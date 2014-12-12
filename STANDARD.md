@@ -6,15 +6,6 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
 interpreted as described in [RFC 2119](http://tools.ietf.org/html/rfc2119).
 
 
-A Note on Unit Systems
-----------------------
-
-  - SI
-  - "unitless" simulations -> choose a reference value, e.g. density
-  - `unitSI`: always double precision, always the factor to *multiply* the
-              data with to get a SI value
-
-
 Hierarchy of the data file
 --------------------------
 
@@ -91,6 +82,44 @@ Each file's *root* directory (path `/`) must further define the attributes:
     - type: *(double)*
     - description: a conversation factor to `seconds`
     - example: `1.0e-16`
+
+
+Unit Systems and Dimensionality
+-------------------------------
+
+While this convention does not impose any unit system on the data that is
+stored itself, it still imposes a common interface to convert one system
+to an other.
+
+Each quantity with a dimension must define a unit conversation factor,
+often called `unitSI` in the document, to transform it to a corresponding
+quanity in SI (International System of Units).
+
+Attribute of a data set:
+
+  - `unitSI`
+    - type: *(double*)
+    - description: a conversation factor to multiply data with to be
+                   represented in SI
+    - example: `2.99792e8`
+
+  - `dimension`
+    - reserved for future use (requires struct-attribute support)
+    - powers of the 7 base measures characterizing this data set
+      (length L, mass M, time T, electric current I, thermodynamic temperature
+       theta, amount of substance N, luminous intensity J)
+    - does *not* represent if the data set is a 1, 2 or 3D array
+
+*Note to implementors* 
+
+For the special case of simulations, there can be the situation that a certain
+process scales independently of a given fixed reference quantity that
+can be expressed in SI, e.g., the growth rate of a plasma instability can
+scale over various orders of magnitudes solely with the plasma frequency
+and the basic constants such as mass/charge of the simulated particles.
+
+In such a case, picking a *reference density* to determine the `unitSI`
+factors is mandatory to provide a fallback for compatibility.
 
 
 Mesh based data (fields)

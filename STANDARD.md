@@ -1,5 +1,5 @@
-The openPMD Convention
-======================
+The openPMD Standard
+====================
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
 "SHOULD NOT", "RECOMMENDED",  "MAY", and "OPTIONAL" in this document are to be
@@ -87,7 +87,7 @@ Each file's *root* directory (path `/`) must further define the attributes:
 Unit Systems and Dimensionality
 -------------------------------
 
-While this convention does not impose any unit system on the data that is
+While this standard does not impose any unit system on the data that is
 stored itself, it still imposes a common interface to convert one system
 to an other.
 
@@ -122,21 +122,66 @@ In such a case, picking a *reference density* to determine the `unitSI`
 factors is mandatory to provide a fallback for compatibility.
 
 
-Mesh based data (fields)
+Grid based data (fields)
 ------------------------
 
-  - scalar vs vector fields
-  - position of the component on the grid/node/cell/voxel
-  - dimension of the unit of the data field
+Fields shall be represented as homogeneous data sets of on a equal-spaced,
+regular grid.
+
+Scalar fields are stored in a data set with the same name as the field.
+Vector and tensor fields shall be represented component-wise as a *structure
+of scalar fields* using a common sub-group as the name.
+
+### Naming conventions
+
+  - `scalar` fields
+    - type: *(any type)*
+    - data set: `fieldName` unique name in group `basePath` + `fieldsPath`
+
+  - `vector` fields
+    - type: *(any type)*
+    - data set: `fieldName/x`, `fieldName/y`, `fieldName/z`
+                while `fieldName` is a sub-group and `x`, `y`, `z` are
+                data sets of `scalar` fields
+
+### Mandatory attributes for each field
+
+The following attributes must be stored with the `fieldName` (which is a
+data set attribute for `scalar` and a group attribute for `vector` fields):
+
   - unit-conversion factor to SI
+  - dimension of the unit of the data field
+  - dx, dy, dz + units
+  - order: ijk or kji
+
+The following attributes must be stored with each data set:
+
+  - position of the component on the grid/node/cell/voxel (=left/right handed)
+
+The total size of a field and it's offset, e.g., in a co-moving window
+simulation, are not covered by this standard and shall be provided by
+the API of the according file format.
 
 
 Particle data (particles)
 -------------------------
 
+  - min attributes: position, momentum
+  - recommendation for particle data sets > 100 GB,
+    data locality aware particleGroups aka "particle_info"
+
 
 Domain-Specific Extensions
 --------------------------
+
+Why extensions?
+  -> standard == enough for general fields & analysis
+  -> extensions == code interoperability of the same domain (naming conventions)
+                   open access unique description & meta
+                   additional hints for domain-specific analysis
+
+-> format == openPMD + ED-PIC
+                     + ExtensionABC
 
 Up to now, the following domain-specific naming conventions for data fields
 and *algorithms*, *methods* and/or *schemes* have been defined:

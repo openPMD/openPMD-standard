@@ -53,8 +53,9 @@ and the *algorithms*, *methods* and/or *schemes* that created these.
 License
 -------
 
-The content of this standard is provided under the **CC0 license** and
-auxiliary software under the **ISC license**.
+The content of this standard is provided under the
+[**CC-BY 4.0 license**](http://creativecommons.org/licenses/by/4.0/)
+and auxiliary software under the **ISC license**.
 
 For more details, see the [contributions](CONTRIBUTING.md) page.
 

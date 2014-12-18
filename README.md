@@ -55,6 +55,7 @@ License
 
 The content of this standard is provided under the
 [**CC-BY 4.0 license**](http://creativecommons.org/licenses/by/4.0/)
+(see [list of authors](AUTHORS.md))
 and auxiliary software under the **ISC license**.
 
 For more details, see the [contributions](CONTRIBUTING.md) page.

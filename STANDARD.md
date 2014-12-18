@@ -59,11 +59,11 @@ Each file's *root* directory (path `/`) must further define the attributes:
 
   - `timeStepEncoding`
     - type: *(string)*
+    - allowed values: selection of either "fileBased" (multiple files) or
+                      "groupBased" (one file)
     - description: are other time steps of this series, from the file-format's
                    API point of view, encoded in the same file or is an
                    other `open/close` call necessary to access other time steps?
-    - allowed options: selection of either "fileBased" (multiple files) or
-                       "groupBased" (one file)
 
   - `timeStepFormat`
     - type: *(string)*
@@ -76,10 +76,10 @@ Each file's *root* directory (path `/`) must further define the attributes:
                    the format depends on the selected `timeStepEncoding` method
     - examples:
       - `fileBased`: "filename_%T.h5" (without file system directories)
-      - `groupBased`: "/data/%T/"
+      - `groupBased`: "/data/%T/" (must be encoded in the `basePath`)
 
   - `timeStepUnitSI`
-    - type: *(double)*
+    - type: *(double / REAL8)*
     - description: a conversation factor to `seconds`
     - example: `1.0e-16`
 
@@ -98,12 +98,12 @@ quanity in SI (International System of Units).
 Attribute of a data set:
 
   - `unitSI`
-    - type: *(double*)
+    - type: *(double / REAL8*)
     - description: a conversation factor to multiply data with to be
                    represented in SI
     - example: `2.99792e8`
 
-  - `dimension`
+  - `unitDimension`
     - reserved for future use (requires struct-attribute support)
     - powers of the 7 base measures characterizing this data set
       (length L, mass M, time T, electric current I, thermodynamic temperature
@@ -147,16 +147,60 @@ of scalar fields* using a common sub-group as the name.
 ### Mandatory attributes for each field
 
 The following attributes must be stored with the `fieldName` (which is a
-data set attribute for `scalar` and a group attribute for `vector` fields):
+data set attribute for `scalar` or a group attribute for `vector` fields):
 
-  - unit-conversion factor to SI
-  - dimension of the unit of the data field
-  - dx, dy, dz + units
-  - order: ijk or kji
+  - `unitSI`
+    - type: *(double / REAL8)*
+    - description: unit-conversion factor to multiply the stored data with to
+                   be represented in SI
+    - example: 2.99792e8
+
+  - `unitDimension`
+    - reserved for future use (requires struct-attribute support)
+    - powers of the 7 base measures characterizing this data set
+      (length L, mass M, time T, electric current I, thermodynamic temperature
+       theta, amount of substance N, luminous intensity J)
+    - does *not* represent if the data set is a 1, 2 or 3D array
+
+  - `dx`, `dy`, `dz`
+    - type: each attribute in *(float / REAL4)*
+    - description: spacing of the grid; `dz` or both `dy`, `dz` can be omitted
+                   which represents `undefined`
+    - example: `dx` = 2.0; `dy` = 1.0; `dz = 2.0`
+
+  - `gridUnitSI`
+    - type: *(double / REAL8)*
+    - description: unit-conversion factor to multiply `dx`, `dy` and `dz` with to
+                   be represented in SI
+    - example: 1.0e-9
+
+  - `dataOrder`
+    - type: *(string)*
+    - allowed values: `ijk` or `kji` (also for 2D data sets)
+    - description: describes the fastest/slowest increasing index for 2D and 3D
+                   data sets (e.g., the difference between a Fortran and C array);
+                   can be omitted for 1D data sets
+    - example:
+      - `ijk`: while accessing the data with a linear index, the `i` index
+               will increase for each value, the `j` index for each line of values
+               and the `k` index only for each plane of values
+      - `kji`: exactly the opposite of `ijk`, the k index rises with each value
+               and the `i` index is the slowest
 
 The following attributes must be stored with each data set:
 
-  - position of the component on the grid/node/cell/voxel (=left/right handed)
+  - `posX`, `posY`, `posZ`,
+    - type: each attribute in *(float / REAL4)*
+    - range: `[ 0.0 : 1.0 )`
+    - description: `x` position of the component on the grid/node/cell/voxel;
+                   `0.0` means at the beginning of the cell and `1.0` is the
+                   beginning of the next cell;
+
+  - `coordSystem`
+    - type: *(string*)
+    - allowed values: `left-handed`, `right-handed`
+    - description: orientation of the coordinate system seen from the
+                   (0. 0. 0.) position of the node
 
 The total size of a field and it's offset, e.g., in a co-moving window
 simulation, are not covered by this standard and shall be provided by
@@ -166,9 +210,60 @@ the API of the according file format.
 Particle data (particles)
 -------------------------
 
-  - min attributes: position, momentum
-  - recommendation for particle data sets > 100 GB,
-    data locality aware particleGroups aka "particle_info"
+Each particle species shall be represented as a group `particleName/` that
+contains all its properties. Properties per particle are generally stored as
+contigous array of a non-compound type.
+
+For properties that are the same for all particles in a particle species, e.g.,
+all electrons have `charge` `-1`, replacing the data set with a group
+attribute of the same name is possible, as described in the following
+paragraphs.
+
+### Naming conventions
+
+As with mesh-based `vector` properties, compound particle vector properties
+are again splitted in scalar sub-properties that are stored in a common
+sub-group `particleName/propertyName/`.
+
+Replacing a data set for a particle property with a constant property for all
+particles in the particle species, independent if the data set is stored as a
+sub-property in a sub-group or if the data set is the scalar property itself,
+works as follows. The data set `particleName/propertyName` shall be replaced
+with an empty sub-group `particleName/propertyName/` that hosts the
+group-attribute `value` and other mandatory attributes such as `unitSI`. The
+sub-property `particleName/propertyName/x` shall be replaced with an  empty
+sub-sub-group `particleName/propertyName/x/` that again hosts the
+group-attribute `value` and other mandatory attributes such as `unitSI`.
+
+### Mandatory properties for each particle species
+
+  - `position/` + `x` or `y` or `z`
+    - type: each data set in *(float / REAL4)* or *(double / REAL8)*
+    - description: component-wise global position of a particle, if not
+                   enforced otherwise by a domain-specific extension (see below)
+
+  - `momentum/` + `x` or `y` or `z`
+    - type: each data set in *(float / REAL4)* or *(double / REAL8)*
+    - description: component-wise momentum of the attribute
+
+### Mandatory attributes for each particle property
+
+The following attributes must be stored with the `particleName/propertyName`
+(which is a data set attribute for a `scalar` particle property or a group
+attribute for a `compound` or `vector` particle property):
+
+  - `unitSI`
+    - type: *(double / REAL8)*
+    - description: unit-conversion factor to multiply the stored data with to
+                   be represented in SI
+    - example: 1.0e-9
+
+  - `unitDimension`
+    - reserved for future use (requires struct-attribute support)
+    - powers of the 7 base measures characterizing this data set
+      (length L, mass M, time T, electric current I, thermodynamic temperature
+       theta, amount of substance N, luminous intensity J)
+    - does *not* represent if the data set is a 1, 2 or 3D array
 
 
 Domain-Specific Extensions

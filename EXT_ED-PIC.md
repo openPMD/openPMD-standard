@@ -4,6 +4,8 @@ Domain-Specific Naming Conventions for Electro-Dynamic/Static PIC Codes
 Grid based data (fields)
 ------------------------
 
+### Additional Mandatory Attributes per `fieldName`
+
 - Maxwell/field solver
   - allowed values:
     - Yee
@@ -31,19 +33,22 @@ Grid based data (fields)
   - `smoothingPeriod`
   - `smoothingParameters`
 
-- naming conventions:
-  - E/B/J
-  - with species & added?
-     e_#_*
-      density, particleEnergy, energyDensity, particleCounter, larmor? skip?
+
+### Naming Conventions
+
+- `E`/`B`/`J`
+- fields derived from particles:
+    `particleName_*`:
+      `density`, `particleEnergy`, `energyDensity`, `particleCounter`, `larmor`?
 
 Particle data (particles)
 -------------------------
 
 - Particle-Shape / -Order
-  - linear
-  - quadratic
-  - quadrilinear
+  - 0 pointlike
+  - 1 linear
+  - 2 quadratic
+  - 3 quadrilinear
   - ...
   - other
 
@@ -56,13 +61,15 @@ Particle data (particles)
 - Interpolation & smoothing for push
   - momemtum conserving? true/false
   - energy conserving? true/false
-  - smoothing?
+  - field-smoothing/transformation?
 
 ### Additional Mandatory Properties per Particle Species
 
 - required: charge, weighting, globalCellId, position = in-cell-position
-  -> array or attribute
-- charge state, ionizable (true/false), electron/fundamental
+  -> as usual as an array or attribute
+  -> [!] if position is in-cell-position, than unitSI is different for each component
+- charge state, ionizable (true/false), "electron"/fundamental particle
+- ions & atoms: proton number + neutron number?
 
 ### Additional Data Set per Particle Species
 

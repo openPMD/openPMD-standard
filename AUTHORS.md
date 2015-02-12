@@ -11,10 +11,12 @@
                     Special thanks goes to Felix Schmitt (ZIH, TU Dresden)
                     and Rene Widera (HZDR).
 
+
 ### Review and Improvements in Draft Phase (2014-2015)
 
 - Jean-Luc Vay (LBL)
+- David P. Grote (LLNL)
 
 
-### Reviewers and Contributions in Later Versions
+### Reviewers and Relevant Contributions in Later Versions
 

@@ -6,6 +6,16 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
 interpreted as described in [RFC 2119](http://tools.ietf.org/html/rfc2119).
 
 
+The versions of this standard
+-----------------------------
+
+Major versions of this standard do not need to be backwards compatible.
+Minor versions need to be backwards compatible and should for example
+only add additional information.
+Revisions are reserved for minor typos in the documentation (but not in
+keywords).
+
+
 Hierarchy of the data file
 --------------------------
 
@@ -31,6 +41,13 @@ without a `/`, e.g., `dataSet` or `/path/to/dataSet`.
 
 Each file's *root* directory (path `/`) must at leat contain the attributes:
 
+  - `version`
+    - type: *(string)*
+    - description: (targeted) version of the format in "MAJOR.MINOR.REVISION",
+                   see section "The versions of this standard",
+                   minor and revision must not be neglected
+    - example: "1.0.0"
+
   - `basePath`
     - type: *(string)*
     - description: a common prefix for all data sets and sub-groups
@@ -45,6 +62,33 @@ Each file's *root* directory (path `/`) must at leat contain the attributes:
     - type: *(string)*
     - description: path *relative* from the baseDir to the particle data sets
     - example: "particles/"
+
+Each file's *root* directory (path `/`) might contain these attributes
+(these attributes are *recommended* and their usage is *reserved* for):
+
+  - `author`
+    - type: *(string)*
+    - description: Author and contact of the data
+    - example: "Axel Huebl <a.huebl@hzdr.de>"
+
+  - `software`
+    - type: *(string)*
+    - description: the software/code/simulation that created the file
+    - example: "PIConGPU 1.0", "Warp 80c7551"
+
+  - `date`
+    - type: *(string)*
+    - description: date of creation in format "YYYY-MM-DD HH:mm:ss TZ"
+    - example: "2015-12-02 17:48:42 +0100"
+
+Each group and path might contain the attribute **comment** for general
+human-readable documentation, e.g., for features not yet covered by the
+standard:
+
+  - `comment`
+    - type: *(string)*
+    - description: An arbitrary comment
+    - example: "After each time step we randomly removed 5 particles."
 
 
 Time Series
@@ -93,7 +137,7 @@ to an other.
 
 Each quantity with a dimension must define a unit conversation factor,
 often called `unitSI` in the document, to transform it to a corresponding
-quanity in SI (International System of Units).
+quanity in the International System of Units (SI).
 
 Attribute of a data set:
 
@@ -109,6 +153,7 @@ Attribute of a data set:
       (length L, mass M, time T, electric current I, thermodynamic temperature
        theta, amount of substance N, luminous intensity J)
     - does *not* represent if the data set is a 1, 2 or 3D array
+    - example: "N = kg * m / s^2", store struct "[1.; 1.; -2.; 0.; 0.; 0.; 0.]"
 
 *Note to implementors* 
 
@@ -120,6 +165,9 @@ and the basic constants such as mass/charge of the simulated particles.
 
 In such a case, picking a *reference density* to determine the `unitSI`
 factors is mandatory to provide a fallback for compatibility.
+
+For human readable output, it is *recommended* to add the actual string
+of the unit in the corresponding `comment` attribute.
 
 
 Grid based data (fields)

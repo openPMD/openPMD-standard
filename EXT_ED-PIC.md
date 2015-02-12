@@ -6,7 +6,9 @@ Grid based data (fields)
 
 ### Additional Mandatory Attributes per `fieldName`
 
-- Maxwell/field solver
+- fieldSolver
+  - type: *(string)*
+  - description: Maxwell/field solver
   - allowed values:
     - Yee
     - Karkinnen
@@ -15,23 +17,26 @@ Grid based data (fields)
     - PSATD
     - PSAOTD
     - other
-  - reserved for future use: `solverParameters`
 
-- Current Solver
-  - allowed values:
-    - VillaBune
-    - Esirkepov
-    - ZigZag
-    - other
-  - reserved for future use: `...Parameters`
+- fieldSolverOrder
+  - type: "(float)*
+  - description: order of the `fieldSolver`
+  - example: "2.0", "3.0", use "-1.0" for infinite
 
-- `smoothing`
+- reserved for future use: `fieldSolverParameters`
+
+- `fieldSmoothing`
+  - type: *(string)*
+  - description: applied field filters for E and B
   - allowed values:
     - Binomial
     - ...
     - other
-  - `smoothingPeriod`
-  - `smoothingParameters`
+
+- reserved for future use:
+  - `fieldSmoothingPeriod`
+  - `fieldSmoothingOrder`
+  - `fieldSmoothingParameters`
 
 
 ### Naming Conventions
@@ -41,35 +46,80 @@ Grid based data (fields)
     `particleName_*`:
       `density`, `particleEnergy`, `energyDensity`, `particleCounter`, `larmor`?
 
+
 Particle data (particles)
 -------------------------
 
-- Particle-Shape / -Order
-  - 0 pointlike
-  - 1 linear
-  - 2 quadratic
-  - 3 quadrilinear
-  - ...
-  - other
+- `particleShape`
+  - type: *(float)*
+  - description: ... reference hockney ...
+  - example values:
+    - 0. pointlike
+    - 1. linear
+    - 2. quadratic
+    - 3. quadrilinear
+    - ...
+    - other
 
-- Particle-Pushing Algorithm
-  - Boris
-  - Vay
-  - Karkinnen Pusher
-  - other
+- `currentDeposition`
+  - type: *(string)*
+  - description: current deposition scheme
+  - allowed values:
+    - VillaBune
+    - Esirkepov
+    - ZigZag
+    - other
 
-- Interpolation & smoothing for push
+- reserved for future use: `currentDepositionParameters`
+
+- `currentSmoothing`
+  - type: *(string)*
+  - description: applied current filters after current deposition
+
+- reserved for future use:
+  - `currentSmoothingPeriod`
+  - `currentSmoothingOrder`
+  - `currentSmoothingParameters`
+
+- `particlePush`
+  - type: *(string)*
+  - description: Particle-Pushing Algorithm
+  - reserved values:
+    - Boris
+    - Vay
+    - Karkainen Pusher
+    - other
+
+- `particleInterpolation`
+  - type: *(string)*
+  - description:
+  - reserved values:
+    - Galerkin
+    - Trilinear
+    - other
+
+- reserved for future use:
   - momemtum conserving? true/false
   - energy conserving? true/false
-  - field-smoothing/transformation?
+
+- `particleSmoothing`
+  - type: *(string)*
+  - description: applied transformations or smoothing filters while interpolating
+                 fields to the particle
+
+- reserved for future use:
+  - `particleSmoothingPeriod`
+  - `particleSmoothingOrder`
+  - `particleSmoothingParameters`
 
 ### Additional Mandatory Properties per Particle Species
 
-- required: charge, weighting, globalCellId, position = in-cell-position
+- required: charge, masss, weighting, globalCellId, position = in-cell-position,
+            descriptive long name "2nd e-", "Deuterium"
   -> as usual as an array or attribute
   -> [!] if position is in-cell-position, than unitSI is different for each component
-- charge state, ionizable (true/false), "electron"/fundamental particle
-- ions & atoms: proton number + neutron number?
+- charge state (float), "electron"/"fundamental" particle numbers (float)
+- atomic numbers: proton number + neutron number (float)
 
 ### Additional Data Set per Particle Species
 

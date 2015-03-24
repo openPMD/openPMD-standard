@@ -6,32 +6,36 @@ Grid based data (fields)
 
 ### Additional Mandatory Attributes per `fieldName`
 
-- fieldSolver
+- `fieldSolver`
   - type: *(string)*
   - description: Maxwell/field solver
   - allowed values:
-    - Yee
-    - Karkinnen
-    - DS
-    - PSTD
-    - PSATD
-    - PSAOTD
-    - other
+    - `Yee` ([doi:10.1109/TAP.1966.1138693](http://dx.doi.org/10.1109/TAP.1966.1138693))
+    - `CK` (*Cole-Karkkainen* type solvers: [doi:10.1016/j.jcp.2011.04.003](http://dx.doi.org/10.1016/j.jcp.2011.04.003), [doi:10.1063/1.168620](http://dx.doi.org/10.1063/1.168620), [doi:10.1109/TAP.2002.801268](http://dx.doi.org/10.1109/TAP.2002.801268); M. Karkkainen et al., *Low-dispersionwake field calculation tools*, ICAP 2006)
+    - `Lehe` ([doi:10.1103/PhysRevSTAB.16.021301](http://dx.doi.org/10.1103/PhysRevSTAB.16.021301))
+    - `DS` (*Directional Splitting* after Yasuhiko Sentoku, [doi:10.1140/epjd/e2014-50162-y](http://dx.doi.org/10.1140/epjd/e2014-50162-y))
+    - `PSTD`
+    - `PSATD`
+    - `PSAOTD`
+    - `other`
 
-- fieldSolverOrder
-  - type: "(float)*
+- `fieldSolverOrder`
+  - type: *(float)*
   - description: order of the `fieldSolver`
   - example: "2.0", "3.0", use "-1.0" for infinite
 
-- reserved for future use: `fieldSolverParameters`
+- `fieldSolverParameters`
+  - type: *(string)*
+  - description: additional parameters for fields solvers
+                 (might be specified further in the future)
 
 - `fieldSmoothing`
   - type: *(string)*
   - description: applied field filters for E and B
   - allowed values:
-    - Binomial
+    - `Binomial`
     - ...
-    - other
+    - `other`
 
 - reserved for future use:
   - `fieldSmoothingPeriod`
@@ -65,12 +69,21 @@ Particle data (particles)
   - type: *(string)*
   - description: current deposition scheme
   - allowed values:
-    - VillaBune
-    - Esirkepov
-    - ZigZag
-    - other
+    - `VillaBune` ([doi:10.1016/0010-4655(92)90169-Y](http://dx.doi.org/10.1016/0010-4655(92)90169-Y))
+    - `Esirkepov` ([doi:10.1016/S0010-4655(00)00228-9](http://dx.doi.org/10.1016/S0010-4655(00)00228-9))
+    - `ZigZag`
+    - `direct` (not charge conserving)
+    - `other`
 
-- reserved for future use: `currentDepositionParameters`
+- `currentDepositionParameters`
+  - type *(string)*
+  - description: further parameters for current deposition schemes;
+                 optional attribute
+                 (might be specified further in the future)
+  - examples:
+    - for `direct` scheme: (Birdsall & Langdon, *Plasma Physics via Computer Simulation*, 15-5)
+      - `Boris`
+      - `MorseNielson`
 
 - `currentSmoothing`
   - type: *(string)*
@@ -87,7 +100,6 @@ Particle data (particles)
   - reserved values:
     - Boris
     - Vay
-    - Karkainen Pusher
     - other
 
 - `particleInterpolation`

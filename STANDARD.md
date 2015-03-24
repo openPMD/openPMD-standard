@@ -220,7 +220,7 @@ data set attribute for `scalar` or a group attribute for `vector` fields):
     - description: geometry of the mesh of the field data
     - allowed values:
       - `cartesian`
-      - `cylindrical`
+      - `cylindrical` ([doi:10.1016/j.jcp.2008.11.017](http://dx.doi.org/10.1016/j.jcp.2008.11.017))
       - `other`
 
   - `geometryParameters`
@@ -230,8 +230,8 @@ data set attribute for `scalar` or a group attribute for `vector` fields):
                    or `cylindrical` geometry with only mode `m=0` is used
     - examples:
       - for `cylindrical` geometry:
-        - `m=3;imag=+` (`cylindrical` simulation simulating 3 *modes* and using
-                        a `+` sign for the definiton of the *imaginary* part)
+        - `m=3;imag=+` (3 *modes* and using a `+` sign for the definiton of the *imaginary* part)
+                        ![definition of imaginary part](img/cylindrical.png)
 
   - `dx`, `dy`, `dz`
     - type: each attribute in *(float / REAL4)*

@@ -233,11 +233,13 @@ data set attribute for `scalar` or a group attribute for `vector` fields):
         - `m=3;imag=+` (3 *modes* and using a `+` sign for the definiton of the *imaginary* part)
                         ![definition of imaginary part](img/cylindrical.png)
 
-  - `dx`, `dy`, `dz`
-    - type: each attribute in *(float / REAL4)*
-    - description: spacing of the grid; `dz` or both `dy`, `dz` can be omitted
-                   which represents `undefined`
-    - example: `dx` = 2.0; `dy` = 1.0; `dz = 2.0`
+  - `gridSpacing`
+    - type: N-dimensional struct of *(float / REAL4)*
+    - description: spacing of the grid; the dimensionality `N` of the struct (array)
+                   determines if the field data is 1, 2 or 3D
+    - examples and required order of attributes:
+      - `cartesian`: `dx`, `dy`, `dz`
+      - `cylindrical`: `dr`, `dz`
 
   - `gridUnitSI`
     - type: *(double / REAL8)*

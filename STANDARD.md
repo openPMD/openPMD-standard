@@ -74,7 +74,12 @@ Each file's *root* directory (path `/`) might contain these attributes
   - `software`
     - type: *(string)*
     - description: the software/code/simulation that created the file
-    - example: "PIConGPU 1.0", "Warp 80c7551"
+    - example: "PIConGPU", "Warp"
+
+  - `softwareVersion`
+    - type: *(string)*
+    - description: the version of the software/code/simulation that created the file
+    - example: "1.2.1", "80c7551", "rev42"
 
   - `date`
     - type: *(string)*

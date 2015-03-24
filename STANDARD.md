@@ -217,7 +217,8 @@ data set attribute for `scalar` or a group attribute for `vector` fields):
 
   - `geometry` / `coordinateSystem` ?
     - type: *(string)*
-    - description: geometry of the mesh of the field data
+    - description: geometry of the mesh of the field data, right-handed
+                   coordinate systems are imposed
     - allowed values:
       - `cartesian`
       - `cylindrical` ([doi:10.1016/j.jcp.2008.11.017](http://dx.doi.org/10.1016/j.jcp.2008.11.017))
@@ -241,10 +242,14 @@ data set attribute for `scalar` or a group attribute for `vector` fields):
       - `cartesian`: `dx`, `dy`, `dz`
       - `cylindrical`: `dr`, `dz`
 
+  - `gridGlobalOffset`
+    - type: N-dimensional struct of *(float / REAL4)*
+    - ...
+
   - `gridUnitSI`
     - type: *(double / REAL8)*
-    - description: unit-conversion factor to multiply `dx`, `dy` and `dz` with to
-                   be represented in SI
+    - description: unit-conversion factor to multiply each value in `gridSpacing`
+                   and `gridGlobalOffset` with to be represented in SI
     - example: 1.0e-9
 
   - `dataOrder`
@@ -262,23 +267,13 @@ data set attribute for `scalar` or a group attribute for `vector` fields):
 
 The following attributes must be stored with each data set:
 
-  - `posX`, `posY`, `posZ`,
-    - type: each attribute in *(float / REAL4)*
-    - range: `[ 0.0 : 1.0 )`
-    - description: `x` position of the component on the grid/node/cell/voxel;
+  - `position`
+    - type: struct of *(float / REAL4)*
+    - range of each value: `[ 0.0 : 1.0 )`
+    - description: position of the component on the grid/node/cell/voxel;
                    `0.0` means at the beginning of the cell and `1.0` is the
                    beginning of the next cell;
-
-  - `coordSystem`
-    - type: *(string*)
-    - allowed values: `left-handed`, `right-handed`
-    - description: orientation of the coordinate system seen from the
-                   (0. 0. 0.) position of the node
-
-The total size of a field and it's offset, e.g., in a co-moving window
-simulation, are not covered by this standard and shall be provided by
-the API of the according file format.
-
+                   in the same order as the `gridSpacing` and `gridOffset`
 
 Particle data (particles)
 -------------------------

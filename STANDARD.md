@@ -215,6 +215,24 @@ data set attribute for `scalar` or a group attribute for `vector` fields):
        theta, amount of substance N, luminous intensity J)
     - does *not* represent if the data set is a 1, 2 or 3D array
 
+  - `geometry` / `coordinateSystem` ?
+    - type: *(string)*
+    - description: geometry of the mesh of the field data
+    - allowed values:
+      - `cartesian`
+      - `cylindrical`
+      - `other`
+
+  - `geometryParameters`
+    - type: *(string)*
+    - description: additional parameters for the geometry, separated by a `;`,
+                   this attribute can be omitted if `cartesian` geometry
+                   or `cylindrical` geometry with only mode `m=0` is used
+    - examples:
+      - for `cylindrical` geometry:
+        - `m=3;imag=+` (`cylindrical` simulation simulating 3 *modes* and using
+                        a `+` sign for the definiton of the *imaginary* part)
+
   - `dx`, `dy`, `dz`
     - type: each attribute in *(float / REAL4)*
     - description: spacing of the grid; `dz` or both `dy`, `dz` can be omitted

@@ -96,38 +96,54 @@ standard:
     - example: "After each time step we randomly removed 5 particles."
 
 
-Time Series
------------
+Iterations and Time Series
+--------------------------
 
-Time series can be encoded in either the file name of each master-file of a
+Iterations can be encoded in either the file name of each master-file of a
 time step or in groups of the same file.
 
-The choosen style shall not vary within a single time series.
+The choosen style shall not vary within a related set of iterations.
+
+Since the meaning of *time* can be confusing for simulations with non-constant
+time steps or or simulations in a frame of reference moving with relativistic
+speeds, an iteration describes a single simulation cycle.
 
 Each file's *root* directory (path `/`) must further define the attributes:
 
-  - `timeStepEncoding`
+  - `iterationEncoding`
     - type: *(string)*
     - allowed values: selection of either "fileBased" (multiple files) or
                       "groupBased" (one file)
-    - description: are other time steps of this series, from the file-format's
+    - description: are other iterations of this series, from the file-format's
                    API point of view, encoded in the same file or is an
-                   other `open/close` call necessary to access other time steps?
+                   other `open/close` call necessary to access other iterations?
 
-  - `timeStepFormat`
+  - `iterationFormat`
     - type: *(string)*
-    - description: a well defined string with the time `%T` placeholder
+    - description: a well defined string with the iteration `%T` placeholder
                    defining either the series of files (`fileBased`) or the
                    series of groups within a single file (`groupBased`)
-                   that allows to extract the time step from it;
-                   for `fileBased` formats the time step must be included
+                   that allows to extract the iteration from it;
+                   for `fileBased` formats the iteration must be included
                    in the file name;
-                   the format depends on the selected `timeStepEncoding` method
+                   the format depends on the selected `iterationEncoding` method
     - examples:
       - `fileBased`: "filename_%T.h5" (without file system directories)
       - `groupBased`: "/data/%T/" (must be encoded in the `basePath`)
 
-  - `timeStepUnitSI`
+  - `time`
+    - type: *(float / REAL4)*
+    - description: the current time;
+                   add a `comment` to your data set if it can not be described
+                   with a common "time"
+
+  - `timeStep`
+    - type: *(float / REAL4)*
+    - description: the time step used for each iteration;
+                   for simulations with non-constant time steps, use
+                   the last time step used to reach this iteration
+
+  - `timeUnitSI`
     - type: *(double / REAL8)*
     - description: a conversation factor to `seconds`
     - example: `1.0e-16`
@@ -254,16 +270,15 @@ data set attribute for `scalar` or a group attribute for `vector` fields):
 
   - `dataOrder`
     - type: *(string)*
-    - allowed values: `ijk` or `kji` (also for 2D data sets)
+    - allowed values: `Fortran` or `C` (also for 2D data sets)
     - description: describes the fastest/slowest increasing index for 2D and 3D
                    data sets (e.g., the difference between a Fortran and C array);
                    can be omitted for 1D data sets
     - example:
-      - `ijk`: while accessing the data with a linear index, the `i` index
-               will increase for each value, the `j` index for each line of values
-               and the `k` index only for each plane of values
-      - `kji`: exactly the opposite of `ijk`, the k index rises with each value
-               and the `i` index is the slowest
+      - `Fortran`: ordering of matrixes is linearized in memory in column-major order
+      - `C`:       exactly the opposite ordering (row-major), reading matrixes from
+                   a Fortran code will appear transposed in C (or C-based applications
+                   such as Python)
 
 The following attributes must be stored with each data set:
 

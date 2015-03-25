@@ -121,10 +121,13 @@ Particle data (particles)
 
 - `particleInterpolation`
   - type: *(string)*
-  - description:
+  - description: method that was used to interpolate fields to particle positions,
+                 as described in [doi:10.1016/j.crme.2014.07.006](http://dx.doi.org/10.1016/j.crme.2014.07.006)
+                 section 2.4
   - reserved values:
-    - `Galerkin`
-    - `Trilinear`
+    - `energyConserving` (Galerkin method, energy-conserving in the limit of infinitesimal small grids)
+    - `momentumConserving` (momentum-conserving in the limit of infinitesimal small grids)
+    - `uniform` (neither energy- nor momentum-conserving)
     - `other`
 
 - `particleSmoothing`

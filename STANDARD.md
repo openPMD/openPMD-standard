@@ -275,8 +275,8 @@ data set attribute for `scalar` or a group attribute for `vector` fields):
 
   - `gridSpacing`
     - type: 1-dimensional array containing N *(float / REAL4)*
-      elements, where N is the number of dimensions in the simulation.
-      - description: spacing of the grid points along each dimension (in the
+            elements, where N is the number of dimensions in the simulation.
+    - description: spacing of the grid points along each dimension (in the
                    units of the simulation); this refers to the spacing of the
                    actual data that is written to the file, not that of the
                    simulation grid. (The data written may be down-sampled, as
@@ -319,7 +319,7 @@ The following attributes must be stored with each data set:
 
   - `position`
     - type: 1-dimesional array of N *(float / REAL4)* where N is the number of
-      dimensions in the simulation. 
+            dimensions in the simulation.
     - range of each value: `[ 0.0 : 1.0 )`
     - description: position of the component on the grid/node/cell/voxel;
                    `0.0` means at the beginning of the cell and `1.0` is the

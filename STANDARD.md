@@ -290,10 +290,11 @@ data set attribute for `scalar` or a group attribute for `vector` fields):
         should be of length 2 and contain `dr` and `dz`, in that order.
 
   - `gridGlobalOffset`
-    - type: 1-dimensional array containing N *(float / REAL4)*
+    - type: 1-dimensional array containing N *(double / REAL8)*
             elements, where N is the number of dimensions in the simulation
-    - description: ...
-    - example: ...
+    - description: start of the current domain of the simulation (beginning
+                   of the first cell)
+    - example: `[0.0; 0.0; 0.0]` or `[0.5; 0.5; 0.5]`
 
   - `gridUnitSI`
     - type: *(double / REAL8)*

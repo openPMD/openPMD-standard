@@ -18,11 +18,15 @@ Grid based data (fields)
     - `PSATD`
     - `PSAOTD`
     - `other`
+    - `none`
 
 - `fieldSolverOrder`
   - type: *(float)*
   - description: order of the `fieldSolver`
-  - example: "2.0", "3.0", use "-1.0" for infinite
+  - examples:
+    - `2.0`
+    - `3.0`
+    - use `-1.0` for infinite order (for spectral solvers)
 
 - `fieldSolverParameters`
   - type: *(string)*
@@ -34,21 +38,44 @@ Grid based data (fields)
   - description: applied field filters for E and B
   - allowed values:
     - `Binomial`
-    - ...
+    - `other`
+    - `none`
+
+- `fieldSmoothingParameters`
+  - type: *(string)*
+  - description: additional parameters to describe the applied filter further
+  - example: `period=10;numPasses=4;compensator=true`
+  - reserved for future use: `direction=array()`, `stride=array()`
+
+- `currentSmoothing`
+  - type: *(string)*
+  - description: applied filters to the current field after the particles' current deposition
+  - allowed values: same as for `fieldSmoothing`
+
+- `currentSmoothingParameters`
+  - type: *(string)*
+  - description: additional parameters to describe the applied filter further
+  - allowed values: same as for `fieldSmoothingParameters`
+
+- `chargeCorrection`
+  - type: *(string)*
+  - description: applied corrections to fields to ensure charge conservation
+  - allowed values:
+    - `Mader`
+    - `spectral` (various)
     - `other`
 
-- reserved for future use:
-  - `fieldSmoothingPeriod`
-  - `fieldSmoothingOrder`
-  - `fieldSmoothingParameters`
-
+- `chargeCorrectionParameters`
+  - example: `period=100`
 
 ### Naming Conventions
 
-- `E`/`B`/`J`
-- fields derived from particles:
-    `particleName_*`:
-      `density`, `particleEnergy`, `energyDensity`, `particleCounter`, `larmor`?
+- fundamental: `E`/`B`
+- auxiliary:
+  - `J`/`rho`
+  - fields derived from particles:
+      `particleName_*`:
+        `current`, `density`, `particleEnergy`, `energyDensity`, `particleCounter`, `larmor`?
 
 
 Particle data (particles)
@@ -58,12 +85,11 @@ Particle data (particles)
   - type: *(float)*
   - description: ... reference hockney ...
   - example values:
-    - 0. pointlike
-    - 1. linear
-    - 2. quadratic
-    - 3. quadrilinear
-    - ...
-    - other
+    - `0.` pointlike
+    - `1.` linear
+    - `2.` quadratic
+    - `3.` quadrilinear
+    - or an other `floating point` number
 
 - `currentDeposition`
   - type: *(string)*
@@ -72,7 +98,7 @@ Particle data (particles)
     - `VillaBune` ([doi:10.1016/0010-4655(92)90169-Y](http://dx.doi.org/10.1016/0010-4655(92)90169-Y))
     - `Esirkepov` ([doi:10.1016/S0010-4655(00)00228-9](http://dx.doi.org/10.1016/S0010-4655(00)00228-9))
     - `ZigZag`
-    - `direct` (not charge conserving)
+    - `direct` (often used in spectral codes, usually used with `chargeCorrection`s)
     - `other`
 
 - `currentDepositionParameters`
@@ -84,15 +110,6 @@ Particle data (particles)
     - for `direct` scheme: (Birdsall & Langdon, *Plasma Physics via Computer Simulation*, 15-5)
       - `Boris`
       - `MorseNielson`
-
-- `currentSmoothing`
-  - type: *(string)*
-  - description: applied current filters after current deposition
-
-- reserved for future use:
-  - `currentSmoothingPeriod`
-  - `currentSmoothingOrder`
-  - `currentSmoothingParameters`
 
 - `particlePush`
   - type: *(string)*
@@ -110,19 +127,22 @@ Particle data (particles)
     - Trilinear
     - other
 
-- reserved for future use:
-  - momemtum conserving? true/false
-  - energy conserving? true/false
-
 - `particleSmoothing`
   - type: *(string)*
-  - description: applied transformations or smoothing filters while interpolating
-                 fields to the particle
+  - description: applied transformations or smoothing filters on copied
+                 versions of the fields while interpolating those to 
+                 the particle
+  - allowed values:
+    - `Binomial`
+    - `other`
+    - `none`
 
-- reserved for future use:
-  - `particleSmoothingPeriod`
-  - `particleSmoothingOrder`
-  - `particleSmoothingParameters`
+- `particleSmoothingParameters`
+  - type: *(string)*
+  - description: additional parameters to describe the applied filter further
+  - example: `period=1;numPasses=2;compensator=false`
+  - reserved for future use: `direction=array()`, `stride=array()`
+
 
 ### Additional Mandatory Properties per Particle Species
 

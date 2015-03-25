@@ -124,10 +124,22 @@ Particle data (particles)
   - description: method that was used to interpolate fields to particle positions,
                  as described in [doi:10.1016/j.crme.2014.07.006](http://dx.doi.org/10.1016/j.crme.2014.07.006)
                  section 2.4
-  - reserved values:
-    - `energyConserving` (Galerkin method, from staggered grid with one order less in parallel direction, energy-conserving in the limit of infinitesimal small time steps)
-    - `momentumConserving` (fields interpolated to the grid nodes first - then same order in all directions, momentum-conserving in the limit of infinitesimal small time steps)
-    - `uniform` (from staggered grid with same order in all directions, neither energy- nor momentum-conserving)
+  - allowed values:
+    - `uniform`: The fields are interpolated directly from the staggered grid
+                 to the particle positions (with the same interpolation order
+                 in all directions).
+    - `energyConserving`: Also known as *Galerkin method*.
+                          The fields are interpolated directly from the staggered
+                          grid to the particle positions (with reduced
+                          interpolation order in the parallel direction). This
+                          scheme is energy conserving in the limit of infinitely
+                          small time steps.
+    - `momentumConserving`: The fields are first interpolated from the staggered
+                            grid points to the corners of each cell, and then from
+                            the cell corners to the particle position (with the
+                            same order of interpolation in all directions). This
+                            scheme is momentum conserving in the limit of
+                            infinitely small time steps.
     - `other`
 
 - `particleSmoothing`

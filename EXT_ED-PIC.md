@@ -114,18 +114,18 @@ Particle data (particles)
 - `particlePush`
   - type: *(string)*
   - description: Particle-Pushing Algorithm
-  - reserved values:
-    - Boris
-    - Vay
-    - other
+  - allowed values:
+    - `Boris` (J.P. Boris. *Relativistic plasma simulation-optimization of a hybrid code.* USA, 1970)
+    - `Vay` ([doi:10.1063/1.2837054](http://dx.doi.org/10.1063/1.2837054))
+    - `other`
 
 - `particleInterpolation`
   - type: *(string)*
   - description:
   - reserved values:
-    - Galerkin
-    - Trilinear
-    - other
+    - `Galerkin`
+    - `Trilinear`
+    - `other`
 
 - `particleSmoothing`
   - type: *(string)*

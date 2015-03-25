@@ -16,6 +16,7 @@
 
 - Jean-Luc Vay (LBL)
 - David P. Grote (LLNL)
+- Remi Lehe (LBL)
 
 
 ### Reviewers and Relevant Contributions in Later Versions

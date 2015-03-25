@@ -125,9 +125,9 @@ Particle data (particles)
                  as described in [doi:10.1016/j.crme.2014.07.006](http://dx.doi.org/10.1016/j.crme.2014.07.006)
                  section 2.4
   - reserved values:
-    - `energyConserving` (Galerkin method, energy-conserving in the limit of infinitesimal small grids)
-    - `momentumConserving` (momentum-conserving in the limit of infinitesimal small grids)
-    - `uniform` (neither energy- nor momentum-conserving)
+    - `energyConserving` (Galerkin method, from staggered grid with one order less in parallel direction, energy-conserving in the limit of infinitesimal small time steps)
+    - `momentumConserving` (fields interpolated to the grid nodes first - then same order in all directions, momentum-conserving in the limit of infinitesimal small time steps)
+    - `uniform` (from staggered grid with same order in all directions, neither energy- nor momentum-conserving)
     - `other`
 
 - `particleSmoothing`

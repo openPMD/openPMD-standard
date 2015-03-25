@@ -114,13 +114,12 @@ def addEDPICAttrParticles(f, particleName):
    f[particleName].attrs["particleSmoothing"] = "none"
    #f[particleName].attrs["particleSmoothingParameters"] = "period=1;numPasses=2;compensator=false"
 
-
    return
 
 def writeParticles(f):
    fullParticlesPath = f.attrs["basePath"] + f.attrs["particlesPath"]
 
-   # constant particle attributes (that could also be variable data sets)
+   # constant scalar particle attributes (that could also be variable data sets)
    f.create_group(fullParticlesPath + "electrons/charge")
    f[fullParticlesPath + "electrons/charge"].attrs["value"] = -1.0;
    f[fullParticlesPath + "electrons/charge"].attrs["unitSI"] = 1.60217657e-19;
@@ -128,10 +127,32 @@ def writeParticles(f):
       np.array([0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0 ])
       #          L    M    T    J  theta  N    J
       # C = A * s
+   f.create_group(fullParticlesPath + "electrons/mass")
+   f[fullParticlesPath + "electrons/mass"].attrs["value"] = 1.0;
+   f[fullParticlesPath + "electrons/mass"].attrs["unitSI"] = 9.10938291e-31;
+   f[fullParticlesPath + "electrons/mass"].attrs["unitDimension"] = \
+      np.array([0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0 ])
+      #          L    M    T    J  theta  N    J
 
+   f[fullParticlesPath + "electrons"].attrs["longName"] = "My first electron species"
    addEDPICAttrParticles(f, fullParticlesPath + "electrons")
 
-   # scalar particle attribute
+   # scalar particle attribute (non-const/individual per particle)
+   f.create_dataset(fullParticlesPath + "electrons/weighting", (128,), dtype='f4')
+   f[fullParticlesPath + "electrons/weighting"].attrs["unitSI"] = 1.0;
+   f[fullParticlesPath + "electrons/weighting"].attrs["unitDimension"] = \
+      np.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ]) # plain floating point number
+
+   # vector particle attribute (non-const/individual per particle)
+   f.create_dataset(fullParticlesPath + "electrons/position/x", (128,), dtype='f4')
+   f.create_dataset(fullParticlesPath + "electrons/position/y", (128,), dtype='f4')
+   f.create_dataset(fullParticlesPath + "electrons/position/z", (128,), dtype='f4')
+   f[fullParticlesPath + "electrons/position"].attrs["unitSI"] = 1.e-9;
+   f[fullParticlesPath + "electrons/position"].attrs["unitDimension"] = \
+      np.array([1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ])
+      #          L    M     T    J  theta  N    J
+      # Dimension of Length per component
+
    f.create_dataset(fullParticlesPath + "electrons/momentum/x", (128,), dtype='f4')
    f.create_dataset(fullParticlesPath + "electrons/momentum/y", (128,), dtype='f4')
    f.create_dataset(fullParticlesPath + "electrons/momentum/z", (128,), dtype='f4')
@@ -140,8 +161,6 @@ def writeParticles(f):
       np.array([1.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0 ])
       #          L    M     T    J  theta  N    J
       # Dimension of Length * Mass / Time
-
-   # vector particle attribute
 
    return
 

@@ -217,10 +217,12 @@ of scalar fields* using a common sub-group as the name.
   - `vector` fields
     - type: *(any type)*
     - data set: `fieldName/x`, `fieldName/y`, `fieldName/z` when
-	writing the *Cartesian* components of the vectors ; `fieldName/r`,
-	`fieldName/t`,  `fieldName/z` when writing the *cylindrical*
-	components of the vectors. While `fieldName` is a sub-group,
-	`x`, `y`, `z` are data sets of `scalar` fields.
+                writing the *Cartesian* components of the vectors;
+                `fieldName/r`, `fieldName/t`, `fieldName/z` when
+                writing the *cylindrical* components of the vectors.
+                Here `fieldName` is a sub-group. The components `x`,
+                `y`, `z` (or respectively `r`, `t`, `z`) are data
+                sets of `scalar` fields.
 
 ### Mandatory attributes for each field
 
@@ -245,18 +247,20 @@ data set attribute for `scalar` or a group attribute for `vector` fields):
     - description: geometry of the mesh of the field data, right-handed
                    coordinate systems are imposed
     - allowed values:
-      - `cartesian` : standard Cartesian mesh
-      - `cylindrical` : regularly-spaced mesh in the r-z plane, with
-     Fourier decomposition in the azimuthal direction (See
-	 [doi:10.1016/j.jcp.2008.11.017](http://dx.doi.org/10.1016/j.jcp.2008.11.017))
-	 In this case, the field arrays are stored as a three-dimensional
-     dataset where the last axis corresponds to the z direction, the second
-     axis correspond to the r direction and where the first axis
-     corresponds to the azimuthal mode. (This last axis has length
-     2m+1, where m is the number of modes used. By convention, this
-     first stores the real part of the mode 0, than the real part of
-     the mode 1, than the imaginary part of the mode 1, than the real
-     part of the mode 2, etc...)
+      - `cartesian`: standard Cartesian mesh
+      - `cylindrical`: regularly-spaced mesh in the r-z plane, with
+                       Fourier decomposition in the azimuthal direction (See
+                       [doi:10.1016/j.jcp.2008.11.017](http://dx.doi.org/10.1016/j.jcp.2008.11.017))
+                       In this case, the field arrays are stored as a
+                       three-dimensional dataset where the last axis corresponds
+                       to the `z` direction, the second axis correspond to the
+                       `r` direction and where the first axis corresponds to
+                       the azimuthal mode. (This last axis has length `2m+1`,
+                       where `m` is the number of modes used. By convention,
+                       this first stores the real part of the mode `0`, than
+                       the real part of the mode `1`, than the imaginary part
+                       of the mode `1`, than the real part of the mode `2`,
+                       etc.)
       - `other`
 
   - `geometryParameters`
@@ -273,19 +277,21 @@ data set attribute for `scalar` or a group attribute for `vector` fields):
     - type: 1-dimensional array containing N *(float / REAL4)*
       elements, where N is the number of dimensions in the simulation.
     - description: spacing of the grid points along each dimension;
-    this refers to the spacing of the actual data that is written to
-    the file, not that of the simulation grid. (The data written may be
-    downsampled, compared to the simulation grid).
-	- In the case where `geometry` is `cartesian`, the dimensionality
-      `N` of the array determines if the field data is 1, 2 or 3D. The
-      elements of the array should correspond to `dx`, `dy`, `dz`, in
-      this order.
+                   this refers to the spacing of the actual data that is
+                   written to the file, not that of the simulation grid.
+                   (The data written may be down-sampled, compared to the
+                   simulation grid).
+    - examples:
+      - In the case where `geometry` is `cartesian`, the dimensionality
+        `N` of the array determines if the field data is 1, 2 or 3D. The
+        elements of the array should correspond to `dx`, `dy`, `dz`, in
+        this order.
       - In the case where `geometry` is `cylindrical`, the array
         should be of length 2 and contain `dr` and `dz`, in that order.
 
   - `gridGlobalOffset`
     - type: 1-dimensional array containing N *(float / REAL4)*
-      elements, where N is the number of dimensions in the simulation
+            elements, where N is the number of dimensions in the simulation
     - description: ...
     - example: ...
 

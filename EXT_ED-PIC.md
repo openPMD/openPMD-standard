@@ -121,10 +121,25 @@ Particle data (particles)
 
 - `particleInterpolation`
   - type: *(string)*
-  - description:
-  - reserved values:
-    - `Galerkin`
-    - `Trilinear`
+  - description: method that was used to interpolate fields to particle positions,
+                 as described in [doi:10.1016/j.crme.2014.07.006](http://dx.doi.org/10.1016/j.crme.2014.07.006)
+                 section 2.4
+  - allowed values:
+    - `uniform`: The fields are interpolated directly from the staggered grid
+                 to the particle positions (with the same interpolation order
+                 in all directions).
+    - `energyConserving`: Also known as *Galerkin method*.
+                          The fields are interpolated directly from the staggered
+                          grid to the particle positions (with reduced
+                          interpolation order in the parallel direction). This
+                          scheme is energy conserving in the limit of infinitely
+                          small time steps.
+    - `momentumConserving`: The fields are first interpolated from the staggered
+                            grid points to the corners of each cell, and then from
+                            the cell corners to the particle position (with the
+                            same order of interpolation in all directions). This
+                            scheme is momentum conserving in the limit of
+                            infinitely small time steps.
     - `other`
 
 - `particleSmoothing`

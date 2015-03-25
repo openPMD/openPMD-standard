@@ -257,9 +257,9 @@ data set attribute for `scalar` or a group attribute for `vector` fields):
                        `r` direction and where the first axis corresponds to
                        the azimuthal mode. (This last axis has length `2m+1`,
                        where `m` is the number of modes used. By convention,
-                       this first stores the real part of the mode `0`, than
-                       the real part of the mode `1`, than the imaginary part
-                       of the mode `1`, than the real part of the mode `2`,
+                       this first stores the real part of the mode `0`, then
+                       the real part of the mode `1`, then the imaginary part
+                       of the mode `1`, then the real part of the mode `2`,
                        etc.)
       - `other`
 
@@ -276,11 +276,11 @@ data set attribute for `scalar` or a group attribute for `vector` fields):
   - `gridSpacing`
     - type: 1-dimensional array containing N *(float / REAL4)*
       elements, where N is the number of dimensions in the simulation.
-    - description: spacing of the grid points along each dimension;
-                   this refers to the spacing of the actual data that is
-                   written to the file, not that of the simulation grid.
-                   (The data written may be down-sampled, compared to the
-                   simulation grid).
+      - description: spacing of the grid points along each dimension (in the
+                   units of the simulation); this refers to the spacing of the
+                   actual data that is written to the file, not that of the
+                   simulation grid. (The data written may be down-sampled, as
+                   compared to the simulation grid).
     - examples:
       - In the case where `geometry` is `cartesian`, the dimensionality
         `N` of the array determines if the field data is 1, 2 or 3D. The
@@ -292,14 +292,15 @@ data set attribute for `scalar` or a group attribute for `vector` fields):
   - `gridGlobalOffset`
     - type: 1-dimensional array containing N *(double / REAL8)*
             elements, where N is the number of dimensions in the simulation
-    - description: start of the current domain of the simulation (beginning
-                   of the first cell)
+    - description: start of the current domain of the simulation (position of the
+                   beginning of the first cell) in simulation units
     - example: `[0.0; 0.0; 0.0]` or `[0.5; 0.5; 0.5]`
 
   - `gridUnitSI`
     - type: *(double / REAL8)*
     - description: unit-conversion factor to multiply each value in `gridSpacing`
-                   and `gridGlobalOffset` with to be represented in SI
+                   and `gridGlobalOffset`, in order to convert from simulation units
+                   to SI units
     - example: `1.0e-9`
 
   - `dataOrder`
@@ -317,7 +318,8 @@ data set attribute for `scalar` or a group attribute for `vector` fields):
 The following attributes must be stored with each data set:
 
   - `position`
-    - type: array of *(float / REAL4)*
+    - type: 1-dimesional array of N *(float / REAL4)* where N is the number of
+      dimensions in the simulation. 
     - range of each value: `[ 0.0 : 1.0 )`
     - description: position of the component on the grid/node/cell/voxel;
                    `0.0` means at the beginning of the cell and `1.0` is the

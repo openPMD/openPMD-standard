@@ -33,8 +33,8 @@ while allowing for each of those to assign
 We define the following placeholders and reserved characters:
 
   - `/`: separator of groups
-  - `%T`: a time step (unsigned integer type,
-                       same range as a 64bit unsigned integer).
+  - `%T`: an iteration (unsigned integer type,
+                        same range as a 64bit unsigned integer).
 
 **Paths** to **groups** end on `/`, e.g., `/mySubGroup/` and **data sets** end
 without a `/`, e.g., `dataSet` or `/path/to/dataSet`.
@@ -46,22 +46,22 @@ Each file's *root* directory (path `/`) must at leat contain the attributes:
     - description: (targeted) version of the format in "MAJOR.MINOR.REVISION",
                    see section "The versions of this standard",
                    minor and revision must not be neglected
-    - example: "1.0.0"
+    - example: `1.0.0`
 
   - `basePath`
     - type: *(string)*
     - description: a common prefix for all data sets and sub-groups
-    - example: "/data/%T/" but at least `/`
+    - example: `/data/%T/` but at least `/`
 
   - `fieldsPath`
     - type: *(string)*
     - description: path *relative* from the baseDir to the field data sets
-    - example: "fields/"
+    - example: `fields/`
 
   - `particlesPath`
     - type: *(string)*
     - description: path *relative* from the baseDir to the particle data sets
-    - example: "particles/"
+    - example: `particles/`
 
 Each file's *root* directory (path `/`) might contain these attributes
 (these attributes are *recommended* and their usage is *reserved* for):
@@ -69,22 +69,22 @@ Each file's *root* directory (path `/`) might contain these attributes
   - `author`
     - type: *(string)*
     - description: Author and contact of the data
-    - example: "Axel Huebl <a.huebl@hzdr.de>"
+    - example: `Axel Huebl <a.huebl@hzdr.de>`
 
   - `software`
     - type: *(string)*
     - description: the software/code/simulation that created the file
-    - example: "PIConGPU", "Warp"
+    - example: `PIConGPU`, `Warp`
 
   - `softwareVersion`
     - type: *(string)*
     - description: the version of the software/code/simulation that created the file
-    - example: "1.2.1", "80c7551", "rev42"
+    - example: `1.2.1`, `80c7551`, `rev42`
 
   - `date`
     - type: *(string)*
-    - description: date of creation in format "YYYY-MM-DD HH:mm:ss TZ"
-    - example: "2015-12-02 17:48:42 +0100"
+    - description: date of creation in format "YYYY-MM-DD HH:mm:ss tz"
+    - example: `2015-12-02 17:48:42 +0100`
 
 Each group and path might contain the attribute **comment** for general
 human-readable documentation, e.g., for features not yet covered by the
@@ -92,8 +92,8 @@ standard:
 
   - `comment`
     - type: *(string)*
-    - description: An arbitrary comment
-    - example: "After each time step we randomly removed 5 particles."
+    - description: an arbitrary comment
+    - example: `After each time step we randomly removed 5 particles.`
 
 
 Iterations and Time Series
@@ -112,11 +112,12 @@ Each file's *root* directory (path `/`) must further define the attributes:
 
   - `iterationEncoding`
     - type: *(string)*
-    - allowed values: selection of either "fileBased" (multiple files) or
-                      "groupBased" (one file)
     - description: are other iterations of this series, from the file-format's
                    API point of view, encoded in the same file or is an
                    other `open/close` call necessary to access other iterations?
+    - allowed values:
+      - `fileBased` (multiple files)
+      - `groupBased` (one file)
 
   - `iterationFormat`
     - type: *(string)*
@@ -128,8 +129,10 @@ Each file's *root* directory (path `/`) must further define the attributes:
                    in the file name;
                    the format depends on the selected `iterationEncoding` method
     - examples:
-      - `fileBased`: "filename_%T.h5" (without file system directories)
-      - `groupBased`: "/data/%T/" (must be encoded in the `basePath`)
+      - for `fileBased`:
+        - `filename_%T.h5` (without file system directories)
+      - for `groupBased`:
+        - `/data/%T/` (must be equal to and encoded in the `basePath`)
 
   - `time`
     - type: *(float / REAL4)*
@@ -169,12 +172,14 @@ Attribute of a data set:
     - example: `2.99792e8`
 
   - `unitDimension`
-    - reserved for future use (requires struct-attribute support)
     - powers of the 7 base measures characterizing this data set
       (length L, mass M, time T, electric current I, thermodynamic temperature
        theta, amount of substance N, luminous intensity J)
     - does *not* represent if the data set is a 1, 2 or 3D array
-    - example: "N = kg * m / s^2", store struct "[1.; 1.; -2.; 0.; 0.; 0.; 0.]"
+    - examples:
+      - "m / s" is of dimension `L=1` and `T=-1`,
+        store struct `[1.; 0.; -1.; 0.; 0.; 0.; 0.]`
+      - "N = kg * m / s^2", store struct `[1.; 1.; -2.; 0.; 0.; 0.; 0.]`
 
 *Note to implementors* 
 
@@ -222,16 +227,16 @@ data set attribute for `scalar` or a group attribute for `vector` fields):
     - type: *(double / REAL8)*
     - description: unit-conversion factor to multiply the stored data with to
                    be represented in SI
-    - example: 2.99792e8
+    - example: `2.99792e8`
 
   - `unitDimension`
-    - reserved for future use (requires struct-attribute support)
+    - see general section above
     - powers of the 7 base measures characterizing this data set
       (length L, mass M, time T, electric current I, thermodynamic temperature
        theta, amount of substance N, luminous intensity J)
     - does *not* represent if the data set is a 1, 2 or 3D array
 
-  - `geometry` / `coordinateSystem` ?
+  - `geometry`
     - type: *(string)*
     - description: geometry of the mesh of the field data, right-handed
                    coordinate systems are imposed
@@ -260,13 +265,14 @@ data set attribute for `scalar` or a group attribute for `vector` fields):
 
   - `gridGlobalOffset`
     - type: N-dimensional struct of *(float / REAL4)*
-    - ...
+    - description: ...
+    - example: ...
 
   - `gridUnitSI`
     - type: *(double / REAL8)*
     - description: unit-conversion factor to multiply each value in `gridSpacing`
                    and `gridGlobalOffset` with to be represented in SI
-    - example: 1.0e-9
+    - example: `1.0e-9`
 
   - `dataOrder`
     - type: *(string)*
@@ -339,10 +345,10 @@ attribute for a `compound` or `vector` particle property):
     - type: *(double / REAL8)*
     - description: unit-conversion factor to multiply the stored data with to
                    be represented in SI
-    - example: 1.0e-9
+    - example: `1.0e-9`
 
   - `unitDimension`
-    - reserved for future use (requires struct-attribute support)
+    - see general section above
     - powers of the 7 base measures characterizing this data set
       (length L, mass M, time T, electric current I, thermodynamic temperature
        theta, amount of substance N, luminous intensity J)

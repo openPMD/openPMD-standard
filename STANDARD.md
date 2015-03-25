@@ -180,8 +180,8 @@ Attribute of a data set:
     - does *not* represent if the data set is a 1, 2 or 3D array
     - examples:
       - "m / s" is of dimension `L=1` and `T=-1`,
-        store struct `[1.; 0.; -1.; 0.; 0.; 0.; 0.]`
-      - "N = kg * m / s^2", store struct `[1.; 1.; -2.; 0.; 0.; 0.; 0.]`
+        store array `[1.; 0.; -1.; 0.; 0.; 0.; 0.]`
+      - "N = kg * m / s^2", store array `[1.; 1.; -2.; 0.; 0.; 0.; 0.]`
 
 *Note to implementors* 
 
@@ -216,9 +216,11 @@ of scalar fields* using a common sub-group as the name.
 
   - `vector` fields
     - type: *(any type)*
-    - data set: `fieldName/x`, `fieldName/y`, `fieldName/z`
-                while `fieldName` is a sub-group and `x`, `y`, `z` are
-                data sets of `scalar` fields
+    - data set: `fieldName/x`, `fieldName/y`, `fieldName/z` when
+	writing the *Cartesian* components of the vectors ; `fieldName/r`,
+	`fieldName/t`,  `fieldName/z` when writing the *cylindrical*
+	components of the vectors. While `fieldName` is a sub-group,
+	`x`, `y`, `z` are data sets of `scalar` fields.
 
 ### Mandatory attributes for each field
 
@@ -243,14 +245,24 @@ data set attribute for `scalar` or a group attribute for `vector` fields):
     - description: geometry of the mesh of the field data, right-handed
                    coordinate systems are imposed
     - allowed values:
-      - `cartesian`
-      - `cylindrical` ([doi:10.1016/j.jcp.2008.11.017](http://dx.doi.org/10.1016/j.jcp.2008.11.017))
+      - `cartesian` : standard Cartesian mesh
+      - `cylindrical` : regularly-spaced mesh in the r-z plane, with
+     Fourier decomposition in the azimuthal direction (See
+	 [doi:10.1016/j.jcp.2008.11.017](http://dx.doi.org/10.1016/j.jcp.2008.11.017))
+	 In this case, the field arrays are stored as a three-dimensional
+     dataset where the last axis corresponds to the z direction, the second
+     axis correspond to the r direction and where the first axis
+     corresponds to the azimuthal mode. (This last axis has length
+     2m+1, where m is the number of modes used. By convention, this
+     first stores the real part of the mode 0, than the real part of
+     the mode 1, than the imaginary part of the mode 1, than the real
+     part of the mode 2, etc...)
       - `other`
 
   - `geometryParameters`
     - type: *(string)*
     - description: additional parameters for the geometry, separated by a `;`,
-                   this attribute can be omitted if `cartesian` geometry
+                   this attribute can be omitted if geometry is `cartesian`
                    or `cylindrical` geometry with only mode `m=0` is used
     - examples:
       - for `cylindrical` geometry:
@@ -258,15 +270,22 @@ data set attribute for `scalar` or a group attribute for `vector` fields):
                         ![definition of imaginary part](img/cylindrical.png)
 
   - `gridSpacing`
-    - type: N-dimensional struct of *(float / REAL4)*
-    - description: spacing of the grid; the dimensionality `N` of the struct (array)
-                   determines if the field data is 1, 2 or 3D
-    - examples and required order of attributes:
-      - `cartesian`: `dx`, `dy`, `dz`
-      - `cylindrical`: `dr`, `dz`
+    - type: 1-dimensional array containing N *(float / REAL4)*
+      elements, where N is the number of dimensions in the simulation.
+    - description: spacing of the grid points along each dimension;
+    this refers to the spacing of the actual data that is written to
+    the file, not that of the simulation grid. (The data written may be
+    downsampled, compared to the simulation grid).
+	- In the case where `geometry` is `cartesian`, the dimensionality
+      `N` of the array determines if the field data is 1, 2 or 3D. The
+      elements of the array should correspond to `dx`, `dy`, `dz`, in
+      this order.
+      - In the case where `geometry` is `cylindrical`, the array
+        should be of length 2 and contain `dr` and `dz`, in that order.
 
   - `gridGlobalOffset`
-    - type: N-dimensional struct of *(float / REAL4)*
+    - type: 1-dimensional array containing N *(float / REAL4)*
+      elements, where N is the number of dimensions in the simulation
     - description: ...
     - example: ...
 
@@ -291,7 +310,7 @@ data set attribute for `scalar` or a group attribute for `vector` fields):
 The following attributes must be stored with each data set:
 
   - `position`
-    - type: struct of *(float / REAL4)*
+    - type: array of *(float / REAL4)*
     - range of each value: `[ 0.0 : 1.0 )`
     - description: position of the component on the grid/node/cell/voxel;
                    `0.0` means at the beginning of the cell and `1.0` is the

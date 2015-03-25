@@ -50,6 +50,19 @@ def writeRootAttr(f):
    f.attrs["comment"] = "This is a dummy file for test purposes."
 
 
+def addEDPICAttrFields(f, fieldName):
+   f[fieldName].attrs["fieldSolver"] = "Yee"
+   f[fieldName].attrs["fieldSolverOrder"] = 2.0
+   #f[fieldName].attrs["fieldSolverParameters"] = ""
+   f[fieldName].attrs["fieldSmoothing"] = "none"
+   #f[fieldName].attrs["fieldSmoothingParameters"] = "period=10;numPasses=4;compensator=true"
+   f[fieldName].attrs["currentSmoothing"] = "none"
+   #f[fieldName].attrs["currentSmoothingParameters"] = "period=1;numPasses=2;compensator=false"
+   f[fieldName].attrs["chargeCorrection"] = "none"
+   #f[fieldName].attrs["chargeCorrectionParameters"] = "period=100"
+
+   return
+
 def writeFields(f):
    fullFieldsPath = f.attrs["basePath"] + f.attrs["fieldsPath"]
 
@@ -67,6 +80,7 @@ def writeFields(f):
    f[fullFieldsPath + "rho"].attrs["gridUnitSI"] = 1.0
    f[fullFieldsPath + "rho"].attrs["dataOrder"] = "C"
    f[fullFieldsPath + "rho"].attrs["position"] = np.array([0.0, 0.0])
+   addEDPICAttrFields(f, fullFieldsPath + "rho")
 
    # vector field
    f.create_dataset(fullFieldsPath + "E/x", (32,64), dtype='f4')
@@ -86,15 +100,49 @@ def writeFields(f):
    f[fullFieldsPath + "E/x"].attrs["position"] = np.array([0.0, 0.5])
    f[fullFieldsPath + "E/y"].attrs["position"] = np.array([0.5, 0.0])
    f[fullFieldsPath + "E/z"].attrs["position"] = np.array([0.0, 0.0])
+   addEDPICAttrFields(f, fullFieldsPath + "E")
 
    return
 
 
+def addEDPICAttrParticles(f, particleName):
+   f[particleName].attrs["particleShape"] = 3.0
+   f[particleName].attrs["currentDeposition"] = "Esirkepov"
+   #f[particleName].attrs["currentDepositionParameters"] = ""
+   f[particleName].attrs["particlePush"] = "Boris"
+   f[particleName].attrs["particleInterpolation"] = "Trilinear"
+   f[particleName].attrs["particleSmoothing"] = "none"
+   #f[particleName].attrs["particleSmoothingParameters"] = "period=1;numPasses=2;compensator=false"
+
+
+   return
+
 def writeParticles(f):
    fullParticlesPath = f.attrs["basePath"] + f.attrs["particlesPath"]
+
+   # constant particle attributes (that could also be variable data sets)
+   f.create_group(fullParticlesPath + "electrons/charge")
+   f[fullParticlesPath + "electrons/charge"].attrs["value"] = -1.0;
+   f[fullParticlesPath + "electrons/charge"].attrs["unitSI"] = 1.60217657e-19;
+   f[fullParticlesPath + "electrons/charge"].attrs["unitDimension"] = \
+      np.array([0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0 ])
+      #          L    M    T    J  theta  N    J
+      # C = A * s
+
+   addEDPICAttrParticles(f, fullParticlesPath + "electrons")
+
    # scalar particle attribute
+   f.create_dataset(fullParticlesPath + "electrons/momentum/x", (128,), dtype='f4')
+   f.create_dataset(fullParticlesPath + "electrons/momentum/y", (128,), dtype='f4')
+   f.create_dataset(fullParticlesPath + "electrons/momentum/z", (128,), dtype='f4')
+   f[fullParticlesPath + "electrons/momentum"].attrs["unitSI"] = 1.60217657e-19;
+   f[fullParticlesPath + "electrons/momentum"].attrs["unitDimension"] = \
+      np.array([1.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0 ])
+      #          L    M     T    J  theta  N    J
+      # Dimension of Length * Mass / Time
+
    # vector particle attribute
-   # constant particle attributes
+
    return
 
 

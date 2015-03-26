@@ -1,6 +1,9 @@
 The openPMD Standard
 ====================
 
+Conventions Throughout this Documents
+--------------------------------------
+
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
 "SHOULD NOT", "RECOMMENDED",  "MAY", and "OPTIONAL" in this document are to be
 interpreted as described in [RFC 2119](http://tools.ietf.org/html/rfc2119).
@@ -11,6 +14,11 @@ The naming *(float)* without a closer specification is used if the user can
 choose which kind of floating point precision shall be used.
 The naming *(int)* without a closer specification is used if the user can
 choose which kind of signed integer type shall be used.
+
+Sometimes brackets `<Name>` are used for keywords while the `<>` only indicate
+the keyword is mandatory (but the `<>` itself shall not be written).
+Accordingly, optional keywords and options are indicated via square brackets
+`[Name]`.
 
 
 The Versions of this Standard

@@ -68,14 +68,31 @@ Grid based data (fields)
 - `chargeCorrectionParameters`
   - example: `period=100`
 
-### Naming Conventions
+### Additional Recommended Attributes per `fieldName`
 
-- fundamental: `E`/`B`
-- auxiliary:
-  - `J`/`rho`
-  - fields derived from particles:
-      `particleName_*`:
-        `current`, `density`, `particleEnergy`, `energyDensity`, `particleCounter`, `larmor`?
+- `longName`
+  - type: *(string)*
+  - description: descriptive long name of the field
+  - examples:
+    - `density of the external injected electrons`
+    - `Electric Field in z multiplied by 2 pi and divided by density of ions with gamma > 3`
+
+### Naming Conventions for `fieldName`
+
+- fundamental fields: `E`, `B` for electric and magnetic fields
+
+- auxiliary fields:
+  - `J`, `rho` for current density and charge density
+
+  - fields derived from particles: prefix them with `particleShortName_*`:
+    - examples:
+      - `current`: such as `electron_current`
+      - `density`: such as `electron_density`
+      - `particleEnergy`: kinetic energy of all particles, with their weighted
+                          contribution to a cell
+      - `energyDensity`: same as `particleEnergy` but divided by `density`
+      - `particleCounter`: ignores the shape of a particle and just checks if the
+                           position of it "corresponds" to a cell
 
 
 Particle data (particles)
@@ -121,10 +138,25 @@ Particle data (particles)
 
 - `particleInterpolation`
   - type: *(string)*
-  - description:
-  - reserved values:
-    - `Galerkin`
-    - `Trilinear`
+  - description: method that was used to interpolate fields to particle positions,
+                 as described in [doi:10.1016/j.crme.2014.07.006](http://dx.doi.org/10.1016/j.crme.2014.07.006)
+                 section 2.4
+  - allowed values:
+    - `uniform`: The fields are interpolated directly from the staggered grid
+                 to the particle positions (with the same interpolation order
+                 in all directions).
+    - `energyConserving`: Also known as *Galerkin method*.
+                          The fields are interpolated directly from the staggered
+                          grid to the particle positions (with reduced
+                          interpolation order in the parallel direction). This
+                          scheme is energy conserving in the limit of infinitely
+                          small time steps.
+    - `momentumConserving`: The fields are first interpolated from the staggered
+                            grid points to the corners of each cell, and then from
+                            the cell corners to the particle position (with the
+                            same order of interpolation in all directions). This
+                            scheme is momentum conserving in the limit of
+                            infinitely small time steps.
     - `other`
 
 - `particleSmoothing`
@@ -146,17 +178,64 @@ Particle data (particles)
 
 ### Additional Mandatory Properties per Particle Species
 
-- required: charge, masss, weighting, globalCellId, position = in-cell-position,
-            descriptive long name "2nd e-", "Deuterium"
   -> as usual as an array or attribute
   -> [!] if position is in-cell-position, than unitSI is different for each component
-- charge state (float), "electron"/"fundamental" particle numbers (float)
-- atomic numbers: proton number + neutron number (float)
+
+- **required:**
+  - `charge`
+    - type: *(float)*
+  - `mass`
+    - type: *(float)*
+  - `weighting`
+    - type: *(float)*
+    - description: if a simulated particle represents several real particles,
+                   each attribute such as `charge` and `mass` needs to be
+                   multiplied with that value
+  - `position`
+    - type: vector of *(float)*
+    - description: global position of the particle,
+                   if `globalCellId` is set then it represents the in-cell-position
+  - `momentum`
+    - type: vector of *(float)*
+
+- **recommended:**
+  - `longName`
+    - type: *(string)*
+    - description: descriptive long name of the particle
+    - examples:
+      - `2nd e- species going downstream`
+      - `not ionized Deuterium ions`
+      - `electrons created from carbon ions via impact ionization`
+
+  - `globalCellId`
+    - type: vector of *(int)*
+    - description: position rounded down to the cell the particle belongs to,
+                   increases the precision of position attributes for
+                   single precision attributes with a large offset from
+                   the global origin of the simulation
+
+- **recommended** naming for additional attributes to provide information to atomic physics algorithms:
+  - `boundElectrons`
+    - type: *(float)*
+    - description: number of bound electrons of an ion/atom
+
+  - `protonNumber`
+    - type: *(float)*
+    - description: the atomic number Z of an ion/atom
+
+  - `neutronNumber`
+    - type: *(float)*
+    - description: the neutron number N = the mass number A - the atomic number Z
+                   of an ion/atom
+
+  - future extensions: it might be convenient to add an attribute which electron
+                       species shall be used as a "target" for newly created
+                       free electrons from ionization methods
 
 ### Additional Data Set per Particle Species
 
   - `particleGroups`
-    - type: *(struct of five uint64)*
+    - type: MPI_Size times an *(array of five uint64)*
       - `numParticles`: number of particles in block
       - `rank`: unique, zero-based, contiguous index of the writing process
                 (e.g., the MPI-rank)

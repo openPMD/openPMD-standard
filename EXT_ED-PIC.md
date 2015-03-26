@@ -107,7 +107,7 @@ Grid Based Records (Fields)
 Particle Records
 ----------------
 
-### Additional Attributes for each `particle record`
+### Additional Attributes for the `Group` of each Particle Species
 
 - **Required:**
 
@@ -191,7 +191,7 @@ Particle Records
     - reserved for future use: `direction=array()`, `stride=array()`
 
 
-### Additional Records per Particle Species
+### Additional `Records` per Particle Species
 
 - **Required:**
 

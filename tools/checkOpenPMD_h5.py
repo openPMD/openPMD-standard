@@ -21,7 +21,7 @@ import sys, getopt, os.path
 
 
 def help():
-   print 'checkOpenPMD_h5.py -i <fileName> [-v]'
+   print('checkOpenPMD_h5.py -i <fileName> [-v]')
    sys.exit()
 
 
@@ -31,7 +31,7 @@ def parseCmd(argv):
    try:
       opts, args = getopt.getopt(argv,"hvi:",["file="])
    except getopt.GetoptError:
-      print 'test.py -i <fileName>'
+      print('test.py -i <fileName>')
       sys.exit(2)
    for opt, arg in opts:
       if opt == '-h':
@@ -42,22 +42,22 @@ def parseCmd(argv):
          fileName = arg
    if not os.path.isfile(fileName):
       help()
-   return fileName, verbose
+   return(fileName, verbose)
 
 
 def openFile(fileName):
    if h5.is_hdf5(fileName):
       f = h5.File(fileName, "r")
-      return f
+      return(f)
    else:
       help()
 
 
 def getAttr(f, name):
    if name in f.attrs.keys():
-       return True, f.attrs[name]
+       return(True, f.attrs[name])
    else:
-       return False, None
+       return(False, None)
 
 
 def testAttr(f, v, request, name):
@@ -65,19 +65,19 @@ def testAttr(f, v, request, name):
    valid, value = getAttr(f, name)
    if valid:
      if v:
-        print "Attibute " + name + " (" + request + ") exists! Value = " + str(value)
-     return np.array([0, 0])
+        print("Attibute " + name + " (" + request + ") exists! Value = " + str(value))
+     return(np.array([0, 0]))
    else:
      if request == "required":
-         print "Error: Attibute " + name + " (" + request + ") does NOT exist!"
-         return np.array([1, 0]);
+         print("Error: Attibute " + name + " (" + request + ") does NOT exist!")
+         return(np.array([1, 0]))
      if request == "recommended":
-         print "Warning: Attibute " + name + " (" + request + ") does NOT exist!"
-         return np.array([0, 1]);
+         print("Warning: Attibute " + name + " (" + request + ") does NOT exist!")
+         return(np.array([0, 1]))
      if request == "optional":
          if v:
-            print "Info: Attibute " + name + " (" + request + ") does NOT exist!"
-         return np.array([0, 0]);
+            print("Info: Attibute " + name + " (" + request + ") does NOT exist!")
+         return(np.array([0, 0]))
 
 
 def testRootAttr(f, v):
@@ -121,4 +121,4 @@ if __name__ == "__main__":
    # particle checks
 
    # results
-   print "Result: " + str(err) + " Errors and " + str(warn) + " Warnings."
+   print("Result: " + str(err) + " Errors and " + str(warn) + " Warnings.")

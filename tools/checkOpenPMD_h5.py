@@ -83,7 +83,7 @@ def test_attr(f, v, request, name):
     ----------
     f : an h5py.File object
         The HDF5 file in which to find the attribute
-        
+
     v : bool
         Verbose option
 
@@ -92,7 +92,7 @@ def test_attr(f, v, request, name):
 
     name : string
         The path to the attribute within the HDF5 file
-    
+
     Returns
     -------
     An array with 2 elements :
@@ -132,10 +132,10 @@ def check_root_attr(f, v, pic):
     ----------
     f : an h5py.File object
         The HDF5 file in which to find the attribute
-        
+
     v : bool
         Verbose option
-    
+
     pic : bool
         Whether to check for the ED-PIC extension attributes
 
@@ -147,7 +147,7 @@ def check_root_attr(f, v, pic):
     """
     err = 0
     warn = 0
-    
+
     # STANDARD.md
     #   required
     err, warn = [err, warn] + test_attr(f, v, "required", "version")
@@ -169,19 +169,19 @@ def check_root_attr(f, v, pic):
     # Extension: ED-PIC
     #   no addition requirements for "/" defined
     return np.array([err, warn])
-    
+
 def check_fields(f, v, pic):
     """
-    Scan all the fields in the file and checks the attributes are present 
+    Scan all the fields in the file and checks the attributes are present
 
     Parameters
     ----------
     f : an h5py.File object
         The HDF5 file in which to find the attribute
-        
+
     v : bool
         Verbose option
-    
+
     pic : bool
         Whether to check for the ED-PIC extension attributes
 
@@ -194,15 +194,15 @@ def check_fields(f, v, pic):
     # Initialize the result array
     # First element : number of errors
     # Second element : number of warnings
-    result_array = np.array([ 0, 0]) 
-    
+    result_array = np.array([ 0, 0])
+
     # Find all the fields
     valid, base_path = get_attr(f, "basePath")
     valid, fields_path = get_attr(f, "fieldsPath")
     if os.path.join( base_path, fields_path) != ( base_path + fields_path ):
         print("Error: `basePath`+`fieldsPath` seems to be malformed "
               "(is `basePath` absolute and ends on a `/` ?)")
-        return( np.array([1, 0]) )			
+        return( np.array([1, 0]) )
     else:
         full_fields_path = base_path + fields_path
         # Find all the fields (avoid simple attributes)
@@ -213,7 +213,7 @@ def check_fields(f, v, pic):
     # Check for the attributes of the STANDARD.md
     for field_name in list_fields :
         field = f[full_fields_path + field_name]
-        
+
         # General attributes of the record
         result_array += test_attr(field, v, "required", "unitSI")
         result_array += test_attr(field, v, "required", "unitDimension")
@@ -228,14 +228,14 @@ def check_fields(f, v, pic):
         if type(field) is h5.Dataset :   # If the record is a scalar field
             result_array += test_attr(field, v, "required", "position")
         else:                            # If the record is a vector field
-        	# Loop over the components
+            # Loop over the components
             for component_name in field:
                 component = field[component_name]
                 result_array += test_attr(component, v, "required", "position")
 
-	# Check for the attributes of the PIC extension, if asked to do so by the user 
+    # Check for the attributes of the PIC extension, if asked to do so by the user
     if pic:
-    
+
         # Check the attributes associated with the field solver
         result_array += test_attr( f[full_fields_path], v, "required",
                                     "fieldSolver" )
@@ -245,8 +245,8 @@ def check_fields(f, v, pic):
                                        "fieldSolverOrder")
             result_array += test_attr( f[full_fields_path], v, "required",
                                        "fieldSolverParameters")
- 		
- 		# Check the attributes associated with the current smoothing
+
+        # Check the attributes associated with the current smoothing
         result_array += test_attr( f[full_fields_path], v, "required",
                                    "currentSmoothing")
         valid, current_smoothing = get_attr(field, "currentSmoothing")
@@ -254,15 +254,15 @@ def check_fields(f, v, pic):
             result_array += test_attr(f[full_fields_path], v, "required",
                                       "currentSmoothingParameters")
 
-    	# Check the attributes associated with the charge conservation
+        # Check the attributes associated with the charge conservation
         result_array += test_attr(f[full_fields_path], v, "required",
                                   "chargeCorrection")
-    	valid, charge_correction = get_attr(field, "chargeCorrection")
+        valid, charge_correction = get_attr(field, "chargeCorrection")
         if valid == True and charge_correction != "none":
             result_array += test_attr(f[full_fields_path], v, "required",
                                       "chargeCorrectionParameters")
-		
-    	# Check for the attributes of each record
+
+        # Check for the attributes of each record
         for field_name in list_fields :
             field = f[full_fields_path + field_name]
             result_array + test_attr(field, v, "required", "fieldSmoothing")

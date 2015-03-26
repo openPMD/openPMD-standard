@@ -14,9 +14,9 @@
 
 ### Review and Improvements in Draft Phase (2014-2015)
 
-- Jean-Luc Vay (LBL)
+- Jean-Luc Vay (LBNL)
 - David P. Grote (LLNL)
-- Remi Lehe (LBL)
+- Remi Lehe (LBNL)
 
 
 ### Reviewers and Relevant Contributions in Later Versions

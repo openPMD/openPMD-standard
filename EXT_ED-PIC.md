@@ -18,7 +18,7 @@ Grid Based Records (Fields)
       - `DS` (*Directional Splitting* after Yasuhiko Sentoku, [doi:10.1140/epjd/e2014-50162-y](http://dx.doi.org/10.1140/epjd/e2014-50162-y))
       - `PSTD`
       - `PSATD`
-      - `PSAOTD`
+      - `GPSTD`
       - `other`
       - `none`
 
@@ -52,7 +52,10 @@ Grid Based Records (Fields)
     - type: *(string)*
     - description: applied corrections to fields to ensure charge conservation
     - allowed values:
-      - `Mader`
+      - `Marder` ([doi:10.1016/0021-9991(87)90043-X](http://dx.doi.org/10.1016/0021-9991(87)90043-X))
+      - `Langdon` ([doi:10.1016/0010-4655(92)90105-8](http://dx.doi.org/10.1016/0010-4655(92)90105-8))
+      - `Boris`
+      - `hyperbolic`
       - `spectral` (various)
       - `other`
 

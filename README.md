@@ -61,16 +61,18 @@ and auxiliary software under the **ISC license**.
 For more details, see the [contributions](CONTRIBUTING.md) page.
 
 
-Partners and Subscribers
-------------------------
+Projects and Contributions
+--------------------------
 
 The following projects participated and/or implemented the
 **openPMD** standard to describe their data:
 
 - [PIConGPU](http://picongpu.hzdr.de) (HZDR, Germany)
   - domain: electro-dynamic particle-in-cell code
-  - link to open source implementation
+  - [repository](https://github.com/ComputationalRadiationPhysics/picongpu) (GPLv3+/LGPLv3+)
+  - status: currently implementing
 
-- [Warp](http://warp.lbl.gov) (LBL, United States)
+- [Warp](http://warp.lbl.gov) (LBNL & LLNL, United States)
   - domain: electro-dynamic/static particle-in-cell code
-  - link to open source implementation
+  - [repository](https://bitbucket.org/berkeleylab/warp)
+  - status: currently implementing

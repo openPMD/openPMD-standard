@@ -24,11 +24,18 @@ Accordingly, optional keywords and options are indicated via square brackets
 The Versions of this Standard
 -----------------------------
 
-Major versions of this standard do not need to be backwards compatible.
-Minor versions need to be backwards compatible and should for example
-only add optional information or tool updates.
-Revisions are reserved for minor typos in the documentation (but not in
-keywords).
+Versions of the standard allow codes and implementors to easily differenciate
+between new updates that are incooperated.
+
+The full version number is always used in format `<MAJOR>.<MINOR>.<REVISION>` .
+
+Improvements will be sought to be backwards compatible, if that is not
+possible then changes in the major version of this standard indicate
+incompatibility.
+Minor version updates instead need to be backwards compatible and should for
+example only add optional information or tool updates.
+Revisions are reserved for minor typos in the documentation and tools (but not
+for changes in keywords).
 
 
 Hierarchy of the Data File
@@ -271,19 +278,20 @@ data set attribute for `scalar` or a group attribute for `vector` fields):
     - allowed values:
       - `cartesian`: standard Cartesian mesh, the standard order of axes indexing
                      shall be `x`, `y`, `z`
-      - `cylindrical`: regularly-spaced mesh in the r-z plane, with
-                       Fourier decomposition in the azimuthal direction (See
-                       [doi:10.1016/j.jcp.2008.11.017](http://dx.doi.org/10.1016/j.jcp.2008.11.017))
-                       In this case, the field arrays are stored as a
-                       three-dimensional record where the last axis corresponds
-                       to the `z` direction, the second axis correspond to the
-                       `r` direction and where the first axis corresponds to
-                       the azimuthal mode. (This last axis has length `2m+1`,
-                       where `m` is the number of modes used. By convention,
-                       this first stores the real part of the mode `0`, then
-                       the real part of the mode `1`, then the imaginary part
-                       of the mode `1`, then the real part of the mode `2`,
-                       etc.)
+      - `thetaMode`: regularly-spaced mesh in the r-z plane, with
+                     Fourier decomposition in the azimuthal direction (See
+                     [doi:10.1016/j.jcp.2008.11.017](http://dx.doi.org/10.1016/j.jcp.2008.11.017))
+                     In this case, the field arrays are stored as a
+                     three-dimensional record where the last axis corresponds
+                     to the `z` direction, the second axis correspond to the
+                     `r` direction and where the first axis corresponds to
+                     the azimuthal mode. (This last axis has length `2m+1`,
+                     where `m` is the number of modes used. By convention,
+                     this first stores the real part of the mode `0`, then
+                     the real part of the mode `1`, then the imaginary part
+                     of the mode `1`, then the real part of the mode `2`,
+                     etc.)
+      - reserved: `cylindrical`, `spherical`
       - `other`
 
   - `geometryParameters`

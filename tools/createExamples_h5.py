@@ -21,10 +21,27 @@ import sys
 import datetime
 from dateutil.tz import tzlocal
 
-def setup_root_attr(f, iteration):
+def get_basePath(f, iteration):
+    """
+    Get the basePath for a certain iteration
+
+    Parameter
+    ---------
+    f : an h5py.File object
+        The file in which to write the data
+    iteration : an iteration number
+
+    Returns
+    -------
+    A string with a in-file path.
+    """
+    return f.attrs["basePath"].replace("%T", str(iteration))
+
+
+def setup_root_attr(f):
     """
     Write the root metadata for this file
-    
+
     Parameter
     ---------
     f : an h5py.File object
@@ -33,7 +50,7 @@ def setup_root_attr(f, iteration):
 
     # Required attributes
     f.attrs["version"] = "1.0.0"
-    f.attrs["basePath"] = "/data/%d/" % iteration
+    f.attrs["basePath"] = "/data/%T/"
     f.attrs["fieldsPath"] = "fields/"
     f.attrs["particlesPath"] = "particles/"
     f.attrs["iterationEncoding"] = "fileBased"
@@ -49,235 +66,277 @@ def setup_root_attr(f, iteration):
     f.attrs["comment"] = "This is a dummy file for test purposes."
 
 
-def write_rho_cylindrical(f, mode0, mode1):
+def write_rho_cylindrical(fields, mode0, mode1):
     """
-    Write the metadata and the data associated with the scalar field rho, 
+    Write the metadata and the data associated with the scalar field rho,
     using the cylindrical representation (with azimuthal decomposition going up to m=1)
-    
+
     Parameters
     ----------
-    f : an h5py.File object
-        The file in which to write the data    
-        
+    fields : an h5py.Group object
+             Group of the fields in basePath + fieldsPath
+
     mode0 : a 2darray of reals
         The values of rho in the azimuthal mode 0, on the r-z grid
         (The first axis corresponds to r, and the second axis corresponds to z)
-        
+
     mode1 : a 2darray of complexs
         The values of rho in the azimuthal mode 1, on the r-z grid
         (The first axis corresponds to r, and the second axis corresponds to z)
     """
     # Path to the rho fields, within the h5py file
-    full_rho_path = f.attrs["basePath"] + f.attrs["fieldsPath"] + "rho" 
+    full_rho_path = "rho"
+    fields.create_dataset( full_rho_path, (3, mode0.shape[0], mode0.shape[1]), \
+                           dtype='f4')
+    rho = fields[full_rho_path]
 
     # Create the dataset (cylindrical representation with azimuthal modes up to m=1)
-    # The first axis has size 2m+1 
-    f.create_dataset( full_rho_path, (3, mode0.shape[0], mode0.shape[1]), dtype='f4')  
-    f[full_rho_path].attrs["geometry"] = "cylindrical"    
-    f[full_rho_path].attrs["geometryParameters"] = "m=1; imag=+"
-    
+    # The first axis has size 2m+1
+    rho.attrs["geometry"] = "cylindrical"
+    rho.attrs["geometryParameters"] = "m=1; imag=+"
+
     # Add information on the units of the data
-    f[full_rho_path].attrs["unitSI"] = 1.0
-    f[full_rho_path].attrs["unitDimension"] = \
+    rho.attrs["unitSI"] = 1.0
+    rho.attrs["unitDimension"] = \
        np.array([-3.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0 ])
        #           L    M    T    J  theta  N    J
        # rho is in Coulomb per meter cube : C / m^3 = A * s / m^3 -> M^-3 * T * J
 
     # Add time information
-    f[full_rho_path].attrs["time"] = 0.  # Time is expressed in nanoseconds here
-    f[full_rho_path].attrs["timeUnitSI"] = 1.e-9  # Conversion from nanoseconds to seconds
+    rho.attrs["time"] = 0.  # Time is expressed in nanoseconds here
+    rho.attrs["timeUnitSI"] = 1.e-9  # Conversion from nanoseconds to seconds
 
     # Add information on the r-z grid
-    f[full_rho_path].attrs["gridSpacing"] = np.array([1.0, 1.0])  # dr, dz
-    f[full_rho_path].attrs["gridGlobalOffset"] = np.array([0.0, 0.0]) # rmin, zmin
-    f[full_rho_path].attrs["position"] = np.array([0.0, 0.0])    
-    f[full_rho_path].attrs["gridUnitSI"] = 1.0
-    f[full_rho_path].attrs["dataOrder"] = "C"
+    rho.attrs["gridSpacing"] = np.array([1.0, 1.0])  # dr, dz
+    rho.attrs["gridGlobalOffset"] = np.array([0.0, 0.0]) # rmin, zmin
+    rho.attrs["position"] = np.array([0.0, 0.0])
+    rho.attrs["gridUnitSI"] = 1.0
+    rho.attrs["dataOrder"] = "C"
 
     # Add specific information for PIC simulations
-    add_EDPIC_attr_fields(f, full_rho_path)
-    
-    # Fill the array with the field data 
+    add_EDPIC_attr_fields(rho)
+
+    # Fill the array with the field data
     if mode0.shape != mode1.shape :
         raise ValueError("`mode0` and `mode1` should have the same shape")
-    f[full_rho_path][0,:,:] = mode0[:,:] # Store the mode 0 first
-    f[full_rho_path][1,:,:] = mode1[:,:].real # Then store the real part of mode 1
-    f[full_rho_path][2,:,:] = mode1[:,:].imag # Then store the imaginary part of mode 1
+    rho[0,:,:] = mode0[:,:] # Store the mode 0 first
+    rho[1,:,:] = mode1[:,:].real # Then store the real part of mode 1
+    rho[2,:,:] = mode1[:,:].imag # Then store the imaginary part of mode 1
 
 
-def write_e_2d_cartesian(f, data_ex, data_ey, data_ez ):
+def write_e_2d_cartesian(fields, data_ex, data_ey, data_ez ):
     """
-    Write the metadata and the data associated with the vector field E, 
+    Write the metadata and the data associated with the vector field E,
     using a 2d Cartesian representation
-    
+
     Parameters
     ----------
-    f : an h5py.File object
-        The file in which to write the data    
-        
+    fields : an h5py.Group object
+             Group of the fields in basePath + fieldsPath
+
     data_ex, data_ey, data_ez : 2darray of reals
         The values of the components ex, ey, ez on the 2d x-y grid
         (The first axis corresponds to x, and the second axis corresponds to y)
     """
     # Path to the E field, within the h5py file
-    full_e_path = f.attrs["basePath"] + f.attrs["fieldsPath"] + "E/" 
+    full_e_path_name = "E"
+    fields.create_group(full_e_path_name)
+    E = fields[full_e_path_name]
 
     # Create the dataset (2d cartesian grid)
-    f.create_dataset(full_e_path + "x", data_ex.shape, dtype='f4')
-    f.create_dataset(full_e_path + "y", data_ey.shape, dtype='f4')
-    f.create_dataset(full_e_path + "z", data_ez.shape, dtype='f4')
+    E.create_dataset("x", data_ex.shape, dtype='f4')
+    E.create_dataset("y", data_ey.shape, dtype='f4')
+    E.create_dataset("z", data_ez.shape, dtype='f4')
 
     # Write the common metadata for the group
-    f[full_e_path].attrs["geometry"] = "cartesian"
-    f[full_e_path].attrs["gridSpacing"] = np.array([1.0, 1.0])       # dx, dy
-    f[full_e_path].attrs["gridGlobalOffset"] = np.array([0.0, 0.0])  # xmin, ymin    
-    f[full_e_path].attrs["gridUnitSI"] = 1.0
-    f[full_e_path].attrs["dataOrder"] = "C"
-    f[full_e_path].attrs["unitDimension"] = \
+    E.attrs["geometry"] = "cartesian"
+    E.attrs["gridSpacing"] = np.array([1.0, 1.0])       # dx, dy
+    E.attrs["gridGlobalOffset"] = np.array([0.0, 0.0])  # xmin, ymin
+    E.attrs["gridUnitSI"] = 1.0
+    E.attrs["dataOrder"] = "C"
+    E.attrs["unitSI"] = 1.0e9 # convert normalized simulation units to SI
+    E.attrs["unitDimension"] = \
        np.array([1.0, 1.0, -3.0, -1.0, 0.0, 0.0, 0.0 ])
        #          L    M     T     J  theta  N    J
        # E is in volts per meters : V / m = kg * m / (A * s^3) -> L * M * T^-3 * J^-1
 
     # Add specific information for PIC simulations at the group level
-    add_EDPIC_attr_fields(f, full_e_path)
+    add_EDPIC_attr_fields(E)
 
     # Add time information
-    f[full_e_path].attrs["time"] = 0.  # Time is expressed in nanoseconds here
-    f[full_e_path].attrs["timeUnitSI"] = 1.e-9  # Conversion from nanoseconds to seconds
-    
+    E.attrs["time"] = 0.  # Time is expressed in nanoseconds here
+    E.attrs["timeUnitSI"] = 1.e-9  # Conversion from nanoseconds to seconds
+
     # Write attribute that is specific to each dataset: staggered position within a cell
-    f[full_e_path + "x"].attrs["position"] = np.array([0.0, 0.5])
-    f[full_e_path + "y"].attrs["position"] = np.array([0.5, 0.0])
-    f[full_e_path + "z"].attrs["position"] = np.array([0.0, 0.0])
-    
-    # Fill the array with the field data 
-    f[full_e_path + "x"][:,:] =  data_ex[:,:]
-    f[full_e_path + "y"][:,:] =  data_ey[:,:]
-    f[full_e_path + "z"][:,:] =  data_ez[:,:]
+    E["x"].attrs["position"] = np.array([0.0, 0.5])
+    E["y"].attrs["position"] = np.array([0.5, 0.0])
+    E["z"].attrs["position"] = np.array([0.0, 0.0])
+
+    # Fill the array with the field data
+    E["x"][:,:] =  data_ex[:,:]
+    E["y"][:,:] =  data_ey[:,:]
+    E["z"][:,:] =  data_ez[:,:]
 
 
-def add_EDPIC_attr_fields(f, fieldName ):
+def add_EDPIC_attr_fields(field):
     """
     Write the metadata which is specific to PIC algorithm
     for a given field
-    
+
     Parameters
     ----------
-    f : an h5py.File object
-        The file in which to write the data
-        
-    fieldName : string
-        The path (within the HDF5 file) to the field considered
-        (a path to a dataset in the case of a scalar field, 
-        or to a group in the case of a vector field)
-    """
-    f[fieldName].attrs["fieldSolver"] = "Yee"
-    f[fieldName].attrs["fieldSolverOrder"] = 2.0
-    #f[fieldName].attrs["fieldSolverParameters"] = ""
-    f[fieldName].attrs["fieldSmoothing"] = "none"
-    #f[fieldName].attrs["fieldSmoothingParameters"] = \
-    # "period=10;numPasses=4;compensator=true"
-    f[fieldName].attrs["currentSmoothing"] = "none"
-    #f[fieldName].attrs["currentSmoothingParameters"] = \
-    #"period=1;numPasses=2;compensator=false"
-    f[fieldName].attrs["chargeCorrection"] = "none"
-    #f[fieldName].attrs["chargeCorrectionParameters"] = "period=100"
+    field : an h5py.Group or h5py.Dataset object
+            The record of the field (Group for vector field
+            and Dataset for scalar fields)
 
-def add_EDPIC_attr_particles(f, particleName):
+    """
+    field.attrs["fieldSmoothing"] = "none"
+    # field.attrs["fieldSmoothingParameters"] = \
+    #     "period=10;numPasses=4;compensator=true"
+
+
+def add_EDPIC_attr_particles(particle):
     """
     Write the metadata which is specific to the PIC algorithm
     for a given species.
 
     Parameters
     ----------
-    f : an h5py.File object
-        The file in which to write the data
+    particle : an h5py.Group object
+               The group of the particle that gets additional attributes.
 
-    particleName : string
-        The path (within the HDF5 file) to the species considered
-        (a path to a dataset in the case of a scalar field, 
-        or to a group in the case of a vector field)
     """
-    f[particleName].attrs["particleShape"] = 3.0
-    f[particleName].attrs["currentDeposition"] = "Esirkepov"
-    #f[particleName].attrs["currentDepositionParameters"] = ""
-    f[particleName].attrs["particlePush"] = "Boris"
-    f[particleName].attrs["particleInterpolation"] = "Trilinear"
-    f[particleName].attrs["particleSmoothing"] = "none"
-    #f[particleName].attrs["particleSmoothingParameters"] = "period=1;numPasses=2;compensator=false"
+    particle.attrs["particleShape"] = 3.0
+    particle.attrs["currentDeposition"] = "Esirkepov"
+    # particle.attrs["currentDepositionParameters"] = ""
+    particle.attrs["particlePush"] = "Boris"
+    particle.attrs["particleInterpolation"] = "Trilinear"
+    particle.attrs["particleSmoothing"] = "none"
+    # particle.attrs["particleSmoothingParameters"] = \
+    #     "period=1;numPasses=2;compensator=false"
 
-def write_particles(f):
-    fullParticlesPath = f.attrs["basePath"] + f.attrs["particlesPath"]
 
-    # constant scalar particle attributes (that could also be variable data sets)
-    f.create_group(fullParticlesPath + "electrons/charge")
-    f[fullParticlesPath + "electrons/charge"].attrs["value"] = -1.0;
-    f[fullParticlesPath + "electrons/charge"].attrs["unitSI"] = 1.60217657e-19;
-    f[fullParticlesPath + "electrons/charge"].attrs["unitDimension"] = \
+def write_fields(f, iteration):
+    full_fields_path = get_basePath(f, iteration) + f.attrs["fieldsPath"]
+    f.create_group(full_fields_path)
+    fields = f[full_fields_path]
+
+    # Extension: Additional attributes for ED-PIC
+    fields.attrs["fieldSolver"] = "Yee"
+    fields.attrs["fieldSolverOrder"] = 2.0
+    # fields.attrs["fieldSolverParameters"] = ""
+    fields.attrs["currentSmoothing"] = "none"
+    # fields.attrs["currentSmoothingParameters"] = \
+    #     "period=1;numPasses=2;compensator=false"
+    fields.attrs["chargeCorrection"] = "none"
+    # fields.attrs["chargeCorrectionParameters"] = "period=100"
+
+    # (Here the data is randomly generated, but in an actual simulation, this would
+    # be replaced by the simulation data.)
+
+    # - Write rho
+    # Mode 0 : real values, mode 1 : complex values
+    data_rho0 = np.random.rand(32,64)
+    data_rho1 = np.random.rand(32,64) + 1.j*np.random.rand(32,64)
+    write_rho_cylindrical(fields, data_rho0, data_rho1)
+
+    # - Write E
+    data_ex = np.random.rand(32,64)
+    data_ey = np.random.rand(32,64)
+    data_ez = np.random.rand(32,64)
+    write_e_2d_cartesian( fields, data_ex, data_ey, data_ez )
+
+def write_particles(f, iteration):
+    fullParticlesPath = get_basePath(f, iteration) + f.attrs["particlesPath"]
+    f.create_group(fullParticlesPath + "electrons")
+    electrons = f[fullParticlesPath + "electrons"]
+
+    globalNumParticles = 128 # example number of all particles
+
+    # Extension: ED-PIC Attributes
+    #   required
+    add_EDPIC_attr_particles(electrons)
+    #   recommended
+    electrons.attrs["longName"] = "My first electron species"
+
+    # Extension: ED-PIC Record `particleGroups`
+    #   recommended
+    mpi_size = 4  # "emulate" example MPI run with 4 ranks
+    data_size = 5 # see EXT_ED-PIC.md
+    grid_layout = np.array( [512, 128, 1] ) # global grid in cells
+    electrons.create_dataset("particleGroups", (5*mpi_size,), dtype='uint64')
+    particleGroups = electrons["particleGroups"]
+
+    for rank in np.arange(mpi_size): # each MPI rank would write it's part independently
+        particleGroups[rank*data_size + 0] = globalNumParticles / mpi_size
+        particleGroups[rank*data_size + 1] = rank
+        # example: 1D domain decompositon along the first axis
+        particleGroups[rank*data_size + 2] = rank * grid_layout[0] / mpi_size # 1st dimension spatial offset
+        particleGroups[rank*data_size + 3] = 0 # 2nd dimension spatial offset
+        particleGroups[rank*data_size + 4] = 0 # 3rd dimension spatial offset
+
+    # constant scalar particle records (that could also be variable records)
+    electrons.create_group("charge")
+    charge = electrons["charge"]
+    charge.attrs["value"] = -1.0;
+    charge.attrs["unitSI"] = 1.60217657e-19;
+    charge.attrs["unitDimension"] = \
        np.array([0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0 ])
        #          L    M    T    J  theta  N    J
        # C = A * s
-    f.create_group(fullParticlesPath + "electrons/mass")
-    f[fullParticlesPath + "electrons/mass"].attrs["value"] = 1.0;
-    f[fullParticlesPath + "electrons/mass"].attrs["unitSI"] = 9.10938291e-31;
-    f[fullParticlesPath + "electrons/mass"].attrs["unitDimension"] = \
+    electrons.create_group("mass")
+    mass = electrons["mass"]
+    mass.attrs["value"] = 1.0;
+    mass.attrs["unitSI"] = 9.10938291e-31;
+    mass.attrs["unitDimension"] = \
        np.array([0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0 ])
        #          L    M    T    J  theta  N    J
 
-    f[fullParticlesPath + "electrons"].attrs["longName"] = "My first electron species"
-    addEDPICAttrParticles(f, fullParticlesPath + "electrons")
-
-    # scalar particle attribute (non-const/individual per particle)
-    f.create_dataset(fullParticlesPath + "electrons/weighting", (128,), dtype='f4')
-    f[fullParticlesPath + "electrons/weighting"].attrs["unitSI"] = 1.0;
-    f[fullParticlesPath + "electrons/weighting"].attrs["unitDimension"] = \
+    # scalar particle records (non-const/individual per particle)
+    electrons.create_dataset("weighting", (globalNumParticles,), dtype='f4')
+    weighting = electrons["weighting"]
+    weighting.attrs["unitSI"] = 1.0;
+    weighting.attrs["unitDimension"] = \
        np.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ]) # plain floating point number
 
-    # vector particle attribute (non-const/individual per particle)
-    f.create_dataset(fullParticlesPath + "electrons/position/x", (128,), dtype='f4')
-    f.create_dataset(fullParticlesPath + "electrons/position/y", (128,), dtype='f4')
-    f.create_dataset(fullParticlesPath + "electrons/position/z", (128,), dtype='f4')
-    f[fullParticlesPath + "electrons/position"].attrs["unitSI"] = 1.e-9;
-    f[fullParticlesPath + "electrons/position"].attrs["unitDimension"] = \
+    # vector particle records (non-const/individual per particle)
+    electrons.create_group("position")
+    position = electrons["position"]
+    position.create_dataset("x", (globalNumParticles,), dtype='f4')
+    position.create_dataset("y", (globalNumParticles,), dtype='f4')
+    position.create_dataset("z", (globalNumParticles,), dtype='f4')
+    position.attrs["unitSI"] = 1.e-9;
+    position.attrs["unitDimension"] = \
        np.array([1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ])
        #          L    M     T    J  theta  N    J
        # Dimension of Length per component
 
-    f.create_dataset(fullParticlesPath + "electrons/momentum/x", (128,), dtype='f4')
-    f.create_dataset(fullParticlesPath + "electrons/momentum/y", (128,), dtype='f4')
-    f.create_dataset(fullParticlesPath + "electrons/momentum/z", (128,), dtype='f4')
-    f[fullParticlesPath + "electrons/momentum"].attrs["unitSI"] = 1.60217657e-19;
-    f[fullParticlesPath + "electrons/momentum"].attrs["unitDimension"] = \
+    electrons.create_group("momentum")
+    momentum = electrons["momentum"]
+    momentum.create_dataset("x", (globalNumParticles,), dtype='f4')
+    momentum.create_dataset("y", (globalNumParticles,), dtype='f4')
+    momentum.create_dataset("z", (globalNumParticles,), dtype='f4')
+    momentum.attrs["unitSI"] = 1.60217657e-19;
+    momentum.attrs["unitDimension"] = \
        np.array([1.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0 ])
        #          L    M     T    J  theta  N    J
        # Dimension of Length * Mass / Time
 
 
-
 if __name__ == "__main__":
-	
-	# Open an exemple file
+
+    # Open an exemple file
     f = h5.File("example.h5", "w")
-    
+
     # Setup the root attributes for iteration 0
-    setup_root_attr(f, iteration=0 )
-    
-    # Write the field data to this file. 
-    # (Here the data is randomly generated, but in an actual simulation, this would 
-    # be replaced by the simulation data.)
-    # - Write rho
-    # Mode 0 : real values, mode 1 : complex values
-    data_rho0 = np.random.rand(32,64)
-    data_rho1 = np.random.rand(32,64) + 1.j*np.random.rand(32,64) 
-    write_rho_cylindrical(f, data_rho0, data_rho1)
-    # - Write E
-    data_ex = np.random.rand(32,64)
-    data_ey = np.random.rand(32,64)
-    data_ez = np.random.rand(32,64)
-    write_e_2d_cartesian( f, data_ex, data_ey, data_ez )
-    
-    # writeParticles(f)
-    
+    setup_root_attr(f)
+
+    # Write the field records
+    write_fields(f, iteration=0)
+
+    # Write the particle records
+    write_particles(f, iteration=0)
+
     # Close the file
     f.close()
     print("File example.h5 created!")

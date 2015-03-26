@@ -58,7 +58,11 @@ Each file's *root* directory (path `/`) must at leat contain the attributes:
   - `basePath`
     - type: *(string)*
     - description: a common prefix for all data sets and sub-groups of a
-                   specific iteration
+                   specific iteration;
+                   this string only indicates *how* the data is stored,
+                   to create a real path from it replace all occurences
+                   of `%T` with the integer value of the iteration, e.g.,
+                   `/data/%T` becomes `/data/100`
     - allowed value: fixed to `/data/%T/` for this version of the standard
 
   - `fieldsPath`
@@ -234,7 +238,7 @@ the vector sub-group as `field record`.
                  `y`, `z` (or respectively `r`, `t`, `z`) are data
                  sets of `scalar` fields.
 
-### Mandatory attributes for each field
+### Mandatory attributes for each `field record`
 
 The following attributes must be stored with the `fieldName` (which is a
 data set attribute for `scalar` or a group attribute for `vector` fields):
@@ -377,7 +381,7 @@ hosts the group-attribute `value` and other mandatory attributes such as
     - type: each component in *(float)*
     - description: component-wise momentum of the attribute
 
-### Mandatory attributes for each particle record
+### Mandatory attributes for each `particle record`
 
 The following attributes must be stored with the `particleName/recordName`
 (which is a data set attribute for a `scalar` particle record or a group

@@ -7,18 +7,23 @@ interpreted as described in [RFC 2119](http://tools.ietf.org/html/rfc2119).
 
 All `keywords` in this standard are case-sensitive.
 
+The naming *(float)* without a closer specification is used if the user can
+choose which kind of floating point precision shall be used.
+The naming *(int)* without a closer specification is used if the user can
+choose which kind of signed integer type shall be used.
 
-The versions of this standard
+
+The Versions of this Standard
 -----------------------------
 
 Major versions of this standard do not need to be backwards compatible.
 Minor versions need to be backwards compatible and should for example
-only add additional information.
+only add optional information or tool updates.
 Revisions are reserved for minor typos in the documentation (but not in
 keywords).
 
 
-Hierarchy of the data file
+Hierarchy of the Data File
 --------------------------
 
 The used hierarchical data file format must provide the capability to
@@ -52,25 +57,31 @@ Each file's *root* directory (path `/`) must at leat contain the attributes:
 
   - `basePath`
     - type: *(string)*
-    - description: a common prefix for all data sets and sub-groups
-    - example: `/data/%T/` but at least `/`
+    - description: a common prefix for all data sets and sub-groups of a
+                   specific iteration;
+                   this string only indicates *how* the data is stored,
+                   to create a real path from it replace all occurences
+                   of `%T` with the integer value of the iteration, e.g.,
+                   `/data/%T` becomes `/data/100`
+    - allowed value: fixed to `/data/%T/` for this version of the standard
 
   - `fieldsPath`
     - type: *(string)*
-    - description: path *relative* from the baseDir to the field data sets
+    - description: path *relative* from the `basePath` to the field records
     - example: `fields/`
 
   - `particlesPath`
     - type: *(string)*
-    - description: path *relative* from the baseDir to the particle data sets
+    - description: path *relative* from the `basePath` to the groups for each
+                   particle species and the records they include
     - example: `particles/`
 
-Each file's *root* directory (path `/`) might contain these attributes
-(these attributes are *recommended* and their usage is *reserved* for):
+It is *recommended* that each file's *root* directory (path `/`) further
+contains the attributes:
 
   - `author`
     - type: *(string)*
-    - description: Author and contact of the data
+    - description: Author and contact for the information in the file
     - example: `Axel Huebl <a.huebl@hzdr.de>`
 
   - `software`
@@ -107,16 +118,17 @@ time step or in groups of the same file.
 The choosen style shall not vary within a related set of iterations.
 
 Since the meaning of *time* can be confusing for simulations with non-constant
-time steps or or simulations in a frame of reference moving with relativistic
-speeds, an iteration describes a single simulation cycle.
+time steps, records that are stagered in time or simulations in a frame of
+reference moving with relativistic speeds, an iteration describes a single
+simulation cycle.
 
 Each file's *root* directory (path `/`) must further define the attributes:
 
   - `iterationEncoding`
     - type: *(string)*
-    - description: are other iterations of this series, from the file-format's
-                   API point of view, encoded in the same file or is an
-                   other `open/close` call necessary to access other iterations?
+    - description: tells if other iterations of this series, from the
+                   file-format's API point of view, encoded in the same file or
+                   is an other `open/close` call necessary to access other iterations
     - allowed values:
       - `fileBased` (multiple files)
       - `groupBased` (one file)
@@ -136,23 +148,6 @@ Each file's *root* directory (path `/`) must further define the attributes:
       - for `groupBased`:
         - `/data/%T/` (must be equal to and encoded in the `basePath`)
 
-  - `time`
-    - type: *(float / REAL4)*
-    - description: the current time;
-                   add a `comment` to your data set if it can not be described
-                   with a common "time"
-
-  - `timeStep`
-    - type: *(float / REAL4)*
-    - description: the time step used for each iteration;
-                   for simulations with non-constant time steps, use
-                   the last time step used to reach this iteration
-
-  - `timeUnitSI`
-    - type: *(double / REAL8)*
-    - description: a conversation factor to `seconds`
-    - example: `1.0e-16`
-
 
 Unit Systems and Dimensionality
 -------------------------------
@@ -165,7 +160,8 @@ Each quantity with a dimension must define a unit conversation factor,
 often called `unitSI` in the document, to transform it to a corresponding
 quanity in the International System of Units (SI).
 
-Attribute of a data set:
+For each field or particle `record` (defined later) the following
+attributes are mandatory:
 
   - `unitSI`
     - type: *(double / REAL8*)
@@ -174,14 +170,30 @@ Attribute of a data set:
     - example: `2.99792e8`
 
   - `unitDimension`
-    - powers of the 7 base measures characterizing this data set
+    - powers of the 7 base measures characterizing the record's unit in SI
       (length L, mass M, time T, electric current I, thermodynamic temperature
        theta, amount of substance N, luminous intensity J)
-    - does *not* represent if the data set is a 1, 2 or 3D array
+    - does *not* represent if the record is a 1, 2 or 3D array
     - examples:
       - "m / s" is of dimension `L=1` and `T=-1`,
         store array `[1.; 0.; -1.; 0.; 0.; 0.; 0.]`
       - "N = kg * m / s^2", store array `[1.; 1.; -2.; 0.; 0.; 0.; 0.]`
+
+
+In addition to that, each `record` must define the attributes:
+
+  - `time`
+    - type: *(float / REAL8)*
+    - description: the current time;
+                   add a `comment` to your record if it can not be described
+                   with a common "time" (or if it's definition of time varies
+                   from the definition of time in other record)
+
+  - `timeUnitSI`
+    - type: *(double / REAL8)*
+    - description: a conversation factor to `seconds`
+    - example: `1.0e-16`
+
 
 *Note to implementors* 
 
@@ -198,61 +210,64 @@ For human readable output, it is *recommended* to add the actual string
 of the unit in the corresponding `comment` attribute.
 
 
-Grid based data (fields)
-------------------------
+Grid Based Records (Fields)
+---------------------------
 
-Fields shall be represented as homogeneous data sets of on a equal-spaced,
+Fields shall be represented via homogeneous data sets on an equal-spaced,
 regular grid.
 
 Scalar fields are stored in a data set with the same name as the field.
-Vector and tensor fields shall be represented component-wise as a *structure
-of scalar fields* using a common sub-group as the name.
+Vector and tensor fields shall be represented component-wise as a
+*collection of individual scalar fields* using a common sub-group that
+is equal to the field name. We refer to the scalar field itself and
+the vector sub-group as `field record`.
 
 ### Naming conventions
 
   - `scalar` fields
     - type: *(any type)*
-    - data set: `fieldName` unique name in group `basePath` + `fieldsPath`
+    - data set: `recordName` unique name in group `basePath` + `fieldsPath`
 
   - `vector` fields
     - type: *(any type)*
-    - data set: `fieldName/x`, `fieldName/y`, `fieldName/z` when
-                writing the *Cartesian* components of the vectors;
-                `fieldName/r`, `fieldName/t`, `fieldName/z` when
-                writing the *cylindrical* components of the vectors.
-                Here `fieldName` is a sub-group. The components `x`,
-                `y`, `z` (or respectively `r`, `t`, `z`) are data
-                sets of `scalar` fields.
+    - data sets: `recordName/x`, `recordName/y`, `recordName/z` when
+                 writing the *Cartesian* components of the vectors;
+                 `recordName/r`, `recordName/t`, `recordName/z` when
+                 writing the *cylindrical* components of the vectors.
+                 Here `recordName` is a sub-group. The components `x`,
+                 `y`, `z` (or respectively `r`, `t`, `z`) are data
+                 sets of `scalar` fields.
 
-### Mandatory attributes for each field
+### Mandatory attributes for each `field record`
 
 The following attributes must be stored with the `fieldName` (which is a
 data set attribute for `scalar` or a group attribute for `vector` fields):
 
   - `unitSI`
     - type: *(double / REAL8)*
-    - description: unit-conversion factor to multiply the stored data with to
+    - description: unit-conversion factor to multiply the stored record with to
                    be represented in SI
     - example: `2.99792e8`
 
   - `unitDimension`
     - see general section above
-    - powers of the 7 base measures characterizing this data set
+    - powers of the 7 base measures characterizing the record's unit in SI
       (length L, mass M, time T, electric current I, thermodynamic temperature
        theta, amount of substance N, luminous intensity J)
-    - does *not* represent if the data set is a 1, 2 or 3D array
+    - does *not* represent if the record is a 1, 2 or 3D array
 
   - `geometry`
     - type: *(string)*
-    - description: geometry of the mesh of the field data, right-handed
+    - description: geometry of the mesh of the field record, right-handed
                    coordinate systems are imposed
     - allowed values:
-      - `cartesian`: standard Cartesian mesh
+      - `cartesian`: standard Cartesian mesh, the standard order of axes indexing
+                     shall be `x`, `y`, `z`
       - `cylindrical`: regularly-spaced mesh in the r-z plane, with
                        Fourier decomposition in the azimuthal direction (See
                        [doi:10.1016/j.jcp.2008.11.017](http://dx.doi.org/10.1016/j.jcp.2008.11.017))
                        In this case, the field arrays are stored as a
-                       three-dimensional dataset where the last axis corresponds
+                       three-dimensional record where the last axis corresponds
                        to the `z` direction, the second axis correspond to the
                        `r` direction and where the first axis corresponds to
                        the azimuthal mode. (This last axis has length `2m+1`,
@@ -278,12 +293,12 @@ data set attribute for `scalar` or a group attribute for `vector` fields):
             elements, where N is the number of dimensions in the simulation.
     - description: spacing of the grid points along each dimension (in the
                    units of the simulation); this refers to the spacing of the
-                   actual data that is written to the file, not that of the
-                   simulation grid. (The data written may be down-sampled, as
+                   actual record that is written to the file, not that of the
+                   simulation grid. (The record written may be down-sampled, as
                    compared to the simulation grid).
     - examples:
       - In the case where `geometry` is `cartesian`, the dimensionality
-        `N` of the array determines if the field data is 1, 2 or 3D. The
+        `N` of the array determines if the field record is 1, 2 or 3D. The
         elements of the array should correspond to `dx`, `dy`, `dz`, in
         this order.
       - In the case where `geometry` is `cylindrical`, the array
@@ -305,17 +320,18 @@ data set attribute for `scalar` or a group attribute for `vector` fields):
 
   - `dataOrder`
     - type: *(string)*
-    - allowed values: `Fortran` or `C` (also for 2D data sets)
+    - allowed values: `Fortran` or `C` (also for 2D records)
     - description: describes the fastest/slowest increasing index for 2D and 3D
-                   data sets (e.g., the difference between a Fortran and C array);
-                   can be omitted for 1D data sets
+                   records (e.g., the difference between a Fortran and C array);
+                   can be omitted for 1D record
     - example:
       - `Fortran`: ordering of matrixes is linearized in memory in column-major order
       - `C`:       exactly the opposite ordering (row-major), reading matrixes from
                    a Fortran code will appear transposed in C (or C-based applications
                    such as Python)
 
-The following attributes must be stored with each data set:
+The following attributes must be stored with each scalar record and each
+component of a vector record:
 
   - `position`
     - type: 1-dimesional array of N *(float / REAL4)* where N is the number of
@@ -326,63 +342,63 @@ The following attributes must be stored with each data set:
                    beginning of the next cell;
                    in the same order as the `gridSpacing` and `gridOffset`
 
-Particle data (particles)
--------------------------
+Particle Records
+----------------
 
 Each particle species shall be represented as a group `particleName/` that
-contains all its properties. Properties per particle are generally stored as
+contains all its records. Records per particle are generally stored as
 contigous array of a non-compound type.
 
-For properties that are the same for all particles in a particle species, e.g.,
-all electrons have `charge` `-1`, replacing the data set with a group
+For records that are the same for all particles in a particle species, e.g.,
+all electrons have `charge` `-1`, replacing the record with a group
 attribute of the same name is possible, as described in the following
 paragraphs.
 
 ### Naming conventions
 
-As with mesh-based `vector` properties, compound particle vector properties
-are again splitted in scalar sub-properties that are stored in a common
-sub-group `particleName/propertyName/`.
+As with mesh-based `vector` record, compound particle vector records
+are again splitted in scalar components that are stored in a common
+sub-group `particleName/recordName/`.
 
-Replacing a data set for a particle property with a constant property for all
-particles in the particle species, independent if the data set is stored as a
-sub-property in a sub-group or if the data set is the scalar property itself,
-works as follows. The data set `particleName/propertyName` shall be replaced
-with an empty sub-group `particleName/propertyName/` that hosts the
-group-attribute `value` and other mandatory attributes such as `unitSI`. The
-sub-property `particleName/propertyName/x` shall be replaced with an  empty
-sub-sub-group `particleName/propertyName/x/` that again hosts the
-group-attribute `value` and other mandatory attributes such as `unitSI`.
+Replacing a record for a particle with a constant value for all particles in
+the particle species, independent if the record is stored as a vector or
+scalar record, works as follows. The record `particleName/recordName` shall
+be replaced with an empty sub-group `particleName/recordName/` that hosts the
+group-attribute `value` and other mandatory attributes such as `unitSI`. For
+components of vector-records, the component `particleName/recordName/x` shall
+be replaced with an empty sub-sub-group `particleName/recordName/x/` that again
+hosts the group-attribute `value` and other mandatory attributes such as
+`unitSI`.
 
-### Mandatory properties for each particle species
+### Mandatory records for each particle species
 
-  - `position/` + `x` or `y` or `z`
-    - type: each data set in *(float / REAL4)* or *(double / REAL8)*
+  - `position/` + `x`, `y`, `z` (or `r`, `t`, `z` respectively)
+    - type: each component in *(float)*
     - description: component-wise global position of a particle, if not
                    enforced otherwise by a domain-specific extension (see below)
 
-  - `momentum/` + `x` or `y` or `z`
-    - type: each data set in *(float / REAL4)* or *(double / REAL8)*
+  - `momentum/` + `x` or `y` or `z` (or `r`, `t`, `z` respectively)
+    - type: each component in *(float)*
     - description: component-wise momentum of the attribute
 
-### Mandatory attributes for each particle property
+### Mandatory attributes for each `particle record`
 
-The following attributes must be stored with the `particleName/propertyName`
-(which is a data set attribute for a `scalar` particle property or a group
-attribute for a `compound` or `vector` particle property):
+The following attributes must be stored with the `particleName/recordName`
+(which is a data set attribute for a `scalar` particle record or a group
+attribute for a `compound` or `vector` particle record):
 
   - `unitSI`
     - type: *(double / REAL8)*
-    - description: unit-conversion factor to multiply the stored data with to
+    - description: unit-conversion factor to multiply the stored record with to
                    be represented in SI
     - example: `1.0e-9`
 
   - `unitDimension`
     - see general section above
-    - powers of the 7 base measures characterizing this data set
+    - powers of the 7 base measures characterizing the record's unit in SI
       (length L, mass M, time T, electric current I, thermodynamic temperature
        theta, amount of substance N, luminous intensity J)
-    - does *not* represent if the data set is a 1, 2 or 3D array
+    - does *not* represent if the record is a 1, 2 or 3D array
 
 
 Domain-Specific Extensions
@@ -397,12 +413,12 @@ Why extensions?
 -> format == openPMD + ED-PIC
                      + ExtensionABC
 
-Up to now, the following domain-specific naming conventions for data fields
-and *algorithms*, *methods* and/or *schemes* have been defined:
+Up to now, the following domain-specific naming conventions for have been
+defined:
 
 - **ED-PIC**: electro-dynamic/static particle-in-cell codes,
   see [EXT_ED-PIC.md](EXT_ED-PIC.md).
 
 Extensions to similar domains such as fluid, finite-element or
-molecular-dynamics simulations, CCD images or other grid-based data can
+molecular-dynamics simulations, CCD images or other grid-based records can
 proposed for [future versions](CONTRIBUTING.md) of this document.

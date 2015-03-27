@@ -18,7 +18,7 @@ Grid Based Records (Fields)
       - `DS` (*Directional Splitting* after Yasuhiko Sentoku, [doi:10.1140/epjd/e2014-50162-y](http://dx.doi.org/10.1140/epjd/e2014-50162-y))
       - `PSTD`
       - `PSATD`
-      - `PSAOTD`
+      - `GPSTD`
       - `other`
       - `none`
 
@@ -33,7 +33,7 @@ Grid Based Records (Fields)
   - `fieldSolverParameters`
     - type: *(string)*
     - description: additional parameters for fields solvers
-                 (might be specified further in the future)
+                   (optional, might be specified further in the future)
 
   - `currentSmoothing`
     - type: *(string)*
@@ -44,7 +44,7 @@ Grid Based Records (Fields)
 
   - `currentSmoothingParameters`
     - type: *(string)*
-    - description: additional parameters to describe the applied filter further
+    - description: required if `currentSmoothing` is not `none`, additional parameters to describe the applied filter further
     - note: might become a particle record attribute in the future
     - allowed values: same as for `fieldSmoothingParameters`
 
@@ -52,11 +52,18 @@ Grid Based Records (Fields)
     - type: *(string)*
     - description: applied corrections to fields to ensure charge conservation
     - allowed values:
-      - `Mader`
+      - `Marder` ([doi:10.1016/0021-9991(87)90043-X](http://dx.doi.org/10.1016/0021-9991(87)90043-X))
+      - `Langdon` ([doi:10.1016/0010-4655(92)90105-8](http://dx.doi.org/10.1016/0010-4655(92)90105-8))
+      - `Boris` (Birdsall & Langdon, *Plasma Physics via Computer Simulation*, 15-6)
+      - `hyperbolic` (section III-B in [doi:10.1063/1.872648](http://dx.doi.org/10.1063/1.872648),
+                      [doi:http://dx.doi.org/10.1006/jcph.2000.6507](http://dx.doi.org/10.1006/jcph.2000.6507),
+                      section 2.3 in [doi:10.1016/S0920-3796(96)00502-9](http://dx.doi.org/10.1016/S0920-3796(96)00502-9))
       - `spectral` (various)
       - `other`
+      - `none`
 
   - `chargeCorrectionParameters`
+    - description: required if `chargeCorrection` is not `none`
     - example: `period=100`
 
 ### Additional Attributes for each `field record`
@@ -129,19 +136,15 @@ Particle Records
       - `VillaBune` ([doi:10.1016/0010-4655(92)90169-Y](http://dx.doi.org/10.1016/0010-4655(92)90169-Y))
       - `Esirkepov` ([doi:10.1016/S0010-4655(00)00228-9](http://dx.doi.org/10.1016/S0010-4655(00)00228-9))
       - `ZigZag`
-      - `direct` (often used in spectral codes, usually used with `chargeCorrection`s)
+      - `directBoris` (Birdsall & Langdon, *Plasma Physics via Computer Simulation*, 15-5)
+      - `directMorseNielson` (Birdsall & Langdon, *Plasma Physics via Computer Simulation*, 15-5)
       - `other`
       - `none`
 
   - `currentDepositionParameters`
     - type *(string)*
     - description: further parameters for current deposition schemes;
-                   optional attribute
-                   (might be specified further in the future)
-    - examples:
-      - for `direct` scheme: (Birdsall & Langdon, *Plasma Physics via Computer Simulation*, 15-5)
-        - `Boris`
-        - `MorseNielson`
+                   reserved for future use
 
   - `particlePush`
     - type: *(string)*
@@ -186,7 +189,8 @@ Particle Records
 
   - `particleSmoothingParameters`
     - type: *(string)*
-    - description: additional parameters to describe the applied filter further
+    - description: required if `particleSmoothing` is not `none`;
+                   additional parameters to describe the applied filter further
     - example: `period=1;numPasses=2;compensator=false`
     - reserved for future use: `direction=array()`, `stride=array()`
 
@@ -207,7 +211,8 @@ Particle Records
     - type: *(float)*
     - description: if a simulated particle represents several real particles,
                    each attribute such as `charge` and `mass` needs to be
-                   multiplied with that value
+                   multiplied with that value; this is a unitless number
+                   (`unitSI==1` and `unitDimension==[0., ..., 0.]`)
   - `position`
     - type: vector property of *(float)*
     - description: default in `STANDARD.md`: global position of the particle;
@@ -231,6 +236,25 @@ Particle Records
                    single precision attributes with a large offset from
                    the global origin of the simulation
 
+  - `particleGroups`
+    - type: MPI_Size times an *(array of five uint64)*
+      - `numParticles`: number of particles in block
+      - `rank`: unique, zero-based, contiguous index of the writing process
+                (e.g., the MPI-rank)
+      - `offsetX`: position offset in `x`, `y` and `z` (or `r`, `t`, `z`)
+      - `offsetY`, `offsetZ`: see `offsetX`, must NOT be omitted or replaced
+                              in 2D/1D
+    - size: the record contains `max(rank)` structs, e.g., the MPI-size
+    - description: to allow post-processing and visualization tools
+                   to read records with the size of more than the typical
+                   size of a local-nodes RAM, this attribute allows to
+                   group records that are close in `position` to ensure
+                   an intermediate level of data locality;
+                   groups of particles must be adjacent boxes (or rectangles
+                   in 2D) regarding the `position` of the particles within
+
+- **Optional:**
+
   - `boundElectrons`
     - type: *(float)*
     - description: number of bound electrons of an ion/atom;
@@ -251,23 +275,3 @@ Particle Records
                        species shall be used as a "target" for newly created
                        free electrons from ionization methods
 
-### Additional Record per Particle Species
-
-- **Recommended:**
-
-  - `particleGroups`
-    - type: MPI_Size times an *(array of five uint64)*
-      - `numParticles`: number of particles in block
-      - `rank`: unique, zero-based, contiguous index of the writing process
-                (e.g., the MPI-rank)
-      - `offsetX`: position offset in `x`, `y` and `z` (or `r`, `t`, `z`)
-      - `offsetY`, `offsetZ`: see `offsetX`, must NOT be omitted or replaced
-                              in 2D/1D
-    - size: the record contains `max(rank)` structs, e.g., the MPI-size
-    - description: to allow post-processing and visualization tools
-                   to read records with the size of more than the typical
-                   size of a local-nodes RAM, this attribute allows to
-                   group records that are close in `position` to ensure
-                   an intermediate level of data locality;
-                   groups of particles must be adjacent boxes (or rectangles
-                   in 2D) regarding the `position` of the particles within

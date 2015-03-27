@@ -236,6 +236,23 @@ Particle Records
                    single precision attributes with a large offset from
                    the global origin of the simulation
 
+  - `particleGroups`
+    - type: MPI_Size times an *(array of five uint64)*
+      - `numParticles`: number of particles in block
+      - `rank`: unique, zero-based, contiguous index of the writing process
+                (e.g., the MPI-rank)
+      - `offsetX`: position offset in `x`, `y` and `z` (or `r`, `t`, `z`)
+      - `offsetY`, `offsetZ`: see `offsetX`, must NOT be omitted or replaced
+                              in 2D/1D
+    - size: the record contains `max(rank)` structs, e.g., the MPI-size
+    - description: to allow post-processing and visualization tools
+                   to read records with the size of more than the typical
+                   size of a local-nodes RAM, this attribute allows to
+                   group records that are close in `position` to ensure
+                   an intermediate level of data locality;
+                   groups of particles must be adjacent boxes (or rectangles
+                   in 2D) regarding the `position` of the particles within
+
 - **Optional:**
 
   - `boundElectrons`
@@ -258,23 +275,3 @@ Particle Records
                        species shall be used as a "target" for newly created
                        free electrons from ionization methods
 
-### Additional Record per Particle Species
-
-- **Recommended:**
-
-  - `particleGroups`
-    - type: MPI_Size times an *(array of five uint64)*
-      - `numParticles`: number of particles in block
-      - `rank`: unique, zero-based, contiguous index of the writing process
-                (e.g., the MPI-rank)
-      - `offsetX`: position offset in `x`, `y` and `z` (or `r`, `t`, `z`)
-      - `offsetY`, `offsetZ`: see `offsetX`, must NOT be omitted or replaced
-                              in 2D/1D
-    - size: the record contains `max(rank)` structs, e.g., the MPI-size
-    - description: to allow post-processing and visualization tools
-                   to read records with the size of more than the typical
-                   size of a local-nodes RAM, this attribute allows to
-                   group records that are close in `position` to ensure
-                   an intermediate level of data locality;
-                   groups of particles must be adjacent boxes (or rectangles
-                   in 2D) regarding the `position` of the particles within

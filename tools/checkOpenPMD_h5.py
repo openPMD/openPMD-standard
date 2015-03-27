@@ -102,7 +102,7 @@ def test_key(f, v, request, name):
     if valid:
         if v:
             print("Key %s (%s) exists in `%s`!" %(name, request, str(f.name) ) )
-            result_array = np.array([0,0])
+        result_array = np.array([0,0])
     else:
         if request == "required":
             print("Error: Key %s (%s) does NOT exist in `%s`!" \
@@ -274,7 +274,7 @@ def check_iterations(f, v, pic) :
     # Loop over the iterations and check the fields and the particles 
     for iteration in list_iterations :
         result_array += check_fields(f, iteration, v, pic)
-#        result_array += check_particles(f, iteration, v, pic)
+        result_array += check_particles(f, iteration, v, pic)
 
     return(result_array)
     
@@ -426,7 +426,7 @@ def check_particles(f, iteration, v, pic) :
         return( np.array([1, 0]) )
     else:
         full_particle_path = base_path + particles_path
-        # Find all the fields
+        # Find all the species
         list_species = f[full_particle_path].keys()
     print( "Iteration %s : found %d species"
         %( iteration, len(list_species) ) )
@@ -436,18 +436,49 @@ def check_particles(f, iteration, v, pic) :
         species = f[full_particle_path + species_name]
         
         # Check that the position and momenta of the particles are present
-        result_array += test_key( species, "required", "position" )
-        result_array += test_key( species, "required", "momentum" )
+        result_array += test_key( species, v, "required", "position" )
+        result_array += test_key( species, v, "required", "momentum" )
 
-        # Do the required records for the extension ....
-        
-        # Check each record
+        # Check the records required by the PIC extension
+        if pic :
+            result_array += test_key( species, v, "required", "charge" )
+            result_array += test_key( species, v, "required", "mass" )
+            result_array += test_key( species, v, "required", "weighting" )
+            result_array += test_key( species, v, "recommended", "longName" )
+            result_array += test_key( species, v, "recommended",
+                                      "globalCellId" )
+            result_array += test_key( species, v, "optional", "particleGroups" )
+            result_array += test_key( species, v, "optional", "boundElectrons" )
+            result_array += test_key( species, v, "optional", "protonNumber" )
+            result_array += test_key( species, v, "optional", "neutronNumber" )
+
+        # Check the attributes associated with the PIC extension
+        if pic :
+            result_array += test_attr(species, v, "required",
+                                      "particleShape")
+            result_array += test_attr(species, v, "required",
+                                      "currentDeposition")
+            result_array += test_attr(species, v, "required",
+                                      "particlePush")
+            result_array += test_attr(species, v, "required",
+                                      "particleInterpolation")
+            result_array += test_attr(species, v, "required",
+                                    "particleSmoothing")
+            valid, particle_smoothing = get_attr(field, "particleSmoothing")
+            if valid == True and particle_smoothing != "none":            
+                result_array += test_attr(species, v, "required",
+                                    "particleSmoothingParameters")
+
+        # Check each record of the particle
         for record in species.keys() :
             result_array += test_attr(species[record], v,
                                       "required", "unitSI")
             result_array += test_attr(species[record], v,
                                       "required", "unitDimension")
+ 
+            
     return(result_array)
+
     
 if __name__ == "__main__":
     file_name, verbose, extension_pic = parse_cmd(sys.argv[1:])

@@ -17,6 +17,7 @@
 
 import h5py as h5
 import numpy as np
+import string
 import sys, getopt, os.path
 
 formatVersion="1.0.0"
@@ -60,8 +61,7 @@ def open_file(fileName):
         return(f)
     else:
         help()
-
-
+        
 def get_attr(f, name):
     """
     Try to access the path `name` in the file `f`
@@ -72,7 +72,56 @@ def get_attr(f, name):
     else:
         return(False, None)
 
+def test_key(f, v, request, name):
+    """
+    Checks whether a key is present.
+    Returns an error if the key if absent and requested
+    Returns a warning if the key if absent and recommanded
 
+    Parameters
+    ----------
+    f : an h5py.File, h5py.Group or h5py.DataSet object
+        The object in which to find the key
+        
+    v : bool
+        Verbose option
+
+    request : string
+        Either "required", "recommended" or "optional
+
+    name : string
+        The name of the key within this File, Group or DataSet
+    
+    Returns
+    -------
+    An array with 2 elements :
+    - The first element is 1 if an error occured, and 0 otherwise
+    - The second element is 0 if a warning arised, and 0 otherwise
+    """
+    valid = (name in f.keys())
+    if valid:
+        if v:
+            print("Key %s (%s) exists in `%s`!" %(name, request, str(f.name) ) )
+        result_array = np.array([0,0])
+    else:
+        if request == "required":
+            print("Error: Key %s (%s) does NOT exist in `%s`!" \
+            %(name, request, str(f.name)) )
+            result_array = np.array([1, 0])
+        elif request == "recommended":
+            print("Warning: Key %s (%s) does NOT exist in `%s`!" \
+            %(name, request, str(f.name)) )
+            result_array = np.array([0, 1])
+        elif request == "optional":
+            if v:
+                print("Info: Key %s (%s) does NOT exist in `%s`!"  \
+            %(name, request, str(f.name)) )
+            result_array = np.array([0, 0])
+        else :
+            raise ValueError("Unrecognized string for `request` : %s" %request)
+
+    return(result_array)
+        
 def test_attr(f, v, request, name):
     """
     Checks whether an attribute is present.
@@ -81,9 +130,9 @@ def test_attr(f, v, request, name):
 
     Parameters
     ----------
-    f : an h5py.File object
-        The HDF5 file in which to find the attribute
-
+    f : an h5py.File, h5py.Group or h5py.DataSet object
+        The object in which to find the key
+        
     v : bool
         Verbose option
 
@@ -91,8 +140,8 @@ def test_attr(f, v, request, name):
         Either "required", "recommended" or "optional
 
     name : string
-        The path to the attribute within the HDF5 file
-
+        The name of the attribute within this File, Group or DataSet
+    
     Returns
     -------
     An array with 2 elements :
@@ -126,62 +175,16 @@ def test_attr(f, v, request, name):
 
 def check_root_attr(f, v, pic):
     """
-    Scan the root of the file and make sure that the attributes are present
+    Scan the root of the file and make sure that all the attributes are present
 
     Parameters
     ----------
     f : an h5py.File object
         The HDF5 file in which to find the attribute
-
+        
     v : bool
         Verbose option
-
-    pic : bool
-        Whether to check for the ED-PIC extension attributes
-
-    Returns
-    -------
-    An array with 2 elements :
-    - The first element is the number of errors encountered
-    - The second element is the number of warnings encountered
-    """
-    err = 0
-    warn = 0
-
-    # STANDARD.md
-    #   required
-    err, warn = [err, warn] + test_attr(f, v, "required", "version")
-    err, warn = [err, warn] + test_attr(f, v, "required", "basePath")
-    err, warn = [err, warn] + test_attr(f, v, "required", "fieldsPath")
-    err, warn = [err, warn] + test_attr(f, v, "required", "particlesPath")
-    err, warn = [err, warn] + test_attr(f, v, "required", "iterationEncoding")
-    err, warn = [err, warn] + test_attr(f, v, "required", "iterationFormat")
-
-    #   recommended
-    err, warn = [err, warn] + test_attr(f, v, "recommended", "author")
-    err, warn = [err, warn] + test_attr(f, v, "recommended", "software")
-    err, warn = [err, warn] + test_attr(f, v, "recommended", "softwareVersion")
-    err, warn = [err, warn] + test_attr(f, v, "recommended", "date")
-
-    #   optional
-    err, warn = [err, warn] + test_attr(f, v, "optional", "comment")
-
-    # Extension: ED-PIC
-    #   no addition requirements for "/" defined
-    return np.array([err, warn])
-
-def check_fields(f, v, pic):
-    """
-    Scan all the fields in the file and checks the attributes are present
-
-    Parameters
-    ----------
-    f : an h5py.File object
-        The HDF5 file in which to find the attribute
-
-    v : bool
-        Verbose option
-
+    
     pic : bool
         Whether to check for the ED-PIC extension attributes
 
@@ -194,36 +197,145 @@ def check_fields(f, v, pic):
     # Initialize the result array
     # First element : number of errors
     # Second element : number of warnings
-    result_array = np.array([ 0, 0])
+    result_array = np.array([0,0])
+    
+    # STANDARD.md
+    #   required
+    result_array += test_attr(f, v, "required", "version")
+    result_array += test_attr(f, v, "required", "basePath")
+    result_array += test_attr(f, v, "required", "fieldsPath")
+    result_array += test_attr(f, v, "required", "particlesPath")
+    result_array += test_attr(f, v, "required", "iterationEncoding")
+    result_array += test_attr(f, v, "required", "iterationFormat")
 
-    # Find all the fields
-    valid, base_path = get_attr(f, "basePath")
+    #   recommended
+    result_array += test_attr(f, v, "recommended", "author")
+    result_array += test_attr(f, v, "recommended", "software")
+    result_array += test_attr(f, v, "recommended", "softwareVersion")
+    result_array += test_attr(f, v, "recommended", "date")
+
+    #   optional
+    result_array += test_attr(f, v, "optional", "comment")
+
+    # Extension: ED-PIC
+    #   no addition requirements for "/" defined
+    return(result_array)
+
+
+def check_iterations(f, v, pic) :
+    """
+    Scan all the iterations present in the file, checking both
+    the fields and the particles
+
+    Parameters
+    ----------
+    f : an h5py.File object
+        The HDF5 file in which to find the attribute
+        
+    v : bool
+        Verbose option
+    
+    pic : bool
+        Whether to check for the ED-PIC extension attributes
+
+    Returns
+    -------
+    An array with 2 elements :
+    - The first element is the number of errors encountered
+    - The second element is the number of warnings encountered
+    """
+
+    # Find all the iterations
+    format_error = False
+    try :
+        list_iterations = f['/data/'].keys()
+    except KeyError, TypeError :
+        format_error = True
+    else :
+        # Check that these iterations are indeed encoded as integers
+        for iteration in list_iterations :
+            for character in iteration : # go through the string
+                if not (character in string.digits) :
+                    format_error = True                    
+    # Detect any error and interrupt execution if one is found
+    if format_error == True :
+        print("Error : it seems that the path of the data within the HDF5 file"
+              "is not of the form '/data/%T/', where %T corresponds to an "
+              "actual integer.")
+        return(np.array([1, 0]))
+    else :
+        print("Found %d iterations" % len(list_iterations) )
+
+    # Initialize the result array
+    # First element : number of errors
+    # Second element : number of warnings
+    result_array = np.array([ 0, 0]) 
+        
+    # Loop over the iterations and check the fields and the particles 
+    for iteration in list_iterations :
+        result_array += check_fields(f, iteration, v, pic)
+        result_array += check_particles(f, iteration, v, pic)
+
+    return(result_array)
+    
+def check_fields(f, iteration, v, pic):
+    """
+    Scan all the fields corresponding to one iteration
+
+    Parameters
+    ----------
+    f : an h5py.File object
+        The HDF5 file in which to find the attribute
+
+    iteration : string representing an integer
+        The iteration at which to scan the fields
+        
+    v : bool
+        Verbose option
+        
+    pic : bool
+        Whether to check for the ED-PIC extension attributes
+    
+    Returns
+    -------
+    An array with 2 elements :
+    - The first element is the number of errors encountered
+    - The second element is the number of warnings encountered
+    """
+    # Initialize the result array
+    # First element : number of errors
+    # Second element : number of warnings
+    result_array = np.array([ 0, 0]) 
+
+    # Find the path to the data
+    base_path = "/data/%s/" % iteration
     valid, fields_path = get_attr(f, "fieldsPath")
     if os.path.join( base_path, fields_path) != ( base_path + fields_path ):
         print("Error: `basePath`+`fieldsPath` seems to be malformed "
-              "(is `basePath` absolute and ends on a `/` ?)")
+            "(is `basePath` absolute and ends on a `/` ?)")
         return( np.array([1, 0]) )
     else:
         full_fields_path = base_path + fields_path
-        # Find all the fields (avoid simple attributes)
+        # Find all the fields
         list_fields = f[full_fields_path].keys()
-    if v:
-        print("Found %d fields" % len(f[full_fields_path].keys()))
+    print( "Iteration %s : found %d fields"
+        %( iteration, len(list_fields) ) )
 
     # Check for the attributes of the STANDARD.md
     for field_name in list_fields :
         field = f[full_fields_path + field_name]
-
+        
         # General attributes of the record
         result_array += test_attr(field, v, "required", "unitSI")
         result_array += test_attr(field, v, "required", "unitDimension")
         result_array += test_attr(field, v, "required", "geometry")
-        result_array += test_attr(field, v, "optional", "geometryParameters")
+        result_array += test_attr(field, v, "optional",
+                                      "geometryParameters")
         result_array += test_attr(field, v, "required", "gridSpacing")
         result_array += test_attr(field, v, "required", "gridGlobalOffset")
         result_array += test_attr(field, v, "required", "gridUnitSI")
         result_array += test_attr(field, v, "required", "dataOrder")
-
+    
         # Attributes of data set
         if type(field) is h5.Dataset :   # If the record is a scalar field
             result_array += test_attr(field, v, "required", "position")
@@ -231,37 +343,39 @@ def check_fields(f, v, pic):
             # Loop over the components
             for component_name in field:
                 component = field[component_name]
-                result_array += test_attr(component, v, "required", "position")
+                result_array += test_attr(component, v, "required",
+                                              "position")
 
-    # Check for the attributes of the PIC extension, if asked to do so by the user
+    # Check for the attributes of the PIC extension,
+    # if asked to do so by the user 
     if pic:
-
+        
         # Check the attributes associated with the field solver
         result_array += test_attr( f[full_fields_path], v, "required",
-                                    "fieldSolver" )
+                    "fieldSolver" )
         valid, field_solver = get_attr(field, "fieldSolver")
         if (valid == True) and (field_solver != "none") :
             result_array += test_attr( f[full_fields_path], v, "required",
-                                       "fieldSolverOrder")
+                    "fieldSolverOrder")
             result_array += test_attr( f[full_fields_path], v, "required",
-                                       "fieldSolverParameters")
-
+                    "fieldSolverParameters")
+            
         # Check the attributes associated with the current smoothing
         result_array += test_attr( f[full_fields_path], v, "required",
-                                   "currentSmoothing")
+                                    "currentSmoothing")
         valid, current_smoothing = get_attr(field, "currentSmoothing")
         if (valid == True) and (current_smoothing != "none") :
             result_array += test_attr(f[full_fields_path], v, "required",
-                                      "currentSmoothingParameters")
-
+                                        "currentSmoothingParameters")
+    
         # Check the attributes associated with the charge conservation
         result_array += test_attr(f[full_fields_path], v, "required",
-                                  "chargeCorrection")
+                                    "chargeCorrection")
         valid, charge_correction = get_attr(field, "chargeCorrection")
         if valid == True and charge_correction != "none":
             result_array += test_attr(f[full_fields_path], v, "required",
                                       "chargeCorrectionParameters")
-
+		
         # Check for the attributes of each record
         for field_name in list_fields :
             field = f[full_fields_path + field_name]
@@ -269,10 +383,103 @@ def check_fields(f, v, pic):
             valid, field_smoothing = get_attr(field, "fieldSmoothing")
             if field_smoothing != "none":
                 result_array += test_attr(field,v, "required",
-                                          "fieldSmoothingParameters")
+                                            "fieldSmoothingParameters")
     return(result_array)
 
 
+def check_particles(f, iteration, v, pic) :
+    """
+    Scan all the particle data corresponding to one iteration
+
+    Parameters
+    ----------
+    f : an h5py.File object
+        The HDF5 file in which to find the attribute
+
+    iteration : string representing an integer
+        The iteration at which to scan the particle data
+        
+    v : bool
+        Verbose option
+        
+    pic : bool
+        Whether to check for the ED-PIC extension attributes
+    
+    Returns
+    -------
+    An array with 2 elements :
+    - The first element is the number of errors encountered
+    - The second element is the number of warnings encountered
+    """
+    # Initialize the result array
+    # First element : number of errors
+    # Second element : number of warnings
+    result_array = np.array([ 0, 0]) 
+
+    # Find the path to the data
+    base_path = "/data/%s/" % iteration
+    valid, particles_path = get_attr(f, "particlesPath")
+    if os.path.join( base_path, particles_path) !=  \
+        ( base_path + particles_path ) :
+        print("Error: `basePath`+`fieldsPath` seems to be malformed "
+            "(is `basePath` absolute and ends on a `/` ?)")
+        return( np.array([1, 0]) )
+    else:
+        full_particle_path = base_path + particles_path
+        # Find all the species
+        list_species = f[full_particle_path].keys()
+    print( "Iteration %s : found %d species"
+        %( iteration, len(list_species) ) )
+
+    # Go through all the species
+    for species_name in list_species :
+        species = f[full_particle_path + species_name]
+        
+        # Check that the position and momenta of the particles are present
+        result_array += test_key( species, v, "required", "position" )
+        result_array += test_key( species, v, "required", "momentum" )
+
+        # Check the records required by the PIC extension
+        if pic :
+            result_array += test_key( species, v, "required", "charge" )
+            result_array += test_key( species, v, "required", "mass" )
+            result_array += test_key( species, v, "required", "weighting" )
+            result_array += test_key( species, v, "recommended", "longName" )
+            result_array += test_key( species, v, "recommended",
+                                      "globalCellId" )
+            result_array += test_key( species, v, "optional", "particleGroups" )
+            result_array += test_key( species, v, "optional", "boundElectrons" )
+            result_array += test_key( species, v, "optional", "protonNumber" )
+            result_array += test_key( species, v, "optional", "neutronNumber" )
+
+        # Check the attributes associated with the PIC extension
+        if pic :
+            result_array += test_attr(species, v, "required",
+                                      "particleShape")
+            result_array += test_attr(species, v, "required",
+                                      "currentDeposition")
+            result_array += test_attr(species, v, "required",
+                                      "particlePush")
+            result_array += test_attr(species, v, "required",
+                                      "particleInterpolation")
+            result_array += test_attr(species, v, "required",
+                                    "particleSmoothing")
+            valid, particle_smoothing = get_attr(field, "particleSmoothing")
+            if valid == True and particle_smoothing != "none":            
+                result_array += test_attr(species, v, "required",
+                                    "particleSmoothingParameters")
+
+        # Check each record of the particle
+        for record in species.keys() :
+            result_array += test_attr(species[record], v,
+                                      "required", "unitSI")
+            result_array += test_attr(species[record], v,
+                                      "required", "unitDimension")
+ 
+            
+    return(result_array)
+
+    
 if __name__ == "__main__":
     file_name, verbose, extension_pic = parse_cmd(sys.argv[1:])
     f = open_file(file_name)
@@ -281,11 +488,9 @@ if __name__ == "__main__":
     result_array = np.array([0, 0])
     result_array += check_root_attr(f, verbose, extension_pic)
 
-    # field checks
-    if result_array[0] == 0:
-        result_array += check_fields(f, verbose, extension_pic)
-
-    # particle checks
+    # Go through all the iterations, checking both the particles
+    # and the fields
+    result_array += check_iterations(f, verbose, extension_pic)
 
     # results
     print("Result: %d Errors and %d Warnings."

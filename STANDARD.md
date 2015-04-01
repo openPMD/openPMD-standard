@@ -164,8 +164,8 @@ Each file's *root* directory (path `/`) must further define the attributes:
         - `/data/%T/` (must be equal to and encoded in the `basePath`)
 
 
-Unit Systems and Dimensionality
--------------------------------
+Unit Systems and Dimensionality: Required for each `Record`
+-----------------------------------------------------------
 
 While this standard does not impose any unit system on the data that is
 stored itself, it still imposes a common interface to convert one system
@@ -193,9 +193,6 @@ attributes are mandatory:
       - "m / s" is of dimension `L=1` and `T=-1`,
         store array `[1.; 0.; -1.; 0.; 0.; 0.; 0.]`
       - "N = kg * m / s^2", store array `[1.; 1.; -2.; 0.; 0.; 0.; 0.]`
-
-
-In addition to that, each `record` must define the attributes:
 
   - `time`
     - type: *(float / REAL8)*
@@ -242,6 +239,8 @@ the vector sub-group as `field record`.
   - `scalar` fields
     - type: *(any type)*
     - data set: `recordName` unique name in group `basePath` + `fieldsPath`
+    - example:
+      - `/data/fields/temperature`
 
   - `vector` fields
     - type: *(any type)*
@@ -252,24 +251,21 @@ the vector sub-group as `field record`.
                  Here `recordName` is a sub-group. The components `x`,
                  `y`, `z` (or respectively `r`, `t`, `z`) are data
                  sets of `scalar` fields.
+    - examples:
+      - `/data/fields/F/`
+        - `x`
+        - `y`
+        - `z`
+      - `/data/fields/F/`
+        - `r`
+        - `t`
+        - `z`
 
 ### Mandatory attributes for each `field record`
 
-The following attributes must be stored with the `fieldName` (which is a
-data set attribute for `scalar` or a group attribute for `vector` fields):
-
-  - `unitSI`
-    - type: *(double / REAL8)*
-    - description: unit-conversion factor to multiply the stored record with to
-                   be represented in SI
-    - example: `2.99792e8`
-
-  - `unitDimension`
-    - see general section above
-    - powers of the 7 base measures characterizing the record's unit in SI
-      (length L, mass M, time T, electric current I, thermodynamic temperature
-       theta, amount of substance N, luminous intensity J)
-    - does *not* represent if the record is a 1, 2 or 3D array
+The following attributes must be stored additionally with the `fieldName`
+(which is a data set attribute for `scalar` or a group attribute for `vector`
+fields):
 
   - `geometry`
     - type: *(string)*
@@ -346,8 +342,8 @@ data set attribute for `scalar` or a group attribute for `vector` fields):
                    a Fortran code will appear transposed in C (or C-based applications
                    such as Python)
 
-The following attributes must be stored with each scalar record and each
-component of a vector record:
+The following attributes must be stored with each `scalar record` and each
+*component* of a `vector record`:
 
   - `position`
     - type: 1-dimesional array of N *(float / REAL4)* where N is the number of
@@ -358,21 +354,24 @@ component of a vector record:
                    beginning of the next cell;
                    in the same order as the `gridSpacing` and `gridOffset`
 
+
 Particle Records
 ----------------
 
-Each particle species shall be represented as a group `particleName/` that
-contains all its records. Records per particle are generally stored as
-contigous array of a non-compound type.
+Each `particle species` shall be represented as a group `particleName/` that
+contains all its records. Particles records are generally represented in
+one-dimensional contigous records, where the n-th entry in
+`particleName/recordNameA` and the n-th entry in `particleName/recordNameB`
+belong to the same particle.
 
-For records that are the same for all particles in a particle species, e.g.,
-all electrons have `charge` `-1`, replacing the record with a group
+For records that are constant for all particles in a particle species, e.g.,
+all electrons might have `charge` `-1`, replacing the record with a group
 attribute of the same name is possible, as described in the following
 paragraphs.
 
 ### Naming conventions
 
-As with mesh-based `vector` record, compound particle vector records
+As with mesh-based `vector` records, compound particle vector records
 are again splitted in scalar components that are stored in a common
 sub-group `particleName/recordName/`.
 
@@ -386,7 +385,7 @@ be replaced with an empty sub-sub-group `particleName/recordName/x/` that again
 hosts the group-attribute `value` and other mandatory attributes such as
 `unitSI`.
 
-### Mandatory records for each particle species
+### Mandatory Records for each `Particle Species`
 
   - `position/` + `x`, `y`, `z` (or `r`, `t`, `z` respectively)
     - type: each component in *(float)*
@@ -396,25 +395,6 @@ hosts the group-attribute `value` and other mandatory attributes such as
   - `momentum/` + `x` or `y` or `z` (or `r`, `t`, `z` respectively)
     - type: each component in *(float)*
     - description: component-wise momentum of the attribute
-
-### Mandatory attributes for each `particle record`
-
-The following attributes must be stored with the `particleName/recordName`
-(which is a data set attribute for a `scalar` particle record or a group
-attribute for a `compound` or `vector` particle record):
-
-  - `unitSI`
-    - type: *(double / REAL8)*
-    - description: unit-conversion factor to multiply the stored record with to
-                   be represented in SI
-    - example: `1.0e-9`
-
-  - `unitDimension`
-    - see general section above
-    - powers of the 7 base measures characterizing the record's unit in SI
-      (length L, mass M, time T, electric current I, thermodynamic temperature
-       theta, amount of substance N, luminous intensity J)
-    - does *not* represent if the record is a 1, 2 or 3D array
 
 
 Domain-Specific Extensions

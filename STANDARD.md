@@ -351,10 +351,11 @@ The following attributes must be stored with each `scalar record` and each
     - type: 1-dimesional array of N *(float / REAL4)* where N is the number of
             dimensions in the simulation.
     - range of each value: `[ 0.0 : 1.0 )`
-    - description: position of the component on the grid/node/cell/voxel;
-                   `0.0` means at the beginning of the cell and `1.0` is the
-                   beginning of the next cell;
-                   in the same order as the `gridSpacing` and `gridOffset`
+    - description: relative position of the component on the current element of
+                   the mesh/grid/node/cell/voxel;
+                   `0.0` means at the beginning of the mesh element and `1.0` is the
+                   beginning of the next mesh element;
+                   the same dimensionality N as in `gridSpacing` and `gridOffset`
 
 
 Particle Records

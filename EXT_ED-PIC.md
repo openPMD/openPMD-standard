@@ -1,10 +1,10 @@
 Domain-Specific Naming Conventions for Electro-Dynamic/Static PIC Codes
 =======================================================================
 
-Grid Based Records (Fields)
+Mesh Based Records (Fields)
 ---------------------------
 
-### Additional Attributes for the Group `fieldsPath`
+### Additional Attributes for the Group `meshesPath`
 
 - **Required:**
 
@@ -66,7 +66,7 @@ Grid Based Records (Fields)
     - description: required if `chargeCorrection` is not `none`
     - example: `period=100`
 
-### Additional Attributes for each `field record`
+### Additional Attributes for each `mesh record`
 
 - **Required:**
 
@@ -93,7 +93,7 @@ Grid Based Records (Fields)
       - `density of the external injected electrons`
       - `Electric Field in z multiplied by 2 pi and divided by density of ions with gamma > 3`
 
-### Naming Conventions for `field records`
+### Naming Conventions for `mesh records`
 
 - fundamental fields: `E`, `B` for electric and magnetic fields
 

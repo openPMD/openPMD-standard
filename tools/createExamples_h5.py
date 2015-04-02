@@ -51,7 +51,7 @@ def setup_root_attr(f):
     # Required attributes
     f.attrs["version"] = "1.0.0"
     f.attrs["basePath"] = "/data/%T/"
-    f.attrs["fieldsPath"] = "fields/"
+    f.attrs["meshesPath"] = "meshes/"
     f.attrs["particlesPath"] = "particles/"
     f.attrs["iterationEncoding"] = "fileBased"
     f.attrs["iterationFormat"] = "/data/%T/"
@@ -66,15 +66,15 @@ def setup_root_attr(f):
     f.attrs["comment"] = "This is a dummy file for test purposes."
 
 
-def write_rho_cylindrical(fields, mode0, mode1):
+def write_rho_cylindrical(meshes, mode0, mode1):
     """
     Write the metadata and the data associated with the scalar field rho,
     using the cylindrical representation (with azimuthal decomposition going up to m=1)
 
     Parameters
     ----------
-    fields : an h5py.Group object
-             Group of the fields in basePath + fieldsPath
+    meshes : an h5py.Group object
+             Group of the meshes in basePath + meshesPath
 
     mode0 : a 2darray of reals
         The values of rho in the azimuthal mode 0, on the r-z grid
@@ -84,11 +84,11 @@ def write_rho_cylindrical(fields, mode0, mode1):
         The values of rho in the azimuthal mode 1, on the r-z grid
         (The first axis corresponds to r, and the second axis corresponds to z)
     """
-    # Path to the rho fields, within the h5py file
+    # Path to the rho meshes, within the h5py file
     full_rho_path = "rho"
-    fields.create_dataset( full_rho_path, (3, mode0.shape[0], mode0.shape[1]), \
+    meshes.create_dataset( full_rho_path, (3, mode0.shape[0], mode0.shape[1]), \
                            dtype='f4')
-    rho = fields[full_rho_path]
+    rho = meshes[full_rho_path]
 
     # Create the dataset (cylindrical representation with azimuthal modes up to m=1)
     # The first axis has size 2m+1
@@ -114,7 +114,7 @@ def write_rho_cylindrical(fields, mode0, mode1):
     rho.attrs["dataOrder"] = "C"
 
     # Add specific information for PIC simulations
-    add_EDPIC_attr_fields(rho)
+    add_EDPIC_attr_meshes(rho)
 
     # Fill the array with the field data
     if mode0.shape != mode1.shape :
@@ -124,15 +124,15 @@ def write_rho_cylindrical(fields, mode0, mode1):
     rho[2,:,:] = mode1[:,:].imag # Then store the imaginary part of mode 1
 
 
-def write_e_2d_cartesian(fields, data_ex, data_ey, data_ez ):
+def write_e_2d_cartesian(meshes, data_ex, data_ey, data_ez ):
     """
     Write the metadata and the data associated with the vector field E,
     using a 2d Cartesian representation
 
     Parameters
     ----------
-    fields : an h5py.Group object
-             Group of the fields in basePath + fieldsPath
+    meshes : an h5py.Group object
+             Group of the meshes in basePath + meshesPath
 
     data_ex, data_ey, data_ez : 2darray of reals
         The values of the components ex, ey, ez on the 2d x-y grid
@@ -140,8 +140,8 @@ def write_e_2d_cartesian(fields, data_ex, data_ey, data_ez ):
     """
     # Path to the E field, within the h5py file
     full_e_path_name = "E"
-    fields.create_group(full_e_path_name)
-    E = fields[full_e_path_name]
+    meshes.create_group(full_e_path_name)
+    E = meshes[full_e_path_name]
 
     # Create the dataset (2d cartesian grid)
     E.create_dataset("x", data_ex.shape, dtype='f4')
@@ -161,7 +161,7 @@ def write_e_2d_cartesian(fields, data_ex, data_ey, data_ez ):
        # E is in volts per meters : V / m = kg * m / (A * s^3) -> L * M * T^-3 * J^-1
 
     # Add specific information for PIC simulations at the group level
-    add_EDPIC_attr_fields(E)
+    add_EDPIC_attr_meshes(E)
 
     # Add time information
     E.attrs["time"] = 0.  # Time is expressed in nanoseconds here
@@ -178,7 +178,7 @@ def write_e_2d_cartesian(fields, data_ex, data_ey, data_ez ):
     E["z"][:,:] =  data_ez[:,:]
 
 
-def add_EDPIC_attr_fields(field):
+def add_EDPIC_attr_meshes(field):
     """
     Write the metadata which is specific to PIC algorithm
     for a given field
@@ -186,8 +186,8 @@ def add_EDPIC_attr_fields(field):
     Parameters
     ----------
     field : an h5py.Group or h5py.Dataset object
-            The record of the field (Group for vector field
-            and Dataset for scalar fields)
+            The record of the field (Group for vector mesh
+            and Dataset for scalar meshes)
 
     """
     field.attrs["fieldSmoothing"] = "none"
@@ -216,20 +216,20 @@ def add_EDPIC_attr_particles(particle):
     #     "period=1;numPasses=2;compensator=false"
 
 
-def write_fields(f, iteration):
-    full_fields_path = get_basePath(f, iteration) + f.attrs["fieldsPath"]
-    f.create_group(full_fields_path)
-    fields = f[full_fields_path]
+def write_meshes(f, iteration):
+    full_meshes_path = get_basePath(f, iteration) + f.attrs["meshesPath"]
+    f.create_group(full_meshes_path)
+    meshes = f[full_meshes_path]
 
     # Extension: Additional attributes for ED-PIC
-    fields.attrs["fieldSolver"] = "Yee"
-    fields.attrs["fieldSolverOrder"] = 2.0
-    # fields.attrs["fieldSolverParameters"] = ""
-    fields.attrs["currentSmoothing"] = "none"
-    # fields.attrs["currentSmoothingParameters"] = \
+    meshes.attrs["fieldSolver"] = "Yee"
+    meshes.attrs["fieldSolverOrder"] = 2.0
+    # meshes.attrs["fieldSolverParameters"] = ""
+    meshes.attrs["currentSmoothing"] = "none"
+    # meshes.attrs["currentSmoothingParameters"] = \
     #     "period=1;numPasses=2;compensator=false"
-    fields.attrs["chargeCorrection"] = "none"
-    # fields.attrs["chargeCorrectionParameters"] = "period=100"
+    meshes.attrs["chargeCorrection"] = "none"
+    # meshes.attrs["chargeCorrectionParameters"] = "period=100"
 
     # (Here the data is randomly generated, but in an actual simulation, this would
     # be replaced by the simulation data.)
@@ -238,13 +238,13 @@ def write_fields(f, iteration):
     # Mode 0 : real values, mode 1 : complex values
     data_rho0 = np.random.rand(32,64)
     data_rho1 = np.random.rand(32,64) + 1.j*np.random.rand(32,64)
-    write_rho_cylindrical(fields, data_rho0, data_rho1)
+    write_rho_cylindrical(meshes, data_rho0, data_rho1)
 
     # - Write E
     data_ex = np.random.rand(32,64)
     data_ey = np.random.rand(32,64)
     data_ez = np.random.rand(32,64)
-    write_e_2d_cartesian( fields, data_ex, data_ey, data_ez )
+    write_e_2d_cartesian( meshes, data_ex, data_ey, data_ez )
 
 def write_particles(f, iteration):
     fullParticlesPath = get_basePath(f, iteration) + f.attrs["particlesPath"]
@@ -332,7 +332,7 @@ if __name__ == "__main__":
     setup_root_attr(f)
 
     # Write the field records
-    write_fields(f, iteration=0)
+    write_meshes(f, iteration=0)
 
     # Write the particle records
     write_particles(f, iteration=0)

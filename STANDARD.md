@@ -82,10 +82,10 @@ Each file's *root* directory (path `/`) must at leat contain the attributes:
                    `/data/%T` becomes `/data/100`
     - allowed value: fixed to `/data/%T/` for this version of the standard
 
-  - `fieldsPath`
+  - `meshesPath`
     - type: *(string)*
-    - description: path *relative* from the `basePath` to the field records
-    - example: `fields/`
+    - description: path *relative* from the `basePath` to the mesh records
+    - example: `meshes/`
 
   - `particlesPath`
     - type: *(string)*
@@ -177,7 +177,7 @@ Each quantity with a dimension must define a unit conversation factor,
 often called `unitSI` in the document, to transform it to a corresponding
 quanity in the International System of Units (SI).
 
-For each field or particle `record` (defined later) the following
+For each mesh or particle `record` (defined later) the following
 attributes are mandatory:
 
   - `unitSI`
@@ -224,27 +224,27 @@ For human readable output, it is *recommended* to add the actual string
 of the unit in the corresponding `comment` attribute.
 
 
-Grid Based Records (Fields)
----------------------------
+Mesh Based Records
+------------------
 
-Fields shall be represented via homogeneous data sets on an equal-spaced,
-regular grid.
+Mesh based records such as discriticed fields shall be represented via
+homogeneous data sets.
 
-Scalar fields are stored in a data set with the same name as the field.
-Vector and tensor fields shall be represented component-wise as a
-*collection of individual scalar fields* using a common sub-group that
-is equal to the field name. We refer to the scalar field itself and
-the vector sub-group as `field record`.
+Meshes with only a scalar component are stored in a data set with the same name
+as the mesh. Vector and tensor meshes shall be represented component-wise as a
+*collection of individual scalar meshes* using a common sub-group that
+is equal to the mesh name. We refer to the scalar mesh itself and
+the vector sub-group as `mesh record`.
 
 ### Naming conventions
 
-  - `scalar` fields
+  - `scalar` meshes
     - type: *(any type)*
-    - data set: `recordName` unique name in group `basePath` + `fieldsPath`
+    - data set: `recordName` unique name in group `basePath` + `meshesPath`
     - example:
-      - `/data/fields/temperature`
+      - `/data/meshes/temperature`
 
-  - `vector` fields
+  - `vector` meshes
     - type: *(any type)*
     - data sets: `recordName/x`, `recordName/y`, `recordName/z` when
                  writing the *Cartesian* components of the vectors;
@@ -252,26 +252,26 @@ the vector sub-group as `field record`.
                  writing the *cylindrical* components of the vectors.
                  Here `recordName` is a sub-group. The components `x`,
                  `y`, `z` (or respectively `r`, `t`, `z`) are data
-                 sets of `scalar` fields.
+                 sets of `scalar` meshes.
     - examples:
-      - `/data/fields/F/`
+      - `/data/meshes/F/`
         - `x`
         - `y`
         - `z`
-      - `/data/fields/F/`
+      - `/data/meshes/F/`
         - `r`
         - `t`
         - `z`
 
-### Mandatory attributes for each `field record`
+### Mandatory attributes for each `mesh record`
 
-The following attributes must be stored additionally with the `fieldName`
+The following attributes must be stored additionally with the `meshName`
 (which is a data set attribute for `scalar` or a group attribute for `vector`
-fields):
+meshes):
 
   - `geometry`
     - type: *(string)*
-    - description: geometry of the mesh of the field record, right-handed
+    - description: geometry of the mesh of the mesh record, right-handed
                    coordinate systems are imposed
     - allowed values:
       - `cartesian`: standard Cartesian mesh, the standard order of axes indexing
@@ -279,7 +279,7 @@ fields):
       - `thetaMode`: regularly-spaced mesh in the r-z plane, with
                      Fourier decomposition in the azimuthal direction (See
                      [doi:10.1016/j.jcp.2008.11.017](http://dx.doi.org/10.1016/j.jcp.2008.11.017))
-                     In this case, the field arrays are stored as a
+                     In this case, the mesh arrays are stored as a
                      three-dimensional record where the last axis corresponds
                      to the `z` direction, the second axis correspond to the
                      `r` direction and where the first axis corresponds to
@@ -312,7 +312,7 @@ fields):
                    compared to the simulation grid).
     - examples:
       - In the case where `geometry` is `cartesian`, the dimensionality
-        `N` of the array determines if the field record is 1, 2 or 3D. The
+        `N` of the array determines if the mesh record is 1, 2 or 3D. The
         elements of the array should correspond to `dx`, `dy`, `dz`, in
         this order.
       - In the case where `geometry` is `cylindrical`, the array
@@ -403,13 +403,12 @@ Domain-Specific Extensions
 --------------------------
 
 Why extensions?
-  -> standard == enough for general fields & analysis
+  -> standard == enough for general meshes & analysis
   -> extensions == code interoperability of the same domain (naming conventions)
                    open access unique description & meta
                    additional hints for domain-specific analysis
 
--> format == openPMD + ED-PIC
-                     + ExtensionABC
+-> format == openPMD + ED-PIC or ExtensionABC
 
 Up to now, the following domain-specific naming conventions for have been
 defined:

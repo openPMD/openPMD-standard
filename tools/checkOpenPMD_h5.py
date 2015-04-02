@@ -203,7 +203,7 @@ def check_root_attr(f, v, pic):
     #   required
     result_array += test_attr(f, v, "required", "version")
     result_array += test_attr(f, v, "required", "basePath")
-    result_array += test_attr(f, v, "required", "fieldsPath")
+    result_array += test_attr(f, v, "required", "meshesPath")
     result_array += test_attr(f, v, "required", "particlesPath")
     result_array += test_attr(f, v, "required", "iterationEncoding")
     result_array += test_attr(f, v, "required", "iterationFormat")
@@ -225,7 +225,7 @@ def check_root_attr(f, v, pic):
 def check_iterations(f, v, pic) :
     """
     Scan all the iterations present in the file, checking both
-    the fields and the particles
+    the meshes and the particles
 
     Parameters
     ----------
@@ -271,16 +271,16 @@ def check_iterations(f, v, pic) :
     # Second element : number of warnings
     result_array = np.array([ 0, 0]) 
         
-    # Loop over the iterations and check the fields and the particles 
+    # Loop over the iterations and check the meshes and the particles 
     for iteration in list_iterations :
-        result_array += check_fields(f, iteration, v, pic)
+        result_array += check_meshes(f, iteration, v, pic)
         result_array += check_particles(f, iteration, v, pic)
 
     return(result_array)
     
-def check_fields(f, iteration, v, pic):
+def check_meshes(f, iteration, v, pic):
     """
-    Scan all the fields corresponding to one iteration
+    Scan all the meshes corresponding to one iteration
 
     Parameters
     ----------
@@ -288,7 +288,7 @@ def check_fields(f, iteration, v, pic):
         The HDF5 file in which to find the attribute
 
     iteration : string representing an integer
-        The iteration at which to scan the fields
+        The iteration at which to scan the meshes
         
     v : bool
         Verbose option
@@ -309,21 +309,21 @@ def check_fields(f, iteration, v, pic):
 
     # Find the path to the data
     base_path = "/data/%s/" % iteration
-    valid, fields_path = get_attr(f, "fieldsPath")
-    if os.path.join( base_path, fields_path) != ( base_path + fields_path ):
-        print("Error: `basePath`+`fieldsPath` seems to be malformed "
+    valid, meshes_path = get_attr(f, "meshesPath")
+    if os.path.join( base_path, meshes_path) != ( base_path + meshes_path ):
+        print("Error: `basePath`+`meshesPath` seems to be malformed "
             "(is `basePath` absolute and ends on a `/` ?)")
         return( np.array([1, 0]) )
     else:
-        full_fields_path = base_path + fields_path
-        # Find all the fields
-        list_fields = f[full_fields_path].keys()
-    print( "Iteration %s : found %d fields"
-        %( iteration, len(list_fields) ) )
+        full_meshes_path = base_path + meshes_path
+        # Find all the meshes
+        list_meshes = f[full_meshes_path].keys()
+    print( "Iteration %s : found %d meshes"
+        %( iteration, len(list_meshes) ) )
 
     # Check for the attributes of the STANDARD.md
-    for field_name in list_fields :
-        field = f[full_fields_path + field_name]
+    for field_name in list_meshes :
+        field = f[full_meshes_path + field_name]
         
         # General attributes of the record
         result_array += test_attr(field, v, "required", "unitSI")
@@ -351,34 +351,34 @@ def check_fields(f, iteration, v, pic):
     if pic:
         
         # Check the attributes associated with the field solver
-        result_array += test_attr( f[full_fields_path], v, "required",
+        result_array += test_attr( f[full_meshes_path], v, "required",
                     "fieldSolver" )
         valid, field_solver = get_attr(field, "fieldSolver")
         if (valid == True) and (field_solver != "none") :
-            result_array += test_attr( f[full_fields_path], v, "required",
+            result_array += test_attr( f[full_meshes_path], v, "required",
                     "fieldSolverOrder")
-            result_array += test_attr( f[full_fields_path], v, "required",
+            result_array += test_attr( f[full_meshes_path], v, "required",
                     "fieldSolverParameters")
             
         # Check the attributes associated with the current smoothing
-        result_array += test_attr( f[full_fields_path], v, "required",
+        result_array += test_attr( f[full_meshes_path], v, "required",
                                     "currentSmoothing")
         valid, current_smoothing = get_attr(field, "currentSmoothing")
         if (valid == True) and (current_smoothing != "none") :
-            result_array += test_attr(f[full_fields_path], v, "required",
+            result_array += test_attr(f[full_meshes_path], v, "required",
                                         "currentSmoothingParameters")
     
         # Check the attributes associated with the charge conservation
-        result_array += test_attr(f[full_fields_path], v, "required",
+        result_array += test_attr(f[full_meshes_path], v, "required",
                                     "chargeCorrection")
         valid, charge_correction = get_attr(field, "chargeCorrection")
         if valid == True and charge_correction != "none":
-            result_array += test_attr(f[full_fields_path], v, "required",
+            result_array += test_attr(f[full_meshes_path], v, "required",
                                       "chargeCorrectionParameters")
 		
         # Check for the attributes of each record
-        for field_name in list_fields :
-            field = f[full_fields_path + field_name]
+        for field_name in list_meshes :
+            field = f[full_meshes_path + field_name]
             result_array + test_attr(field, v, "required", "fieldSmoothing")
             valid, field_smoothing = get_attr(field, "fieldSmoothing")
             if field_smoothing != "none":
@@ -421,7 +421,7 @@ def check_particles(f, iteration, v, pic) :
     valid, particles_path = get_attr(f, "particlesPath")
     if os.path.join( base_path, particles_path) !=  \
         ( base_path + particles_path ) :
-        print("Error: `basePath`+`fieldsPath` seems to be malformed "
+        print("Error: `basePath`+`meshesPath` seems to be malformed "
             "(is `basePath` absolute and ends on a `/` ?)")
         return( np.array([1, 0]) )
     else:
@@ -490,7 +490,7 @@ if __name__ == "__main__":
     result_array += check_root_attr(f, verbose, extension_pic)
 
     # Go through all the iterations, checking both the particles
-    # and the fields
+    # and the meshes
     result_array += check_iterations(f, verbose, extension_pic)
 
     # results

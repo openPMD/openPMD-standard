@@ -17,7 +17,9 @@
 - Jean-Luc Vay (LBNL)
 - David P. Grote (LLNL)
 - Remi Lehe (LBNL)
+- Ivo Sbalzarini (MPI-CBG)
+- Michael Bussmann (HZDR)
 
 
-### Reviewers and Relevant Contributions in Later Versions
+### Reviewers and Substantive Contributions in Later Versions
 

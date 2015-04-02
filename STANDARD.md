@@ -389,14 +389,34 @@ hosts the group-attribute `value` and other mandatory attributes such as
 
 ### Mandatory Records for each `Particle Species`
 
-  - `position/` + `x`, `y`, `z` (or `r`, `t`, `z` respectively)
+  - `position/` + components such as `x`, `y`, `z` (or `r`, `t`, `z` respectively)
     - type: each component in *(float)*
     - description: component-wise global position of a particle, if not
                    enforced otherwise by a domain-specific extension (see below)
 
-  - `momentum/` + `x` or `y` or `z` (or `r`, `t`, `z` respectively)
-    - type: each component in *(float)*
-    - description: component-wise momentum of the attribute
+### Additional `Records` for each `Particle Species`
+
+- **Recommended:**
+
+  - `particleGroups` (todo: change name, it collides with the definition of `group`)
+    - type: one dimensional array of *(double)* values,
+            repeating the following entries for each particle group:
+      - `numParticles`: number of particles in block
+      - `groupID`: unique, zero-based, contiguous index of the particle group
+                   (e.g., the MPI-rank of the writing process)
+      - `offset`: n-values with positions where the particle group; the order is
+                  given by the species' `componentOrder`
+      - `extend`: extend of the particle group; n is the number of components
+                  in `position`; the order is given by the species'
+                  `componentOrder`
+    - size: the record contains `2 * (1 + n) * max(groupID + 1)` values
+    - description: to allow post-processing, efficient checkpointing and
+                   visualization tools to read records with the size of more
+                   than the typical size of a local-node's RAM, this attribute
+                   allows to group records that are close in the n-dimensional
+                   `position` to ensure an intermediate level of data locality;
+                   groups of particles must be adjacent hyperrectangles
+                   regarding the `position` of the particles within
 
 
 Domain-Specific Extensions

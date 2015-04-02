@@ -213,6 +213,11 @@ Particle Records
                    each attribute such as `charge` and `mass` needs to be
                    multiplied with that value; this is a unitless number
                    (`unitSI==1` and `unitDimension==[0., ..., 0.]`)
+
+  - `momentum/` + components such as `x` or `y` or `z` (or `r`, `t`, `z` respectively)
+    - type: each component in *(float)*
+    - description: component-wise momentum of the attribute
+
   - `position`
     - type: vector property of *(float)*
     - description: default in `STANDARD.md`: global position of the particle;
@@ -237,21 +242,10 @@ Particle Records
                    the global origin of the simulation
 
   - `particleGroups`
-    - type: MPI_Size times an *(array of five uint64)*
-      - `numParticles`: number of particles in block
-      - `rank`: unique, zero-based, contiguous index of the writing process
-                (e.g., the MPI-rank)
-      - `offsetX`: position offset in `x`, `y` and `z` (or `r`, `t`, `z`)
-      - `offsetY`, `offsetZ`: see `offsetX`, must NOT be omitted or replaced
-                              in 2D/1D
-    - size: the record contains `max(rank)` structs, e.g., the MPI-size
-    - description: to allow post-processing and visualization tools
-                   to read records with the size of more than the typical
-                   size of a local-nodes RAM, this attribute allows to
-                   group records that are close in `position` to ensure
-                   an intermediate level of data locality;
-                   groups of particles must be adjacent boxes (or rectangles
-                   in 2D) regarding the `position` of the particles within
+    - description: if this record is used in combination with the
+                   `globalCellId` record, the `position` for `offset` and
+                   `extend` refers to the `globalCellId` and not the in-cell
+                   `position`
 
 - **Optional:**
 
@@ -274,4 +268,3 @@ Particle Records
   - future extensions: it might be convenient to add an attribute which electron
                        species shall be used as a "target" for newly created
                        free electrons from ionization methods
-

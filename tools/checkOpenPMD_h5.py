@@ -426,12 +426,12 @@ def check_particles(f, iteration, v, pic) :
         return( np.array([1, 0]) )
     else:
         full_particle_path = base_path + particles_path
-        # Find all the species
+        # Find all the particle species
         list_species = f[full_particle_path].keys()
-    print( "Iteration %s : found %d species"
+    print( "Iteration %s : found %d particle species"
         %( iteration, len(list_species) ) )
 
-    # Go through all the species
+    # Go through all the particle species
     for species_name in list_species :
         species = f[full_particle_path + species_name]
         
@@ -463,7 +463,7 @@ def check_particles(f, iteration, v, pic) :
             result_array += test_attr(species, v, "required",
                                       "particleInterpolation")
             result_array += test_attr(species, v, "required",
-                                    "particleSmoothing")
+                                      "particleSmoothing")
             valid, particle_smoothing = get_attr(species, "particleSmoothing")
             if valid == True and particle_smoothing != "none":            
                 result_array += test_attr(species, v, "required",

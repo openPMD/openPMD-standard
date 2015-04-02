@@ -264,7 +264,7 @@ def check_iterations(f, v, pic) :
               "actual integer.")
         return(np.array([1, 0]))
     else :
-        print("Found %d iterations" % len(list_iterations) )
+        print("Found %d iteration(s)" % len(list_iterations) )
 
     # Initialize the result array
     # First element : number of errors
@@ -464,17 +464,18 @@ def check_particles(f, iteration, v, pic) :
                                       "particleInterpolation")
             result_array += test_attr(species, v, "required",
                                     "particleSmoothing")
-            valid, particle_smoothing = get_attr(field, "particleSmoothing")
+            valid, particle_smoothing = get_attr(species, "particleSmoothing")
             if valid == True and particle_smoothing != "none":            
                 result_array += test_attr(species, v, "required",
                                     "particleSmoothingParameters")
 
         # Check each record of the particle
         for record in species.keys() :
-            result_array += test_attr(species[record], v,
-                                      "required", "unitSI")
-            result_array += test_attr(species[record], v,
-                                      "required", "unitDimension")
+            if record != "particleGroups" :
+                result_array += test_attr(species[record], v,
+                                          "required", "unitSI")
+                result_array += test_attr(species[record], v,
+                                          "required", "unitDimension")
  
             
     return(result_array)

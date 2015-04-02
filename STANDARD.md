@@ -399,24 +399,24 @@ hosts the group-attribute `value` and other mandatory attributes such as
 
 - **Recommended:**
 
-  - `particleGroups` (todo: change name, it collides with the definition of `group`)
+  - `particlePatches`
     - type: one dimensional array of *(double)* values,
-            repeating the following entries for each particle group:
+            repeating the following entries for each particle patch:
       - `numParticles`: number of particles in block
-      - `groupID`: unique, zero-based, contiguous index of the particle group
+      - `patchID`: unique, zero-based, contiguous index of the particle patch
                    (e.g., the MPI-rank of the writing process)
-      - `offset`: n-values with positions where the particle group; the order is
+      - `offset`: n-values with positions where the particle patch; the order is
                   given by the species' `componentOrder`
-      - `extend`: extend of the particle group; n is the number of components
+      - `extend`: extend of the particle patch; n is the number of components
                   in `position`; the order is given by the species'
                   `componentOrder`
-    - size: the record contains `2 * (1 + n) * max(groupID + 1)` values
+    - size: the record contains `2 * (1 + n) * max(patchID + 1)` values
     - description: to allow post-processing, efficient checkpointing and
                    visualization tools to read records with the size of more
                    than the typical size of a local-node's RAM, this attribute
-                   allows to group records that are close in the n-dimensional
+                   allows to sub-sort records that are close in the n-dimensional
                    `position` to ensure an intermediate level of data locality;
-                   groups of particles must be adjacent hyperrectangles
+                   patches of particles must be adjacent hyperrectangles
                    regarding the `position` of the particles within
 
 

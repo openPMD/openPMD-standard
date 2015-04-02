@@ -447,7 +447,7 @@ def check_particles(f, iteration, v, pic) :
             result_array += test_key( species, v, "recommended", "longName" )
             result_array += test_key( species, v, "recommended",
                                       "globalCellId" )
-            result_array += test_key( species, v, "optional", "particleGroups" )
+            result_array += test_key( species, v, "optional", "particlePatches" )
             result_array += test_key( species, v, "optional", "boundElectrons" )
             result_array += test_key( species, v, "optional", "protonNumber" )
             result_array += test_key( species, v, "optional", "neutronNumber" )
@@ -471,7 +471,7 @@ def check_particles(f, iteration, v, pic) :
 
         # Check each record of the particle
         for record in species.keys() :
-            if record != "particleGroups" :
+            if record != "particlePatches" :
                 result_array += test_attr(species[record], v,
                                           "required", "unitSI")
                 result_array += test_attr(species[record], v,

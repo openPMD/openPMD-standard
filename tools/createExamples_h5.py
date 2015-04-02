@@ -59,7 +59,7 @@ def setup_root_attr(f):
     # Recommended attributes
     f.attrs["author"] = "Axel Huebl <a.huebl@hzdr.de>"
     f.attrs["software"] = "OpenPMD Example Script"
-    #f.attrs["softwareVersion"] = "1.0.0"
+    f.attrs["softwareVersion"] = "1.0.0"
     f.attrs["date"] = datetime.datetime.now(tzlocal()).strftime('%Y-%m-%d %H:%M:%S %z')
 
     # Optional
@@ -259,21 +259,21 @@ def write_particles(f, iteration):
     #   recommended
     electrons.attrs["longName"] = "My first electron species"
 
-    # Extension: ED-PIC Record `particleGroups`
+    # Extension: ED-PIC Record `particlePatches`
     #   recommended
     mpi_size = 4  # "emulate" example MPI run with 4 ranks
     data_size = 5 # see EXT_ED-PIC.md
     grid_layout = np.array( [512, 128, 1] ) # global grid in cells
-    electrons.create_dataset("particleGroups", (5*mpi_size,), dtype='uint64')
-    particleGroups = electrons["particleGroups"]
+    electrons.create_dataset("particlePatches", (5*mpi_size,), dtype='uint64')
+    particlePatches = electrons["particlePatches"]
 
     for rank in np.arange(mpi_size): # each MPI rank would write it's part independently
-        particleGroups[rank*data_size + 0] = globalNumParticles / mpi_size
-        particleGroups[rank*data_size + 1] = rank
+        particlePatches[rank*data_size + 0] = globalNumParticles / mpi_size
+        particlePatches[rank*data_size + 1] = rank
         # example: 1D domain decompositon along the first axis
-        particleGroups[rank*data_size + 2] = rank * grid_layout[0] / mpi_size # 1st dimension spatial offset
-        particleGroups[rank*data_size + 3] = 0 # 2nd dimension spatial offset
-        particleGroups[rank*data_size + 4] = 0 # 3rd dimension spatial offset
+        particlePatches[rank*data_size + 2] = rank * grid_layout[0] / mpi_size # 1st dimension spatial offset
+        particlePatches[rank*data_size + 3] = 0 # 2nd dimension spatial offset
+        particlePatches[rank*data_size + 4] = 0 # 3rd dimension spatial offset
 
     # constant scalar particle records (that could also be variable records)
     electrons.create_group("charge")

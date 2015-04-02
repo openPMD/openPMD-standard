@@ -241,7 +241,7 @@ Particle Records
                    single precision attributes with a large offset from
                    the global origin of the simulation
 
-  - `particleGroups`
+  - `particlePatches`
     - description: if this record is used in combination with the
                    `globalCellId` record, the `position` for `offset` and
                    `extend` refers to the `globalCellId` and not the in-cell

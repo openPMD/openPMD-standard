@@ -259,22 +259,6 @@ def write_particles(f, iteration):
     #   recommended
     electrons.attrs["longName"] = "My first electron species"
 
-    # Extension: ED-PIC Record `particlePatches`
-    #   recommended
-    mpi_size = 4  # "emulate" example MPI run with 4 ranks
-    data_size = 5 # see EXT_ED-PIC.md
-    grid_layout = np.array( [512, 128, 1] ) # global grid in cells
-    electrons.create_dataset("particlePatches", (5*mpi_size,), dtype='uint64')
-    particlePatches = electrons["particlePatches"]
-
-    for rank in np.arange(mpi_size): # each MPI rank would write it's part independently
-        particlePatches[rank*data_size + 0] = globalNumParticles / mpi_size
-        particlePatches[rank*data_size + 1] = rank
-        # example: 1D domain decompositon along the first axis
-        particlePatches[rank*data_size + 2] = rank * grid_layout[0] / mpi_size # 1st dimension spatial offset
-        particlePatches[rank*data_size + 3] = 0 # 2nd dimension spatial offset
-        particlePatches[rank*data_size + 4] = 0 # 3rd dimension spatial offset
-
     # constant scalar particle records (that could also be variable records)
     electrons.create_group("charge")
     charge = electrons["charge"]
@@ -321,6 +305,26 @@ def write_particles(f, iteration):
        np.array([1.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0 ])
        #          L    M     T    J  theta  N    J
        # Dimension of Length * Mass / Time
+
+    # Record `particlePatches`
+    #   recommended
+    mpi_size = 4  # "emulate" example MPI run with 4 ranks
+    data_size = 2 + 2 * len(position.keys())  # 2 + 2 * Dimensionality of position record
+    grid_layout = np.array( [512, 128, 1] ) # global grid in cells
+    electrons.create_dataset("particlePatches", (data_size*mpi_size,), dtype='f64')
+    particlePatches = electrons["particlePatches"]
+
+    for rank in np.arange(mpi_size): # each MPI rank would write it's part independently
+        particlePatches[rank*data_size + 0] = globalNumParticles / mpi_size
+        particlePatches[rank*data_size + 1] = rank
+        # example: 1D domain decompositon along the first axis
+        particlePatches[rank*data_size + 2] = rank * grid_layout[0] / mpi_size # 1st dimension spatial offset
+        particlePatches[rank*data_size + 3] = 0 # 2nd dimension spatial offset
+        particlePatches[rank*data_size + 4] = 0 # 3rd dimension spatial offset
+        particlePatches[rank*data_size + 5] = grid_layout[0] / mpi_size # 1st dimension spatial extend
+        particlePatches[rank*data_size + 6] = 0 # 2nd dimension spatial extend
+        particlePatches[rank*data_size + 7] = 0 # 3rd dimension spatial extend
+
 
 
 if __name__ == "__main__":

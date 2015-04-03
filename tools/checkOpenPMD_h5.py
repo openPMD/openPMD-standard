@@ -330,7 +330,7 @@ def check_meshes(f, iteration, v, pic):
         result_array += test_attr(field, v, "required", "unitDimension")
         result_array += test_attr(field, v, "required", "geometry")
         result_array += test_attr(field, v, "optional",
-                                      "geometryParameters")
+                                            "geometryParameters")
         result_array += test_attr(field, v, "required", "gridSpacing")
         result_array += test_attr(field, v, "required", "gridGlobalOffset")
         result_array += test_attr(field, v, "required", "gridUnitSI")
@@ -344,33 +344,33 @@ def check_meshes(f, iteration, v, pic):
             for component_name in field:
                 component = field[component_name]
                 result_array += test_attr(component, v, "required",
-                                              "position")
+                                                        "position")
 
     # Check for the attributes of the PIC extension,
     # if asked to do so by the user 
     if pic:
         
         # Check the attributes associated with the field solver
-        result_array += test_attr( f[full_meshes_path], v, "required",
-                    "fieldSolver" )
+        result_array += test_attr(f[full_meshes_path], v, "required",
+                                  "fieldSolver" )
         valid, field_solver = get_attr(field, "fieldSolver")
         if (valid == True) and (field_solver != "none") :
-            result_array += test_attr( f[full_meshes_path], v, "required",
-                    "fieldSolverOrder")
-            result_array += test_attr( f[full_meshes_path], v, "required",
-                    "fieldSolverParameters")
+            result_array += test_attr(f[full_meshes_path], v, "required",
+                                      "fieldSolverOrder")
+            result_array += test_attr(f[full_meshes_path], v, "required",
+                                      "fieldSolverParameters")
             
         # Check the attributes associated with the current smoothing
-        result_array += test_attr( f[full_meshes_path], v, "required",
-                                    "currentSmoothing")
+        result_array += test_attr(f[full_meshes_path], v, "required",
+                                  "currentSmoothing")
         valid, current_smoothing = get_attr(field, "currentSmoothing")
         if (valid == True) and (current_smoothing != "none") :
             result_array += test_attr(f[full_meshes_path], v, "required",
-                                        "currentSmoothingParameters")
+                                      "currentSmoothingParameters")
     
         # Check the attributes associated with the charge conservation
         result_array += test_attr(f[full_meshes_path], v, "required",
-                                    "chargeCorrection")
+                                  "chargeCorrection")
         valid, charge_correction = get_attr(field, "chargeCorrection")
         if valid == True and charge_correction != "none":
             result_array += test_attr(f[full_meshes_path], v, "required",
@@ -383,7 +383,7 @@ def check_meshes(f, iteration, v, pic):
             valid, field_smoothing = get_attr(field, "fieldSmoothing")
             if field_smoothing != "none":
                 result_array += test_attr(field,v, "required",
-                                            "fieldSmoothingParameters")
+                                          "fieldSmoothingParameters")
     return(result_array)
 
 
@@ -435,19 +435,19 @@ def check_particles(f, iteration, v, pic) :
     for species_name in list_species :
         species = f[full_particle_path + species_name]
         
-        # Check that the position and momenta of the particles are present
+        # Check the position and particlePatches records of the particles
         result_array += test_key( species, v, "required", "position" )
-        result_array += test_key( species, v, "required", "momentum" )
+        result_array += test_key( species, v, "optional", "particlePatches" )
 
         # Check the records required by the PIC extension
         if pic :
+            result_array += test_key( species, v, "required", "momentum" )
             result_array += test_key( species, v, "required", "charge" )
             result_array += test_key( species, v, "required", "mass" )
             result_array += test_key( species, v, "required", "weighting" )
             result_array += test_key( species, v, "recommended", "longName" )
             result_array += test_key( species, v, "recommended",
-                                      "globalCellId" )
-            result_array += test_key( species, v, "optional", "particlePatches" )
+                                                  "globalCellId" )
             result_array += test_key( species, v, "optional", "boundElectrons" )
             result_array += test_key( species, v, "optional", "protonNumber" )
             result_array += test_key( species, v, "optional", "neutronNumber" )
@@ -467,7 +467,7 @@ def check_particles(f, iteration, v, pic) :
             valid, particle_smoothing = get_attr(species, "particleSmoothing")
             if valid == True and particle_smoothing != "none":            
                 result_array += test_attr(species, v, "required",
-                                    "particleSmoothingParameters")
+                                          "particleSmoothingParameters")
 
         # Check each record of the particle
         for record in species.keys() :

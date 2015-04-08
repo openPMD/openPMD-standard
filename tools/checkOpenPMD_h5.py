@@ -445,7 +445,6 @@ def check_particles(f, iteration, v, pic) :
             result_array += test_key( species, v, "required", "charge" )
             result_array += test_key( species, v, "required", "mass" )
             result_array += test_key( species, v, "required", "weighting" )
-            result_array += test_key( species, v, "recommended", "longName" )
             result_array += test_key( species, v, "recommended",
                                                   "globalCellId" )
             result_array += test_key( species, v, "optional", "boundElectrons" )

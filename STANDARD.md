@@ -178,7 +178,9 @@ often called `unitSI` in the document, to transform it to a corresponding
 quanity in the International System of Units (SI).
 
 For each mesh or particle `record` (defined later) the following
-attributes are mandatory:
+attributes shall be added:
+
+- **Required:**
 
   - `unitSI`
     - type: *(double / REAL8*)
@@ -208,8 +210,7 @@ attributes are mandatory:
     - description: a conversation factor to `seconds`
     - example: `1.0e-16`
 
-
-*Note to implementors* 
+- **Note to implementors:**
 
 For the special case of simulations, there can be the situation that a certain
 process scales independently of a given fixed reference quantity that

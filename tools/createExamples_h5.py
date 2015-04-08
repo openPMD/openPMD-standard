@@ -89,6 +89,7 @@ def write_rho_cylindrical(meshes, mode0, mode1):
     meshes.create_dataset( full_rho_path, (3, mode0.shape[0], mode0.shape[1]), \
                            dtype='f4')
     rho = meshes[full_rho_path]
+    rho.attrs["comment"] = "Density of electrons in azimuthal decomposition"
 
     # Create the dataset (cylindrical representation with azimuthal modes up to m=1)
     # The first axis has size 2m+1
@@ -253,11 +254,13 @@ def write_particles(f, iteration):
 
     globalNumParticles = 128 # example number of all particles
 
+    electrons.attrs["comment"] = "My first electron species"
+
     # Extension: ED-PIC Attributes
     #   required
     add_EDPIC_attr_particles(electrons)
     #   recommended
-    electrons.attrs["longName"] = "My first electron species"
+    # currently none
 
     # constant scalar particle records (that could also be variable records)
     electrons.create_group("charge")

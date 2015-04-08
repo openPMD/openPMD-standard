@@ -84,15 +84,6 @@ Mesh Based Records (Fields)
     - example: `period=10;numPasses=4;compensator=true`
     - reserved for future use: `direction=array()`, `stride=array()`
 
-- **Recommended:**
-
-  - `longName`
-    - type: *(string)*
-    - description: descriptive long name of the field
-    - examples:
-      - `density of the external injected electrons`
-      - `Electric Field in z multiplied by 2 pi and divided by density of ions with gamma > 3`
-
 ### Naming Conventions for `mesh records`
 
 - fundamental fields: `E`, `B` for electric and magnetic fields
@@ -225,14 +216,6 @@ Particle Records
                    represents the in-cell-position
 
 - **Recommended:**
-
-  - `longName`
-    - type: *(string)*
-    - description: descriptive long name of the particle
-    - examples:
-      - `2nd e- species going downstream`
-      - `not ionized Deuterium ions`
-      - `electrons created from carbon ions via impact ionization`
 
   - `globalCellId`
     - type: vector property of *(int)*

@@ -61,18 +61,27 @@ and auxiliary software under the **ISC license**.
 For more details, see the [contributions](CONTRIBUTING.md) page.
 
 
-Projects and Contributions
---------------------------
+Projects and Libraries
+----------------------
 
-The following projects participated and/or implemented the
-**openPMD** standard to describe their data:
+The following list of projects uses the
+**openPMD** standard to describe their data.
+
+### Libraries
+
+- [libSplash](https://github.com/ComputationalRadiationPhysics/libSplash) (TU Dresden/HZDR, Germany)
+  - domain: high-level C++ HDF5 library for mesh and particle records
+  - [repository](https://github.com/ComputationalRadiationPhysics/libSplash) (LGPLv3+)
+  - status: upcoming version 1.3 will automatically write valid openPMD files (base standard)
+
+### Scientific Simulations
 
 - [PIConGPU](http://picongpu.hzdr.de) (HZDR, Germany)
   - domain: electro-dynamic particle-in-cell code
   - [repository](https://github.com/ComputationalRadiationPhysics/picongpu) (GPLv3+/LGPLv3+)
-  - status: currently implementing
+  - status: currently implementing (base standard + ED-PIC)
 
 - [Warp](http://warp.lbl.gov) (LBNL & LLNL, United States)
   - domain: electro-dynamic/static particle-in-cell code
   - [repository](https://bitbucket.org/berkeleylab/warp)
-  - status: currently implementing
+  - status: currently implementing (base standard + ED-PIC)

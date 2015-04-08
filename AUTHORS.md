@@ -8,7 +8,7 @@
                     we gained in the last years implementing efficient,
                     parallel I/O in several PIC codes, but most recently
                     in PIConGPU (picongpu.hzdr.de).
-                    Special thanks goes to Felix Schmitt (ZIH, TU Dresden)
+                    Special thanks goes to Felix Schmitt (TU Dresden)
                     and Rene Widera (HZDR).
 
 

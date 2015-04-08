@@ -65,7 +65,7 @@ without a `/`, e.g., `dataSet` or `/path/to/dataSet`.
 
 Each file's *root* directory (path `/`) must at leat contain the attributes:
 
-  - `version`
+  - `openPMD`
     - type: *(string)*
     - description: (targeted) version of the format in "MAJOR.MINOR.REVISION",
                    see section "The versions of this standard",

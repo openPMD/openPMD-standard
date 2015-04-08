@@ -20,13 +20,13 @@ import numpy as np
 import string
 import sys, getopt, os.path
 
-formatVersion="1.0.0"
+openPMD="1.0.0"
 
 
 def help():
     """ Print usage information for this file """
     print('This is the openPMD file check for HDF5 files.\n')
-    print('Check for format version: %s\n' % formatVersion)
+    print('Check for format version: %s\n' % openPMD)
     print('Usage:\n  checkOpenPMD_h5.py -i <fileName> [-v] [--EDPIC]')
     sys.exit()
 
@@ -201,7 +201,7 @@ def check_root_attr(f, v, pic):
     
     # STANDARD.md
     #   required
-    result_array += test_attr(f, v, "required", "version")
+    result_array += test_attr(f, v, "required", "openPMD")
     result_array += test_attr(f, v, "required", "basePath")
     result_array += test_attr(f, v, "required", "meshesPath")
     result_array += test_attr(f, v, "required", "particlesPath")

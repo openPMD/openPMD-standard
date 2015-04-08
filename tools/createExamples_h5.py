@@ -49,7 +49,7 @@ def setup_root_attr(f):
     """
 
     # Required attributes
-    f.attrs["version"] = "1.0.0"
+    f.attrs["openPMD"] = "1.0.0"
     f.attrs["basePath"] = "/data/%T/"
     f.attrs["meshesPath"] = "meshes/"
     f.attrs["particlesPath"] = "particles/"

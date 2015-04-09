@@ -17,6 +17,7 @@
 
 import h5py as h5
 import numpy as np
+import re
 import string
 import sys, getopt, os.path
 
@@ -76,7 +77,7 @@ def test_key(f, v, request, name):
     """
     Checks whether a key is present.
     Returns an error if the key if absent and requested
-    Returns a warning if the key if absent and recommanded
+    Returns a warning if the key if absent and recommended
 
     Parameters
     ----------
@@ -122,7 +123,7 @@ def test_key(f, v, request, name):
 
     return(result_array)
         
-def test_attr(f, v, request, name):
+def test_attr(f, v, request, name, is_type=None, type_format=None):
     """
     Checks whether an attribute is present.
     Returns an error if the attribute if absent and requested
@@ -141,6 +142,13 @@ def test_attr(f, v, request, name):
 
     name : string
         The name of the attribute within this File, Group or DataSet
+
+    is_type : (numpy or python) data type
+        The type of the attribute. Default is "arbitrary" for None.
+
+    type_format: (numpy or python) data type
+        Used with is_type to specify numpy ndarray dtypes or a
+        base str format regex.
     
     Returns
     -------
@@ -151,9 +159,39 @@ def test_attr(f, v, request, name):
     valid, value = get_attr(f, name)
     if valid:
         if v:
-            print("Attribute %s (%s) exists in `%s`! Value = %s" \
-            %(name, request, str(f.name), str(value)) )
-        result_array = np.array([0,0])
+            print("Attribute %s (%s) exists in `%s`! Type = %s, Value = %s" \
+            %(name, request, str(f.name), type(value), str(value)) )
+
+        # test type
+        if is_type is not None:
+            if type(value) is is_type:
+                # ndarray dtype or str format test
+                if type(value) is np.ndarray:
+                    if value.dtype.type is type_format:
+                        result_array = np.array([0,0])
+                    else:
+                        print("Error: Attribute %s in `%s` is not of type " \
+                              "ndarray of '%s' (is ndarray of '%s')!" \
+                              %(name, str(f.name), type_format.__name__, \
+                              value.dtype.type.__name__) )
+                        result_array = np.array([1,0])
+                elif type(value) is str and type_format is not None:
+                    regEx = re.compile(type_format)
+                    if regEx.match(value):
+                        result_array = np.array([0,0])
+                    else:
+                        print("Error: Attribute %s in `%s` does not satisfy " \
+                              "format (should be '%s')!" \
+                              %(name, str(f.name), type_format) )
+                        result_array = np.array([1,0])
+                else:
+                    result_array = np.array([0,0])
+            else:
+                print("Error: Attribute %s in `%s` is not of type '%s' (is '%s')!" \
+                %(name, str(f.name), is_type.__name__, type(value).__name__) )
+                result_array = np.array([1,0])
+        else:
+            result_array = np.array([0,0])
     else:
         if request == "required":
             print("Error: Attribute %s (%s) does NOT exist in `%s`!" \
@@ -201,21 +239,22 @@ def check_root_attr(f, v, pic):
     
     # STANDARD.md
     #   required
-    result_array += test_attr(f, v, "required", "openPMD")
-    result_array += test_attr(f, v, "required", "basePath")
-    result_array += test_attr(f, v, "required", "meshesPath")
-    result_array += test_attr(f, v, "required", "particlesPath")
-    result_array += test_attr(f, v, "required", "iterationEncoding")
-    result_array += test_attr(f, v, "required", "iterationFormat")
+    result_array += test_attr(f, v, "required", "openPMD", str)
+    result_array += test_attr(f, v, "required", "basePath", str)
+    result_array += test_attr(f, v, "required", "meshesPath", str)
+    result_array += test_attr(f, v, "required", "particlesPath", str)
+    result_array += test_attr(f, v, "required", "iterationEncoding", str)
+    result_array += test_attr(f, v, "required", "iterationFormat", str)
 
     #   recommended
-    result_array += test_attr(f, v, "recommended", "author")
-    result_array += test_attr(f, v, "recommended", "software")
-    result_array += test_attr(f, v, "recommended", "softwareVersion")
-    result_array += test_attr(f, v, "recommended", "date")
+    result_array += test_attr(f, v, "recommended", "author", str)
+    result_array += test_attr(f, v, "recommended", "software", str)
+    result_array += test_attr(f, v, "recommended", "softwareVersion", str)
+    result_array += test_attr(f, v, "recommended", "date", str,
+      "^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2} [\+|-][0-9]{4}$")
 
     #   optional
-    result_array += test_attr(f, v, "optional", "comment")
+    result_array += test_attr(f, v, "optional", "comment", str)
 
     # Extension: ED-PIC
     #   no addition requirements for "/" defined
@@ -326,25 +365,26 @@ def check_meshes(f, iteration, v, pic):
         field = f[full_meshes_path + field_name]
         
         # General attributes of the record
-        result_array += test_attr(field, v, "required", "unitSI")
-        result_array += test_attr(field, v, "required", "unitDimension")
-        result_array += test_attr(field, v, "required", "geometry")
+        result_array += test_attr(field, v, "required", "unitSI", np.float64)
+        result_array += test_attr(field, v, "required", "unitDimension", np.ndarray, np.float64)
+        result_array += test_attr(field, v, "required", "geometry", str)
         result_array += test_attr(field, v, "optional",
-                                            "geometryParameters")
-        result_array += test_attr(field, v, "required", "gridSpacing")
-        result_array += test_attr(field, v, "required", "gridGlobalOffset")
-        result_array += test_attr(field, v, "required", "gridUnitSI")
-        result_array += test_attr(field, v, "required", "dataOrder")
+                                            "geometryParameters", str)
+        result_array += test_attr(field, v, "required", "gridSpacing", np.ndarray, np.float32)
+        result_array += test_attr(field, v, "required", "gridGlobalOffset", np.ndarray, np.float32)
+        result_array += test_attr(field, v, "required", "gridUnitSI", np.float64)
+        result_array += test_attr(field, v, "required", "dataOrder", str)
     
         # Attributes of data set
         if type(field) is h5.Dataset :   # If the record is a scalar field
-            result_array += test_attr(field, v, "required", "position")
+            result_array += test_attr(field, v, "required", "position",
+                                      np.ndarray, np.float32)
         else:                            # If the record is a vector field
             # Loop over the components
             for component_name in field:
                 component = field[component_name]
-                result_array += test_attr(component, v, "required",
-                                                        "position")
+                result_array += test_attr(component, v, "required", "position",
+                                          np.ndarray, np.float32)
 
     # Check for the attributes of the PIC extension,
     # if asked to do so by the user 
@@ -352,38 +392,38 @@ def check_meshes(f, iteration, v, pic):
         
         # Check the attributes associated with the field solver
         result_array += test_attr(f[full_meshes_path], v, "required",
-                                  "fieldSolver" )
+                                  "fieldSolver", str)
         valid, field_solver = get_attr(field, "fieldSolver")
         if (valid == True) and (field_solver != "none") :
             result_array += test_attr(f[full_meshes_path], v, "required",
-                                      "fieldSolverOrder")
+                                      "fieldSolverOrder", np.float_)
             result_array += test_attr(f[full_meshes_path], v, "required",
-                                      "fieldSolverParameters")
+                                      "fieldSolverParameters", str)
             
         # Check the attributes associated with the current smoothing
         result_array += test_attr(f[full_meshes_path], v, "required",
-                                  "currentSmoothing")
+                                  "currentSmoothing", str)
         valid, current_smoothing = get_attr(field, "currentSmoothing")
         if (valid == True) and (current_smoothing != "none") :
             result_array += test_attr(f[full_meshes_path], v, "required",
-                                      "currentSmoothingParameters")
+                                      "currentSmoothingParameters", str)
     
         # Check the attributes associated with the charge conservation
         result_array += test_attr(f[full_meshes_path], v, "required",
-                                  "chargeCorrection")
+                                  "chargeCorrection", str)
         valid, charge_correction = get_attr(field, "chargeCorrection")
         if valid == True and charge_correction != "none":
             result_array += test_attr(f[full_meshes_path], v, "required",
-                                      "chargeCorrectionParameters")
+                                      "chargeCorrectionParameters", str)
 		
         # Check for the attributes of each record
         for field_name in list_meshes :
             field = f[full_meshes_path + field_name]
-            result_array + test_attr(field, v, "required", "fieldSmoothing")
+            result_array + test_attr(field, v, "required", "fieldSmoothing", str)
             valid, field_smoothing = get_attr(field, "fieldSmoothing")
             if field_smoothing != "none":
                 result_array += test_attr(field,v, "required",
-                                          "fieldSmoothingParameters")
+                                          "fieldSmoothingParameters", str)
     return(result_array)
 
 
@@ -438,6 +478,8 @@ def check_particles(f, iteration, v, pic) :
         # Check the position and particlePatches records of the particles
         result_array += test_key( species, v, "required", "position" )
         result_array += test_key( species, v, "optional", "particlePatches" )
+        # to do: if particlePatches is found,
+        #        require size of start/extend to be same as dim of position
 
         # Check the records required by the PIC extension
         if pic :
@@ -454,27 +496,28 @@ def check_particles(f, iteration, v, pic) :
         # Check the attributes associated with the PIC extension
         if pic :
             result_array += test_attr(species, v, "required",
-                                      "particleShape")
+                                      "particleShape", np.float_)
             result_array += test_attr(species, v, "required",
-                                      "currentDeposition")
+                                      "currentDeposition", str)
             result_array += test_attr(species, v, "required",
-                                      "particlePush")
+                                      "particlePush", str)
             result_array += test_attr(species, v, "required",
-                                      "particleInterpolation")
+                                      "particleInterpolation", str)
             result_array += test_attr(species, v, "required",
-                                      "particleSmoothing")
+                                      "particleSmoothing", str)
             valid, particle_smoothing = get_attr(species, "particleSmoothing")
             if valid == True and particle_smoothing != "none":            
                 result_array += test_attr(species, v, "required",
-                                          "particleSmoothingParameters")
+                                          "particleSmoothingParameters", str)
 
         # Check each record of the particle
         for record in species.keys() :
             if record != "particlePatches" :
-                result_array += test_attr(species[record], v,
-                                          "required", "unitSI")
-                result_array += test_attr(species[record], v,
-                                          "required", "unitDimension")
+                result_array += test_attr(species[record], v, "required",
+                                          "unitSI", np.float64)
+                result_array += test_attr(species[record], v, "required",
+                                          "unitDimension",
+                                          np.ndarray, np.float64)
  
             
     return(result_array)

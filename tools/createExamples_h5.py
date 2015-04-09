@@ -97,21 +97,21 @@ def write_rho_cylindrical(meshes, mode0, mode1):
     rho.attrs["geometryParameters"] = "m=1; imag=+"
 
     # Add information on the units of the data
-    rho.attrs["unitSI"] = 1.0
+    rho.attrs["unitSI"] = np.float64(1.0)
     rho.attrs["unitDimension"] = \
-       np.array([-3.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0 ])
+       np.array([-3.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0 ], dtype="float64")
        #           L    M    T    J  theta  N    J
        # rho is in Coulomb per meter cube : C / m^3 = A * s / m^3 -> M^-3 * T * J
 
     # Add time information
     rho.attrs["time"] = 0.  # Time is expressed in nanoseconds here
-    rho.attrs["timeUnitSI"] = 1.e-9  # Conversion from nanoseconds to seconds
+    rho.attrs["timeUnitSI"] = np.float64(1.e-9)  # Conversion from nanoseconds to seconds
 
     # Add information on the r-z grid
-    rho.attrs["gridSpacing"] = np.array([1.0, 1.0])  # dr, dz
-    rho.attrs["gridGlobalOffset"] = np.array([0.0, 0.0]) # rmin, zmin
-    rho.attrs["position"] = np.array([0.0, 0.0])
-    rho.attrs["gridUnitSI"] = 1.0
+    rho.attrs["gridSpacing"] = np.array([1.0, 1.0], dtype="float32")  # dr, dz
+    rho.attrs["gridGlobalOffset"] = np.array([0.0, 0.0], dtype="float32") # rmin, zmin
+    rho.attrs["position"] = np.array([0.0, 0.0], dtype="float32")
+    rho.attrs["gridUnitSI"] = np.float64(1.0)
     rho.attrs["dataOrder"] = "C"
 
     # Add specific information for PIC simulations
@@ -151,13 +151,13 @@ def write_e_2d_cartesian(meshes, data_ex, data_ey, data_ez ):
 
     # Write the common metadata for the group
     E.attrs["geometry"] = "cartesian"
-    E.attrs["gridSpacing"] = np.array([1.0, 1.0])       # dx, dy
-    E.attrs["gridGlobalOffset"] = np.array([0.0, 0.0])  # xmin, ymin
-    E.attrs["gridUnitSI"] = 1.0
+    E.attrs["gridSpacing"] = np.array([1.0, 1.0], dtype="float32")       # dx, dy
+    E.attrs["gridGlobalOffset"] = np.array([0.0, 0.0], dtype="float32")  # xmin, ymin
+    E.attrs["gridUnitSI"] = np.float64(1.0)
     E.attrs["dataOrder"] = "C"
-    E.attrs["unitSI"] = 1.0e9 # convert normalized simulation units to SI
+    E.attrs["unitSI"] = np.float64(1.0e9) # convert normalized simulation units to SI
     E.attrs["unitDimension"] = \
-       np.array([1.0, 1.0, -3.0, -1.0, 0.0, 0.0, 0.0 ])
+       np.array([1.0, 1.0, -3.0, -1.0, 0.0, 0.0, 0.0 ], dtype="float64")
        #          L    M     T     J  theta  N    J
        # E is in volts per meters : V / m = kg * m / (A * s^3) -> L * M * T^-3 * J^-1
 
@@ -166,12 +166,12 @@ def write_e_2d_cartesian(meshes, data_ex, data_ey, data_ez ):
 
     # Add time information
     E.attrs["time"] = 0.  # Time is expressed in nanoseconds here
-    E.attrs["timeUnitSI"] = 1.e-9  # Conversion from nanoseconds to seconds
+    E.attrs["timeUnitSI"] = np.float64(1.e-9)  # Conversion from nanoseconds to seconds
 
     # Write attribute that is specific to each dataset: staggered position within a cell
-    E["x"].attrs["position"] = np.array([0.0, 0.5])
-    E["y"].attrs["position"] = np.array([0.5, 0.0])
-    E["z"].attrs["position"] = np.array([0.0, 0.0])
+    E["x"].attrs["position"] = np.array([0.0, 0.5], dtype="float32")
+    E["y"].attrs["position"] = np.array([0.5, 0.0], dtype="float32")
+    E["z"].attrs["position"] = np.array([0.0, 0.0], dtype="float32")
 
     # Fill the array with the field data
     E["x"][:,:] =  data_ex[:,:]
@@ -266,25 +266,25 @@ def write_particles(f, iteration):
     electrons.create_group("charge")
     charge = electrons["charge"]
     charge.attrs["value"] = -1.0;
-    charge.attrs["unitSI"] = 1.60217657e-19;
+    charge.attrs["unitSI"] = np.float64(1.60217657e-19);
     charge.attrs["unitDimension"] = \
-       np.array([0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0 ])
+       np.array([0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0 ], dtype="float64")
        #          L    M    T    J  theta  N    J
        # C = A * s
     electrons.create_group("mass")
     mass = electrons["mass"]
     mass.attrs["value"] = 1.0;
-    mass.attrs["unitSI"] = 9.10938291e-31;
+    mass.attrs["unitSI"] = np.float64(9.10938291e-31);
     mass.attrs["unitDimension"] = \
-       np.array([0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0 ])
+       np.array([0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0 ], dtype="float64")
        #          L    M    T    J  theta  N    J
 
     # scalar particle records (non-const/individual per particle)
     electrons.create_dataset("weighting", (globalNumParticles,), dtype='f4')
     weighting = electrons["weighting"]
-    weighting.attrs["unitSI"] = 1.0;
+    weighting.attrs["unitSI"] = np.float64(1.0);
     weighting.attrs["unitDimension"] = \
-       np.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ]) # plain floating point number
+       np.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ], dtype="float64") # plain floating point number
 
     # vector particle records (non-const/individual per particle)
     electrons.create_group("position")
@@ -292,9 +292,9 @@ def write_particles(f, iteration):
     position.create_dataset("x", (globalNumParticles,), dtype='f4')
     position.create_dataset("y", (globalNumParticles,), dtype='f4')
     position.create_dataset("z", (globalNumParticles,), dtype='f4')
-    position.attrs["unitSI"] = 1.e-9;
+    position.attrs["unitSI"] = np.float64(1.e-9);
     position.attrs["unitDimension"] = \
-       np.array([1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ])
+       np.array([1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ], dtype="float64")
        #          L    M     T    J  theta  N    J
        # Dimension of Length per component
 
@@ -303,9 +303,9 @@ def write_particles(f, iteration):
     momentum.create_dataset("x", (globalNumParticles,), dtype='f4')
     momentum.create_dataset("y", (globalNumParticles,), dtype='f4')
     momentum.create_dataset("z", (globalNumParticles,), dtype='f4')
-    momentum.attrs["unitSI"] = 1.60217657e-19;
+    momentum.attrs["unitSI"] = np.float64(1.60217657e-19);
     momentum.attrs["unitDimension"] = \
-       np.array([1.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0 ])
+       np.array([1.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0 ], dtype="float64")
        #          L    M     T    J  theta  N    J
        # Dimension of Length * Mass / Time
 

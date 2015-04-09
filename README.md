@@ -83,5 +83,17 @@ The following list of projects uses the
 
 - [Warp](http://warp.lbl.gov) (LBNL & LLNL, United States)
   - domain: electro-dynamic/static particle-in-cell code
-  - [repository](https://bitbucket.org/berkeleylab/warp)
+  - [repository](https://bitbucket.org/berkeleylab/warp) (BSD-3-Clause-LBNL)
   - status: currently implementing (base standard + ED-PIC)
+
+### Data Processing and Visualization
+
+- [pyDive](https://github.com/ComputationalRadiationPhysics/pyDive) (HZDR, Germany)
+  - domain: parallel numpy for ipython notebook
+  - [repository](https://github.com/ComputationalRadiationPhysics/pyDive) (GPLv3+/LGPLv3+)
+  - status: currently implementing reader and writer (base standard + ED-PIC)
+
+- [postpic](https://github.com/skuschel/postpic) (U Jena, Germany)
+  - domain: serial post-processing tool for particle-in-cell codes
+  - [repository](https://github.com/skuschel/postpic) (GPLv3+)
+  - status: currently implementing (reader for base standard + ED-PIC)

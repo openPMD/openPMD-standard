@@ -72,7 +72,7 @@ The following list of projects uses the
 - [libSplash](https://github.com/ComputationalRadiationPhysics/libSplash) (TU Dresden/HZDR, Germany)
   - domain: high-level C++ HDF5 library for mesh and particle records
   - [repository](https://github.com/ComputationalRadiationPhysics/libSplash) (LGPLv3+)
-  - status: upcoming version 1.3 will automatically write valid openPMD files (base standard)
+  - status: upcoming version 2.0 will automatically write valid openPMD files (base standard)
 
 ### Scientific Simulations
 

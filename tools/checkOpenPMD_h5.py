@@ -21,8 +21,9 @@ import re
 import string
 import sys, getopt, os.path
 
-openPMD="1.0.0"
+openPMD = "1.0.0"
 
+ext_list = [["ED-PIC", np.uint32(1)]]
 
 def help():
     """ Print usage information for this file """
@@ -304,6 +305,7 @@ def check_root_attr(f, v, pic):
     # STANDARD.md
     #   required
     result_array += test_attr(f, v, "required", "openPMD", str)
+    result_array += test_attr(f, v, "required", "openPMDextension", np.uint32)
     result_array += test_attr(f, v, "required", "basePath", str)
     result_array += test_attr(f, v, "required", "meshesPath", str)
     result_array += test_attr(f, v, "required", "particlesPath", str)
@@ -321,7 +323,15 @@ def check_root_attr(f, v, pic):
     result_array += test_attr(f, v, "optional", "comment", str)
 
     # Extension: ED-PIC
-    #   no addition requirements for "/" defined
+    if pic:
+        valid, extensionIDs = get_attr(f, "openPMDextension")
+        if valid:
+            if (ext_list[0][1] & extensionIDs) != extensionIDs:
+                print("Error: ID=%s for extension `%s` not found in " \
+                      "`openPMDextension` (is %s)!" \
+                     %(ext_list[0][1], ext_list[0][0], extensionIDs) )
+                result_array += np.array([1,0])
+
     return(result_array)
 
 

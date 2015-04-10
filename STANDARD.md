@@ -14,8 +14,8 @@ All `keywords` in this standard are case-sensitive.
 
 The naming *(float)* without a closer specification is used if the user can
 choose which kind of floating point precision shall be used.
-The naming *(int)* without a closer specification is used if the user can
-choose which kind of signed integer type shall be used.
+The naming *(uint)* and *(int) without a closer specification is used if the
+user can choose which kind of (un)signed integer type shall be used.
 
 Sometimes brackets `<Name>` are used for keywords while the `<>` only indicate
 the keyword is mandatory (but the `<>` itself shall not be written).
@@ -71,6 +71,22 @@ Each file's *root* directory (path `/`) must at leat contain the attributes:
                    see section "The versions of this standard",
                    minor and revision must not be neglected
     - example: `1.0.0`
+
+  - `openPMDextension`
+    - type: *(uint32)*
+    - description: the bit-mask of unique IDs of applied extensions of the
+                   openPMD standard
+                   (see: *Domain-Specific Extensions*);
+                   to test for a specific extension `ID` perform a bit-wise
+                   `AND` operation on `openPMDextension`:
+                   `extension_1_used = (( openPMDextension AND ID ) == ID)`
+    - note: if only one extension is used at a time, the value for
+            `openPMDextension` is simply the `ID` of the extension
+    - examples:
+      - `0`: only the base standard is used
+      - `1`: the base standard and the extension with ID `1` apply for the file
+      - general case (discouraged in this version of the standard):
+             `openPMDextension=0 OR <ID1> OR <ID2> OR <...>` (bit-wise `OR`)
 
   - `basePath`
     - type: *(string)*
@@ -486,13 +502,23 @@ short-hand notation (see: *Constant Record Components*).
 Domain-Specific Extensions
 --------------------------
 
-Why extensions?
-  -> standard == enough for general meshes & analysis
-  -> extensions == code interoperability of the same domain (naming conventions)
-                   open access unique description & meta
-                   additional hints for domain-specific analysis
+The base standard defined in this document is sufficient for describing
+*general* mesh and particle based records.
 
--> format == openPMD + ED-PIC or ExtensionABC
+For specific domains of engineering and science and to allow code
+interoperability, specific conventions are necessary. As an example, some
+records might be of distinct importance and should be read/written with exactly
+the same name or are always required for, e.g., restarts and checkpoints.
+
+Also additional meta information might be useful for publishing the data
+created by a scientific instrument or simulation, e.g., the focal length
+of a camera objective or the used algorithms in a specific simulation.
+Even if they are not necessary for code-interoperability, an extension
+can require additional information to describe the created data further.
+
+The openPMD standard is therefore organized in the *base standard* and
+*domain-specific extensions* (with a unique ID). In the current version of
+the standard, using multiple extensions at the same time is discouraged.
 
 Up to now, the following domain-specific naming conventions for have been
 defined:
@@ -501,5 +527,5 @@ defined:
   see [EXT_ED-PIC.md](EXT_ED-PIC.md).
 
 Extensions to similar domains such as fluid, finite-element or
-molecular-dynamics simulations, CCD images or other grid-based records can
-proposed for [future versions](CONTRIBUTING.md) of this document.
+molecular-dynamics simulations, CCD images or other particle and/or mesh-based
+records can proposed for [future versions](CONTRIBUTING.md) of this document.

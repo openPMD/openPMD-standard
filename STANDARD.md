@@ -299,6 +299,37 @@ as `components`.
 Constant Record Components
 --------------------------
 
+For records components that are constant (for a certain iteration), replacing
+the record component with a group attribute of the same name is possible, as
+described in the following paragraphs. For scalar records, the component is as
+usual the record itself.
+
+Replacing a record component with a constant value for all values on the mesh
+or for all particles respectively (see definitions below) works as follows:
+The record's *data set* `component` shall be replaced with an empty *sub-group*
+`component/` that hosts the group-attribute `value`.
+
+Other mandatory attributes such as `unitSI` need to be added to the new
+sub-group for *scalar records* as well; for vector and tensor records these
+standard record attributes are still stored with the group of the
+`recordName/`.
+
+Examples:
+  - the mesh record for a magnetic field `B` is constant for `B.x` and `B.y`:
+    - `<basePath><meshesPath>B/`: record group with standard attributes, e.g.,
+                                  `unitSI`
+      - `x/`: sub-group with attribute `value=<C0>`
+      - `y/`: sub-group with attribute `value=<C1>`
+      - `z`: data set
+  - the mesh record for a temperature field `T` is constant
+    - `<basePath><meshesPath>T/`: record group with attribute `value=<C0>` and
+                                  standard attributes, e.g., `unitSI`
+  - the particle record `charge` for the particle species `electrons` is
+    constant
+    - `<basePath><particlesPath>electrons/charge/`: record group with attribute
+                                                    `value=-1.0` and standard
+                                                    attributes, e.g.,
+                                                    `unitSI=1.60217657e-19`
 
 Mesh Based Records
 ------------------
@@ -410,26 +441,14 @@ one-dimensional contigous records, where the n-th entry in
 `particleName/recordNameA` and the n-th entry in `particleName/recordNameB`
 belong to the same particle.
 
-For records that are constant for all particles in a particle species, e.g.,
-all electrons might have `charge` `-1`, replacing the record with a group
-attribute of the same name is possible, as described in the following
-paragraphs.
-
 ### Naming conventions
 
-As with mesh-based `vector` records, compound particle vector records
+As with general `vector` records, compound particle vector records
 are again splitted in scalar components that are stored in a common
-sub-group `particleName/recordName/`.
-
-Replacing a record for a particle with a constant value for all particles in
-the particle species, independent if the record is stored as a vector or
-scalar record, works as follows. The record `particleName/recordName` shall
-be replaced with an empty sub-group `particleName/recordName/` that hosts the
-group-attribute `value` and other mandatory attributes such as `unitSI`. For
-components of vector-records, the component `particleName/recordName/x` shall
-be replaced with an empty sub-sub-group `particleName/recordName/x/` that again
-hosts the group-attribute `value` and other mandatory attributes such as
-`unitSI`.
+sub-group `particleName/recordName/`
+(see: *Scalar, Vector and Tensor Records*). Also, record components that are
+constant for all particles of a species (and iteration) can be replaced with a
+short-hand notation (see: *Constant Record Components*).
 
 ### Mandatory Records for each `Particle Species`
 

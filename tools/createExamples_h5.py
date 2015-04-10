@@ -124,6 +124,60 @@ def write_rho_cylindrical(meshes, mode0, mode1):
     rho[1,:,:] = mode1[:,:].real # Then store the real part of mode 1
     rho[2,:,:] = mode1[:,:].imag # Then store the imaginary part of mode 1
 
+def write_b_2d_cartesian(meshes, data_ez):
+    """
+    Write the metadata and the data associated with the vector field B,
+    using a 2d Cartesian representation.
+    In this special case, the components of the vector field B.x and B.y
+    shall be constant.
+
+    Parameters
+    ----------
+    meshes : an h5py.Group object
+             Group of the meshes in basePath + meshesPath
+    data_ez : 2darray of reals
+        The values of the component B.z on the 2d x-y grid
+        (The first axis corresponds to x, and the second axis corresponds to y)
+    """
+    # Path to the E field, within the h5py file
+    full_b_path_name = "B"
+    meshes.create_group(full_b_path_name)
+    B = meshes[full_b_path_name]
+
+    # Create the dataset (2d cartesian grid)
+    B.attrs["componentOrder"] = "x;y;z"
+    B.create_group("x")
+    B.create_group("y")
+    B.create_dataset("z", data_ez.shape, dtype='f4')
+
+    # Write the common metadata for the group
+    B.attrs["geometry"] = "cartesian"
+    B.attrs["gridSpacing"] = np.array([1.0, 1.0], dtype="float32")       # dx, dy
+    B.attrs["gridGlobalOffset"] = np.array([0.0, 0.0], dtype="float32")  # xmin, ymin
+    B.attrs["gridUnitSI"] = np.float64(1.0)
+    B.attrs["dataOrder"] = "C"
+    B.attrs["unitSI"] = np.float64(3.3) # convert normalized simulation units to SI
+    B.attrs["unitDimension"] = \
+       np.array([0.0, 1.0, -2.0, -1.0, 0.0, 0.0, 0.0 ], dtype="float64")
+       #          L    M     T     J  theta  N    J
+       # B is in Telsa : kg / (A * s^2) -> M * T^-2 * J^-1
+
+    # Add specific information for PIC simulations at the group level
+    add_EDPIC_attr_meshes(B)
+
+    # Add time information
+    B.attrs["time"] = 0.  # Time is expressed in nanoseconds here
+    B.attrs["timeUnitSI"] = np.float64(1.e-9)  # Conversion from nanoseconds to seconds
+
+    # Write attribute that is specific to each dataset: staggered position within a cell
+    B["x"].attrs["position"] = np.array([0.0, 0.0], dtype="float32")
+    B["y"].attrs["position"] = np.array([0.0, 0.0], dtype="float32")
+    B["z"].attrs["position"] = np.array([0.5, 0.5], dtype="float32")
+
+    # Fill the array with the field data
+    B["x"].attrs["value"] = np.float(0.0)
+    B["y"].attrs["value"] = np.float(0.0)
+    B["z"][:,:] =  data_ez[:,:]
 
 def write_e_2d_cartesian(meshes, data_ex, data_ey, data_ez ):
     """
@@ -136,7 +190,7 @@ def write_e_2d_cartesian(meshes, data_ex, data_ey, data_ez ):
              Group of the meshes in basePath + meshesPath
 
     data_ex, data_ey, data_ez : 2darray of reals
-        The values of the components ex, ey, ez on the 2d x-y grid
+        The values of the components E.x, E.y, E.z on the 2d x-y grid
         (The first axis corresponds to x, and the second axis corresponds to y)
     """
     # Path to the E field, within the h5py file
@@ -247,6 +301,10 @@ def write_meshes(f, iteration):
     data_ey = np.random.rand(32,64)
     data_ez = np.random.rand(32,64)
     write_e_2d_cartesian( meshes, data_ex, data_ey, data_ez )
+
+    # - Write B
+    data_bz = np.random.rand(32,64)
+    write_b_2d_cartesian( meshes, data_bz )
 
 def write_particles(f, iteration):
     fullParticlesPath = get_basePath(f, iteration) + f.attrs["particlesPath"]

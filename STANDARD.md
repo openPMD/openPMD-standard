@@ -1,7 +1,7 @@
 The openPMD Standard
 ====================
 
-VERSION: *draft* (April 2nd, 2015)
+VERSION: *draft* (April 10th, 2015)
 
 Conventions Throughout this Documents
 --------------------------------------
@@ -225,27 +225,40 @@ For human readable output, it is *recommended* to add the actual string
 of the unit in the corresponding `comment` attribute.
 
 
-Mesh Based Records
-------------------
+Scalar, Vector and Tensor Records
+---------------------------------
 
-Mesh based records such as discriticed fields shall be represented via
-homogeneous data sets.
+In general, all data sets shall be stored as homogenous arrays or matrices
+respectively, depending on the (spatial) dimensionality of the record they
+represent.
 
-Meshes with only a scalar component are stored in a data set with the same name
-as the mesh. Vector and tensor meshes shall be represented component-wise as a
-*collection of individual scalar meshes* using a common sub-group that
-is equal to the mesh name. We refer to the scalar mesh itself and
-the vector sub-group as `mesh record`.
+Records with only a scalar component are stored in a data set with the same name
+as the record. Vector and tensor records shall be represented component-wise as a
+*collection of individual scalar data sets* using a common sub-group that
+is equal to the record name. We refer to the scalar record itself and
+the vector sub-group as `record`, to the data sets in the vector sub-group
+as `components`.
 
 ### Naming conventions
 
-  - `scalar` meshes
-    - type: *(any type)*
-    - data set: `recordName` unique name in group `basePath` + `meshesPath`
-    - example:
-      - `/data/meshes/temperature`
+  - names of `records` and `components`
+    - type: *(string)*
+    - description: names of records and their components are only allowed to
+                   contain the characters `a-Z`, the numbers `0-9` and the
+                   underscore `_` (the regex `\w`)
+    - rationale: this avoids incompatibilities between file formats and
+                 allows efficient parsing via regular expressions
 
-  - `vector` meshes
+  - `scalar` record
+    - type: *(any type)*
+    - data set: `recordName` unique name in group `basePath` +
+                `meshesPath` or alternatively in `basePath` +
+                `particleName` + `particlesPath`
+    - examples:
+      - `/data/meshes/temperature`
+      - `/data/particles/electrons/charge`
+
+  - `vector` records
     - type: *(any type)*
     - data sets: `recordName/x`, `recordName/y`, `recordName/z` when
                  writing the *Cartesian* components of the vectors;
@@ -263,10 +276,39 @@ the vector sub-group as `mesh record`.
         - `r`
         - `t`
         - `z`
+      - `/data/particles/electrons/position/`
+        - `x`
+        - `y`
+        - `z`
+
+### Required Attributes for `vector` and `tensor` records
+
+  - `componentOrder`
+    - type: *(string)*
+    - description: semicolon-separated list that corresponds exactly to the
+                   names of the components of the `vector` record;
+                   this attribute determines the natural order of the
+                   components in this record
+    - examples:
+      - `x;y;z`
+      - `x;y`
+      - `r;z`
+      - `r;t;z`
+
+
+Constant Record Components
+--------------------------
+
+
+Mesh Based Records
+------------------
+
+Mesh based records such as discreticed fields shall be represented as
+homogenous records, usually in a N-dimensional matrix.
 
 ### Mandatory attributes for each `mesh record`
 
-The following attributes must be stored additionally with the `meshName`
+The following attributes must be stored additionally with the `meshName` record
 (which is a data set attribute for `scalar` or a group attribute for `vector`
 meshes):
 
@@ -406,11 +448,12 @@ hosts the group-attribute `value` and other mandatory attributes such as
       - `numParticles`: number of particles in block
       - `patchID`: unique, zero-based, contiguous index of the particle patch
                    (e.g., the MPI-rank of the writing process)
-      - `offset`: n-values with positions where the particle patch; the order is
-                  given by the species' `componentOrder`
-      - `extend`: extend of the particle patch; n is the number of components
-                  in `position`; the order is given by the species'
-                  `componentOrder`
+      - `offset`: n-values with positions where the particle patch begins; the
+                  order of positions is given by the `componentOrder` of the
+                  species' `position` record and `n` by the number of
+                  components of `position`
+      - `extend`: n-values with extend of the particle patch; order and
+                  `n` are defined as in `offset`
     - size: the record contains `2 * (1 + n) * max(patchID + 1)` values
     - description: to allow post-processing, efficient checkpointing and
                    visualization tools to read records with the size of more

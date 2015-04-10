@@ -145,6 +145,7 @@ def write_e_2d_cartesian(meshes, data_ex, data_ey, data_ez ):
     E = meshes[full_e_path_name]
 
     # Create the dataset (2d cartesian grid)
+    E.attrs["componentOrder"] = "x;y;z"
     E.create_dataset("x", data_ex.shape, dtype='f4')
     E.create_dataset("y", data_ey.shape, dtype='f4')
     E.create_dataset("z", data_ez.shape, dtype='f4')
@@ -289,6 +290,7 @@ def write_particles(f, iteration):
     # vector particle records (non-const/individual per particle)
     electrons.create_group("position")
     position = electrons["position"]
+    position.attrs["componentOrder"] = "x;y;z"
     position.create_dataset("x", (globalNumParticles,), dtype='f4')
     position.create_dataset("y", (globalNumParticles,), dtype='f4')
     position.create_dataset("z", (globalNumParticles,), dtype='f4')
@@ -300,6 +302,7 @@ def write_particles(f, iteration):
 
     electrons.create_group("momentum")
     momentum = electrons["momentum"]
+    momentum.attrs["componentOrder"] = "x;y;z"
     momentum.create_dataset("x", (globalNumParticles,), dtype='f4')
     momentum.create_dataset("y", (globalNumParticles,), dtype='f4')
     momentum.create_dataset("z", (globalNumParticles,), dtype='f4')

@@ -73,26 +73,63 @@ def get_attr(f, name):
     else:
         return(False, None)
 
+def test_record(g, r):
+    """
+    Checks if a record is valid
+
+    Parameters
+    ----------
+    g : h5py.Group
+        The group the record resides in
+
+    r : string
+        The name of the record.
+
+    Returns
+    -------
+    An array with 2 elements :
+    - The first element is 1 if an error occured, and 0 otherwise
+    - The second element is 0 if a warning arised, and 0 otherwise
+    """
+    regEx = re.compile("^\w+$")
+    if regEx.match(r):
+        # test component names
+        result_array = np.array([0,0])
+        if not is_scalar_record(g[r]) :
+            for component_name in g[r]:
+                if not regEx.match(component_name):
+                    print("Error: Component %s of record %s is NOT named properly " \
+                          "(a-Z0-9_)!" \
+                          %(component_name, g[r].name) )
+                    result_array += np.array([1,0])
+    else:
+        print("Error: Record %s is NOT named properly (a-Z0-9_)!" \
+              %(r.name) )
+        result_array = np.array([1,0])
+
+    return(result_array)
+
 def test_key(f, v, request, name):
     """
-    Checks whether a key is present.
+    Checks whether a key is present. A key can either be
+    a h5py.Group or a h5py.Dataset.
     Returns an error if the key if absent and requested
     Returns a warning if the key if absent and recommended
 
     Parameters
     ----------
-    f : an h5py.File, h5py.Group or h5py.DataSet object
+    f : an h5py.File or h5py.Group object
         The object in which to find the key
         
     v : bool
         Verbose option
 
     request : string
-        Either "required", "recommended" or "optional
+        Either "required", "recommended" or "optional"
 
     name : string
         The name of the key within this File, Group or DataSet
-    
+
     Returns
     -------
     An array with 2 elements :
@@ -122,7 +159,7 @@ def test_key(f, v, request, name):
             raise ValueError("Unrecognized string for `request` : %s" %request)
 
     return(result_array)
-        
+
 def test_attr(f, v, request, name, is_type=None, type_format=None):
     """
     Checks whether an attribute is present.
@@ -210,6 +247,33 @@ def test_attr(f, v, request, name, is_type=None, type_format=None):
             raise ValueError("Unrecognized string for `request` : %s" %request)
 
     return(result_array)
+
+def is_scalar_record(r):
+    """
+    Checks if a record is a scalar record or not.
+
+    Parameters
+    ----------
+    r : an h5py.Group or h5py.Dataset object
+        the record that shall be tested
+
+    Returns
+    -------
+    bool : true if the record is a scalar record, false if the record
+           is either a vector or an other type of tensor record
+    """
+    if type(r) is h5.Group :
+        # now it could be either a vector/tensor record
+        # or a scalar record with a constant component
+
+        valid, value = get_attr(r, "value")
+        # constant components require a "value" attribute
+        if valid :
+            return True
+        else:
+            return False
+    else :
+        return True
 
 def check_root_attr(f, v, pic):
     """
@@ -363,6 +427,8 @@ def check_meshes(f, iteration, v, pic):
     # Check for the attributes of the STANDARD.md
     for field_name in list_meshes :
         field = f[full_meshes_path + field_name]
+
+        result_array += test_record(f[full_meshes_path], field_name)
         
         # General attributes of the record
         result_array += test_attr(field, v, "required", "unitSI", np.float64)
@@ -375,11 +441,14 @@ def check_meshes(f, iteration, v, pic):
         result_array += test_attr(field, v, "required", "gridUnitSI", np.float64)
         result_array += test_attr(field, v, "required", "dataOrder", str)
     
-        # Attributes of data set
-        if type(field) is h5.Dataset :   # If the record is a scalar field
+        # Attributes of the record's components
+        if is_scalar_record(field) :   # If the record is a scalar field
             result_array += test_attr(field, v, "required", "position",
                                       np.ndarray, np.float32)
-        else:                            # If the record is a vector field
+        else:                          # If the record is a vector field
+            result_array += test_attr(field, v, "required", "componentOrder",
+                                                str, "^\w(;\w+)+$")
+            # to do: check if components really exist
             # Loop over the components
             for component_name in field:
                 component = field[component_name]
@@ -474,24 +543,27 @@ def check_particles(f, iteration, v, pic) :
     # Go through all the particle species
     for species_name in list_species :
         species = f[full_particle_path + species_name]
+
+        # check all records for this species
+        for species_record_name in species :
+            result_array += test_record(species, species_record_name)
         
         # Check the position and particlePatches records of the particles
-        result_array += test_key( species, v, "required", "position" )
-        result_array += test_key( species, v, "optional", "particlePatches" )
+        result_array += test_key(species, v, "required", "position")
+        result_array += test_key(species, v, "optional", "particlePatches")
         # to do: if particlePatches is found,
         #        require size of start/extend to be same as dim of position
 
         # Check the records required by the PIC extension
         if pic :
-            result_array += test_key( species, v, "required", "momentum" )
-            result_array += test_key( species, v, "required", "charge" )
-            result_array += test_key( species, v, "required", "mass" )
-            result_array += test_key( species, v, "required", "weighting" )
-            result_array += test_key( species, v, "recommended",
-                                                  "globalCellId" )
-            result_array += test_key( species, v, "optional", "boundElectrons" )
-            result_array += test_key( species, v, "optional", "protonNumber" )
-            result_array += test_key( species, v, "optional", "neutronNumber" )
+            result_array += test_key(species, v, "required", "momentum")
+            result_array += test_key(species, v, "required", "charge")
+            result_array += test_key(species, v, "required", "mass")
+            result_array += test_key(species, v, "required", "weighting")
+            result_array += test_key(species, v, "recommended", "globalCellId")
+            result_array += test_key(species, v, "optional", "boundElectrons")
+            result_array += test_key(species, v, "optional", "protonNumber")
+            result_array += test_key(species, v, "optional", "neutronNumber")
 
         # Check the attributes associated with the PIC extension
         if pic :
@@ -510,16 +582,21 @@ def check_particles(f, iteration, v, pic) :
                 result_array += test_attr(species, v, "required",
                                           "particleSmoothingParameters", str)
 
-        # Check each record of the particle
+        # Check attributes of each record of the particle
         for record in species.keys() :
+            # all records (but particlePatches) require units
             if record != "particlePatches" :
                 result_array += test_attr(species[record], v, "required",
                                           "unitSI", np.float64)
                 result_array += test_attr(species[record], v, "required",
                                           "unitDimension",
                                           np.ndarray, np.float64)
- 
-            
+            # vector records require an order of components
+            if not is_scalar_record(species[record]) :
+                result_array += test_attr(species[record], v, "required",
+                                          "componentOrder", str, "^\w(;\w+)+$")
+                # to do: check if components really exist
+
     return(result_array)
 
     

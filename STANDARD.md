@@ -1,7 +1,7 @@
 The openPMD Standard
 ====================
 
-VERSION: *draft* (April 10th, 2015)
+VERSION: *draft* (April 14th, 2015)
 
 Conventions Throughout this Documents
 --------------------------------------
@@ -16,6 +16,9 @@ The naming *(float)* without a closer specification is used if the user can
 choose which kind of floating point precision shall be used.
 The naming *(uint)* and *(int) without a closer specification is used if the
 user can choose which kind of (un)signed integer type shall be used.
+The naming for the type *(string)* refers to fixed-length, plain ASCII encoded
+character arrays since they are the only ones that are likely to propagate
+through all file-format APIs and third-party programs that use them.
 
 Sometimes brackets `<Name>` are used for keywords while the `<>` only indicate
 the keyword is mandatory (but the `<>` itself shall not be written).

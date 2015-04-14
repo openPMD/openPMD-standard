@@ -208,6 +208,7 @@ attributes shall be added:
     - example: `2.99792e8`
 
   - `unitDimension`
+    - type: array of 7 *(double / REAL8)*
     - powers of the 7 base measures characterizing the record's unit in SI
       (length L, mass M, time T, electric current I, thermodynamic temperature
        theta, amount of substance N, luminous intensity J)

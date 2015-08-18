@@ -515,6 +515,16 @@ short-hand notation (see: *Constant Record Components*).
                    particle patches must resemble all elements in the particle's
                    records
 
+### Mandatory Attributes for the compontents of `position/`
+
+  - `offset`
+    - type: *(float)* (must be same as in `position/`)
+    - description: start of the current particle domain of the simulation
+                   in simulation units; in the same units as the component;
+                   the components stored in `position/` are relative to the
+                   `offset` defined here
+    - example: `0.0` or `123.4`
+
 
 Domain-Specific Extensions
 --------------------------

@@ -326,20 +326,6 @@ as `components`.
         - `y`
         - `z`
 
-### Required Attributes for `vector` and `tensor` records
-
-  - `componentOrder`
-    - type: *(string)*
-    - description: semicolon-separated list that corresponds exactly to the
-                   names of the components of the `vector` record;
-                   this attribute determines the natural order of the
-                   components in this record
-    - examples:
-      - `x;y;z`
-      - `x;y`
-      - `r;z`
-      - `r;t;z`
-
 
 Constant Record Components
 --------------------------

@@ -129,7 +129,7 @@ def write_rho_cylindrical(meshes, mode0, mode1):
        # rho is in Coulomb per meter cube : C / m^3 = A * s / m^3 -> M^-3 * T * I
 
     # Add time information
-    rho.attrs["timeOffset"]=0. # Time offset with respect to the basePath's time
+    rho.attrs["timeOffset"] = 0. # Time offset with basePath's time
 
     # Add information on the r-z grid
     rho.attrs["gridSpacing"] = np.array([1.0, 1.0], dtype="float32")  # dr, dz
@@ -189,7 +189,7 @@ def write_b_2d_cartesian(meshes, data_ez):
     add_EDPIC_attr_meshes(B)
 
     # Add time information
-    B.attrs["timeOffset"]=0.25 # Time offset with respect to the basePath's time
+    B.attrs["timeOffset"] = 0.25 # Time offset with basePath's time
 
     # Write attribute that is specific to each dataset: staggered position within a cell
     B["x"].attrs["position"] = np.array([0.0, 0.0], dtype="float32")
@@ -345,8 +345,8 @@ def write_particles(f, iteration):
     electrons.create_group("charge")
     charge = electrons["charge"]
     charge.attrs["value"] = -1.0
+    charge.attrs["timeOffset"] = 0.
     charge.attrs["unitSI"] = np.float64(1.60217657e-19)
-    charge.attrs["timeOffset"] = np.float(0.)
     charge.attrs["unitDimension"] = \
        np.array([0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0 ], dtype="float64")
        #          L    M    T    I  theta  N    J
@@ -354,8 +354,8 @@ def write_particles(f, iteration):
     electrons.create_group("mass")
     mass = electrons["mass"]
     mass.attrs["value"] = 1.0
-    mass.attrs["unitSI"] = np.float64(9.10938291e-31)
     mass.attrs["timeOffset"] = 0.
+    mass.attrs["unitSI"] = np.float64(9.10938291e-31)
     mass.attrs["unitDimension"] = \
        np.array([0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0 ], dtype="float64")
        #          L    M    T    I  theta  N    J
@@ -363,8 +363,8 @@ def write_particles(f, iteration):
     # scalar particle records (non-const/individual per particle)
     electrons.create_dataset("weighting", (globalNumParticles,), dtype="f4")
     weighting = electrons["weighting"]
-    weighting.attrs["unitSI"] = np.float64(1.0)
     weighting.attrs["timeOffset"] = 0.
+    weighting.attrs["unitSI"] = np.float64(1.0)
     weighting.attrs["unitDimension"] = \
        np.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ], dtype="float64") # plain floating point number
 
@@ -389,8 +389,8 @@ def write_particles(f, iteration):
     momentum.create_dataset("x", (globalNumParticles,), dtype="f4")
     momentum.create_dataset("y", (globalNumParticles,), dtype="f4")
     momentum.create_dataset("z", (globalNumParticles,), dtype="f4")
-    momentum.attrs["unitSI"] = np.float64(1.60217657e-19)
     momentum.attrs["timeOffset"] = 0.25
+    momentum.attrs["unitSI"] = np.float64(1.60217657e-19)
     momentum.attrs["unitDimension"] = \
        np.array([1.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0 ], dtype="float64")
        #          L    M     T    I  theta  N    J

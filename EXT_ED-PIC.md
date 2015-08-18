@@ -209,7 +209,7 @@ Particle Records
                    multiplied with that value; this is a unitless number
                    (`unitSI==1` and `unitDimension==[0., ..., 0.]`)
 
-  - `momentum/` + components such as `x`, `y` and `z` (or `x` and `y` in 2D)
+  - `momentum/` + components such as `x`, `y` and `z`
     - type: each component in *(float)*
     - description: component-wise momentum of the attribute
 

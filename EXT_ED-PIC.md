@@ -218,21 +218,23 @@ particle. Therefore, this extension requires the two following attributes:
     charge of each underlying individual particle is q=-1.6e-19. Then
     the charge Q of the full macroparticle is given by: Q=q w^1 and
     therefore `weightingPower` must be 1.
-  - note to implementors: reading the file (in h5py) and extracting
-    charge of the macroparticles would look like this:
+  - advice to implementors: reading example (in h5py) and extracting
+    charge of the macroparticles in Python. When not absolutely necessary,
+    reading the additional `weighting` record can be avoided for performance
+    reasons like this:
   ```python
-  f = h5py.File('example.h5')
-  species = f[path_to_species_group]
-  q = species["charge"][:]
-  u_si = q.attrs["unitSI"]
-  p = q.attrs["weightingPower"]
-  if q.attrs["macroWeighted"] == 0 and p != 0:
+f = h5py.File('example.h5')
+species = f[path_to_species_group]
+q = species["charge"][:]
+u_si = q.attrs["unitSI"]
+p = q.attrs["weightingPower"]
+if q.attrs["macroWeighted"] == 0 and p != 0:
     w = species["weighting"][:]
     q_macro = u_si * q * w**p
-  else :
+else :
     # No need to read the weighting from disk
     q_macro = u_si * q
-  ```
+```
 
 ### Additional `Records` per Particle Species
 
@@ -243,58 +245,80 @@ particle. Therefore, this extension requires the two following attributes:
     - description: electric charge of the macroparticle or of the
       underlying individual particle (depending on the `macroWeighted`
       flag)
-	- must have `weightingPower = 1`
+    - advice to implementors: must have `weightingPower = 1`
 
   - `mass`
     - type: *(float)*
     - description: mass of the macroparticle or of the
       underlying individual particle (depending on the `macroWeighted`
       flag)
-	- must have `weightingPower = 1`
+    - advice to implementors: must have `weightingPower = 1`
 
   - `weighting`
     - type: *(float)*
     - description: the number of underlying individual particles that
                    the macroparticles represent
-	- note: must have `weightingPower = 1`, `macroWeighted = 1`,
-      `unitSI = 1` and `unitDimension==[0., ..., 0.]`
+    - advice to implementors: must have `weightingPower = 1`,
+      `macroWeighted = 1`, `unitSI = 1` and `unitDimension==[0., ..., 0.]`
 
   - `momentum/` + components such as `x`, `y` and `z`
     - type: each component in *(float)*
     - description: component-wise momentum of the macroparticle or of the
       underlying individual particle (depending on the `macroWeighted` flag)
-	- must have `weightingPower = 1`
+    - advice to implementors: must have `weightingPower = 1`
 
   - `position/` + components such as `x`, `y` and `z`
     - type: each component in *(float)*
-    - description: component-wise global position of the particle
-                   Default in `STANDARD.md`: global position of the particle;
-                   in this extension, if `globalCellId` is set, then it does 
-                   represents the in-cell-position
-	- must have `weightingPower = 0`
+    - description: component-wise global position of the particle;
+                   global position of the particle; can be replaced
+                   by splitting the position into the records `positionOfCell`
+                   and `positionInCell` (see below)
+    - advice to implementors: must have `weightingPower = 0`
     - example: use only `x` and `y` in 2D
 
 - **Recommended:**
 
-  - `globalCellId`
-    - type: vector property of *(int)*
-    - description: position rounded down to the cell the particle belongs to,
-                   increases the precision of position attributes for
-                   single precision attributes with a large offset from
-                   the global origin of the simulation
-    - must have `weightingPower = 0`
+  - `positionOfCell/` + components such as `x`, `y` and `z`
+    - type: each component in *(int)*
+    - description: zero-origin position of the cell the particle is
+                   associated with, this record requires the additional
+                   attributes `gridSpacing`, `gridGlobalOffset` and
+                   `gridUnitSI` (see base standard for `mesh` records);
+                   this record together with `positionInCell` replaces the
+                   otherwise required `position` record
+    - rationale: keeps the precision of particle positions constant along the
+                 simulation, independent of their position inside the global
+                 range of the record; the two mesh attributes are required
+                 since this record is essentially a unitless cell index,
+                 a position scaled to the cell edges
+    - advice to implementors: must have `weightingPower = 0`; since this
+                              is a cell index use `unitSI = 1` and
+                              `unitDimension==[0., ..., 0.]`
+
+  - `positionInCell/` + components such as `x`, `y` and `z`
+    - type: each component in *(float)*
+    - description: in-cell position, relative to the zero-origin give in
+                   `positionOfCell`; must be in the same units (scaled to
+                   cell edges) as `positionOfCell` and must therefore fulfill
+                   for all values `|max-min| < 1.0`; the maximum allowed value,
+                   determining the offset to the cell's zero-origin (given by
+                   `positionOfCell`) must not be greater or equal to `1.0`
+    - advice to implementors: must have `weightingPower = 0`; common ranges are
+                              `[0.0 1.0)` and `[-0.5 0.5)`; since this is the
+                              fraction of a cell index use `unitSI = 1` and
+                              `unitDimension==[0., ..., 0.]`
 
   - `particlePatches`
     - description: if this record is used in combination with the
                    `globalCellId` record, the `position` for `offset` and
                    `extend` refers to the `globalCellId` and not the in-cell
                    `position`
-    - must have `weightingPower = 0`
+    - advice to implementors: must have `weightingPower = 0`
 
 - **Optional:**
   - `id`
     - type: *(uint64 / UNSIGNED8)*
-	- description: a globally-unique identifying integer for each particle,
+    - description: a globally-unique identifying integer for each particle,
                        that can be used to, e.g., track particles. This
                        identifying integer should be truly unique within the
                        simulation; in particular, even among different
@@ -302,27 +326,23 @@ particle. Therefore, this extension requires the two following attributes:
                        Also, when a particle exits the simulation box, its
                        identifying integer should not be reassigned to a new
                        particle.
-    - must have `weightingPower = 0`
+    - advice to implementors: must have `weightingPower = 0`
 
   - `boundElectrons`
     - type: *(float)*
     - description: number of bound electrons of an ion/atom;
                    to provide information to atomic physics algorithms
-    - must have `weightingPower = 1`
+    - advice to implementors: must have `weightingPower = 1`
 
   - `protonNumber`
     - type: *(float)*
     - description: the atomic number Z of an ion/atom;
                    to provide information to atomic physics algorithms
-    - must have `weightingPower = 1`
+    - advice to implementors: must have `weightingPower = 1`
 
   - `neutronNumber`
     - type: *(float)*
     - description: the neutron number N = the mass number A - the atomic number Z
                    of an ion/atom;
                    to provide information to atomic physics algorithms
-    - must have `weightingPower = 1`
-
-  - future extensions: it might be convenient to add an attribute which electron
-                       species shall be used as a "target" for newly created
-                       free electrons from ionization methods
+    - advice to implementors: must have `weightingPower = 1`

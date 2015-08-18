@@ -104,8 +104,8 @@ def write_rho_cylindrical(meshes, mode0, mode1):
     rho.attrs["unitSI"] = np.float64(1.0)
     rho.attrs["unitDimension"] = \
        np.array([-3.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0 ], dtype="float64")
-       #           L    M    T    J  theta  N    J
-       # rho is in Coulomb per meter cube : C / m^3 = A * s / m^3 -> M^-3 * T * J
+       #           L    M    T    I  theta  N    J
+       # rho is in Coulomb per meter cube : C / m^3 = A * s / m^3 -> M^-3 * T * I
 
     # Add time information
     rho.attrs["time"] = 0.  # Time is expressed in nanoseconds here
@@ -163,8 +163,8 @@ def write_b_2d_cartesian(meshes, data_ez):
     B.attrs["unitSI"] = np.float64(3.3) # convert normalized simulation units to SI
     B.attrs["unitDimension"] = \
        np.array([0.0, 1.0, -2.0, -1.0, 0.0, 0.0, 0.0 ], dtype="float64")
-       #          L    M     T     J  theta  N    J
-       # B is in Telsa : kg / (A * s^2) -> M * T^-2 * J^-1
+       #          L    M     T     I  theta  N    J
+       # B is in Telsa : kg / (A * s^2) -> M * T^-2 * I^-1
 
     # Add specific information for PIC simulations at the group level
     add_EDPIC_attr_meshes(B)
@@ -217,8 +217,8 @@ def write_e_2d_cartesian(meshes, data_ex, data_ey, data_ez ):
     E.attrs["unitSI"] = np.float64(1.0e9) # convert normalized simulation units to SI
     E.attrs["unitDimension"] = \
        np.array([1.0, 1.0, -3.0, -1.0, 0.0, 0.0, 0.0 ], dtype="float64")
-       #          L    M     T     J  theta  N    J
-       # E is in volts per meters : V / m = kg * m / (A * s^3) -> L * M * T^-3 * J^-1
+       #          L    M     T     I  theta  N    J
+       # E is in volts per meters : V / m = kg * m / (A * s^3) -> L * M * T^-3 * I^-1
 
     # Add specific information for PIC simulations at the group level
     add_EDPIC_attr_meshes(E)
@@ -332,7 +332,7 @@ def write_particles(f, iteration):
     charge.attrs["unitSI"] = np.float64(1.60217657e-19);
     charge.attrs["unitDimension"] = \
        np.array([0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0 ], dtype="float64")
-       #          L    M    T    J  theta  N    J
+       #          L    M    T    I  theta  N    J
        # C = A * s
     electrons.create_group("mass")
     mass = electrons["mass"]
@@ -340,7 +340,7 @@ def write_particles(f, iteration):
     mass.attrs["unitSI"] = np.float64(9.10938291e-31);
     mass.attrs["unitDimension"] = \
        np.array([0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0 ], dtype="float64")
-       #          L    M    T    J  theta  N    J
+       #          L    M    T    I  theta  N    J
 
     # scalar particle records (non-const/individual per particle)
     electrons.create_dataset("weighting", (globalNumParticles,), dtype="f4")
@@ -359,7 +359,7 @@ def write_particles(f, iteration):
     position.attrs["unitSI"] = np.float64(1.e-9);
     position.attrs["unitDimension"] = \
        np.array([1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ], dtype="float64")
-       #          L    M     T    J  theta  N    J
+       #          L    M     T    I  theta  N    J
        # Dimension of Length per component
 
     electrons.create_group("momentum")
@@ -371,7 +371,7 @@ def write_particles(f, iteration):
     momentum.attrs["unitSI"] = np.float64(1.60217657e-19);
     momentum.attrs["unitDimension"] = \
        np.array([1.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0 ], dtype="float64")
-       #          L    M     T    J  theta  N    J
+       #          L    M     T    I  theta  N    J
        # Dimension of Length * Mass / Time
 
     # Record `particlePatches`

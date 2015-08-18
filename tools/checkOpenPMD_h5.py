@@ -560,7 +560,7 @@ def check_particles(f, iteration, v, pic) :
         
         # Check the position and particlePatches records of the particles
         result_array += test_key(species, v, "required", "position")
-        result_array += test_key(species, v, "optional", "particlePatches")
+        result_array += test_key(species, v, "recommended", "particlePatches")
         # to do: if particlePatches is found,
         #        require size of start/extend to be same as dim of position
 

@@ -149,14 +149,10 @@ Iterations and Time Series
 --------------------------
 
 Iterations can be encoded in either the file name of each master-file of a
-time step or in groups of the same file.
+time step or in groups of the same file. (Here, an *iteration* refers
+to a single simulation cycle.)
 
 The choosen style shall not vary within a related set of iterations.
-
-Since the meaning of *time* can be confusing for simulations with non-constant
-time steps, records that are stagered in time or simulations in a frame of
-reference moving with relativistic speeds, an iteration describes a single
-simulation cycle.
 
 Each file's *root* directory (path `/`) must further define the attributes:
 
@@ -184,6 +180,34 @@ Each file's *root* directory (path `/`) must further define the attributes:
       - for `groupBased`:
         - `/data/%T/` (must be equal to and encoded in the `basePath`)
 
+In addition to holding information about the iteration, each series of
+files  (`fileBased`) or series of groups (`groupBased`) should have
+attributes that describe the current time and the last
+timestep. 
+
+ - `time`
+   - type: *(float / REAL8)*
+   - description: the time corresponding to this iteration. This is
+     somewhat loosely defined in the case of a staggered code. (At one
+     given iteration, different quantities may be defined at different
+     times.) However, this ambiguity is resolved at the *record* level
+     (see below), where each quantity has an attribute `timeOffset`
+     which corresponds to its offset with respect to `time`.
+
+	For instance, in a staggered PIC code, the `time` attribute can be
+    the time at which the electric field is defined, and the magnetic
+    field would then have a non-zero `timeOffset`.
+
+ - `dt`
+   - type: *(float / REAL8)*
+   - description: The latest timestep (that used to reach this
+   iteration). This is needed at the iteration level, since the
+   timestep may vary from iteration to iteration, in certain codes.
+
+ - `timeUnitSI`
+    - type: *(double / REAL8)*
+    - description: a conversation factor to convert `time` and `dt` to `seconds`
+    - example: `1.0e-16`
 
 Unit Systems and Dimensionality: Required for each `Record`
 -----------------------------------------------------------
@@ -218,17 +242,16 @@ attributes shall be added:
         store array `[1.; 0.; -1.; 0.; 0.; 0.; 0.]`
       - "N = kg * m / s^2", store array `[1.; 1.; -2.; 0.; 0.; 0.; 0.]`
 
-  - `time`
+  - `timeOffset`
     - type: *(float / REAL8)*
-    - description: the current time;
-                   add a `comment` to your record if it can not be described
-                   with a common "time" (or if it's definition of time varies
-                   from the definition of time in other record)
-
-  - `timeUnitSI`
-    - type: *(double / REAL8)*
-    - description: a conversation factor to `seconds`
-    - example: `1.0e-16`
+    - description: the offset between the time at which this record is
+      defined and the `time` attribute of the `BasePath` level. This
+      should be written in the same unit system as `time` (i.e. it
+      should be multiplied by `timeUnitSI` to get the actual time in seconds.)
+	- example: In a staggered PIC code, if `time` is chosen to
+      correspond to the time at which the electric field is defined,
+      and if `dt` is e.g. 1e-5, `timeOffset` would be 0.5e-5 for the
+      magnetic field and 0. for the electric field.
 
 - **Note to implementors:**
 

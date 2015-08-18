@@ -652,7 +652,11 @@ def check_particles(f, iteration, v, pic) :
                 time_type = f[base_path].attrs["time"].dtype.type
                 result_array += test_attr(species[record], v, "required",
                                         "timeOffset", time_type)
-                
+                result_array += test_attr(species[record], v, "required",
+                                          "weightingPower", np.float64)
+                result_array += test_attr(species[record], v, "required",
+                                          "macroWeighted", np.uint32)
+
     return(result_array)
 
     

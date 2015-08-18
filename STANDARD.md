@@ -484,23 +484,24 @@ short-hand notation (see: *Constant Record Components*).
   - `particlePatches`
     - type: one dimensional array of *(double)* values,
             repeating the following entries for each particle patch:
-      - `numParticles`: number of particles in block
-      - `patchID`: unique, zero-based, contiguous index of the particle patch
-                   (e.g., the MPI-rank of the writing process)
+      - `numParticles`: number of particles in this patch
+      - `numParticlesOffset`: offset within the one-dimensional records where
+                              the first particle in this patch is stored
       - `offset`: n-values with positions where the particle patch begins; the
-                  order of positions is given by the `componentOrder` of the
-                  species' `position` record and `n` by the number of
-                  components of `position`
+                  order of positions is given in component order
+                  `x`[, `y`[, `z`]] of the species' `position` record and `n`
+                  by the number of components of `position`
       - `extend`: n-values with extend of the particle patch; order and
                   `n` are defined as in `offset`
-    - size: the record contains `2 * (1 + n) * max(patchID + 1)` values
     - description: to allow post-processing, efficient checkpointing and
                    visualization tools to read records with the size of more
                    than the typical size of a local-node's RAM, this attribute
                    allows to sub-sort records that are close in the n-dimensional
                    `position` to ensure an intermediate level of data locality;
-                   patches of particles must be adjacent hyperrectangles
-                   regarding the `position` of the particles within
+                   patches of particles must be hyperrectangles regarding
+                   the `position` of the particles within; the union of all
+                   particle patches must resemble all elements in the particle's
+                   records
 
 
 Domain-Specific Extensions

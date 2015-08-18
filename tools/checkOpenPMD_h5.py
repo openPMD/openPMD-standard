@@ -456,11 +456,8 @@ def check_meshes(f, iteration, v, pic):
             result_array += test_attr(field, v, "required", "position",
                                       np.ndarray, np.float32)
         else:                          # If the record is a vector field
-            result_array += test_attr(field, v, "required", "componentOrder",
-                                                np.string_, "^\w(;\w+)+$")
-            # to do: check if components really exist
             # Loop over the components
-            for component_name in field:
+            for component_name in field.keys():
                 component = field[component_name]
                 result_array += test_attr(component, v, "required", "position",
                                           np.ndarray, np.float32)
@@ -601,11 +598,6 @@ def check_particles(f, iteration, v, pic) :
                 result_array += test_attr(species[record], v, "required",
                                           "unitDimension",
                                           np.ndarray, np.float64)
-            # vector records require an order of components
-            if not is_scalar_record(species[record]) :
-                result_array += test_attr(species[record], v, "required",
-                                          "componentOrder", np.string_, "^\w(;\w+)+$")
-                # to do: check if components really exist
 
     return(result_array)
 

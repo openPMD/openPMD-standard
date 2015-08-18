@@ -497,10 +497,11 @@ short-hand notation (see: *Constant Record Components*).
 
 ### Mandatory Records for each `Particle Species`
 
-  - `position/` + components such as `x`, `y`, `z` (or `r`, `t`, `z` respectively)
+  - `position/` + components such as `x`, `y`, `z`
     - type: each component in *(float)*
     - description: component-wise global position of a particle, if not
                    enforced otherwise by a domain-specific extension (see below)
+    - example: use only `x` and `y` in 2D
 
 ### Additional `Records` for each `Particle Species`
 

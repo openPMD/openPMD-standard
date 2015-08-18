@@ -209,15 +209,17 @@ Particle Records
                    multiplied with that value; this is a unitless number
                    (`unitSI==1` and `unitDimension==[0., ..., 0.]`)
 
-  - `momentum/` + components such as `x` or `y` or `z` (or `r`, `t`, `z` respectively)
+  - `momentum/` + components such as `x`, `y` and `z`
     - type: each component in *(float)*
     - description: component-wise momentum of the attribute
 
-  - `position`
-    - type: vector property of *(float)*
-    - description: default in `STANDARD.md`: global position of the particle;
+  - `position/` + components such as `x`, `y` and `z`
+    - type: each component in *(float)*
+    - description: component-wise global position of a particle.
+                   Default in `STANDARD.md`: global position of the particle;
                    in this extension, if `globalCellId` is set, then it does 
                    represents the in-cell-position
+    - example: use only `x` and `y` in 2D
 
 - **Recommended:**
 

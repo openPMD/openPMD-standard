@@ -238,7 +238,7 @@ Particle Records
 
 - **Optional:**
   - `id`
-    - type: *(int)*
+    - type: *(uint64 / UNSIGNED8)*
 	- description: a globally-unique identifying integer for each particle,
                        that can be used to, e.g., track particles. This
                        identifying integer should be truly unique within the

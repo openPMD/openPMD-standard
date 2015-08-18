@@ -351,8 +351,11 @@ def write_particles(f, iteration):
     electrons.create_group("position")
     position = electrons["position"]
     position.create_dataset("x", (globalNumParticles,), dtype="f4")
+    position["x"].attrs["offset"] = np.float32(0.0)
     position.create_dataset("y", (globalNumParticles,), dtype="f4")
+    position["y"].attrs["offset"] = np.float32(0.0)
     position.create_dataset("z", (globalNumParticles,), dtype="f4")
+    position["z"].attrs["offset"] = np.float32(0.0)
     position.attrs["unitSI"] = np.float64(1.e-9);
     position.attrs["unitDimension"] = \
        np.array([1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ], dtype="float64")

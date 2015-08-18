@@ -519,6 +519,17 @@ short-hand notation (see: *Constant Record Components*).
                    particle patches must resemble all elements in the particle's
                    records
 
+### Mandatory Attributes for the compontents of `position/`
+
+  - `offset`
+    - type: *(float)* (must be same as in `position/`)
+    - description: a global shift to be added to each element of the component,
+                   in the same units as the component; for precision reasons
+                   and visualization purposes, it is sometimes more useful
+                   to define all positions of an iteration relative to an
+                   offset
+    - example: `0.0` or `123.4`
+
 
 Domain-Specific Extensions
 --------------------------

@@ -345,15 +345,32 @@ def write_particles(f, iteration):
     electrons.create_group("charge")
     charge = electrons["charge"]
     charge.attrs["value"] = -1.0
+    # macroWeighted: False(0) the charge value is given for an underlying,
+    #                real particle
+    # weightingPower == 1: the charge of the macro particle scales linearly
+    #                      with the number of underlying real particles
+    #                      it represents
+    charge.attrs["macroWeighted"] = np.uint32(0)
+    charge.attrs["weightingPower"] = np.float64(1.0)
+    # attributes from the base standard
     charge.attrs["timeOffset"] = 0.
     charge.attrs["unitSI"] = np.float64(1.60217657e-19)
     charge.attrs["unitDimension"] = \
        np.array([0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0 ], dtype=np.float64)
        #          L    M    T    I  theta  N    J
        # C = A * s
+
     electrons.create_group("mass")
     mass = electrons["mass"]
     mass.attrs["value"] = 1.0
+    # macroWeighted: False(0) the mass value is given for an underlying,
+    #                real particle
+    # weightingPower == 1: the mass of the macro particle scales linearly
+    #                      with the number of underlying real particles
+    #                      it represents
+    mass.attrs["macroWeighted"] = np.uint32(0)
+    mass.attrs["weightingPower"] = np.float64(1.0)
+    # attributes from the base standard
     mass.attrs["timeOffset"] = 0.
     mass.attrs["unitSI"] = np.float64(9.10938291e-31)
     mass.attrs["unitDimension"] = \
@@ -363,6 +380,12 @@ def write_particles(f, iteration):
     # scalar particle records (non-const/individual per particle)
     electrons.create_dataset("weighting", (globalNumParticles,), dtype=np.float32)
     weighting = electrons["weighting"]
+    # macroWeighted: True(1) by definition
+    # weightingPower == 1: since this is the identity of weighting,
+    #                      it scales linearly with itself
+    weighting.attrs["macroWeighted"] = np.uint32(1)
+    weighting.attrs["weightingPower"] = np.float64(1.0)
+    # attributes from the base standard
     weighting.attrs["timeOffset"] = 0.
     weighting.attrs["unitSI"] = np.float64(1.0)
     weighting.attrs["unitDimension"] = \
@@ -377,6 +400,12 @@ def write_particles(f, iteration):
     position["y"].attrs["offset"] = np.float32(0.0)
     position.create_dataset("z", (globalNumParticles,), dtype=np.float32)
     position["z"].attrs["offset"] = np.float32(0.0)
+    # macroWeighted: can be 1 or 0 in this case, since it's the same for macro
+    #                particles and representing underlying particles
+    # weightingPower == 0: the position does not scale with the weighting
+    position.attrs["macroWeighted"] = np.uint32(1)
+    position.attrs["weightingPower"] = np.float64(0.0)
+    # attributes from the base standard
     position.attrs["timeOffset"] = 0.
     position.attrs["unitSI"] = np.float64(1.e-9)
     position.attrs["unitDimension"] = \
@@ -389,6 +418,13 @@ def write_particles(f, iteration):
     momentum.create_dataset("x", (globalNumParticles,), dtype=np.float32)
     momentum.create_dataset("y", (globalNumParticles,), dtype=np.float32)
     momentum.create_dataset("z", (globalNumParticles,), dtype=np.float32)
+    # macroWeighted: True(1) in this example we store the momentum
+    #                of the macro particle
+    # weightingPower == 1: each underlying particle contributes linearly
+    #                      to the total momentum
+    momentum.attrs["macroWeighted"] = np.uint32(1)
+    momentum.attrs["weightingPower"] = np.float64(1.0)
+    # attributes from the base standard
     momentum.attrs["timeOffset"] = 0.25
     momentum.attrs["unitSI"] = np.float64(1.60217657e-19)
     momentum.attrs["unitDimension"] = \

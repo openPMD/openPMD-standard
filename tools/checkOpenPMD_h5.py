@@ -555,8 +555,15 @@ def check_particles(f, iteration, v, pic) :
         for species_record_name in species :
             result_array += test_record(species, species_record_name)
         
-        # Check the position and particlePatches records of the particles
+        # Check the position record of the particles
         result_array += test_key(species, v, "required", "position")
+        for component_name in species["position"].keys():
+            component = species["position/" + component_name]
+            component_type = component.dtype.type
+            result_array += test_attr(component, v, "required", "offset",
+                                      component_type)
+
+        # Check the particlePatches record of the particles
         result_array += test_key(species, v, "recommended", "particlePatches")
         # to do: if particlePatches is found,
         #        require size of start/extend to be same as dim of position

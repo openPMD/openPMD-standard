@@ -189,7 +189,7 @@ Particle Records
     - example: `period=1;numPasses=2;compensator=false`
     - reserved for future use: `direction=array()`, `stride=array()`
 
-### Additional attributes for each particle `Record`
+### Additional Attributes for each Particle `Record`
 
 When using macroparticles (see below for the definition of the
 macroparticle `weighting`), there is an ambiguity regarding whether the

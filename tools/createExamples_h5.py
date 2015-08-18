@@ -112,7 +112,7 @@ def write_rho_cylindrical(meshes, mode0, mode1):
     # Path to the rho meshes, within the h5py file
     full_rho_path = np.string_("rho")
     meshes.create_dataset( full_rho_path, (3, mode0.shape[0], mode0.shape[1]), \
-                           dtype="f4")
+                           dtype=np.float32)
     rho = meshes[full_rho_path]
     rho.attrs["comment"] = np.string_("Density of electrons in azimuthal decomposition")
 
@@ -124,7 +124,7 @@ def write_rho_cylindrical(meshes, mode0, mode1):
     # Add information on the units of the data
     rho.attrs["unitSI"] = np.float64(1.0)
     rho.attrs["unitDimension"] = \
-       np.array([-3.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0 ], dtype="float64")
+       np.array([-3.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0 ], dtype=np.float64)
        #           L    M    T    I  theta  N    J
        # rho is in Coulomb per meter cube : C / m^3 = A * s / m^3 -> M^-3 * T * I
 
@@ -132,9 +132,9 @@ def write_rho_cylindrical(meshes, mode0, mode1):
     rho.attrs["timeOffset"] = 0. # Time offset with basePath's time
 
     # Add information on the r-z grid
-    rho.attrs["gridSpacing"] = np.array([1.0, 1.0], dtype="float32")  # dr, dz
-    rho.attrs["gridGlobalOffset"] = np.array([0.0, 0.0], dtype="float32") # rmin, zmin
-    rho.attrs["position"] = np.array([0.0, 0.0], dtype="float32")
+    rho.attrs["gridSpacing"] = np.array([1.0, 1.0], dtype=np.float32)  # dr, dz
+    rho.attrs["gridGlobalOffset"] = np.array([0.0, 0.0], dtype=np.float32) # rmin, zmin
+    rho.attrs["position"] = np.array([0.0, 0.0], dtype=np.float32)
     rho.attrs["gridUnitSI"] = np.float64(1.0)
     rho.attrs["dataOrder"] = np.string_("C")
 
@@ -171,17 +171,17 @@ def write_b_2d_cartesian(meshes, data_ez):
     # Create the dataset (2d cartesian grid)
     B.create_group("x")
     B.create_group("y")
-    B.create_dataset("z", data_ez.shape, dtype="f4")
+    B.create_dataset("z", data_ez.shape, dtype=np.float32)
 
     # Write the common metadata for the group
     B.attrs["geometry"] = np.string_("cartesian")
-    B.attrs["gridSpacing"] = np.array([1.0, 1.0], dtype="float32")       # dx, dy
-    B.attrs["gridGlobalOffset"] = np.array([0.0, 0.0], dtype="float32")  # xmin, ymin
+    B.attrs["gridSpacing"] = np.array([1.0, 1.0], dtype=np.float32)       # dx, dy
+    B.attrs["gridGlobalOffset"] = np.array([0.0, 0.0], dtype=np.float32)  # xmin, ymin
     B.attrs["gridUnitSI"] = np.float64(1.0)
     B.attrs["dataOrder"] = np.string_("C")
     B.attrs["unitSI"] = np.float64(3.3) # convert normalized simulation units to SI
     B.attrs["unitDimension"] = \
-       np.array([0.0, 1.0, -2.0, -1.0, 0.0, 0.0, 0.0 ], dtype="float64")
+       np.array([0.0, 1.0, -2.0, -1.0, 0.0, 0.0, 0.0 ], dtype=np.float64)
        #          L    M     T     I  theta  N    J
        # B is in Telsa : kg / (A * s^2) -> M * T^-2 * I^-1
 
@@ -192,9 +192,9 @@ def write_b_2d_cartesian(meshes, data_ez):
     B.attrs["timeOffset"] = 0.25 # Time offset with basePath's time
 
     # Write attribute that is specific to each dataset: staggered position within a cell
-    B["x"].attrs["position"] = np.array([0.0, 0.0], dtype="float32")
-    B["y"].attrs["position"] = np.array([0.0, 0.0], dtype="float32")
-    B["z"].attrs["position"] = np.array([0.5, 0.5], dtype="float32")
+    B["x"].attrs["position"] = np.array([0.0, 0.0], dtype=np.float32)
+    B["y"].attrs["position"] = np.array([0.0, 0.0], dtype=np.float32)
+    B["z"].attrs["position"] = np.array([0.5, 0.5], dtype=np.float32)
 
     # Fill the array with the field data
     B["x"].attrs["value"] = np.float(0.0)
@@ -221,19 +221,19 @@ def write_e_2d_cartesian(meshes, data_ex, data_ey, data_ez ):
     E = meshes[full_e_path_name]
 
     # Create the dataset (2d cartesian grid)
-    E.create_dataset("x", data_ex.shape, dtype="f4")
-    E.create_dataset("y", data_ey.shape, dtype="f4")
-    E.create_dataset("z", data_ez.shape, dtype="f4")
+    E.create_dataset("x", data_ex.shape, dtype=np.float32)
+    E.create_dataset("y", data_ey.shape, dtype=np.float32)
+    E.create_dataset("z", data_ez.shape, dtype=np.float32)
 
     # Write the common metadata for the group
     E.attrs["geometry"] = np.string_("cartesian")
-    E.attrs["gridSpacing"] = np.array([1.0, 1.0], dtype="float32")       # dx, dy
-    E.attrs["gridGlobalOffset"] = np.array([0.0, 0.0], dtype="float32")  # xmin, ymin
+    E.attrs["gridSpacing"] = np.array([1.0, 1.0], dtype=np.float32)       # dx, dy
+    E.attrs["gridGlobalOffset"] = np.array([0.0, 0.0], dtype=np.float32)  # xmin, ymin
     E.attrs["gridUnitSI"] = np.float64(1.0)
     E.attrs["dataOrder"] = np.string_("C")
     E.attrs["unitSI"] = np.float64(1.0e9) # convert normalized simulation units to SI
     E.attrs["unitDimension"] = \
-       np.array([1.0, 1.0, -3.0, -1.0, 0.0, 0.0, 0.0 ], dtype="float64")
+       np.array([1.0, 1.0, -3.0, -1.0, 0.0, 0.0, 0.0 ], dtype=np.float64)
        #          L    M     T     I  theta  N    J
        # E is in volts per meters : V / m = kg * m / (A * s^3) -> L * M * T^-3 * I^-1
 
@@ -244,9 +244,9 @@ def write_e_2d_cartesian(meshes, data_ex, data_ey, data_ez ):
     E.attrs["timeOffset"] = 0.  # Time offset with respect to basePath's time
 
     # Write attribute that is specific to each dataset: staggered position within a cell
-    E["x"].attrs["position"] = np.array([0.0, 0.5], dtype="float32")
-    E["y"].attrs["position"] = np.array([0.5, 0.0], dtype="float32")
-    E["z"].attrs["position"] = np.array([0.0, 0.0], dtype="float32")
+    E["x"].attrs["position"] = np.array([0.0, 0.5], dtype=np.float32)
+    E["y"].attrs["position"] = np.array([0.5, 0.0], dtype=np.float32)
+    E["z"].attrs["position"] = np.array([0.0, 0.0], dtype=np.float32)
 
     # Fill the array with the field data
     E["x"][:,:] =  data_ex[:,:]
@@ -348,7 +348,7 @@ def write_particles(f, iteration):
     charge.attrs["timeOffset"] = 0.
     charge.attrs["unitSI"] = np.float64(1.60217657e-19)
     charge.attrs["unitDimension"] = \
-       np.array([0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0 ], dtype="float64")
+       np.array([0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0 ], dtype=np.float64)
        #          L    M    T    I  theta  N    J
        # C = A * s
     electrons.create_group("mass")
@@ -357,42 +357,42 @@ def write_particles(f, iteration):
     mass.attrs["timeOffset"] = 0.
     mass.attrs["unitSI"] = np.float64(9.10938291e-31)
     mass.attrs["unitDimension"] = \
-       np.array([0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0 ], dtype="float64")
+       np.array([0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0 ], dtype=np.float64)
        #          L    M    T    I  theta  N    J
 
     # scalar particle records (non-const/individual per particle)
-    electrons.create_dataset("weighting", (globalNumParticles,), dtype="f4")
+    electrons.create_dataset("weighting", (globalNumParticles,), dtype=np.float32)
     weighting = electrons["weighting"]
     weighting.attrs["timeOffset"] = 0.
     weighting.attrs["unitSI"] = np.float64(1.0)
     weighting.attrs["unitDimension"] = \
-       np.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ], dtype="float64") # plain floating point number
+       np.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ], dtype=np.float64) # plain floating point number
 
     # vector particle records (non-const/individual per particle)
     electrons.create_group("position")
     position = electrons["position"]
-    position.create_dataset("x", (globalNumParticles,), dtype="f4")
+    position.create_dataset("x", (globalNumParticles,), dtype=np.float32)
     position["x"].attrs["offset"] = np.float32(0.0)
-    position.create_dataset("y", (globalNumParticles,), dtype="f4")
+    position.create_dataset("y", (globalNumParticles,), dtype=np.float32)
     position["y"].attrs["offset"] = np.float32(0.0)
-    position.create_dataset("z", (globalNumParticles,), dtype="f4")
+    position.create_dataset("z", (globalNumParticles,), dtype=np.float32)
     position["z"].attrs["offset"] = np.float32(0.0)
     position.attrs["timeOffset"] = 0.
     position.attrs["unitSI"] = np.float64(1.e-9)
     position.attrs["unitDimension"] = \
-       np.array([1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ], dtype="float64")
+       np.array([1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ], dtype=np.float64)
        #          L    M     T    I  theta  N    J
        # Dimension of Length per component
 
     electrons.create_group("momentum")
     momentum = electrons["momentum"]
-    momentum.create_dataset("x", (globalNumParticles,), dtype="f4")
-    momentum.create_dataset("y", (globalNumParticles,), dtype="f4")
-    momentum.create_dataset("z", (globalNumParticles,), dtype="f4")
+    momentum.create_dataset("x", (globalNumParticles,), dtype=np.float32)
+    momentum.create_dataset("y", (globalNumParticles,), dtype=np.float32)
+    momentum.create_dataset("z", (globalNumParticles,), dtype=np.float32)
     momentum.attrs["timeOffset"] = 0.25
     momentum.attrs["unitSI"] = np.float64(1.60217657e-19)
     momentum.attrs["unitDimension"] = \
-       np.array([1.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0 ], dtype="float64")
+       np.array([1.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0 ], dtype=np.float64)
        #          L    M     T    I  theta  N    J
        # Dimension of Length * Mass / Time
 
@@ -401,7 +401,7 @@ def write_particles(f, iteration):
     mpi_size = 4  # "emulate" example MPI run with 4 ranks
     data_size = 2 + 2 * len(position.keys())  # 2 + 2 * Dimensionality of position record
     grid_layout = np.array( [512, 128, 1] ) # global grid in cells
-    electrons.create_dataset("particlePatches", (data_size*mpi_size,), dtype="f64")
+    electrons.create_dataset("particlePatches", (data_size*mpi_size,), dtype=np.float64)
     particlePatches = electrons["particlePatches"]
 
     for rank in np.arange(mpi_size): # each MPI rank would write it's part independently

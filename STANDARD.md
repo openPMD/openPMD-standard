@@ -188,27 +188,27 @@ time step.
  - `time`
    - type: *(float / REAL8)*
    - description: the time corresponding to this iteration. Because at
-   one given iteration, different quantities may be defined at different
-     times (e.g. in a staggered code), this time is defined as a
-   global reference time for this iteration. This ambiguity is then
-   resolved at the *record* level
-     (see below), where each quantity has an attribute `timeOffset`
-     which corresponds to its offset with respect the reference `time`.
-
-	For instance, in a staggered PIC code, the `time` attribute can be
-    the time at which the electric field is defined, and the magnetic
-    field would then have a non-zero `timeOffset`.
+                  one given iteration, different quantities may be defined
+                  at different times (e.g. in a staggered code), this time is
+                  defined as a global reference time for this iteration. This
+                  ambiguity is then resolved at the *record* level (see below),
+                  where each quantity has an attribute `timeOffset` which
+                  corresponds to its offset with respect the reference `time`.
+   - example: In a staggered PIC code, the `time` attribute can be the time at
+              which the electric field is defined, and the magnetic field would
+              then have a non-zero `timeOffset`.
 
  - `dt`
    - type: *(float / REAL8)*
-   - description: The latest time step (that used to reach this
-   iteration). This is needed at the iteration level, since the
-   time step may vary from iteration to iteration in certain codes.
+   - description: The latest time step (that used to reach this iteration).
+                  This is needed at the iteration level, since the time step
+                  may vary from iteration to iteration in certain codes.
 
  - `timeUnitSI`
     - type: *(double / REAL8)*
     - description: a conversation factor to convert `time` and `dt` to `seconds`
     - example: `1.0e-16`
+
 
 Unit Systems and Dimensionality: Required for each `Record`
 -----------------------------------------------------------
@@ -246,13 +246,14 @@ attributes shall be added:
   - `timeOffset`
     - type: *(float / REAL8)*
     - description: the offset between the time at which this record is
-      defined and the `time` attribute of the `basePath` level. This
-      should be written in the same unit system as `time` (i.e. it
-      should be multiplied by `timeUnitSI` to get the actual time in seconds.)
-	- example: In a staggered PIC code, if `time` is chosen to
-      correspond to the time at which the electric field is defined,
-      and if `dt` is e.g. 1e-5, `timeOffset` would be 0.5e-5 for the
-      magnetic field and 0. for the electric field.
+                   defined and the `time` attribute of the `basePath` level.
+                   This should be written in the same unit system as `time`
+                   (i.e. it should be multiplied by `timeUnitSI` to get the
+                   actual time in seconds.)
+	- example: In a staggered PIC code, if `time` is chosen to correspond to
+               the time at which the electric field is defined, and if `dt`
+               is e.g. 1e-5, `timeOffset` would be 0.5e-5 for the magnetic
+               field and 0. for the electric field.
 
 - **Note to implementors:**
 

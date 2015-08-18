@@ -240,11 +240,13 @@ Particle Records
   - `id`
     - type: *(int)*
 	- description: a globally-unique identifying integer for each particle,
-	that can be used to e.g. track particles. This identifying integer
-	should be truly unique within the simulation ; in particular, even among different
-      species, two particles should not have the same id. Also, when a
-	particle exits the simulation box, its identifying integer should
-	not be reassigned to a new particle.
+                       that can be used to, e.g., track particles. This
+                       identifying integer should be truly unique within the
+                       simulation; in particular, even among different
+                       species, two particles should not have the same id.
+                       Also, when a particle exits the simulation box, its
+                       identifying integer should not be reassigned to a new
+                       particle.
 
   - `boundElectrons`
     - type: *(float)*

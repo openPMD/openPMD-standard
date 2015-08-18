@@ -57,7 +57,7 @@ def setup_base_path(f, iteration):
     # Required attributes
     bp.attrs["time"] = 0.  # Value expressed in femtoseconds
     bp.attrs["dt"] = 0.5   # Value expressed in femtoseconds
-    bp.attrs["timeUnitSI"] = 1.e-15 # Conversion factor
+    bp.attrs["timeUnitSI"] = np.float64(1.e-15) # Conversion factor
 
 def setup_root_attr(f):
     """

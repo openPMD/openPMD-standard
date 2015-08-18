@@ -191,17 +191,18 @@ Particle Records
 
 ### Additional attributes for each particle `Record`
 
-When using macroparticles, there is an ambiguity regarding whether the
+When using macroparticles (see below for the definition of the
+macroparticle `weighting`), there is an ambiguity regarding whether the
 particle quantity that is written (e.g. energy, momentum) is that of
 the full macroparticle, or that of the underlying individual
-particle. Therefore, OpenPMD requires the two following attributes:
+particle. Therefore, this extension requires the two following attributes:
 
 - `macroWeighted`
   - type: *(uint32)*
   - description: indicates whether this quantity is written for the
     underlying particle (`macroWeighted = 0`) or for the full
     macroparticle (`macroWeighted = 1`)
-  - example: let us assume that a user is writting the `charge` attribute
+  - example: let us assume that a user writes the `charge` attribute
     of a macroparticle that represents 100 electrons. If this user
     chooses to write -1.6e-19 (charge of one individual electron) then
     `macroWeighted` must be 0. If the user writes -1.6e-17 (total
@@ -213,22 +214,24 @@ particle. Therefore, OpenPMD requires the two following attributes:
     the quantity should be multiplied, in order to go from the
     individual-particle representation to the full-macroparticle representation.
   - example: let us consider a macroparticle that represents 100
-    electrons. In this case, `weighting` is w=100 (see below) and the
+    electrons. In this case, `weighting` is w=100 and the
     charge of each underlying individual particle is q=-1.6e-19. Then
     the charge Q of the full macroparticle is given by: Q=q w^1 and
     therefore `weightingPower` must be 1.
-  - note to implementors (for clarity): reading the file (in h5py) and extracting
+  - note to implementors: reading the file (in h5py) and extracting
     charge of the macroparticles would look like this:
   ```python
   f = h5py.File('example.h5')
   species = f[path_to_species_group]
   q = species["charge"][:]
-  w = species["weighting"][:]
-  if q.attrs["macroWeighted"] == 0 :
-	  p = q.attrs["weightingPower"]
-      q_macro = q * w**p
+  u_si = q.attrs["unitSI"]
+  p = q.attrs["weightingPower"]
+  if q.attrs["macroWeighted"] == 0 and p != 0:
+    w = species["weighting"][:]
+    q_macro = u_si * q * w**p
   else :
-     q_macro = q
+    # No need to read the weighting from disk
+    q_macro = u_si * q
   ```
 
 ### Additional `Records` per Particle Species

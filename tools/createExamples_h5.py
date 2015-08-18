@@ -37,6 +37,27 @@ def get_basePath(f, iteration):
     """
     return f.attrs["basePath"].replace("%T", str(iteration))
 
+def setup_base_path(f, iteration):
+    """
+    Write the basePath group for `iteration`
+
+    Parameters
+    ----------
+    f : an h5py.File object
+        The file in which to write the data
+
+    iteration : int
+        The iteration number for this output
+    """
+    # Create the corresponding group
+    base_path = get_basePath(f, iteration)
+    f.create_group( base_path )
+    bp = f[ base_path ]
+
+    # Required attributes
+    bp.attrs["time"] = 0.  # Value expressed in femtoseconds
+    bp.attrs["dt"] = 0.5   # Value expressed in femtoseconds
+    bp.attrs["timeUnitSI"] = 1.e-15 # Conversion factor
 
 def setup_root_attr(f):
     """
@@ -108,8 +129,7 @@ def write_rho_cylindrical(meshes, mode0, mode1):
        # rho is in Coulomb per meter cube : C / m^3 = A * s / m^3 -> M^-3 * T * I
 
     # Add time information
-    rho.attrs["time"] = 0.  # Time is expressed in nanoseconds here
-    rho.attrs["timeUnitSI"] = np.float64(1.e-9)  # Conversion from nanoseconds to seconds
+    rho.attrs["timeOffset"]=0. # Time offset with respect to the basePath's time
 
     # Add information on the r-z grid
     rho.attrs["gridSpacing"] = np.array([1.0, 1.0], dtype="float32")  # dr, dz
@@ -169,8 +189,7 @@ def write_b_2d_cartesian(meshes, data_ez):
     add_EDPIC_attr_meshes(B)
 
     # Add time information
-    B.attrs["time"] = 0.  # Time is expressed in nanoseconds here
-    B.attrs["timeUnitSI"] = np.float64(1.e-9)  # Conversion from nanoseconds to seconds
+    B.attrs["timeOffset"]=0.25 # Time offset with respect to the basePath's time
 
     # Write attribute that is specific to each dataset: staggered position within a cell
     B["x"].attrs["position"] = np.array([0.0, 0.0], dtype="float32")
@@ -222,8 +241,7 @@ def write_e_2d_cartesian(meshes, data_ex, data_ey, data_ez ):
     add_EDPIC_attr_meshes(E)
 
     # Add time information
-    E.attrs["time"] = 0.  # Time is expressed in nanoseconds here
-    E.attrs["timeUnitSI"] = np.float64(1.e-9)  # Conversion from nanoseconds to seconds
+    E.attrs["timeOffset"] = 0.  # Time offset with respect to basePath's time
 
     # Write attribute that is specific to each dataset: staggered position within a cell
     E["x"].attrs["position"] = np.array([0.0, 0.5], dtype="float32")
@@ -326,16 +344,18 @@ def write_particles(f, iteration):
     # constant scalar particle records (that could also be variable records)
     electrons.create_group("charge")
     charge = electrons["charge"]
-    charge.attrs["value"] = -1.0;
-    charge.attrs["unitSI"] = np.float64(1.60217657e-19);
+    charge.attrs["value"] = -1.0
+    charge.attrs["unitSI"] = np.float64(1.60217657e-19)
+    charge.attrs["timeOffset"] = np.float(0.)
     charge.attrs["unitDimension"] = \
        np.array([0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0 ], dtype="float64")
        #          L    M    T    I  theta  N    J
        # C = A * s
     electrons.create_group("mass")
     mass = electrons["mass"]
-    mass.attrs["value"] = 1.0;
-    mass.attrs["unitSI"] = np.float64(9.10938291e-31);
+    mass.attrs["value"] = 1.0
+    mass.attrs["unitSI"] = np.float64(9.10938291e-31)
+    mass.attrs["timeOffset"] = 0.
     mass.attrs["unitDimension"] = \
        np.array([0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0 ], dtype="float64")
        #          L    M    T    I  theta  N    J
@@ -343,7 +363,8 @@ def write_particles(f, iteration):
     # scalar particle records (non-const/individual per particle)
     electrons.create_dataset("weighting", (globalNumParticles,), dtype="f4")
     weighting = electrons["weighting"]
-    weighting.attrs["unitSI"] = np.float64(1.0);
+    weighting.attrs["unitSI"] = np.float64(1.0)
+    weighting.attrs["timeOffset"] = 0.
     weighting.attrs["unitDimension"] = \
        np.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ], dtype="float64") # plain floating point number
 
@@ -353,7 +374,8 @@ def write_particles(f, iteration):
     position.create_dataset("x", (globalNumParticles,), dtype="f4")
     position.create_dataset("y", (globalNumParticles,), dtype="f4")
     position.create_dataset("z", (globalNumParticles,), dtype="f4")
-    position.attrs["unitSI"] = np.float64(1.e-9);
+    position.attrs["unitSI"] = np.float64(1.e-9)
+    position.attrs["timeOffset"] = 0.
     position.attrs["unitDimension"] = \
        np.array([1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ], dtype="float64")
        #          L    M     T    I  theta  N    J
@@ -364,7 +386,8 @@ def write_particles(f, iteration):
     momentum.create_dataset("x", (globalNumParticles,), dtype="f4")
     momentum.create_dataset("y", (globalNumParticles,), dtype="f4")
     momentum.create_dataset("z", (globalNumParticles,), dtype="f4")
-    momentum.attrs["unitSI"] = np.float64(1.60217657e-19);
+    momentum.attrs["unitSI"] = np.float64(1.60217657e-19)
+    momentum.attrs["timeOffset"] = 0.25
     momentum.attrs["unitDimension"] = \
        np.array([1.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0 ], dtype="float64")
        #          L    M     T    I  theta  N    J
@@ -399,6 +422,9 @@ if __name__ == "__main__":
     # Setup the root attributes for iteration 0
     setup_root_attr(f)
 
+    # Setup basepath
+    setup_base_path(f, iteration=0)
+    
     # Write the field records
     write_meshes(f, iteration=0)
 

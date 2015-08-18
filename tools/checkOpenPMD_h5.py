@@ -386,8 +386,51 @@ def check_iterations(f, v, pic) :
         
     # Loop over the iterations and check the meshes and the particles 
     for iteration in list_iterations :
-        result_array += check_meshes(f, iteration, v, pic)
-        result_array += check_particles(f, iteration, v, pic)
+        result_array += check_base_path(f, iteration, v, pic)
+        # Go deeper only if there is no error at this point
+        if result_array[0] == 0 :
+            result_array += check_meshes(f, iteration, v, pic)
+            result_array += check_particles(f, iteration, v, pic)
+
+    return(result_array)
+    
+def check_base_path(f, iteration, v, pic):
+    """
+    Scan the base_path that corresponds to this iteration
+
+    Parameters
+    ----------
+    f : an h5py.File object
+        The HDF5 file in which to find the attribute
+
+    iteration : string representing an integer
+        The iteration at which to scan the meshes
+        
+    v : bool
+        Verbose option
+        
+    pic : bool
+        Whether to check for the ED-PIC extension attributes
+    
+    Returns
+    -------
+    An array with 2 elements :
+    - The first element is the number of errors encountered
+    - The second element is the number of warnings encountered
+    """
+    # Initialize the result array
+    # First element : number of errors
+    # Second element : number of warnings
+    result_array = np.array([ 0, 0])  
+
+    # Find the path to the data
+    base_path = "/data/%s/" % iteration
+    bp = f[base_path]
+
+    # Check for the attributes of the STANDARD.md
+    result_array += test_attr(bp, v, "required", "time", np.float_)
+    result_array += test_attr(bp, v, "required", "dt", np.float_)
+    result_array += test_attr(bp, v, "required", "timeUnitSI", np.float64)
 
     return(result_array)
     
@@ -419,7 +462,7 @@ def check_meshes(f, iteration, v, pic):
     # First element : number of errors
     # Second element : number of warnings
     result_array = np.array([ 0, 0]) 
-
+    
     # Find the path to the data
     base_path = "/data/%s/" % iteration
     valid, meshes_path = get_attr(f, "meshesPath")
@@ -443,6 +486,7 @@ def check_meshes(f, iteration, v, pic):
         # General attributes of the record
         result_array += test_attr(field, v, "required", "unitSI", np.float64)
         result_array += test_attr(field, v, "required", "unitDimension", np.ndarray, np.float64)
+        result_array += test_attr(field, v, "required", "timeOffset", np.float_)
         result_array += test_attr(field, v, "required", "geometry", np.string_)
         result_array += test_attr(field, v, "optional",
                                             "geometryParameters", np.string_)
@@ -499,7 +543,7 @@ def check_meshes(f, iteration, v, pic):
             valid, field_smoothing = get_attr(field, "fieldSmoothing")
             if field_smoothing != "none":
                 result_array += test_attr(field,v, "required",
-                                          "fieldSmoothingParameters", np.string_)
+                                    "fieldSmoothingParameters", np.string_)
     return(result_array)
 
 
@@ -550,11 +594,11 @@ def check_particles(f, iteration, v, pic) :
     # Go through all the particle species
     for species_name in list_species :
         species = f[full_particle_path + species_name]
-
+        
         # check all records for this species
         for species_record_name in species :
             result_array += test_record(species, species_record_name)
-        
+            
         # Check the position and particlePatches records of the particles
         result_array += test_key(species, v, "required", "position")
         result_array += test_key(species, v, "recommended", "particlePatches")
@@ -598,7 +642,10 @@ def check_particles(f, iteration, v, pic) :
                 result_array += test_attr(species[record], v, "required",
                                           "unitDimension",
                                           np.ndarray, np.float64)
-
+                time_type = f[base_path].attrs["time"].dtype.type
+                result_array += test_attr(species[record], v, "required",
+                                        "timeOffset", time_type)
+                
     return(result_array)
 
     

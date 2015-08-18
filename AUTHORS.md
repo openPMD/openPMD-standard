@@ -19,6 +19,7 @@
 - Remi Lehe (LBNL)
 - Ivo Sbalzarini (MPI-CBG)
 - Michael Bussmann (HZDR)
+- Stephan Kuschel (IOQ Jena)
 
 
 ### Reviewers and Substantive Contributions in Later Versions

@@ -519,10 +519,11 @@ short-hand notation (see: *Constant Record Components*).
 
   - `offset`
     - type: *(float)* (must be same as in `position/`)
-    - description: start of the current particle domain of the simulation
-                   in simulation units; in the same units as the component;
-                   the components stored in `position/` are relative to the
-                   `offset` defined here
+    - description: a global shift to be added to each element of the component,
+                   in the same units as the component; for precision reasons
+                   and visualization purposes, it is sometimes more useful
+                   to define all positions of an iteration relative to an
+                   offset
     - example: `0.0` or `123.4`
 
 

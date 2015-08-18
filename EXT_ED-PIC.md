@@ -237,6 +237,11 @@ Particle Records
                    `position`
 
 - **Optional:**
+  - `id`
+    - type: *(int)*
+	- description: a **unique** identifying integer for each particle,
+	that can be used to e.g. track particles. In particular, even among different
+      species, two particles should not have the same id. Also, 
 
   - `boundElectrons`
     - type: *(float)*

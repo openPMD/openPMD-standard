@@ -441,9 +441,13 @@ def write_particles(f, iteration):
     particlePatches = electrons["particlePatches"]
 
     for rank in np.arange(mpi_size): # each MPI rank would write it's part independently
+        # numParticles: number of particles in this patch
         particlePatches[rank*data_size + 0] = globalNumParticles / mpi_size
-        particlePatches[rank*data_size + 1] = rank
-        # example: 1D domain decompositon along the first axis
+        # numParticlesOffset: offset within the one-dimensional records where
+        #                     the first particle in this patch is stored
+        particlePatches[rank*data_size + 1] = rank * globalNumParticles / mpi_size
+        # offset and extend in the grid
+        #   example: 1D domain decompositon of a 3D simulation along the first axis
         particlePatches[rank*data_size + 2] = rank * grid_layout[0] / mpi_size # 1st dimension spatial offset
         particlePatches[rank*data_size + 3] = 0 # 2nd dimension spatial offset
         particlePatches[rank*data_size + 4] = 0 # 3rd dimension spatial offset

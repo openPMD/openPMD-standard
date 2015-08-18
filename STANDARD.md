@@ -180,13 +180,17 @@ Each file's *root* directory (path `/`) must further define the attributes:
       - for `groupBased`:
         - `/data/%T/` (must be equal to and encoded in the `basePath`)
 
+
+Required Attributes for the `basePath`
+--------------------------------------
+
 In addition to holding information about the iteration, each series of
 files  (`fileBased`) or series of groups (`groupBased`) should have
 attributes that describe the current time and the last
 time step. 
 
  - `time`
-   - type: *(float / REAL8)*
+   - type: *(float)*
    - description: the time corresponding to this iteration. Because at
                   one given iteration, different quantities may be defined
                   at different times (e.g. in a staggered code), this time is
@@ -199,8 +203,8 @@ time step.
               then have a non-zero `timeOffset`.
 
  - `dt`
-   - type: *(float / REAL8)*
-   - description: The latest time step (that used to reach this iteration).
+   - type: *(float)*
+   - description: The latest time step (that was used to reach this iteration).
                   This is needed at the iteration level, since the time step
                   may vary from iteration to iteration in certain codes.
 
@@ -244,12 +248,12 @@ attributes shall be added:
       - "N = kg * m / s^2", store array `[1.; 1.; -2.; 0.; 0.; 0.; 0.]`
 
   - `timeOffset`
-    - type: *(float / REAL8)*
+    - type: *(float)*
     - description: the offset between the time at which this record is
                    defined and the `time` attribute of the `basePath` level.
                    This should be written in the same unit system as `time`
-                   (i.e. it should be multiplied by `timeUnitSI` to get the
-                   actual time in seconds.)
+                   (see `basePath`; i.e., it should be multiplied by
+                   `timeUnitSI` to get the actual time in seconds.)
 	- example: In a staggered PIC code, if `time` is chosen to correspond to
                the time at which the electric field is defined, and if `dt`
                is e.g. 1e-5, `timeOffset` would be 0.5e-5 for the magnetic
@@ -408,7 +412,7 @@ meshes):
                         ![definition of imaginary part](img/cylindrical.png)
 
   - `gridSpacing`
-    - type: 1-dimensional array containing N *(float / REAL4)*
+    - type: 1-dimensional array containing N *(float)*
             elements, where N is the number of dimensions in the simulation.
     - description: spacing of the grid points along each dimension (in the
                    units of the simulation); this refers to the spacing of the
@@ -453,7 +457,7 @@ The following attributes must be stored with each `scalar record` and each
 *component* of a `vector record`:
 
   - `position`
-    - type: 1-dimesional array of N *(float / REAL4)* where N is the number of
+    - type: 1-dimesional array of N *(float)* where N is the number of
             dimensions in the simulation.
     - range of each value: `[ 0.0 : 1.0 )`
     - description: relative position of the component on the current element of
@@ -514,6 +518,17 @@ short-hand notation (see: *Constant Record Components*).
                    the `position` of the particles within; the union of all
                    particle patches must resemble all elements in the particle's
                    records
+
+### Mandatory Attributes for the compontents of `position/`
+
+  - `offset`
+    - type: *(float)* (must be same as in `position/`)
+    - description: a global shift to be added to each element of the component,
+                   in the same units as the component; for precision reasons
+                   and visualization purposes, it is sometimes more useful
+                   to define all positions of an iteration relative to an
+                   offset
+    - example: `0.0` or `123.4`
 
 
 Domain-Specific Extensions

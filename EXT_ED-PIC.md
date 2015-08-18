@@ -189,6 +189,47 @@ Particle Records
     - example: `period=1;numPasses=2;compensator=false`
     - reserved for future use: `direction=array()`, `stride=array()`
 
+### Additional attributes for each particle `Record`
+
+When using macroparticles, there is an ambiguity regarding whether the
+particle quantity that is written (e.g. energy, momentum) is that of
+the full macroparticle, or that of the underlying individual
+particle. Therefore, OpenPMD requires the two following attributes:
+
+- `macroWeighted`
+  - type: *(uint32)*
+  - description: indicates whether this quantity is written for the
+    underlying particle (`macroWeighted = 0`) or for the full
+    macroparticle (`macroWeighted = 1`)
+  - example: let us assume that a user is writting the `charge` attribute
+    of a macroparticle that represents 100 electrons. If this user
+    chooses to write -1.6e-19 (charge of one individual electron) then
+    `macroWeighted` must be 0. If the user writes -1.6e-17 (total
+    charge of 100 electrons), then macroweighted must be 1.
+
+- `weightingPower`
+  - type: *(double / REAL8)*
+  - description: indicates with which power of `weighting` (see below)
+    the quantity should be multiplied, in order to go from the
+    individual-particle representation to the full-macroparticle representation.
+  - example: let us consider a macroparticle that represents 100
+    electrons. In this case, `weighting` is w=100 (see below) and the
+    charge of each underlying individual particle is q=-1.6e-19. Then
+    the charge Q of the full macroparticle is given by: Q=q w^1 and
+    therefore `weightingPower` must be 1.
+  - note to implementors (for clarity): reading the file (in h5py) and extracting
+    charge of the macroparticles would look like this:
+  ```python
+  f = h5py.File('example.h5')
+  species = f[path_to_species_group]
+  q = species["charge"][:]
+  w = species["weighting"][:]
+  if q.attrs["macroWeighted"] == 0 :
+	  p = q.attrs["weightingPower"]
+      q_macro = q * w**p
+  else :
+     q_macro = q
+  ```
 
 ### Additional `Records` per Particle Species
 
@@ -196,29 +237,38 @@ Particle Records
 
   - `charge`
     - type: *(float)*
-    - description: electric charge of the particle (without `weighting`)
+    - description: electric charge of the macroparticle or of the
+      underlying individual particle (depending on the `macroWeighted`
+      flag)
+	- must have `weightingPower = 1`
 
   - `mass`
     - type: *(float)*
-    - description: mass of the particle (without `weighting`)
+    - description: mass of the macroparticle or of the
+      underlying individual particle (depending on the `macroWeighted`
+      flag)
+	- must have `weightingPower = 1`
 
   - `weighting`
     - type: *(float)*
-    - description: if a simulated particle represents several real particles,
-                   each attribute such as `charge` and `mass` needs to be
-                   multiplied with that value; this is a unitless number
-                   (`unitSI==1` and `unitDimension==[0., ..., 0.]`)
+    - description: the number of underlying individual particles that
+                   the macroparticles represent
+	- note: must have `weightingPower = 1`, `macroWeighted = 1`,
+      `unitSI = 1` and `unitDimension==[0., ..., 0.]`
 
   - `momentum/` + components such as `x`, `y` and `z`
     - type: each component in *(float)*
-    - description: component-wise momentum of the attribute
+    - description: component-wise momentum of the macroparticle or of the
+      underlying individual particle (depending on the `macroWeighted` flag)
+	- must have `weightingPower = 1`
 
   - `position/` + components such as `x`, `y` and `z`
     - type: each component in *(float)*
-    - description: component-wise global position of a particle.
+    - description: component-wise global position of the particle
                    Default in `STANDARD.md`: global position of the particle;
                    in this extension, if `globalCellId` is set, then it does 
                    represents the in-cell-position
+	- must have `weightingPower = 0`
     - example: use only `x` and `y` in 2D
 
 - **Recommended:**
@@ -229,12 +279,14 @@ Particle Records
                    increases the precision of position attributes for
                    single precision attributes with a large offset from
                    the global origin of the simulation
+    - must have `weightingPower = 0`
 
   - `particlePatches`
     - description: if this record is used in combination with the
                    `globalCellId` record, the `position` for `offset` and
                    `extend` refers to the `globalCellId` and not the in-cell
                    `position`
+    - must have `weightingPower = 0`
 
 - **Optional:**
   - `id`
@@ -247,22 +299,26 @@ Particle Records
                        Also, when a particle exits the simulation box, its
                        identifying integer should not be reassigned to a new
                        particle.
+    - must have `weightingPower = 0`
 
   - `boundElectrons`
     - type: *(float)*
     - description: number of bound electrons of an ion/atom;
                    to provide information to atomic physics algorithms
+    - must have `weightingPower = 1`
 
   - `protonNumber`
     - type: *(float)*
     - description: the atomic number Z of an ion/atom;
                    to provide information to atomic physics algorithms
+    - must have `weightingPower = 1`
 
   - `neutronNumber`
     - type: *(float)*
     - description: the neutron number N = the mass number A - the atomic number Z
                    of an ion/atom;
                    to provide information to atomic physics algorithms
+    - must have `weightingPower = 1`
 
   - future extensions: it might be convenient to add an attribute which electron
                        species shall be used as a "target" for newly created

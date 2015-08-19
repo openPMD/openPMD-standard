@@ -332,6 +332,9 @@ Reminder: for scalar records the `record` itself is also the `component`.
     - type: *(double / REAL8*)
     - description: a conversation factor to multiply data with to be
                    represented in SI
+    - rationale: can also be used to scale a dimension-less `component`
+    - rationale: if the `component` is dimension-less and in the right scaling
+                 or already in SI, e.g., an index counter, set this to `1.0`
     - example: `2.99792e8`
 
 ### Required for each `Record`
@@ -346,6 +349,8 @@ Reminder: for scalar records the `record` itself is also the `component`.
                  identification and compatibility checks, independent of
                  specific names or string representations;
                  does *not* represent if the record is a 1, 2 or 3D array
+    - rationale: if the `record` is dimension-less, such as an index, set this
+                 to `[0.; 0.; 0.; 0.; 0.; 0.; 0.]`
     - advice to implementors: implement a lookup table for the most common
                               quantities/units in your simulation, e.g.,
                               electric field stengths, mass, energy, etc.

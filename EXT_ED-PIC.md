@@ -282,10 +282,11 @@ else :
     - type: each component in *(int)*
     - description: zero-origin position of the cell the particle is
                    associated with, this record requires the additional
-                   attributes `gridSpacing`, `gridGlobalOffset` and
-                   `gridUnitSI` (see base standard for `mesh` records);
-                   this record together with `positionInCell` replaces the
-                   otherwise required `position` record
+                   attributes `gridSpacing` (N-D array), `gridGlobalOffset`
+                   (N-D array) and `gridUnitSI` (scalar) (see base standard
+                   for `mesh` records); this record together with
+                   `positionInCell` replaces the otherwise required `position`
+                   record
     - rationale: keeps the precision of particle positions constant along the
                  simulation, independent of their position inside the global
                  range of the record; the two mesh attributes are required
@@ -307,6 +308,27 @@ else :
                               `[0.0 1.0)` and `[-0.5 0.5)`; since this is the
                               fraction of a cell index use `unitSI = 1` and
                               `unitDimension==[0., ..., 0.]`
+    - example: Python code to read the position generically:
+```python
+f = h5py.File('example.h5')
+species = f[path_to_species_group]
+
+if "position" in species.keys():
+    h5_position_x = species["position/x"]
+    x = ( h5_position_x[:] + h5_position_x.attrs["offset"] ) \
+      * h5_position_x.attrs["unitSI"]
+else:
+    h5_position_of_cell = species["positionOfCell"]
+    h5_position_in_cell = species["positionInCell"]
+    grid_spacing = position_of_cell.attrs["gridSpacing"] \
+                 * position_of_cell.attrs["gridUnitSI"]
+    grid_offset  = position_of_cell.attrs["gridGlobalOffset"] \
+                 * position_of_cell.attrs["gridUnitSI"]
+
+    x_local = h5_position_in_cell["x"][:] * grid_spacing
+    x = h5_position_of_cell["x"][:].astype(float) * grid_spacing \
+      + grid_offset + x_local
+```
 
   - `particlePatches`
     - description: if this record is used in combination with the

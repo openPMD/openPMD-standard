@@ -295,9 +295,11 @@ represent.
 Records with only a scalar component are stored in a data set with the same name
 as the record. Vector and tensor records shall be represented component-wise as a
 *collection of individual scalar data sets* using a common sub-group that
-is equal to the record name. We refer to the scalar record itself and
-the vector sub-group as `record`, to the data sets in the vector sub-group
-as `components`.
+is equal to the record name.
+
+We refer to the scalar record itself and the vector sub-group as `record`, to
+the data sets in the vector sub-group as `components`. For scalar records,
+the `record` is the `component` (and vice versa).
 
 ### Naming conventions
 

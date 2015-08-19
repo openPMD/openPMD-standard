@@ -225,16 +225,18 @@ Each quantity with a dimension must define a unit conversation factor,
 often called `unitSI` in the document, to transform it to a corresponding
 quanity in the International System of Units (SI).
 
-For each mesh or particle `record` (defined later) the following
-attributes shall be added:
+For each mesh or particle `record` and their `components` (both defined later)
+the following attributes shall be added:
 
-- **Required:**
+### Required for each `Record Component`
 
   - `unitSI`
     - type: *(double / REAL8*)
     - description: a conversation factor to multiply data with to be
                    represented in SI
     - example: `2.99792e8`
+
+### Required for each `Record`
 
   - `unitDimension`
     - type: array of 7 *(double / REAL8)*
@@ -259,7 +261,7 @@ attributes shall be added:
                is e.g. 1e-5, `timeOffset` would be 0.5e-5 for the magnetic
                field and 0. for the electric field.
 
-- **Note to implementors:**
+### Advice to Implementors
 
 For the special case of simulations, there can be the situation that a certain
 process scales independently of a given fixed reference quantity that

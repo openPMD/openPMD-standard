@@ -341,6 +341,12 @@ def write_particles(f, iteration):
     #   recommended
     # currently none
 
+    # Extension: ED-PIC Records
+    #   the records taken for this particle species example are fully backwards
+    #   compatible to the base standard
+    #   (warning: extensions can, e.g., replace the required `position/` record
+    #             with alternative records)
+
     # constant scalar particle records (that could also be variable records)
     electrons.create_group("charge")
     charge = electrons["charge"]

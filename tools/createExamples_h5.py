@@ -175,11 +175,10 @@ def write_b_2d_cartesian(meshes, data_ez):
 
     # Write the common metadata for the group
     B.attrs["geometry"] = np.string_("cartesian")
-    B.attrs["gridSpacing"] = np.array([1.0, 1.0], dtype=np.float32)       # dx, dy
-    B.attrs["gridGlobalOffset"] = np.array([0.0, 0.0], dtype=np.float32)  # xmin, ymin
+    B.attrs["gridSpacing"] = np.array([1.0, 1.0], dtype=np.float32)   # dx, dy
+    B.attrs["gridGlobalOffset"] = np.array([0.0, 0.0], dtype=np.float32)  
     B.attrs["gridUnitSI"] = np.float64(1.0)
     B.attrs["dataOrder"] = np.string_("C")
-    B.attrs["unitSI"] = np.float64(3.3) # convert normalized simulation units to SI
     B.attrs["unitDimension"] = \
        np.array([0.0, 1.0, -2.0, -1.0, 0.0, 0.0, 0.0 ], dtype=np.float64)
        #          L    M     T     I  theta  N    J
@@ -191,10 +190,15 @@ def write_b_2d_cartesian(meshes, data_ez):
     # Add time information
     B.attrs["timeOffset"] = 0.25 # Time offset with basePath's time
 
-    # Write attribute that is specific to each dataset: staggered position within a cell
+    # Write attribute that is specific to each dataset:
+    # - Staggered position within a cell
     B["x"].attrs["position"] = np.array([0.0, 0.0], dtype=np.float32)
     B["y"].attrs["position"] = np.array([0.0, 0.0], dtype=np.float32)
     B["z"].attrs["position"] = np.array([0.5, 0.5], dtype=np.float32)
+    # - Conversion factor to SI units
+    B["x"].attrs["unitSI"] = np.float64(3.3)
+    B["y"].attrs["unitSI"] = np.float64(3.3)
+    B["z"].attrs["unitSI"] = np.float64(3.3)
 
     # Fill the array with the field data
     B["x"].attrs["value"] = np.float(0.0)
@@ -227,11 +231,10 @@ def write_e_2d_cartesian(meshes, data_ex, data_ey, data_ez ):
 
     # Write the common metadata for the group
     E.attrs["geometry"] = np.string_("cartesian")
-    E.attrs["gridSpacing"] = np.array([1.0, 1.0], dtype=np.float32)       # dx, dy
-    E.attrs["gridGlobalOffset"] = np.array([0.0, 0.0], dtype=np.float32)  # xmin, ymin
+    E.attrs["gridSpacing"] = np.array([1.0, 1.0], dtype=np.float32)  # dx, dy
+    E.attrs["gridGlobalOffset"] = np.array([0.0, 0.0], dtype=np.float32)  
     E.attrs["gridUnitSI"] = np.float64(1.0)
     E.attrs["dataOrder"] = np.string_("C")
-    E.attrs["unitSI"] = np.float64(1.0e9) # convert normalized simulation units to SI
     E.attrs["unitDimension"] = \
        np.array([1.0, 1.0, -3.0, -1.0, 0.0, 0.0, 0.0 ], dtype=np.float64)
        #          L    M     T     I  theta  N    J
@@ -243,11 +246,16 @@ def write_e_2d_cartesian(meshes, data_ex, data_ey, data_ez ):
     # Add time information
     E.attrs["timeOffset"] = 0.  # Time offset with respect to basePath's time
 
-    # Write attribute that is specific to each dataset: staggered position within a cell
+    # Write attribute that is specific to each dataset:
+    # - Staggered position within a cell
     E["x"].attrs["position"] = np.array([0.0, 0.5], dtype=np.float32)
     E["y"].attrs["position"] = np.array([0.5, 0.0], dtype=np.float32)
     E["z"].attrs["position"] = np.array([0.0, 0.0], dtype=np.float32)
-
+    # - Conversion factor to SI units
+    E["x"].attrs["unitSI"] = np.float64(1.0e9)
+    E["y"].attrs["unitSI"] = np.float64(1.0e9)
+    E["z"].attrs["unitSI"] = np.float64(1.0e9)
+    
     # Fill the array with the field data
     E["x"][:,:] =  data_ex[:,:]
     E["y"][:,:] =  data_ey[:,:]
@@ -395,11 +403,17 @@ def write_particles(f, iteration):
     electrons.create_group("position")
     position = electrons["position"]
     position.create_dataset("x", (globalNumParticles,), dtype=np.float32)
-    position["x"].attrs["offset"] = np.float32(0.0)
     position.create_dataset("y", (globalNumParticles,), dtype=np.float32)
-    position["y"].attrs["offset"] = np.float32(0.0)
     position.create_dataset("z", (globalNumParticles,), dtype=np.float32)
+    # Offset of the grid
+    position["x"].attrs["offset"] = np.float32(0.0)
+    position["y"].attrs["offset"] = np.float32(0.0)
     position["z"].attrs["offset"] = np.float32(0.0)
+    # Conversion factor to SI units
+    position["x"].attrs["unitSI"] = np.float64(1.e-9)
+    position["y"].attrs["unitSI"] = np.float64(1.e-9)
+    position["z"].attrs["unitSI"] = np.float64(1.e-9)
+    
     # macroWeighted: can be 1 or 0 in this case, since it's the same for macro
     #                particles and representing underlying particles
     # weightingPower == 0: the position does not scale with the weighting
@@ -407,7 +421,6 @@ def write_particles(f, iteration):
     position.attrs["weightingPower"] = np.float64(0.0)
     # attributes from the base standard
     position.attrs["timeOffset"] = 0.
-    position.attrs["unitSI"] = np.float64(1.e-9)
     position.attrs["unitDimension"] = \
        np.array([1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ], dtype=np.float64)
        #          L    M     T    I  theta  N    J
@@ -418,6 +431,11 @@ def write_particles(f, iteration):
     momentum.create_dataset("x", (globalNumParticles,), dtype=np.float32)
     momentum.create_dataset("y", (globalNumParticles,), dtype=np.float32)
     momentum.create_dataset("z", (globalNumParticles,), dtype=np.float32)
+    # Conversion factor to SI units
+    momentum["x"].attrs["unitSI"] = np.float64(1.60217657e-19)
+    momentum["y"].attrs["unitSI"] = np.float64(1.60217657e-19)
+    momentum["z"].attrs["unitSI"] = np.float64(1.60217657e-19)
+    
     # macroWeighted: True(1) in this example we store the momentum
     #                of the macro particle
     # weightingPower == 1: each underlying particle contributes linearly
@@ -426,7 +444,6 @@ def write_particles(f, iteration):
     momentum.attrs["weightingPower"] = np.float64(1.0)
     # attributes from the base standard
     momentum.attrs["timeOffset"] = 0.25
-    momentum.attrs["unitSI"] = np.float64(1.60217657e-19)
     momentum.attrs["unitDimension"] = \
        np.array([1.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0 ], dtype=np.float64)
        #          L    M     T    I  theta  N    J

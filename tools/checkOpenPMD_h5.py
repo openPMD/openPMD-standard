@@ -484,7 +484,6 @@ def check_meshes(f, iteration, v, pic):
         result_array += test_record(f[full_meshes_path], field_name)
         
         # General attributes of the record
-        result_array += test_attr(field, v, "required", "unitSI", np.float64)
         result_array += test_attr(field, v, "required", "unitDimension", np.ndarray, np.float64)
         result_array += test_attr(field, v, "required", "timeOffset", np.float_)
         result_array += test_attr(field, v, "required", "geometry", np.string_)
@@ -497,14 +496,18 @@ def check_meshes(f, iteration, v, pic):
     
         # Attributes of the record's components
         if is_scalar_record(field) :   # If the record is a scalar field
-            result_array += test_attr(field, v, "required", "position",
-                                      np.ndarray, np.float32)
+            result_array += test_attr(field, v,
+                                "required", "unitSI", np.float64)
+            result_array += test_attr(field, v,
+                                "required", "position", np.ndarray, np.float32)
         else:                          # If the record is a vector field
             # Loop over the components
             for component_name in field.keys():
                 component = field[component_name]
-                result_array += test_attr(component, v, "required", "position",
-                                          np.ndarray, np.float32)
+                result_array += test_attr(component, v,
+                                "required", "unitSI", np.float64)
+                result_array += test_attr(component, v,
+                                "required", "position", np.ndarray, np.float32)
 
     # Check for the attributes of the PIC extension,
     # if asked to do so by the user 
@@ -638,25 +641,33 @@ def check_particles(f, iteration, v, pic) :
             valid, particle_smoothing = get_attr(species, "particleSmoothing")
             if valid == True and particle_smoothing != "none":            
                 result_array += test_attr(species, v, "required",
-                                          "particleSmoothingParameters", np.string_)
+                                "particleSmoothingParameters", np.string_)
 
         # Check attributes of each record of the particle
         for record in species.keys() :
             # all records (but particlePatches) require units
-            if record != "particlePatches" :
-                result_array += test_attr(species[record], v, "required",
-                                          "unitSI", np.float64)
-                result_array += test_attr(species[record], v, "required",
-                                          "unitDimension",
-                                          np.ndarray, np.float64)
+            if record != "particlePatches":
+                result_array += test_attr(species[record], v,
+                        "required", "unitDimension", np.ndarray, np.float64)
                 time_type = f[base_path].attrs["time"].dtype.type
                 result_array += test_attr(species[record], v, "required",
                                         "timeOffset", time_type)
                 result_array += test_attr(species[record], v, "required",
                                           "weightingPower", np.float64)
                 result_array += test_attr(species[record], v, "required",
-                                          "macroWeighted", np.uint32)
-
+                                        "macroWeighted", np.uint32)
+                # Attributes of the components
+                if is_scalar_record( species[record] ) : # Scalar record
+                    dset = species[record]
+                    result_array += test_attr( dset, v,
+                            "required", "unitSI", np.float64)
+                else : # Vector record
+                    # Loop over the components
+                    for component_name in species[record].keys():
+                        dset = species[ os.path.join(record, component_name) ]
+                        result_array += test_attr( dset, v,
+                            "required", "unitSI", np.float64)
+                
     return(result_array)
 
     

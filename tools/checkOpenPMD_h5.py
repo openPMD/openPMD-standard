@@ -600,12 +600,38 @@ def check_particles(f, iteration, v, pic) :
             result_array += test_record(species, species_record_name)
 
         # Check the position record of the particles
-        result_array += test_key(species, v, "required", "position")
-        for component_name in species["position"].keys():
-            component = species["position/" + component_name]
-            component_type = component.dtype.type
-            result_array += test_attr(component, v, "required", "offset",
-                                      component_type)
+        position_exists = (test_key(species, False, "required", "position")[0] == 0)
+        position_in_cell_exists = False
+        if pic:
+            # in the ED-PIC extension, the record `position` can be replaced
+            # by specifying both `positionOfCell` and `positionInCell`
+            if not position_exists:
+                result_array += test_key(species, v, "required",
+                                         "positionOfCell")
+                result_array += test_key(species, v, "required",
+                                         "positionInCell")
+                if result_array[0] == 0:
+                    position_in_cell_exists = True
+                else:  # readable error message for "position"
+                    result_array += test_key(species, v, "required",
+                                             "position")
+        else:
+            result_array += test_key(species, v, "required", "position")
+
+        if position_exists :
+            for component_name in species["position"].keys() :
+                component = species["position/" + component_name]
+                component_type = component.dtype.type
+                result_array += test_attr(component, v, "required", "offset",
+                                          component_type)
+
+        if position_in_cell_exists :
+            result_array += test_attr(species["positionOfCell"], v, "required",
+                                      "gridSpacing", np.ndarray, np.float32)
+            result_array += test_attr(species["positionOfCell"], v, "required",
+                                      "gridGlobalOffset", np.ndarray, np.float32)
+            result_array += test_attr(species["positionOfCell"], v, "required",
+                                      "gridUnitSI", np.float64)
 
         # Check the particlePatches record of the particles
         result_array += test_key(species, v, "recommended", "particlePatches")
@@ -618,7 +644,8 @@ def check_particles(f, iteration, v, pic) :
             result_array += test_key(species, v, "required", "charge")
             result_array += test_key(species, v, "required", "mass")
             result_array += test_key(species, v, "required", "weighting")
-            result_array += test_key(species, v, "recommended", "globalCellId")
+            result_array += test_key(species, v, "recommended", "positionOfCell")
+            result_array += test_key(species, v, "recommended", "positionInCell")
             result_array += test_key(species, v, "optional", "boundElectrons")
             result_array += test_key(species, v, "optional", "protonNumber")
             result_array += test_key(species, v, "optional", "neutronNumber")
@@ -651,7 +678,7 @@ def check_particles(f, iteration, v, pic) :
                                           np.ndarray, np.float64)
                 time_type = f[base_path].attrs["time"].dtype.type
                 result_array += test_attr(species[record], v, "required",
-                                        "timeOffset", time_type)
+                                          "timeOffset", time_type)
                 result_array += test_attr(species[record], v, "required",
                                           "weightingPower", np.float64)
                 result_array += test_attr(species[record], v, "required",
@@ -659,7 +686,7 @@ def check_particles(f, iteration, v, pic) :
 
     return(result_array)
 
-    
+
 if __name__ == "__main__":
     file_name, verbose, extension_pic = parse_cmd(sys.argv[1:])
     f = open_file(file_name)

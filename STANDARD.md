@@ -404,10 +404,10 @@ meshes):
   - `geometryParameters`
     - type: *(string)*
     - description: additional parameters for the geometry, separated by a `;`,
-                   this attribute can be omitted if geometry is `cartesian`
-                   or `cylindrical` geometry with only mode `m=0` is used
+                   this attribute is required when `geometry` is
+                   `thetaMode`,  but can be omitted if geometry is `cartesian`
     - examples:
-      - for `cylindrical` geometry:
+      - for `thetaMode` geometry:
         - `m=3;imag=+` (3 *modes* and using a `+` sign for the definiton of the *imaginary* part)
                         ![definition of imaginary part](img/cylindrical.png)
 

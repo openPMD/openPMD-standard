@@ -219,7 +219,7 @@ Unit Systems and Dimensionality: Required for each `Record`
 
 While this standard does not impose any unit system on the data that is
 stored itself, it still imposes a common interface to convert one system
-to an other.
+to another.
 
 Each quantity with a dimension must define a unit conversation factor,
 often called `unitSI` in the document, to transform it to a corresponding
@@ -240,10 +240,19 @@ the following attributes shall be added:
 
   - `unitDimension`
     - type: array of 7 *(double / REAL8)*
-    - powers of the 7 base measures characterizing the record's unit in SI
-      (length L, mass M, time T, electric current I, thermodynamic temperature
-       theta, amount of substance N, luminous intensity J)
-    - does *not* represent if the record is a 1, 2 or 3D array
+    - description: powers of the 7 base measures characterizing the record's
+                   unit in SI (length L, mass M, time T, electric current I,
+                   thermodynamic temperature theta, amount of substance N,
+                   luminous intensity J)
+    - rationale: this allows to implement automated record detection,
+                 identification and compatibility checks, independent of
+                 specific names or string representations;
+                 does *not* represent if the record is a 1, 2 or 3D array
+    - advice to implementors: implement a lookup table for the most common
+                              quantities/units in your simulation, e.g.,
+                              electric field stengths, mass, energy, etc.
+                              in the respect of the power of the base units
+                              given here
     - examples:
       - "m / s" is of dimension `L=1` and `T=-1`,
         store array `[1.; 0.; -1.; 0.; 0.; 0.; 0.]`

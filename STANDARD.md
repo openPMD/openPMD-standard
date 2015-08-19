@@ -432,7 +432,7 @@ meshes):
             elements, where N is the number of dimensions in the simulation
     - description: start of the current domain of the simulation (position of the
                    beginning of the first cell) in simulation units
-    - example: `[0.0; 0.0; 0.0]` or `[0.5; 0.5; 0.5]`
+    - example: `[0.0; 100.0; 0.0]` or `[0.5; 0.5; 0.5]`
 
   - `gridUnitSI`
     - type: *(double / REAL8)*
@@ -464,7 +464,7 @@ The following attributes must be stored with each `scalar record` and each
                    the mesh/grid/node/cell/voxel;
                    `0.0` means at the beginning of the mesh element and `1.0` is the
                    beginning of the next mesh element;
-                   the same dimensionality N as in `gridSpacing` and `gridOffset`
+                   the same dimensionality N as in `gridSpacing` and `gridGlobalOffset`
 
 
 Particle Records

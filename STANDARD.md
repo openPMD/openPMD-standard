@@ -446,7 +446,7 @@ meshes):
         `N` of the array determines if the mesh record is 1, 2 or 3D. The
         elements of the array should correspond to `dx`, `dy`, `dz`, in
         this order.
-      - In the case where `geometry` is `cylindrical`, the array
+      - In the case where `geometry` is `thetaMode`, the array
         should be of length 2 and contain `dr` and `dz`, in that order.
 
   - `gridGlobalOffset`

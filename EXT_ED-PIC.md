@@ -28,7 +28,8 @@ Mesh Based Records (Fields)
 
   - `fieldSolver`
     - type: *(string)*
-    - description: Maxwell/field solver. Required.
+	- scope: *required*
+    - description: Maxwell/field solver
     - allowed values:
       - `Yee` ([doi:10.1109/TAP.1966.1138693](http://dx.doi.org/10.1109/TAP.1966.1138693))
       - `CK` (*Cole-Karkkainen* type solvers: [doi:10.1016/j.jcp.2011.04.003](http://dx.doi.org/10.1016/j.jcp.2011.04.003), [doi:10.1063/1.168620](http://dx.doi.org/10.1063/1.168620), [doi:10.1109/TAP.2002.801268](http://dx.doi.org/10.1109/TAP.2002.801268); M. Karkkainen et al., *Low-dispersion wake field calculation tools*, ICAP 2006)
@@ -42,13 +43,14 @@ Mesh Based Records (Fields)
 
   - `fieldSolverParameters`
     - type: *(string)*
-    - description: additional scheme and parameters specification for fields solvers.
-                   Required if `fieldSolver` is `other`, optional otherwise.
+	- scope: *required* if `fieldSolver` is `other`, *optional* otherwise
+    - description: additional scheme and parameters specification for fields solvers. 
 
   - `fieldBoundary`
     - type: array of *(string)* of length 2*`N`
+	- scope: *required*
 	- description: boundary conditions in each direction (in the
-	above, `N` is the dimensionality of the field mesh). Required.
+	above, `N` is the dimensionality of the field mesh).
 	The strings are stored in the following order:
 	  - boundary at the *lower* end of the *first* axis of the mesh 
 	  - boundary at the *upper* end of the *first* axis of the mesh 
@@ -65,14 +67,16 @@ Mesh Based Records (Fields)
 	  - `other`
 
   - `fieldBoundaryParameters`
+  	- scope: *required* if `fieldBoundary` is `other`, optional otherwise
     - type: array of *(string)* of length 2*`N`
 	- description: additional scheme and parameters specification for
-      the boundary conditions. Required if `fieldBoundary` is `other`, optional otherwise.
+      the boundary conditions
 
   - `currentSmoothing`
     - type: *(string)*
+  	- scope: *required*
     - description: applied filters to the current field after the particles'
-                   current deposition. Required.
+                   current deposition
     - note: may becomes a particle record attribute in the future
     - allowed values:
       - `Binomial`
@@ -81,14 +85,16 @@ Mesh Based Records (Fields)
 
   - `currentSmoothingParameters`
     - type: *(string)*
+	- scope: *required* if `currentSmoothing` is not `none`
     - description: additional parameters to describe the applied
-	filter further. Required if `currentSmoothing` is not `none`
+	filter further
     - note: may becomes a particle record attribute in the future
     - example: `period=10;numPasses=4;compensator=true`
     - reserved for future use: `direction=array()`, `stride=array()`
 	
   - `chargeCorrection`
     - type: *(string)*
+	- scope: *required*
     - description: applied corrections to fields to ensure charge conservation
     - allowed values:
       - `Marder` ([doi:10.1016/0021-9991(87)90043-X](http://dx.doi.org/10.1016/0021-9991(87)90043-X))
@@ -102,18 +108,21 @@ Mesh Based Records (Fields)
       - `none`
 
   - `chargeCorrectionParameters`
-    - description: required if `chargeCorrection` is not `none`
+    - scope: required if `chargeCorrection` is not `none`
+	- description: additional parameters to describe the chargeCorrectionParameters
     - example: `period=100`
 
 ### Additional Attributes for each `mesh record` (field record)
 
   - `fieldSmoothing`
     - type: *(string)*
+	- scope: *required*
     - description: applied field filters for E and B
 	- allowed values: same as for `fieldSmoothing`
 
   - `fieldSmoothingParameters`
     - type: *(string)*
+	- scope: required if `chargeCorrection` is not `none`
     - description: additional parameters to describe the applied
       filter further (similar to `currentSmoothingParameters`)
 

@@ -25,11 +25,10 @@ Mesh Based Records (Fields)
 
 ### Additional Attributes for the Group `meshesPath`
 
-- **Required:**
 
   - `fieldSolver`
     - type: *(string)*
-    - description: Maxwell/field solver
+    - description: Maxwell/field solver. Required.
     - allowed values:
       - `Yee` ([doi:10.1109/TAP.1966.1138693](http://dx.doi.org/10.1109/TAP.1966.1138693))
       - `CK` (*Cole-Karkkainen* type solvers: [doi:10.1016/j.jcp.2011.04.003](http://dx.doi.org/10.1016/j.jcp.2011.04.003), [doi:10.1063/1.168620](http://dx.doi.org/10.1063/1.168620), [doi:10.1109/TAP.2002.801268](http://dx.doi.org/10.1109/TAP.2002.801268); M. Karkkainen et al., *Low-dispersion wake field calculation tools*, ICAP 2006)
@@ -41,32 +40,53 @@ Mesh Based Records (Fields)
       - `other`
       - `none`
 
-  - `fieldSolverOrder`
-    - type: *(float)*
-    - description: order of the `fieldSolver`
-    - examples:
-      - `2.0`
-      - `3.0`
-      - use `-1.0` for infinite order (for spectral solvers)
-
   - `fieldSolverParameters`
     - type: *(string)*
-    - description: additional parameters for fields solvers
-                   (may be specified further in the future)
+    - description: additional scheme and parameters specification for fields solvers.
+                   Required if `fieldSolver` is `other`, optional otherwise.
+
+  - `fieldBoundary`
+    - type: array of *(string)* of length 2*`N`
+	- description: boundary conditions in each direction (in the
+	above, `N` is the dimensionality of the field mesh). Required.
+	The strings are stored in the following order:
+	  - boundary at the *lower* end of the *first* axis of the mesh 
+	  - boundary at the *upper* end of the *first* axis of the mesh 
+	  - boundary at the *lower* end of the *second* axis of the mesh
+	  - boundary at the *upper* end of the *second* axis of the mesh
+	  - ...
+	  - boundary at the *upper* end of the `N`th axis of the mesh
+	- allowed values:
+	  - `periodic`
+	  - `open` (optionally add scheme specification - such as PML,
+        Silver-Muller, etc. - in the `fieldBoundaryParameters` string)
+	  - `reflecting` (optionally add scheme specification - such as Neumann-type
+        or Dirichlet-type - in the `fieldBoundaryParameters` string)
+	  - `other`
+
+  - `fieldBoundaryParameters`
+    - type: array of *(string)* of length 2*`N`
+	- description: additional scheme and parameters specification for
+      the boundary conditions. Required if `fieldBoundary` is `other`, optional otherwise.
 
   - `currentSmoothing`
     - type: *(string)*
     - description: applied filters to the current field after the particles'
-                   current deposition
+                   current deposition. Required.
     - note: may becomes a particle record attribute in the future
-    - allowed values: same as for `fieldSmoothing`
+    - allowed values:
+      - `Binomial`
+      - `other`
+      - `none`
 
   - `currentSmoothingParameters`
     - type: *(string)*
-    - description: required if `currentSmoothing` is not `none`, additional parameters to describe the applied filter further
+    - description: additional parameters to describe the applied
+	filter further. Required if `currentSmoothing` is not `none`
     - note: may becomes a particle record attribute in the future
-    - allowed values: same as for `fieldSmoothingParameters`
-
+    - example: `period=10;numPasses=4;compensator=true`
+    - reserved for future use: `direction=array()`, `stride=array()`
+	
   - `chargeCorrection`
     - type: *(string)*
     - description: applied corrections to fields to ensure charge conservation
@@ -87,21 +107,15 @@ Mesh Based Records (Fields)
 
 ### Additional Attributes for each `mesh record` (field record)
 
-- **Required:**
-
   - `fieldSmoothing`
     - type: *(string)*
     - description: applied field filters for E and B
-    - allowed values:
-      - `Binomial`
-      - `other`
-      - `none`
+	- allowed values: same as for `fieldSmoothing`
 
   - `fieldSmoothingParameters`
     - type: *(string)*
-    - description: additional parameters to describe the applied filter further
-    - example: `period=10;numPasses=4;compensator=true`
-    - reserved for future use: `direction=array()`, `stride=array()`
+    - description: additional parameters to describe the applied
+      filter further (similar to `currentSmoothingParameters`)
 
 ### Naming Conventions for `mesh record`s (field records)
 

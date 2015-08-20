@@ -70,7 +70,7 @@ Mesh Based Records (Fields)
     - description: required if `chargeCorrection` is not `none`
     - example: `period=100`
 
-### Additional Attributes for each `mesh record`
+### Additional Attributes for each `mesh record` (field record)
 
 - **Required:**
 
@@ -88,7 +88,7 @@ Mesh Based Records (Fields)
     - example: `period=10;numPasses=4;compensator=true`
     - reserved for future use: `direction=array()`, `stride=array()`
 
-### Naming Conventions for `mesh records`
+### Naming Conventions for `mesh record`s (field records)
 
 - fundamental fields: `E`, `B` for electric and magnetic fields
 
@@ -269,24 +269,36 @@ else :
     - advice to implementors: must have `weightingPower = 1`
 
   - `position/` + components such as `x`, `y` and `z`
-    - type: each component in *(float)*
-    - description: component-wise global position of the particle
-                   Default in `STANDARD.md`: global position of the particle;
-                   in this extension, if `globalCellId` is set, then it does 
-                   represents the in-cell-position
+    - type: each component in *(float)* or *(int)* or *(uint)*
+    - description: must represent the in-cell-position if `positionOffset`
+                   is not a record of solely `constant component`s
+    - rationale: dividing the particle position in a beginning of the cell
+                 (as *(int)*) and in-cell position (as *(float)*) can
+                 dramatically improve the precision of stored particle
+                 positions; this division creates a connection between
+                 particles and the fields on their cells
     - advice to implementors: must have `weightingPower = 0`
     - example: use only `x` and `y` in 2D
 
-- **Recommended:**
-
-  - `globalCellId`
-    - type: vector property of *(int)*
-    - description: position rounded down to the cell the particle belongs to,
-                   increases the precision of position attributes for
-                   single precision attributes with a large offset from
-                   the global origin of the simulation
+  - `positionOffset/` + components such as `x`, `y` and `z`
+    - type: each component in *(float)* or *(int)* or *(uint)*
+    - description: if the `component`s of this record are non-constant
+                   this must represent the beginning of the cell the
+                   particle is associated with;
+                   for the zero-based index `i` of the first cartesian field
+                   coordinate, the beginning of the cell is defined via
+                   `gridGlobalOffset + i * gridSpacing`
+    - advice to implementors: the interpretation of `position` and
+                              `positionOffset` does not alter the pure
+                              calculation of the global position of the
+                              particle from the base standard
     - advice to implementors: must have `weightingPower = 0`
+    - advice to implementors: if you want to neglect the relation between
+                              particles and their cells, simply store this
+                              record with constant components, e.g., the
+                              global moving window offset
 
+- **Recommended:**
   - `particlePatches`
     - description: if this record is used in combination with the
                    `globalCellId` record, the `position` for `offset` and

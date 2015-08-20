@@ -433,14 +433,30 @@ meshes):
         - `m=3;imag=+` (3 *modes* and using a `+` sign for the definiton of the *imaginary* part)
                         ![definition of imaginary part](img/cylindrical.png)
 
+  - `dataOrder`
+    - type: *(string)*
+    - allowed values: `Fortran` or `C` (also for 2D records)
+    - description: describes the fastest/slowest increasing index, see
+                   `geometry`, for 2D and 3D records (e.g., the difference
+                   between a Fortran and C array); can be omitted for 1D record
+    - example:
+      - `Fortran`: ordering of matrixes is linearized in memory in column-major order
+      - `C`:       exactly the opposite ordering (row-major), reading matrixes from
+                   a Fortran code will appear transposed in C (or C-based applications
+                   such as Python)
+
   - `gridSpacing`
     - type: 1-dimensional array containing N *(float)*
-            elements, where N is the number of dimensions in the simulation.
+            elements, where N is the number of dimensions in the simulation
     - description: spacing of the grid points along each dimension (in the
                    units of the simulation); this refers to the spacing of the
                    actual record that is written to the file, not that of the
                    simulation grid. (The record written may be down-sampled, as
                    compared to the simulation grid).
+    - advice to implementors: the order of the N floats must be identical to
+                              the `dataOrder` of the indexes in `geometry`,
+                              e.g., in C you might write `[dz, dy, dx]` and in
+                              Fortran order `[dx, dy, dz]`
     - examples:
       - In the case where `geometry` is `cartesian`, the dimensionality
         `N` of the array determines if the mesh record is 1, 2 or 3D. The
@@ -454,6 +470,8 @@ meshes):
             elements, where N is the number of dimensions in the simulation
     - description: start of the current domain of the simulation (position of the
                    beginning of the first cell) in simulation units
+    - advice to implementors: the order of the N floats must be identical
+                              to the `dataOrder` of the indexes in `geometry`
     - example: `[0.0; 100.0; 0.0]` or `[0.5; 0.5; 0.5]`
 
   - `gridUnitSI`
@@ -462,18 +480,6 @@ meshes):
                    and `gridGlobalOffset`, in order to convert from simulation units
                    to SI units
     - example: `1.0e-9`
-
-  - `dataOrder`
-    - type: *(string)*
-    - allowed values: `Fortran` or `C` (also for 2D records)
-    - description: describes the fastest/slowest increasing index for 2D and 3D
-                   records (e.g., the difference between a Fortran and C array);
-                   can be omitted for 1D record
-    - example:
-      - `Fortran`: ordering of matrixes is linearized in memory in column-major order
-      - `C`:       exactly the opposite ordering (row-major), reading matrixes from
-                   a Fortran code will appear transposed in C (or C-based applications
-                   such as Python)
 
 The following attributes must be stored with each `scalar record` and each
 *component* of a `vector record`:

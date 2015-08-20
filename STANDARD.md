@@ -1,7 +1,7 @@
 The openPMD Standard
 ====================
 
-VERSION: *draft* (August 19th, 2015)
+VERSION: *draft* (August 20th, 2015)
 
 Conventions Throughout this Documents
 --------------------------------------

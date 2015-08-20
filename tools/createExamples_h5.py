@@ -294,7 +294,9 @@ def add_EDPIC_attr_particles(particle):
     particle.attrs["currentDeposition"] = np.string_("Esirkepov")
     # particle.attrs["currentDepositionParameters"] = np.string_("")
     particle.attrs["particlePush"] = np.string_("Boris")
-    particle.attrs["particleInterpolation"] = np.string_("Trilinear")
+    particle.attrs["particleInterpolation"] = np.string_("uniform")
+    particle.attrs["particleBoundary"] = np.array(
+        ["periodic", "periodic", "absorbing", "absorbing"])
     particle.attrs["particleSmoothing"] = np.string_("none")
     # particle.attrs["particleSmoothingParameters"] = \
     #     np.string_("period=1;numPasses=2;compensator=false")
@@ -307,16 +309,15 @@ def write_meshes(f, iteration):
 
     # Extension: Additional attributes for ED-PIC
     meshes.attrs["fieldSolver"] = np.string_("Yee")
-    meshes.attrs["fieldSolverOrder"] = 2.0
-    # meshes.attrs["fieldSolverParameters"] = np.string_("")
-    meshes.attrs["currentSmoothing"] = np.string_("none")
-    # meshes.attrs["currentSmoothingParameters"] = \
-    #     np.string_("period=1;numPasses=2;compensator=false")
+    meshes.attrs["fieldBoundary"] = np.array(
+        ["periodic", "periodic", "open", "open"])
+    meshes.attrs["currentSmoothing"] = np.string_("Binomial")
+    meshes.attrs["currentSmoothingParameters"] = \
+         np.string_("period=1;numPasses=2;compensator=false")
     meshes.attrs["chargeCorrection"] = np.string_("none")
-    # meshes.attrs["chargeCorrectionParameters"] = np.string("period=100")
 
-    # (Here the data is randomly generated, but in an actual simulation, this would
-    # be replaced by the simulation data.)
+    # (Here the data is randomly generated, but in an actual simulation,
+    # this would be replaced by the simulation data.)
 
     # - Write rho
     # Mode 0 : real values, mode 1 : complex values

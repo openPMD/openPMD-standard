@@ -525,19 +525,25 @@ def check_meshes(f, iteration, v, pic):
         result_array += test_attr(f[full_meshes_path], v, "required",
                                   "fieldSolver", np.string_)
         valid, field_solver = get_attr(field, "fieldSolver")
-        if (valid == True) and (field_solver != "none") :
-            result_array += test_attr(f[full_meshes_path], v, "required",
-                                      "fieldSolverOrder", np.float_)
+        if (valid == True) and (field_solver=="other") :
             result_array += test_attr(f[full_meshes_path], v, "required",
                                       "fieldSolverParameters", np.string_)
-            
+
+        # Check for the attributes associated with the field boundaries
+        result_array += test_attr(f[full_meshes_path], v, "required",
+                                "fieldBoundary", np.ndarray, np.string_)
+        valid, field_boundary = get_attr(field, "fieldBoundary")
+        if (valid == True) and (field_boundary=="other") :
+            result_array += test_attr(f[full_meshes_path], v, "required",
+                        "fieldBoundaryParameters", np.ndarray, np.string_)
+
         # Check the attributes associated with the current smoothing
         result_array += test_attr(f[full_meshes_path], v, "required",
                                   "currentSmoothing", np.string_)
         valid, current_smoothing = get_attr(field, "currentSmoothing")
-        if (valid == True) and (current_smoothing != "none") :
+        if (valid == True) and (current_smoothing=="other") :
             result_array += test_attr(f[full_meshes_path], v, "required",
-                                      "currentSmoothingParameters", np.string_)
+                        "currentSmoothingParameters", np.string_)
     
         # Check the attributes associated with the charge conservation
         result_array += test_attr(f[full_meshes_path], v, "required",
@@ -545,14 +551,15 @@ def check_meshes(f, iteration, v, pic):
         valid, charge_correction = get_attr(field, "chargeCorrection")
         if valid == True and charge_correction != "none":
             result_array += test_attr(f[full_meshes_path], v, "required",
-                                      "chargeCorrectionParameters", np.string_)
-		
+                        "chargeCorrectionParameters", np.string_)
+
         # Check for the attributes of each record
         for field_name in list_meshes :
             field = f[full_meshes_path + field_name]
-            result_array + test_attr(field, v, "required", "fieldSmoothing", np.string_)
+            result_array + test_attr(field, v, "required",
+                                     "fieldSmoothing", np.string_)
             valid, field_smoothing = get_attr(field, "fieldSmoothing")
-            if field_smoothing != "none":
+            if (valid == True) and (field_smoothing != "none") :
                 result_array += test_attr(field,v, "required",
                                     "fieldSmoothingParameters", np.string_)
     return(result_array)
@@ -642,12 +649,22 @@ def check_particles(f, iteration, v, pic) :
                                       "particlePush", np.string_)
             result_array += test_attr(species, v, "required",
                                       "particleInterpolation", np.string_)
+
+            # Check for the attributes associated with the particle smoothing
             result_array += test_attr(species, v, "required",
                                       "particleSmoothing", np.string_)
             valid, particle_smoothing = get_attr(species, "particleSmoothing")
             if valid == True and particle_smoothing != "none":            
                 result_array += test_attr(species, v, "required",
                                 "particleSmoothingParameters", np.string_)
+
+            # Check for the attributes associated with the field boundaries
+            result_array += test_attr(f[full_meshes_path], v, "required",
+                                "particleBoundary", np.ndarray, np.string_)
+            valid, field_boundary = get_attr(field, "fieldBoundary")
+            if (valid == True) and (field_boundary=="other") :
+                result_array += test_attr(f[full_meshes_path], v, "required",
+                        "particleBoundaryParameters", np.ndarray, np.string_)
 
         # Check attributes of each record of the particle
         for record in species.keys() :

@@ -424,10 +424,13 @@ def write_particles(f, iteration):
     # Position offset of each particle
     electrons.create_group("positionOffset")
     offset = electrons["positionOffset"]
-    offset.create_dataset("x", (globalNumParticles,), dtype=np.float32)
-    offset.create_dataset("y", (globalNumParticles,), dtype=np.float32)
+    # Constant components here (typical of a moving window along z)
+    offset.create_group("x")
+    offset["x"].attrs["value"] = np.float32(0.) 
+    offset.create_group("y")
+    offset["y"].attrs["value"] = np.float32(0.)   
     offset.create_group("z")
-    offset["z"].attrs["value"] = np.float32(100.)   # Constant component
+    offset["z"].attrs["value"] = np.float32(100.)   
     # Conversion factor to SI units
     offset["x"].attrs["unitSI"] = np.float64(1.e-9)
     offset["y"].attrs["unitSI"] = np.float64(1.e-9)

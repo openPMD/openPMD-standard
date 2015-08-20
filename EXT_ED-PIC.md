@@ -260,7 +260,7 @@ else :
                    the macroparticles represent
     - advice to implementors: must have `weightingPower = 1`,
                               `macroWeighted = 1`, `unitSI = 1` and
-                              `unitDimension==[0., ..., 0.]`
+                              `unitDimension == [0., ..., 0.]`
 
   - `momentum/` + components such as `x`, `y` and `z`
     - type: each component in *(float)*
@@ -270,29 +270,45 @@ else :
 
   - `position/` + components such as `x`, `y` and `z`
     - type: each component in *(float)* or *(int)* or *(uint)*
-    - description: must represent the in-cell-position if `positionOffset`
-                   is not a record of solely `constant component`s
+    - description: component-wise position of a particle, relative to
+                   `positionOffset`
+      - in the case where the `component`s of `positionOffset` are constant,
+        position is the position relative to a global offset (e.g., the offset
+        of a moving window)
+      - in the case where the `component`s of `positionOffset` are
+        non-constant, `position` must represent the in-cell-position and
+        `positionOffset` must represent the position of the beginning of the
+        cell (see below)
     - rationale: dividing the particle position in a beginning of the cell
                  (as *(int)*) and in-cell position (as *(float)*) can
                  dramatically improve the precision of stored particle
                  positions; this division creates a connection between
                  particles and the fields on their cells
-    - advice to implementors: must have `weightingPower = 0`
+    - advice to implementors: must have `weightingPower = 0` and dimensionality
+                              of a lengths `unitDimension == [1., 0., ..., 0.]`
+    - advice to implementors: a *(float)* type is likely the most frequent case
+                              for this record
     - example: use only `x` and `y` in 2D
 
   - `positionOffset/` + components such as `x`, `y` and `z`
     - type: each component in *(float)* or *(int)* or *(uint)*
     - description: if the `component`s of this record are non-constant
-                   this must represent the beginning of the cell the
-                   particle is associated with;
+                   this must represent the position of the beginning of the
+                   cell the particle is associated with;
                    for the zero-based index `i` of the first cartesian field
-                   coordinate, the beginning of the cell is defined via
-                   `gridGlobalOffset + i * gridSpacing`
+                   coordinate, the position of the beginning of the cell is
+                   defined via `gridGlobalOffset + i * gridSpacing`;
+                   the `unitSI` of each component must be set to the
+                   corresponding lengths of the cell's edges in SI units
     - advice to implementors: the interpretation of `position` and
                               `positionOffset` does not alter the pure
                               calculation of the global position of the
-                              particle from the base standard
-    - advice to implementors: must have `weightingPower = 0`
+                              particle from the base standard; see the base
+                              standard for a code example
+    - advice to implementors: must have `weightingPower = 0` and dimensionality
+                              of a lengths `unitDimension == [1., 0., ..., 0.]`
+    - advice to implementors: an *(int)* or *(uint)* type is likely the most
+                              frequent case for this record
     - advice to implementors: if you want to neglect the relation between
                               particles and their cells, simply store this
                               record with constant components, e.g., the

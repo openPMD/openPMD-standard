@@ -426,10 +426,10 @@ meshes):
   - `geometryParameters`
     - type: *(string)*
     - description: additional parameters for the geometry, separated by a `;`,
-                   this attribute can be omitted if geometry is `cartesian`
-                   or `cylindrical` geometry with only mode `m=0` is used
+                   this attribute is required when `geometry` is
+                   `thetaMode`,  but can be omitted if geometry is `cartesian`
     - examples:
-      - for `cylindrical` geometry:
+      - for `thetaMode` geometry:
         - `m=3;imag=+` (3 *modes* and using a `+` sign for the definiton of the *imaginary* part)
                         ![definition of imaginary part](img/cylindrical.png)
 
@@ -446,7 +446,7 @@ meshes):
         `N` of the array determines if the mesh record is 1, 2 or 3D. The
         elements of the array should correspond to `dx`, `dy`, `dz`, in
         this order.
-      - In the case where `geometry` is `cylindrical`, the array
+      - In the case where `geometry` is `thetaMode`, the array
         should be of length 2 and contain `dr` and `dz`, in that order.
 
   - `gridGlobalOffset`

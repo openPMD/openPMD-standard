@@ -486,14 +486,23 @@ def check_meshes(f, iteration, v, pic):
         # General attributes of the record
         result_array += test_attr(field, v, "required", "unitDimension", np.ndarray, np.float64)
         result_array += test_attr(field, v, "required", "timeOffset", np.float_)
-        result_array += test_attr(field, v, "required", "geometry", np.string_)
-        result_array += test_attr(field, v, "optional",
-                                            "geometryParameters", np.string_)
+
         result_array += test_attr(field, v, "required", "gridSpacing", np.ndarray, np.float32)
         result_array += test_attr(field, v, "required", "gridGlobalOffset", np.ndarray, np.float32)
         result_array += test_attr(field, v, "required", "gridUnitSI", np.float64)
         result_array += test_attr(field, v, "required", "dataOrder", np.string_)
-    
+        # Specific check for geometry
+        geometry_test = test_attr(field, v, "required", "geometry", np.string_)
+        result_array += geometry_test
+        # geometryParameters is required when using thetaMode
+        if geometry_test[0] == 0 and field.attrs["geometry"] == "thetaMode" :
+            result_array += test_attr(field, v, "required",
+                                            "geometryParameters", np.string_)
+        # otherwise it is optional
+        else :
+            result_array += test_attr(field, v, "optional",
+                                            "geometryParameters", np.string_)
+         
         # Attributes of the record's components
         if is_scalar_record(field) :   # If the record is a scalar field
             result_array += test_attr(field, v,

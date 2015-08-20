@@ -47,7 +47,7 @@ Mesh Based Records (Fields)
     - description: additional scheme and parameters specification for fields solvers. 
 
   - `fieldBoundary`
-    - type: array of *(string)* of length 2*`N`
+    - type: array of *(string)* of length 2 `N`
 	- scope: *required*
 	- description: boundary conditions in each direction (in the
 	above, `N` is the dimensionality of the field mesh).
@@ -149,10 +149,9 @@ Particle Records
 
 ### Additional Attributes for the `Group` of each Particle Species
 
-- **Required:**
-
   - `particleShape`
     - type: *(float)*
+	- scope: *required*
     - description: the order of the particle assignment function shape
                    (see *Hockney* reprint 1989, ISBN:0-85274-392-0, table 5-1)
     - example values:
@@ -164,6 +163,7 @@ Particle Records
 
   - `currentDeposition`
     - type: *(string)*
+	- scope: *required*
     - description: current deposition scheme
     - allowed values:
       - `VillaBune` ([doi:10.1016/0010-4655(92)90169-Y](http://dx.doi.org/10.1016/0010-4655(92)90169-Y))
@@ -176,11 +176,13 @@ Particle Records
 
   - `currentDepositionParameters`
     - type *(string)*
+	- scope: *optional*
     - description: further parameters for current deposition schemes;
                    reserved for future use
 
   - `particlePush`
     - type: *(string)*
+	- scope: *required*
     - description: Particle-Pushing Algorithm
     - allowed values:
       - `Boris` (J.P. Boris. *Relativistic plasma simulation-optimization of a hybrid code.* USA, 1970)
@@ -189,6 +191,7 @@ Particle Records
 
   - `particleInterpolation`
     - type: *(string)*
+	- scope: *required*
     - description: method that was used to interpolate fields to particle positions,
                    as described in [doi:10.1016/j.crme.2014.07.006](http://dx.doi.org/10.1016/j.crme.2014.07.006)
                    section 2.4
@@ -210,8 +213,35 @@ Particle Records
                               infinitely small time steps.
       - `other`
 
+  - `particleBoundary`
+    - type: array of *(string)* of length 2 `N`
+	- scope: *required*
+	- description: boundary conditions in each direction (in the
+	above, `N` is the dimensionality of the field mesh).
+	The strings are stored in the following order:
+	  - boundary at the *lower* end of the *first* axis of the mesh 
+	  - boundary at the *upper* end of the *first* axis of the mesh 
+	  - boundary at the *lower* end of the *second* axis of the mesh
+	  - boundary at the *upper* end of the *second* axis of the mesh
+	  - ...
+	  - boundary at the *upper* end of the `N`th axis of the mesh
+	- allowed values:
+	  - `periodic`
+	  - `absorbing`
+	  - `reflecting`
+	  - `reinjecting` (optionally add scheme specification - such as
+        "thermal, T=1keV" - in the `particleBoundaryParameters` string)
+	  - `other`
+
+  - `particleBoundaryParameters`
+   - type: array of *(string)* of length 2 `N`
+  	- scope: *required* if `particleBoundary` is `other`, optional otherwise
+	- description: additional scheme and parameters specification for
+      the boundary conditions
+
   - `particleSmoothing`
     - type: *(string)*
+	- scope: *required*
     - description: applied transformations or smoothing filters on copied
                    versions of the fields while interpolating those to 
                    the particle
@@ -222,8 +252,8 @@ Particle Records
 
   - `particleSmoothingParameters`
     - type: *(string)*
-    - description: required if `particleSmoothing` is not `none`;
-                   additional parameters to describe the applied filter further
+	- scope: *required* if `particleSmoothing` is not `none`
+    - description: additional parameters to describe the applied filter further
     - example: `period=1;numPasses=2;compensator=false`
     - reserved for future use: `direction=array()`, `stride=array()`
 
@@ -237,6 +267,7 @@ particle. Therefore, this extension requires the two following attributes:
 
 - `macroWeighted`
   - type: *(uint32)*
+  - scope: *required*
   - description: indicates whether this quantity is written for the
     underlying particle (`macroWeighted = 0`) or for the full
     macroparticle (`macroWeighted = 1`)
@@ -248,6 +279,7 @@ particle. Therefore, this extension requires the two following attributes:
 
 - `weightingPower`
   - type: *(double / REAL8)*
+  - scope: *required*
   - description: indicates with which power of `weighting` (see below)
     the quantity should be multiplied, in order to go from the
     individual-particle representation to the full-macroparticle representation.

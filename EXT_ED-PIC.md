@@ -70,7 +70,7 @@ Mesh Based Records (Fields)
     - description: required if `chargeCorrection` is not `none`
     - example: `period=100`
 
-### Additional Attributes for each `mesh record`
+### Additional Attributes for each `mesh record` (field record)
 
 - **Required:**
 
@@ -88,7 +88,7 @@ Mesh Based Records (Fields)
     - example: `period=10;numPasses=4;compensator=true`
     - reserved for future use: `direction=array()`, `stride=array()`
 
-### Naming Conventions for `mesh records`
+### Naming Conventions for `mesh record`s (field records)
 
 - fundamental fields: `E`, `B` for electric and magnetic fields
 
@@ -218,13 +218,13 @@ particle. Therefore, this extension requires the two following attributes:
     charge of each underlying individual particle is q=-1.6e-19. Then
     the charge Q of the full macroparticle is given by: Q=q w^1 and
     therefore `weightingPower` must be 1.
-  - advice to implementors: reading example (in h5py) and extracting
+  - advice to implementors: reading example (with h5py) and extracting
     charge of the macroparticles in Python. When not absolutely necessary,
     reading the additional `weighting` record can be avoided for performance
     reasons like this:
   ```python
 f = h5py.File('example.h5')
-species = f[path_to_species_group]
+species = f["<path_to_species_group>"]
 q = species["charge"][:]
 u_si = q.attrs["unitSI"]
 p = q.attrs["weightingPower"]
@@ -260,7 +260,7 @@ else :
                    the macroparticles represent
     - advice to implementors: must have `weightingPower = 1`,
                               `macroWeighted = 1`, `unitSI = 1` and
-                              `unitDimension==[0., ..., 0.]`
+                              `unitDimension == [0., ..., 0.]`
 
   - `momentum/` + components such as `x`, `y` and `z`
     - type: each component in *(float)*
@@ -269,24 +269,52 @@ else :
     - advice to implementors: must have `weightingPower = 1`
 
   - `position/` + components such as `x`, `y` and `z`
-    - type: each component in *(float)*
-    - description: component-wise global position of the particle
-                   Default in `STANDARD.md`: global position of the particle;
-                   in this extension, if `globalCellId` is set, then it does 
-                   represents the in-cell-position
-    - advice to implementors: must have `weightingPower = 0`
+    - type: each component in *(float)* or *(int)* or *(uint)*
+    - description: component-wise position of a particle, relative to
+                   `positionOffset`
+      - in the case where the `component`s of `positionOffset` are constant,
+        position is the position relative to a global offset (e.g., the offset
+        of a moving window)
+      - in the case where the `component`s of `positionOffset` are
+        non-constant, `position` must represent the in-cell-position and
+        `positionOffset` must represent the position of the beginning of the
+        cell (see below)
+    - rationale: dividing the particle position in a beginning of the cell
+                 (as *(int)*) and in-cell position (as *(float)*) can
+                 dramatically improve the precision of stored particle
+                 positions; this division creates a connection between
+                 particles and the fields on their cells
+    - advice to implementors: must have `weightingPower = 0` and dimensionality
+                              of a lengths `unitDimension == [1., 0., ..., 0.]`
+    - advice to implementors: a *(float)* type is likely the most frequent case
+                              for this record
     - example: use only `x` and `y` in 2D
 
+  - `positionOffset/` + components such as `x`, `y` and `z`
+    - type: each component in *(float)* or *(int)* or *(uint)*
+    - description: if the `component`s of this record are non-constant
+                   this must represent the position of the beginning of the
+                   cell the particle is associated with;
+                   for the zero-based index `i` of the first cartesian field
+                   coordinate, the position of the beginning of the cell is
+                   defined via `gridGlobalOffset + i * gridSpacing`;
+                   the `unitSI` of each component must be set to the
+                   corresponding lengths of the cell's edges in SI units
+    - advice to implementors: the interpretation of `position` and
+                              `positionOffset` does not alter the pure
+                              calculation of the global position of the
+                              particle from the base standard; see the base
+                              standard for a code example
+    - advice to implementors: must have `weightingPower = 0` and dimensionality
+                              of a lengths `unitDimension == [1., 0., ..., 0.]`
+    - advice to implementors: an *(int)* or *(uint)* type is likely the most
+                              frequent case for this record
+    - advice to implementors: if you want to neglect the relation between
+                              particles and their cells, simply store this
+                              record with constant components, e.g., the
+                              global moving window offset
+
 - **Recommended:**
-
-  - `globalCellId`
-    - type: vector property of *(int)*
-    - description: position rounded down to the cell the particle belongs to,
-                   increases the precision of position attributes for
-                   single precision attributes with a large offset from
-                   the global origin of the simulation
-    - advice to implementors: must have `weightingPower = 0`
-
   - `particlePatches`
     - description: if this record is used in combination with the
                    `globalCellId` record, the `position` for `offset` and

@@ -537,6 +537,14 @@ def check_meshes(f, iteration, v, pic):
             result_array += test_attr(f[full_meshes_path], v, "required",
                         "fieldBoundaryParameters", np.ndarray, np.string_)
 
+        # Check for the attributes associated with the field boundaries
+        result_array += test_attr(f[full_meshes_path], v, "required",
+                                "particleBoundary", np.ndarray, np.string_)
+        valid, field_boundary = get_attr(field, "fieldBoundary")
+        if (valid == True) and (field_boundary=="other") :
+            result_array += test_attr(f[full_meshes_path], v, "required",
+                    "particleBoundaryParameters", np.ndarray, np.string_)
+
         # Check the attributes associated with the current smoothing
         result_array += test_attr(f[full_meshes_path], v, "required",
                                   "currentSmoothing", np.string_)
@@ -657,14 +665,6 @@ def check_particles(f, iteration, v, pic) :
             if valid == True and particle_smoothing != "none":            
                 result_array += test_attr(species, v, "required",
                                 "particleSmoothingParameters", np.string_)
-
-            # Check for the attributes associated with the field boundaries
-            result_array += test_attr(f[full_meshes_path], v, "required",
-                                "particleBoundary", np.ndarray, np.string_)
-            valid, field_boundary = get_attr(field, "fieldBoundary")
-            if (valid == True) and (field_boundary=="other") :
-                result_array += test_attr(f[full_meshes_path], v, "required",
-                        "particleBoundaryParameters", np.ndarray, np.string_)
 
         # Check attributes of each record of the particle
         for record in species.keys() :

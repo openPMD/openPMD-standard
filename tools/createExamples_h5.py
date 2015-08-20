@@ -295,8 +295,6 @@ def add_EDPIC_attr_particles(particle):
     # particle.attrs["currentDepositionParameters"] = np.string_("")
     particle.attrs["particlePush"] = np.string_("Boris")
     particle.attrs["particleInterpolation"] = np.string_("uniform")
-    particle.attrs["particleBoundary"] = np.array(
-        ["periodic", "periodic", "absorbing", "absorbing"])
     particle.attrs["particleSmoothing"] = np.string_("none")
     # particle.attrs["particleSmoothingParameters"] = \
     #     np.string_("period=1;numPasses=2;compensator=false")
@@ -311,6 +309,8 @@ def write_meshes(f, iteration):
     meshes.attrs["fieldSolver"] = np.string_("Yee")
     meshes.attrs["fieldBoundary"] = np.array(
         ["periodic", "periodic", "open", "open"])
+    particle.attrs["particleBoundary"] = np.array(
+        ["periodic", "periodic", "absorbing", "absorbing"])
     meshes.attrs["currentSmoothing"] = np.string_("Binomial")
     meshes.attrs["currentSmoothingParameters"] = \
          np.string_("period=1;numPasses=2;compensator=false")

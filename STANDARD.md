@@ -510,10 +510,42 @@ short-hand notation (see: *Constant Record Components*).
 ### Mandatory Records for each `Particle Species`
 
   - `position/` + components such as `x`, `y`, `z`
-    - type: each component in *(float)*
-    - description: component-wise global position of a particle, if not
-                   enforced otherwise by a domain-specific extension (see below)
-    - example: use only `x` and `y` in 2D
+    - type: each component in *(float)* or *(int)* or *(uint)*
+    - description: component-wise position of a particle, relative to
+                   `positionOffset`
+    - example: use only `x` and `y` in 2D, use `x` in 1D
+
+  - `positionOffset/` + components such as `x`, `y`, `z`
+    - type: each component in *(float)* or *(int)* or *(uint)*
+    - description: an offset to be added to each element of `position`
+    - rationale: for precision reasons and visualization purposes, it is
+                 often more useful to define all positions of an iteration
+                 relative to an offset; extensions might use this record to
+                 define relations to mesh records
+    - advice to implementors: to reduce read/write accesses and memory
+                              consumption, it is often useful to implement this
+                              with `constant record components`
+    - example: reading example (with h5py) in Python:
+```python
+def is_const_record(record_name, component_name) :
+    return ("value" in record_name["component_name"].attrs.keys())
+
+def get_component(record_name, component_name) :
+    if is_const_record(record_name, component_name) :
+        return record_name["component_name"].value
+    else :
+        record_name["component_name"][:]
+
+f = h5py.File('example.h5')
+species = f["<path_to_species_group>"]
+
+position_x_relative = get_component(species["position"], "x") \
+                    * species["position"].attrs["unitSI"]
+position_x_offset = get_component(species["positionOffset"], "x") \
+                  * species["positionOffset"].attrs["unitSI"]
+
+x = position_x_relative + position_x_offset
+```
 
 ### Additional `Records` for each `Particle Species`
 
@@ -540,17 +572,6 @@ short-hand notation (see: *Constant Record Components*).
                    the `position` of the particles within; the union of all
                    particle patches must resemble all elements in the particle's
                    records
-
-### Mandatory Attributes for the compontents of `position/`
-
-  - `offset`
-    - type: *(float)* (must be same as in `position/`)
-    - description: a global shift to be added to each element of the component,
-                   in the same units as the component; for precision reasons
-                   and visualization purposes, it is sometimes more useful
-                   to define all positions of an iteration relative to an
-                   offset
-    - example: `0.0` or `123.4`
 
 
 Domain-Specific Extensions

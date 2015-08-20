@@ -218,13 +218,13 @@ particle. Therefore, this extension requires the two following attributes:
     charge of each underlying individual particle is q=-1.6e-19. Then
     the charge Q of the full macroparticle is given by: Q=q w^1 and
     therefore `weightingPower` must be 1.
-  - advice to implementors: reading example (in h5py) and extracting
+  - advice to implementors: reading example (with h5py) and extracting
     charge of the macroparticles in Python. When not absolutely necessary,
     reading the additional `weighting` record can be avoided for performance
     reasons like this:
   ```python
 f = h5py.File('example.h5')
-species = f[path_to_species_group]
+species = f["<path_to_species_group>"]
 q = species["charge"][:]
 u_si = q.attrs["unitSI"]
 p = q.attrs["weightingPower"]

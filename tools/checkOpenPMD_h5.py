@@ -99,9 +99,8 @@ def test_record(g, r):
         if not is_scalar_record(g[r]) :
             for component_name in g[r]:
                 if not regEx.match(component_name):
-                    print("Error: Component %s of record %s is NOT named properly " \
-                          "(a-Z0-9_)!" \
-                          %(component_name, g[r].name) )
+                    print("Error: Component %s of record %s is NOT" \
+                    " named properly (a-Z0-9_)!" %(component_name, g[r].name) )
                     result_array += np.array([1,0])
     else:
         print("Error: Record %s is NOT named properly (a-Z0-9_)!" \
@@ -607,17 +606,15 @@ def check_particles(f, iteration, v, pic) :
     for species_name in list_species :
         species = f[full_particle_path + species_name]
         
-        # check all records for this species
+        # Check all records for this species
         for species_record_name in species :
             result_array += test_record(species, species_record_name)
 
         # Check the position record of the particles
         result_array += test_key(species, v, "required", "position")
-        for component_name in species["position"].keys():
-            component = species["position/" + component_name]
-            component_type = component.dtype.type
-            result_array += test_attr(component, v, "required", "offset",
-                                      component_type)
+
+        # Check the position offset record of the particles
+        result_array += test_key(species, v, "required", "positionOffset")
 
         # Check the particlePatches record of the particles
         result_array += test_key(species, v, "recommended", "particlePatches")

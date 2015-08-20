@@ -399,21 +399,16 @@ def write_particles(f, iteration):
     weighting.attrs["unitDimension"] = \
        np.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ], dtype=np.float64) # plain floating point number
 
-    # vector particle records (non-const/individual per particle)
+    # Position of each particle
     electrons.create_group("position")
     position = electrons["position"]
     position.create_dataset("x", (globalNumParticles,), dtype=np.float32)
     position.create_dataset("y", (globalNumParticles,), dtype=np.float32)
     position.create_dataset("z", (globalNumParticles,), dtype=np.float32)
-    # Offset of the grid
-    position["x"].attrs["offset"] = np.float32(0.0)
-    position["y"].attrs["offset"] = np.float32(0.0)
-    position["z"].attrs["offset"] = np.float32(0.0)
     # Conversion factor to SI units
     position["x"].attrs["unitSI"] = np.float64(1.e-9)
     position["y"].attrs["unitSI"] = np.float64(1.e-9)
     position["z"].attrs["unitSI"] = np.float64(1.e-9)
-    
     # macroWeighted: can be 1 or 0 in this case, since it's the same for macro
     #                particles and representing underlying particles
     # weightingPower == 0: the position does not scale with the weighting
@@ -426,6 +421,30 @@ def write_particles(f, iteration):
        #          L    M     T    I  theta  N    J
        # Dimension of Length per component
 
+    # Position offset of each particle
+    electrons.create_group("positionOffset")
+    offset = electrons["positionOffset"]
+    offset.create_dataset("x", (globalNumParticles,), dtype=np.float32)
+    offset.create_dataset("y", (globalNumParticles,), dtype=np.float32)
+    offset.create_group("z")
+    offset["z"].attrs["value"] = np.float32(100.)   # Constant component
+    # Conversion factor to SI units
+    offset["x"].attrs["unitSI"] = np.float64(1.e-9)
+    offset["y"].attrs["unitSI"] = np.float64(1.e-9)
+    offset["z"].attrs["unitSI"] = np.float64(1.e-9)
+    # macroWeighted: can be 1 or 0 in this case, since it's the same for macro
+    #                particles and representing underlying particles
+    # weightingPower == 0: the positionOffset does not scale with the weighting
+    offset.attrs["macroWeighted"] = np.uint32(1)
+    offset.attrs["weightingPower"] = np.float64(0.0)
+    # attributes from the base standard
+    offset.attrs["timeOffset"] = 0.
+    offset.attrs["unitDimension"] = \
+       np.array([1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ], dtype=np.float64)
+       #          L    M     T    I  theta  N    J
+       # Dimension of Length per component
+    
+    # Momentum of each particle
     electrons.create_group("momentum")
     momentum = electrons["momentum"]
     momentum.create_dataset("x", (globalNumParticles,), dtype=np.float32)

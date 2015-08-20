@@ -5,6 +5,21 @@ openPMD extension name: `ED-PIC`
 
 openPMD extension ID: `1`
 
+
+Introduction
+------------
+
+This extension is specifically designed for the domain of electro-dynamic and
+electro-static particle-in-cell (PIC) codes.
+
+The current version of this extension is suitable to allow the output of
+arbitrary simulation codes to be post-processed and compared with common
+tools and frameworks. Future versions will define a common set of required
+records and further attributes (e.g., for moving window and boosted frame
+simulations) that will allow to restart the checkpoints of one PIC code with
+an other.
+
+
 Mesh Based Records (Fields)
 ---------------------------
 

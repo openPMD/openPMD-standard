@@ -37,19 +37,19 @@ Mesh Based Records (Fields)
   - `fieldSolverParameters`
     - type: *(string)*
     - description: additional parameters for fields solvers
-                   (optional, might be specified further in the future)
+                   (may be specified further in the future)
 
   - `currentSmoothing`
     - type: *(string)*
     - description: applied filters to the current field after the particles'
                    current deposition
-    - note: might become a particle record attribute in the future
+    - note: may becomes a particle record attribute in the future
     - allowed values: same as for `fieldSmoothing`
 
   - `currentSmoothingParameters`
     - type: *(string)*
     - description: required if `currentSmoothing` is not `none`, additional parameters to describe the applied filter further
-    - note: might become a particle record attribute in the future
+    - note: may becomes a particle record attribute in the future
     - allowed values: same as for `fieldSmoothingParameters`
 
   - `chargeCorrection`

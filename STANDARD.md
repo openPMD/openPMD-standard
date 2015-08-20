@@ -1,7 +1,7 @@
 The openPMD Standard
 ====================
 
-VERSION: *draft* (April 14th, 2015)
+VERSION: *draft* (August 19th, 2015)
 
 Conventions Throughout this Documents
 --------------------------------------
@@ -14,7 +14,7 @@ All `keywords` in this standard are case-sensitive.
 
 The naming *(float)* without a closer specification is used if the user can
 choose which kind of floating point precision shall be used.
-The naming *(uint)* and *(int) without a closer specification is used if the
+The naming *(uint)* and *(int)* without a closer specification is used if the
 user can choose which kind of (un)signed integer type shall be used.
 The naming for the type *(string)* refers to fixed-length, plain ASCII encoded
 character arrays since they are the only ones that are likely to propagate
@@ -135,7 +135,7 @@ contains the attributes:
     - description: date of creation in format "YYYY-MM-DD HH:mm:ss tz"
     - example: `2015-12-02 17:48:42 +0100`
 
-Each group and path might contain the attribute **comment** for general
+Each group and path may contain the attribute **comment** for general
 human-readable documentation, e.g., for features not yet covered by the
 standard:
 
@@ -561,10 +561,10 @@ The base standard defined in this document is sufficient for describing
 
 For specific domains of engineering and science and to allow code
 interoperability, specific conventions are necessary. As an example, some
-records might be of distinct importance and should be read/written with exactly
+records may be of distinct importance and should be read/written with exactly
 the same name or are always required for, e.g., restarts and checkpoints.
 
-Also additional meta information might be useful for publishing the data
+Also additional meta information may be useful for publishing the data
 created by a scientific instrument or simulation, e.g., the focal length
 of a camera objective or the used algorithms in a specific simulation.
 Even if they are not necessary for code-interoperability, an extension

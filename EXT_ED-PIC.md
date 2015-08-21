@@ -43,21 +43,21 @@ Mesh Based Records (Fields)
 
   - `fieldSolverParameters`
     - type: *(string)*
-    - scope: *required* if `fieldSolver` is `other`, *optional* otherwise
+    - scope: *required* if `fieldSolver` is `other` or `GPSTD`, *optional* otherwise
     - description: additional scheme and parameters specification for fields solvers. 
 
   - `fieldBoundary`
     - type: array of *(string)* of length 2 `N`
     - scope: *required*
     - description: boundary conditions in each direction (in the
-                   above, `N` is the dimensionality of the field mesh).
-                   The strings are stored in the following order:
-      - boundary at the *lower* end of the *first* axis of the mesh
-      - boundary at the *upper* end of the *first* axis of the mesh
-      - boundary at the *lower* end of the *second* axis of the mesh
-      - boundary at the *upper* end of the *second* axis of the mesh
+                   above, `N` is the dimensionality of the field mesh)
+                   ; the strings are stored in the following order:
+      - boundary at the *lower* end of the *first* label of `axisLabels`
+      - boundary at the *upper* end of the *first* label of `axisLabels`
+      - boundary at the *lower* end of the *second* label of `axisLabels`
+      - boundary at the *upper* end of the *second* label of `axisLabels`
       - ...
-      - boundary at the *upper* end of the `N`th axis of the mesh
+      - boundary at the *upper* end of the last label of `axisLabels`
     - allowed values:
       - `periodic`
       - `open` (optionally add scheme specification, such as PML,
@@ -68,10 +68,36 @@ Mesh Based Records (Fields)
       - `other`
 
   - `fieldBoundaryParameters`
-    - type: array of *(string)* of length 2*`N`
-    - scope: *required* if `fieldBoundary` is `other`, optional otherwise
+    - type: array of *(string)* of length 2 `N`
+    - scope: *required* if `fieldBoundary` is `other`, *optional* otherwise
     - description: additional scheme and parameters specification for
                    the boundary conditions
+
+  - `particleBoundary`
+    - type: array of *(string)* of length 2 `N`
+    - scope: *required*
+    - description: boundary conditions in each direction (in the above, `N` is
+                   the dimensionality of the field mesh)
+                   The strings are stored in the following order:
+      - boundary at the *lower* end of the *first* label of `axisLabels`
+      - boundary at the *upper* end of the *first* label of `axisLabels`
+      - boundary at the *lower* end of the *second* label of `axisLabels`
+      - boundary at the *upper* end of the *second* label of `axisLabels`
+      - ...
+      - boundary at the *upper* end of the last label of `axisLabels`
+    - allowed values:
+      - `periodic`
+      - `absorbing`
+      - `reflecting`
+      - `reinjecting` (optionally add scheme specification - such as
+        "thermal, T=1keV" - in the `particleBoundaryParameters` string)
+      - `other`
+
+  - `particleBoundaryParameters`
+    - type: array of *(string)* of length 2 `N`
+    - scope: *required* if `particleBoundary` is `other`, *optional* otherwise
+    - description: additional scheme and parameters specification for the
+                   boundary conditions
 
   - `currentSmoothing`
     - type: *(string)*
@@ -110,8 +136,9 @@ Mesh Based Records (Fields)
 
   - `chargeCorrectionParameters`
     - type: *(string)*
-    - scope: required if `chargeCorrection` is not `none`
-    - description: additional parameters to describe the chargeCorrectionParameters
+    - scope: *required* if `chargeCorrection` is not `none`
+    - description: additional parameters to describe the charge
+      correction parameter
     - example: `period=100`
 
 ### Additional Attributes for each `mesh record` (field record)
@@ -124,7 +151,7 @@ Mesh Based Records (Fields)
 
   - `fieldSmoothingParameters`
     - type: *(string)*
-    - scope: required if `chargeCorrection` is not `none`
+    - scope: *required* if `fieldSmoothing` is not `none`
     - description: additional parameters to describe the applied filter
                    further (similar to `currentSmoothingParameters`)
 
@@ -215,31 +242,7 @@ Particle Records
                               infinitely small time steps.
       - `other`
 
-  - `particleBoundary`
-    - type: array of *(string)* of length 2 `N`
-    - scope: *required*
-    - description: boundary conditions in each direction (in the above, `N` is
-                   the dimensionality of the field mesh)
-                   The strings are stored in the following order:
-      - boundary at the *lower* end of the *first* axis of the mesh
-      - boundary at the *upper* end of the *first* axis of the mesh
-      - boundary at the *lower* end of the *second* axis of the mesh
-      - boundary at the *upper* end of the *second* axis of the mesh
-      - ...
-      - boundary at the *upper* end of the `N`th axis of the mesh
-    - allowed values:
-      - `periodic`
-      - `absorbing`
-      - `reflecting`
-      - `reinjecting` (optionally add scheme specification - such as
-        "thermal, T=1keV" - in the `particleBoundaryParameters` string)
-      - `other`
 
-  - `particleBoundaryParameters`
-    - type: array of *(string)* of length 2 `N`
-    - scope: *required* if `particleBoundary` is `other`, optional otherwise
-    - description: additional scheme and parameters specification for the
-                   boundary conditions
 
   - `particleSmoothing`
     - type: *(string)*

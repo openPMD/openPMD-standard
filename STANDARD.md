@@ -273,125 +273,6 @@ the `record` is the `component` (and vice versa).
         - `z`
 
 
-Constant Record Components
---------------------------
-
-For records components that are constant (for a certain iteration), replacing
-the record component with a group attribute of the same name is possible, as
-described in the following paragraphs. For scalar records, the component is as
-usual the record itself.
-
-Replacing a record component with a constant value for all values on the mesh
-or for all particles respectively (see definitions below) works as follows:
-The record's *data set* `component` shall be replaced with an empty *sub-group*
-`component/` that hosts the group-attribute `value`.
-
-Other mandatory attributes such as `unitSI` need to be added to the new
-sub-group for *scalar records* as well; for vector and tensor records these
-standard record attributes are still stored with the group of the
-`recordName/`.
-
-Examples:
-  - the mesh record for a magnetic field `B` is constant for `B.x` and `B.y`:
-    - `<basePath><meshesPath>B/`: record group with standard attributes, e.g.,
-                                  `unitSI`
-      - `x/`: sub-group with attribute `value=<C0>`
-      - `y/`: sub-group with attribute `value=<C1>`
-      - `z`: data set
-  - the mesh record for a temperature field `T` is constant
-    - `<basePath><meshesPath>T/`: record group with attribute `value=<C0>` and
-                                  standard attributes, e.g., `unitSI`
-  - the particle record `charge` for the particle species `electrons` is
-    constant
-    - `<basePath><particlesPath>electrons/charge/`: record group with attribute
-                                                    `value=-1.0` and standard
-                                                    attributes, e.g.,
-                                                    `unitSI=1.60217657e-19`
-
-
-Unit Systems and Dimensionality
--------------------------------
-
-While this standard does not impose any unit system on the data that is stored
-itself, it still requires a common interface to convert one unit system to
-another.
-
-To allow scaling data without reformatting it during the write process we
-provide a unit conversation factor, often called `unitSI` in the document,
-to transform it to a corresponding quanity in the International System of
-Units (SI).
-
-For each `mesh` or `particle` `record` (defined below) and their `components`
-the following attributes must be added:
-
-### Required for each `Record Component`
-
-Reminder: for scalar records the `record` itself is also the `component`.
-
-  - `unitSI`
-    - type: *(double / REAL8*)
-    - description: a conversation factor to multiply data with to be
-                   represented in SI
-    - rationale: can also be used to scale a dimension-less `component`
-    - rationale: if the `component` is dimension-less and in the right scaling
-                 or already in SI, e.g., an index counter, set this to `1.0`
-    - example: `2.99792e8`
-
-### Required for each `Record`
-
-  - `unitDimension`
-    - type: array of 7 *(double / REAL8)*
-    - description: powers of the 7 base measures characterizing the record's
-                   unit in SI (length L, mass M, time T, electric current I,
-                   thermodynamic temperature theta, amount of substance N,
-                   luminous intensity J)
-    - rationale: this allows to implement automated record detection,
-                 identification and compatibility checks, independent of
-                 specific names or string representations;
-                 does *not* represent if the record is a 1, 2 or 3D array
-    - rationale: if the `record` is dimension-less, such as an index, set this
-                 to `(0., 0., 0., 0., 0., 0., 0.)`
-    - advice to implementors: implement a lookup table for the most common
-                              quantities/units in your simulation, e.g.,
-                              electric field stengths, mass, energy, etc.
-                              in the respect of the power of the base units
-                              given here
-    - examples:
-      - "m / s" is of dimension `L=1` and `T=-1`,
-        store array `(1., 0., -1., 0., 0., 0., 0.)`
-      - "N = kg * m / s^2", store array `(1., 1., -2., 0., 0., 0., 0.)`
-	  - magnetic field: "T = kg / (A * s^2)", store array
-                        `(0., 1., -2., -1., 0., 0., 0.)`
-	  - electric field: "V/m = kg * m / (A * s^3)", store array
-                        `(1., 1., -3., -1., 0., 0., 0.)`
-
-  - `timeOffset`
-    - type: *(float)*
-    - description: the offset between the time at which this record is
-                   defined and the `time` attribute of the `basePath` level.
-                   This should be written in the same unit system as `time`
-                   (see `basePath`; i.e., it should be multiplied by
-                   `timeUnitSI` to get the actual time in seconds.)
-	- example: In a staggered PIC code, if `time` is chosen to correspond to
-               the time at which the electric field is defined, and if `dt`
-               is e.g. 1.e-5, `timeOffset` would be 0.5e-5 for the magnetic
-               field and 0. for the electric field.
-
-### Advice to Implementors
-
-For the special case of simulations, there can be the situation that a certain
-process scales independently of a given fixed reference quantity that
-can be expressed in SI, e.g., the growth rate of a plasma instability can
-scale over various orders of magnitudes solely with the plasma frequency
-and the basic constants such as mass/charge of the simulated particles.
-
-In such a case, picking a *reference density* to determine the `unitSI`
-factors is mandatory to provide a fallback for compatibility.
-
-For human readable output, it is *recommended* to add the actual string
-of the unit in the corresponding `comment` attribute.
-
-
 Mesh Based Records
 ------------------
 
@@ -597,6 +478,134 @@ x = position_x_relative + position_x_offset
                    the `position` of the particles within; the union of all
                    particle patches must resemble all elements in the particle's
                    records
+
+
+Unit Systems and Dimensionality
+-------------------------------
+
+While this standard does not impose any unit system on the data that is stored
+itself, it still requires a common interface to convert one unit system to
+another.
+
+To allow scaling data without reformatting it during the write process we
+provide a unit conversation factor, often called `unitSI` in the document,
+to transform it to a corresponding quanity in the International System of
+Units (SI).
+
+For each `mesh` or `particle` `record` and their `components` the following
+attributes must be added:
+
+### Required for each `Record Component`
+
+Reminder: for scalar records the `record` itself is also the `component`.
+
+  - `unitSI`
+    - type: *(double / REAL8*)
+    - description: a conversation factor to multiply data with to be
+                   represented in SI
+    - rationale: can also be used to scale a dimension-less `component`
+    - rationale: if the `component` is dimension-less and in the right scaling
+                 or already in SI, e.g., an index counter, set this to `1.0`
+    - example: `2.99792e8`
+
+### Required for each `Record`
+
+  - `unitDimension`
+    - type: array of 7 *(double / REAL8)*
+    - description: powers of the 7 base measures characterizing the record's
+                   unit in SI (length L, mass M, time T, electric current I,
+                   thermodynamic temperature theta, amount of substance N,
+                   luminous intensity J)
+    - rationale: this allows to implement automated record detection,
+                 identification and compatibility checks, independent of
+                 specific names or string representations;
+                 does *not* represent if the record is a 1, 2 or 3D array
+    - rationale: if the `record` is dimension-less, such as an index, set this
+                 to `(0., 0., 0., 0., 0., 0., 0.)`
+    - advice to implementors: implement a lookup table for the most common
+                              quantities/units in your simulation, e.g.,
+                              electric field stengths, mass, energy, etc.
+                              in the respect of the power of the base units
+                              given here
+    - examples:
+      - "m / s" is of dimension `L=1` and `T=-1`,
+        store array `(1., 0., -1., 0., 0., 0., 0.)`
+      - "N = kg * m / s^2", store array `(1., 1., -2., 0., 0., 0., 0.)`
+	  - magnetic field: "T = kg / (A * s^2)", store array
+                        `(0., 1., -2., -1., 0., 0., 0.)`
+	  - electric field: "V/m = kg * m / (A * s^3)", store array
+                        `(1., 1., -3., -1., 0., 0., 0.)`
+
+  - `timeOffset`
+    - type: *(float)*
+    - description: the offset between the time at which this record is
+                   defined and the `time` attribute of the `basePath` level.
+                   This should be written in the same unit system as `time`
+                   (see `basePath`; i.e., it should be multiplied by
+                   `timeUnitSI` to get the actual time in seconds.)
+	- example: In a staggered PIC code, if `time` is chosen to correspond to
+               the time at which the electric field is defined, and if `dt`
+               is e.g. 1.e-5, `timeOffset` would be 0.5e-5 for the magnetic
+               field and 0. for the electric field.
+
+### Advice to Implementors
+
+For the special case of simulations, there can be the situation that a certain
+process scales independently of a given fixed reference quantity that
+can be expressed in SI, e.g., the growth rate of a plasma instability can
+scale over various orders of magnitudes solely with the plasma frequency
+and the basic constants such as mass/charge of the simulated particles.
+
+In such a case, picking a *reference density* to determine the `unitSI`
+factors is mandatory to provide a fallback for compatibility.
+
+For human readable output, it is *recommended* to add the actual string
+of the unit in the corresponding `comment` attribute.
+
+
+Constant Record Components
+--------------------------
+
+For records components that are constant (for a certain iteration), replacing
+the record component with a group attribute of the same name is possible, as
+described in the following paragraphs. For scalar records, the component is as
+usual the record itself.
+
+Replacing a record component with a constant value for all values on the mesh
+or for all particles respectively works as follows:
+The record's *data set* `<componentName>` must be replaced with an empty
+*sub-group* `<componentName>/` that hosts the group-attributes `value` and
+`shape`.
+
+`shape` is a 1-dimensional array of `N` *(uint64)* elements, where `N` is the
+number of dimensions of the record. It contains the number of elements of each
+dimension that are replaced with a constant value. For `mesh` based records,
+the order of the `N` values must be identical to the axes in `axisLabels`.
+
+Other mandatory attributes that where previously stored on the *data set* need
+to be added to the new sub-group as well.
+
+Examples:
+  - the `mesh` record for a magnetic field `B` is constant for `B.x` and `B.y`:
+    - `<basePath><meshesPath>B/`: record group with standard attributes, e.g.,
+                                  `unitDimension`
+      - `x/`: sub-group with attributes `value=<C0>`, `shape=array(..., ...)`
+              and standard attributes, e.g., `unitSI`
+      - `y/`: sub-group with attributes `value=<C1>`, `shape=array(..., ...)`
+              and standard attributes, e.g., `unitSI`
+      - `z`: data set with standard attributes, e.g., `unitSI`
+  - the `mesh` record for a temperature field `T` is constant
+    - `<basePath><meshesPath>T/`: record group with attribute `value=<C0>`,
+                                  `shape=array(...)` and standard attributes,
+                                  e.g., `unitDimension` and `unitSI`
+  - the `particle` record `charge` for the particle species `electrons` is
+    constant
+    - `<basePath><particlesPath>electrons/charge/`: record group with attribute
+                                                    `value=-1.0`,
+                                                    `shape=array(...)` and
+                                                    standard attributes, e.g.,
+                                                    `unitSI=1.60217657e-19` and
+                                                    `unitDimension=array(...)`
 
 
 Domain-Specific Extensions

@@ -460,19 +460,6 @@ should be used to push the particle.
                               `positionOffset` record to select particles
                               in patches "by cell"
 
-  - `id`
-    - type: *(uint64 / UNSIGNED8)*
-    - description: a globally-unique identifying integer for each particle,
-                       that can be used to, e.g., track particles. This
-                       identifying integer should be truly unique within the
-                       simulation; in particular, even among different
-                       species, two particles should not have the same id.
-                       Also, when a particle exits the simulation box, its
-                       identifying integer should not be reassigned to a new
-                       particle.
-    - advice to implementors: must have `weightingPower = 0` and
-                              `unitDimension = (0., ..., 0.)` (dimensionless)
-
   - `boundElectrons`
     - type: *(float)* or *(int)* or *(uint)*
     - description: number of bound electrons of an ion/atom;

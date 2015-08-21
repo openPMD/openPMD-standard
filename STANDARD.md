@@ -413,16 +413,18 @@ sub-group `particleName/recordName/`
 constant for all particles of a species (and iteration) can be replaced with a
 short-hand notation (see: *Constant Record Components*).
 
-### Required Records for each `Particle Species`
+### Records for each `Particle Species`
 
   - `position/` + components such as `x`, `y`, `z`
     - type: each component in *(float)* or *(int)* or *(uint)*
+    - scope: *required*
     - description: component-wise position of a particle, relative to
                    `positionOffset`
     - example: use only `x` and `y` in 2D, use `x` in 1D
 
   - `positionOffset/` + components such as `x`, `y`, `z`
     - type: each component in *(float)* or *(int)* or *(uint)*
+    - scope: *required*
     - description: an offset to be added to each element of `position`
     - rationale: for precision reasons and visualization purposes, it is
                  often more useful to define all positions of an iteration
@@ -453,9 +455,8 @@ position_x_offset = get_component(species["positionOffset"], "x") \
 x = position_x_relative + position_x_offset
 ```
 
-### Recommended `Records` for each `Particle Species`
-
   - `particlePatches`
+    - scope: *recommended*
     - type: one dimensional array of *(double)* values,
             repeating the following entries for each particle patch:
       - `numParticles`: number of particles in this patch
@@ -477,6 +478,18 @@ x = position_x_relative + position_x_offset
                    the `position` (including `particleOffset`s as described
                    above) of the particles within; the union of all particle
                    patches must resemble all elements in the particle's records
+
+  - `id`
+    - type: *(uint64 / UNSIGNED8)*
+    - scope: *optional*
+    - description: a globally-unique identifying integer for each particle,
+                   that can be used to, e.g., track particles. This
+                   identifying integer should be truly unique within the
+                   simulation; in particular, even among different particle
+                   species, two particles should not have the same id.
+                   Also, when a particle exits the simulation box, its
+                   identifying integer should not be reassigned to a new
+                   particle.
 
 
 Unit Systems and Dimensionality

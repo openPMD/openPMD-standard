@@ -93,6 +93,8 @@ Mesh Based Records (Fields)
       - `reinjecting` (optionally add scheme specification - such as
         "thermal, T=1keV" - in the `particleBoundaryParameters` string)
       - `other`
+    - note: currently all particles must have the same boundary condition,
+            might become a particle attribute in the future
 
   - `particleBoundaryParameters`
     - type: array of *(string)* of length 2 `N`
@@ -158,6 +160,12 @@ Mesh Based Records (Fields)
 
 ### Naming Conventions for `mesh record`s (field records)
 
+When added to an output, the following naming conventions shall be used for
+`mesh records` to allow an easy the identification of essential fields. If
+these namings are not used, tools might still detect a record by it's
+`unitDimension` as, e.g., *an* electric field but not as *the* main electric
+field that should be distributed again on the cells.
+
 - fundamental fields:
   - `E`
     - type: *(float)* or *(int)* or *(uint)*
@@ -177,9 +185,10 @@ Mesh Based Records (Fields)
                               for this record
 
 - auxiliary fields:
-  - `J`, `rho` for current density and charge density
+  - `J`, `chargeDensity` for summed current density and charge density over
+    all particles, discretized on the mesh
 
-  - fields derived from particles: prefix them with `particleName_*`:
+  - fields derived from particle: prefix them with `particleName_*`:
     - examples:
       - `J`: such as `electron_J`
       - `density`: such as `electron_density` (elements per volume/area/line)
@@ -332,9 +341,15 @@ else :
     q_macro = u_si * q
 ```
 
-### Additional `Records` per Particle Species
+### Namings for `Records` per Particle Species
 
-- **Required:**
+When added as records to a particle output, the following naming conventions
+shall be used to allow an easy identification of essential particle
+properties. If these namings are not used, tools might still detect a particles
+property by it's `unitDimension` as, e.g., *an* arbitary momentum (could be,
+e.g., an additional record defined by the user that stores the integrated
+momentum change due to collisions) but not as *the* particle momentum that
+should be used to push the particle.
 
   - `charge`
     - type: *(float)* or *(int)* or *(uint)*
@@ -417,7 +432,6 @@ else :
                               record with constant components, e.g., the
                               global moving window offset
 
-- **Recommended:**
   - `particlePatches`
     - description: if this record is used in combination with non-constant
                    components in the `particleOffset` components, the
@@ -432,7 +446,6 @@ else :
                               `positionOffset` record to select particles
                               in patches "by cell"
 
-- **Optional:**
   - `id`
     - type: *(uint64 / UNSIGNED8)*
     - description: a globally-unique identifying integer for each particle,

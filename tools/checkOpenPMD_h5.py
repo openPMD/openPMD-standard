@@ -549,7 +549,7 @@ def check_meshes(f, iteration, v, pic):
         result_array += test_attr(f[full_meshes_path], v, "required",
                                   "currentSmoothing", np.string_)
         valid, current_smoothing = get_attr(field, "currentSmoothing")
-        if (valid == True) and (current_smoothing == "other") :
+        if (valid == True) and (current_smoothing != "none") :
             result_array += test_attr(f[full_meshes_path], v, "required",
                         "currentSmoothingParameters", np.string_)
     

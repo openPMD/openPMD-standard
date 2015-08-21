@@ -639,3 +639,47 @@ defined:
 Extensions to similar domains such as fluid, finite-element or
 molecular-dynamics simulations, CCD images or other particle and/or mesh-based
 records can proposed for [future versions](CONTRIBUTING.md) of this document.
+
+
+Implementations
+---------------
+
+### Writer
+
+The created files must pass the provided validator/checker scripts.
+The scripts can not check 100% of the standard, the words written in the
+standard shall be checked manually for parts not covered by these when in
+doubt.
+
+#### Reader
+
+Reader implementations that officially want to add support for the openPMD
+standard must fulfill the following requirements:
+
+- version checking:
+  - description: in case the reader only supports a specific version of the
+                 standard, the reader must abort on missing implementations
+                 of major version changes;
+                 see section "The versions of this standard"
+
+- warnings and additional constrains:
+  - if the provided validator/checker scripts throw warnings (and the
+    file does not violate the standard due to missing coverage of a certain
+    critera in the scripts) the reader must be able to read the file
+  - rationale: if you are creating a script specifically for a certain
+               processing workflow and do have stronger constrains, e.g., about
+               present records or extensions, you must explicitly state this in
+               your reader to be allowed to reject a file even if it fulfills
+               the standard, else the reader must process the file correctly
+
+- errors:
+  - if the provided validator/checker scripts throw errors (and/or additional
+    voilations of the standard are present in the file due to missing coverage
+    of a certain critera in the scripts), the reader should not accept the
+    file
+  - rationale: you are free to "try to parse" a file that is not valid openPMD
+               but it is generally considered bad practice, leads to security
+               problems, uncertainties in interpretation, blowed up code, etc.;
+               we strongly encourage to reject invalid files that claim to
+               fulfill the standard (e.g., with an error message pointing to
+               the validator/checker scripts)

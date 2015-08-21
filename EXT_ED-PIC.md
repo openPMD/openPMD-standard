@@ -207,7 +207,7 @@ Particle Records
       - `1.` linear (CIC)
       - `2.` quadratic (TSC)
       - `3.` quadrilinear (PQS)
-      - or an other `floating point` number
+      - or any other positive `floating point` number
 
   - `currentDeposition`
     - type: *(string)*
@@ -337,7 +337,7 @@ else :
 - **Required:**
 
   - `charge`
-    - type: *(float)*
+    - type: *(float)* or *(int)* or *(uint)*
     - description: electric charge of the macroparticle or of the underlying
                    individual particle (depending on the `macroWeighted` flag)
     - advice to implementors: must have `weightingPower = 1` and
@@ -345,7 +345,7 @@ else :
                               (charge = current * time)
 
   - `mass`
-    - type: *(float)*
+    - type: *(float)* or *(int)* or *(uint)*
     - description: mass of the macroparticle or of the underlying individual
                    particle (depending on the `macroWeighted` flag)
     - advice to implementors: must have `weightingPower = 1` and
@@ -353,7 +353,7 @@ else :
                               (mass)
 
   - `weighting`
-    - type: *(float)*
+    - type: *(float)* or *(int)* or *(uint)*
     - description: the number of underlying individual particles that
                    the macroparticles represent
     - advice to implementors: must have `weightingPower = 1`,
@@ -361,7 +361,7 @@ else :
                               `unitDimension == (0., ..., 0.)`
 
   - `momentum/` + components such as `x`, `y` and `z`
-    - type: each component in *(float)*
+    - type: each component in *(float)* or *(int)* or *(uint)*
     - description: component-wise momentum of the macroparticle or of the
                    underlying individual particle (depending on the
                    `macroWeighted` flag)
@@ -439,21 +439,21 @@ else :
                               `unitDimension = (0., ..., 0.)` (dimensionless)
 
   - `boundElectrons`
-    - type: *(float)*
+    - type: *(float)* or *(int)* or *(uint)*
     - description: number of bound electrons of an ion/atom;
                    to provide information to atomic physics algorithms
     - advice to implementors: must have `weightingPower = 1` and
                               `unitDimension = (0., ..., 0.)` (dimensionless)
 
   - `protonNumber`
-    - type: *(float)*
+    - type: *(float)* or *(int)* or *(uint)*
     - description: the atomic number Z of an ion/atom;
                    to provide information to atomic physics algorithms
     - advice to implementors: must have `weightingPower = 1` and
                               `unitDimension = (0., ..., 0.)` (dimensionless)
 
   - `neutronNumber`
-    - type: *(float)*
+    - type: *(float)* or *(int)* or *(uint)*
     - description: the neutron number N = the mass number A - the atomic number Z
                    of an ion/atom;
                    to provide information to atomic physics algorithms

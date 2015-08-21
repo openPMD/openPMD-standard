@@ -25,6 +25,8 @@ Mesh Based Records (Fields)
 
 ### Additional Attributes for the Group `meshesPath`
 
+The following additional attributes are defined to this extension.
+The individual requirement is given in `scope`.
 
   - `fieldSolver`
     - type: *(string)*
@@ -93,6 +95,8 @@ Mesh Based Records (Fields)
       - `reinjecting` (optionally add scheme specification - such as
         "thermal, T=1keV" - in the `particleBoundaryParameters` string)
       - `other`
+    - note: currently all particles must have the same boundary condition,
+            might become a particle attribute in the future
 
   - `particleBoundaryParameters`
     - type: array of *(string)* of length 2 `N`
@@ -144,6 +148,9 @@ Mesh Based Records (Fields)
 
 ### Additional Attributes for each `mesh record` (field record)
 
+The following additional attributes for `mesh record`s are defined in this
+extension. The individual requirement is given in `scope`.
+
   - `fieldSmoothing`
     - type: *(string)*
     - scope: *required*
@@ -157,6 +164,12 @@ Mesh Based Records (Fields)
                    further (similar to `currentSmoothingParameters`)
 
 ### Naming Conventions for `mesh record`s (field records)
+
+When added to an output, the following naming conventions shall be used for
+`mesh records` to allow an easy the identification of essential fields. If
+these namings are not used, tools might still detect a record by it's
+`unitDimension` as, e.g., *an* electric field but not as *the* main electric
+field that should be distributed again on the cells.
 
 - fundamental fields:
   - `E`
@@ -177,11 +190,11 @@ Mesh Based Records (Fields)
                               for this record
 
 - auxiliary fields:
-  - `J`, `rho` for current density and charge density
-
-  - fields derived from particles: prefix them with `particleName_*`:
-    - examples:
-      - `J`: such as `electron_J`
+  - fields derived from particle species, discretized on the mesh (cells):
+    prefix them with `<particleSpecies>_*`:
+    - defined names and examples:
+      - `J`: such as `electron_J` for current densities created by the
+             particles in particle species `electron`
       - `density`: such as `electron_density` (elements per volume/area/line)
       - `chargeDensity`: such as `electron_chargeDensity` (charge per
                          volume/area/line)
@@ -191,11 +204,18 @@ Mesh Based Records (Fields)
       - `particleCounter`: ignores the shape of a particle and just checks if
                            the position of it "corresponds" to a cell
 
+  - to store the same quantities as above, but summed for each cell over all
+    particles in all particle species, skip the prefix and use the defined
+    names directly
+
 
 Particle Records
 ----------------
 
 ### Additional Attributes for the `Group` of each Particle Species
+
+The following additional attributes are definied in this extension.
+The individual requirement is given in `scope`.
 
   - `particleShape`
     - type: *(float)*
@@ -283,6 +303,9 @@ Particle Records
 
 ### Additional Attributes for each Particle `Record`
 
+The following additional attributes for `particle record`s are defined in this
+extension. The individual requirement is given in `scope`.
+
 When using macroparticles (see below for the definition of the
 macroparticle `weighting`), there is an ambiguity regarding whether the
 particle quantity that is written (e.g. energy, momentum) is that of
@@ -332,9 +355,15 @@ else :
     q_macro = u_si * q
 ```
 
-### Additional `Records` per Particle Species
+### Namings for `Records` per Particle Species
 
-- **Required:**
+When added as records to a particle output, the following naming conventions
+shall be used to allow an easy identification of essential particle
+properties. If these namings are not used, tools might still detect a particles
+property by it's `unitDimension` as, e.g., *an* arbitary momentum (could be,
+e.g., an additional record defined by the user that stores the integrated
+momentum change due to collisions) but not as *the* particle momentum that
+should be used to push the particle.
 
   - `charge`
     - type: *(float)* or *(int)* or *(uint)*
@@ -417,7 +446,6 @@ else :
                               record with constant components, e.g., the
                               global moving window offset
 
-- **Recommended:**
   - `particlePatches`
     - description: if this record is used in combination with non-constant
                    components in the `particleOffset` components, the
@@ -432,7 +460,6 @@ else :
                               `positionOffset` record to select particles
                               in patches "by cell"
 
-- **Optional:**
   - `id`
     - type: *(uint64 / UNSIGNED8)*
     - description: a globally-unique identifying integer for each particle,

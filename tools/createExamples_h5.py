@@ -140,7 +140,8 @@ def write_rho_cylindrical(meshes, mode0, mode1):
     rho.attrs["position"] = np.array([0.0, 0.0], dtype=np.float32)
     rho.attrs["gridUnitSI"] = np.float64(1.0)
     rho.attrs["dataOrder"] = np.string_("C")
-
+    rho.attrs["axisLabels"] = np.array(["r","z"])
+    
     # Add specific information for PIC simulations
     add_EDPIC_attr_meshes(rho)
 
@@ -182,6 +183,7 @@ def write_b_2d_cartesian(meshes, data_ez):
     B.attrs["gridGlobalOffset"] = np.array([0.0, 0.0], dtype=np.float32)  
     B.attrs["gridUnitSI"] = np.float64(1.0)
     B.attrs["dataOrder"] = np.string_("C")
+    B.attrs["axisLabels"] = np.array(["x","y"])
     B.attrs["unitDimension"] = \
        np.array([0.0, 1.0, -2.0, -1.0, 0.0, 0.0, 0.0 ], dtype=np.float64)
        #          L    M     T     I  theta  N    J
@@ -238,6 +240,7 @@ def write_e_2d_cartesian(meshes, data_ex, data_ey, data_ez ):
     E.attrs["gridGlobalOffset"] = np.array([0.0, 0.0], dtype=np.float32)  
     E.attrs["gridUnitSI"] = np.float64(1.0)
     E.attrs["dataOrder"] = np.string_("C")
+    E.attrs["axisLabels"] = np.array(["x","y"])
     E.attrs["unitDimension"] = \
        np.array([1.0, 1.0, -3.0, -1.0, 0.0, 0.0, 0.0 ], dtype=np.float64)
        #          L    M     T     I  theta  N    J

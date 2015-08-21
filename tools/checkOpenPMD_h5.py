@@ -497,6 +497,8 @@ def check_meshes(f, iteration, v, pic):
                                   "gridUnitSI", np.float64)
         result_array += test_attr(field, v, "required",
                                   "dataOrder", np.string_)
+        result_array += test_attr(field, v, "required",
+                                  "axisLabels", np.ndarray, np.string_)
         # Specific check for geometry
         geometry_test = test_attr(field, v, "required", "geometry", np.string_)
         result_array += geometry_test

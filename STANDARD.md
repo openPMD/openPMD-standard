@@ -435,15 +435,38 @@ meshes):
 
   - `dataOrder`
     - type: *(string)*
-    - allowed values: `Fortran` or `C` (also for 2D records)
-    - description: describes the fastest/slowest increasing index, see
-                   `geometry`, for 2D and 3D records (e.g., the difference
-                   between a Fortran and C array); can be omitted for 1D record
-    - example:
-      - `Fortran`: ordering of matrixes is linearized in memory in column-major order
-      - `C`:       exactly the opposite ordering (row-major), reading matrixes from
-                   a Fortran code will appear transposed in C (or C-based applications
-                   such as Python)
+    - description: used for the ordering of 1-dimensional arrays of N elements,
+                   where N is the number of dimensions in the simulation;
+                   these should be in the ordering of variation for the indexes
+                   for matrices as defined by the index-operator (`[...][...]`)
+                   of the writing code; can be omitted for 1D records
+    - rationale: in Fortran ordering of matrixes is linearized in memory in
+                 column-major order whereas in C it is row-major; due to that
+                 the index-operators in Fortran and C operate in exactly
+                 opposite order;
+                 supported file-formats keep the order of the writing code's
+                 record components; we still need to store additional
+                 information such as `axisLabels` in a defined order
+    - allowed values:
+      - `C` if data is written by C or a C-like language such as C++, Python,
+        Java
+      - `F` if data is written by a Fortran code
+
+  - `axisLabels`
+    - type: 1-dimensional array containing N *(string)*
+            elements, where N is the number of dimensions in the simulation
+    - description: ordering of the labels for the `geometry` of the mesh
+    - advice to implementors: in the ordering of variation for the indexes for
+                              matrices as defined by the index-operator
+                              (`[...][...]`) of the writing code
+    - advice to implementors: query the records `dataOrder` to get the
+                              information if you need to invert the access to
+                              `axisLabels` (and other attributes that use the
+                              same definition)
+    - examples:
+      - 3D `cartesian`: `["x", "y", "z"]` or `["z", "y", "x"]`
+      - 2D `cartesian`: `["x", "y"]` or `["y", "x"]`
+      - `thetaMode`: `["r", "z"]` or `["z", "r"]`
 
   - `gridSpacing`
     - type: 1-dimensional array containing N *(float)*
@@ -453,25 +476,17 @@ meshes):
                    actual record that is written to the file, not that of the
                    simulation grid. (The record written may be down-sampled, as
                    compared to the simulation grid).
-    - advice to implementors: the order of the N floats must be identical to
-                              the `dataOrder` of the indexes in `geometry`,
-                              e.g., in C you might write `[dz, dy, dx]` and in
-                              Fortran order `[dx, dy, dz]`
-    - examples:
-      - In the case where `geometry` is `cartesian`, the dimensionality
-        `N` of the array determines if the mesh record is 1, 2 or 3D. The
-        elements of the array should correspond to `dx`, `dy`, `dz`, in
-        this order.
-      - In the case where `geometry` is `thetaMode`, the array
-        should be of length 2 and contain `dr` and `dz`, in that order.
+    - advice to implementors: the order of the N values must be identical to
+                              the axes in `axisLabels`
 
   - `gridGlobalOffset`
     - type: 1-dimensional array containing N *(double / REAL8)*
             elements, where N is the number of dimensions in the simulation
     - description: start of the current domain of the simulation (position of the
                    beginning of the first cell) in simulation units
-    - advice to implementors: the order of the N floats must be identical
-                              to the `dataOrder` of the indexes in `geometry`
+    - advice to implementors: the order of the N values must be identical to
+                              the axes in `axisLabels`
+
     - example: `[0.0; 100.0; 0.0]` or `[0.5; 0.5; 0.5]`
 
   - `gridUnitSI`

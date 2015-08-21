@@ -1,6 +1,6 @@
 # List of Authors of the Standard
 
-### Original Design (2014)
+### Original Design (2014-2015)
 
 - Axel Huebl (HZDR, a.huebl@hzdr.de)
 
@@ -14,9 +14,9 @@
 
 ### Review and Improvements in Draft Phase (2014-2015)
 
+- Remi Lehe (LBNL)
 - Jean-Luc Vay (LBNL)
 - David P. Grote (LLNL)
-- Remi Lehe (LBNL)
 - Ivo Sbalzarini (MPI-CBG)
 - Michael Bussmann (HZDR)
 - Stephan Kuschel (IOQ Jena)

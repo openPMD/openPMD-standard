@@ -350,7 +350,7 @@ Reminder: for scalar records the `record` itself is also the `component`.
                  specific names or string representations;
                  does *not* represent if the record is a 1, 2 or 3D array
     - rationale: if the `record` is dimension-less, such as an index, set this
-                 to `(0, 0, 0, 0, 0, 0, 0)`
+                 to `(0., 0., 0., 0., 0., 0., 0.)`
     - advice to implementors: implement a lookup table for the most common
                               quantities/units in your simulation, e.g.,
                               electric field stengths, mass, energy, etc.
@@ -358,12 +358,12 @@ Reminder: for scalar records the `record` itself is also the `component`.
                               given here
     - examples:
       - "m / s" is of dimension `L=1` and `T=-1`,
-        store array `(1, 0, -1, 0, 0, 0, 0)`
-      - "N = kg * m / s^2", store array `(1, 1, -2, 0, 0, 0, 0)`
-	  - magnetic field: "T = kg / (A * s^2)", store array `(0, 1, -2,
-        -1, 0, 0, 0)`
-	  - electric field: "V/m = kg * m / (A * s^3)", store array `(1, 1,
-        -3, -1, 0, 0, 0)`
+        store array `(1., 0., -1., 0., 0., 0., 0.)`
+      - "N = kg * m / s^2", store array `(1., 1., -2., 0., 0., 0., 0.)`
+	  - magnetic field: "T = kg / (A * s^2)", store array
+                        `(0., 1., -2., -1., 0., 0., 0.)`
+	  - electric field: "V/m = kg * m / (A * s^3)", store array
+                        `(1., 1., -3., -1., 0., 0., 0.)`
 
   - `timeOffset`
     - type: *(float)*
@@ -374,7 +374,7 @@ Reminder: for scalar records the `record` itself is also the `component`.
                    `timeUnitSI` to get the actual time in seconds.)
 	- example: In a staggered PIC code, if `time` is chosen to correspond to
                the time at which the electric field is defined, and if `dt`
-               is e.g. 1e-5, `timeOffset` would be 0.5e-5 for the magnetic
+               is e.g. 1.e-5, `timeOffset` would be 0.5e-5 for the magnetic
                field and 0. for the electric field.
 
 ### Advice to Implementors
@@ -468,9 +468,9 @@ meshes):
                               `axisLabels` (and other attributes that use the
                               same definition)
     - examples:
-      - 3D `cartesian`: `["x", "y", "z"]` or `["z", "y", "x"]`
-      - 2D `cartesian`: `["x", "y"]` or `["y", "x"]`
-      - `thetaMode`: `["r", "z"]` or `["z", "r"]`
+      - 3D `cartesian`: `("x", "y", "z")` or `("z", "y", "x")`
+      - 2D `cartesian`: `("x", "y")` or `("y", "x")`
+      - `thetaMode`: `("r", "z")` or `("z", "r")`
 
   - `gridSpacing`
     - type: 1-dimensional array containing N *(float)*
@@ -491,7 +491,7 @@ meshes):
     - advice to implementors: the order of the N values must be identical to
                               the axes in `axisLabels`
 
-    - example: `[0.0; 100.0; 0.0]` or `[0.5; 0.5; 0.5]`
+    - example: `(0.0, 100.0, 0.0)` or `(0.5, 0.5, 0.5)`
 
   - `gridUnitSI`
     - type: *(double / REAL8)*

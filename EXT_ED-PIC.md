@@ -323,21 +323,24 @@ else :
     - description: electric charge of the macroparticle or of the underlying
                    individual particle (depending on the `macroWeighted` flag)
     - advice to implementors: must have `weightingPower = 1` and
-	`unitDimension = ( 0, 0, 1, 1, 0, 0, 0)` (charge = current * time)
+                              `unitDimension = (0., 0., 1., 1., 0., 0., 0.)`
+                              (charge = current * time)
 
   - `mass`
     - type: *(float)*
     - description: mass of the macroparticle or of the underlying individual
                    particle (depending on the `macroWeighted` flag)
     - advice to implementors: must have `weightingPower = 1` and
-	`unitDimension = ( 0, 1, 0,  0, 0, 0, 0)` (mass)
+                              `unitDimension = (0., 1., 0., 0., 0., 0., 0.)`
+                              (mass)
 
   - `weighting`
     - type: *(float)*
     - description: the number of underlying individual particles that
                    the macroparticles represent
     - advice to implementors: must have `weightingPower = 1`,
-            `macroWeighted = 1`, `unitSI = 1` and `unitDimension == [0., ..., 0.]`
+                              `macroWeighted = 1`, `unitSI = 1` and
+                              `unitDimension == (0., ..., 0.)`
 
   - `momentum/` + components such as `x`, `y` and `z`
     - type: each component in *(float)*
@@ -345,7 +348,8 @@ else :
                    underlying individual particle (depending on the
                    `macroWeighted` flag)
     - advice to implementors: must have `weightingPower = 1` and
-	`unitDimension = (1, 1, -1, 0, 0, 0)`(momentum = mass * length * time)
+                              `unitDimension = (1., 1., -1., 0., 0., 0.)`
+                              (momentum = mass * length * time)
 
   - `position/` + components such as `x`, `y` and `z`
     - type: each component in *(float)* or *(int)* or *(uint)*
@@ -364,7 +368,8 @@ else :
                  positions; this division creates a connection between
                  particles and the fields on their cells
     - advice to implementors: must have `weightingPower = 0` and
-	             `unitDimension = (1, 0, 0, 0, 0, 0)` (length)
+                              `unitDimension = (1., 0., 0., 0., 0., 0.)`
+                              (length)
     - advice to implementors: a *(float)* type is likely the most frequent case
                               for this record
     - example: use only `x` and `y` in 2D
@@ -385,7 +390,8 @@ else :
                               particle from the base standard; see the base
                               standard for a code example
     - advice to implementors: must have `weightingPower = 0` and
-	                `unitDimension = (1, 0, 0, 0, 0, 0)` (length)
+                              `unitDimension = (1., 0., 0., 0., 0., 0.)`
+                              (length)
     - advice to implementors: an *(int)* or *(uint)* type is likely the most
                               frequent case for this record
     - advice to implementors: if you want to neglect the relation between
@@ -400,7 +406,7 @@ else :
                    `extend` refers to the `globalCellId` and not the in-cell
                    `position`
     - advice to implementors: must have `weightingPower = 0` and
-	               `unitDimension = (0, 0, 0, 0, 0, 0)` (dimensionless)
+                              `unitDimension = (0., ..., 0.)` (dimensionless)
 
 - **Optional:**
   - `id`
@@ -414,21 +420,21 @@ else :
                        identifying integer should not be reassigned to a new
                        particle.
     - advice to implementors: must have `weightingPower = 0` and
-	               `unitDimension = (0, 0, 0, 0, 0, 0)` (dimensionless)
+                              `unitDimension = (0., ..., 0.)` (dimensionless)
 
   - `boundElectrons`
     - type: *(float)*
     - description: number of bound electrons of an ion/atom;
                    to provide information to atomic physics algorithms
     - advice to implementors: must have `weightingPower = 1` and
-	               `unitDimension = (0, 0, 0, 0, 0, 0)` (dimensionless)
+                              `unitDimension = (0., ..., 0.)` (dimensionless)
 
   - `protonNumber`
     - type: *(float)*
     - description: the atomic number Z of an ion/atom;
                    to provide information to atomic physics algorithms
     - advice to implementors: must have `weightingPower = 1` and
-	               `unitDimension = (0, 0, 0, 0, 0, 0)` (dimensionless)
+                              `unitDimension = (0., ..., 0.)` (dimensionless)
 
   - `neutronNumber`
     - type: *(float)*
@@ -436,4 +442,4 @@ else :
                    of an ion/atom;
                    to provide information to atomic physics algorithms
     - advice to implementors: must have `weightingPower = 1` and
-	               `unitDimension = (0, 0, 0, 0, 0, 0)` (dimensionless)
+                              `unitDimension = (0., ..., 0.)` (dimensionless)

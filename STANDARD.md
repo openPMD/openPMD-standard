@@ -547,9 +547,9 @@ Reminder: for scalar records the `record` itself is also the `component`.
       - "m / s" is of dimension `L=1` and `T=-1`,
         store array `(1., 0., -1., 0., 0., 0., 0.)`
       - "N = kg * m / s^2", store array `(1., 1., -2., 0., 0., 0., 0.)`
-	  - magnetic field: "T = kg / (A * s^2)", store array
+      - magnetic field: "T = kg / (A * s^2)", store array
                         `(0., 1., -2., -1., 0., 0., 0.)`
-	  - electric field: "V/m = kg * m / (A * s^3)", store array
+      - electric field: "V/m = kg * m / (A * s^3)", store array
                         `(1., 1., -3., -1., 0., 0., 0.)`
 
   - `timeOffset`
@@ -559,7 +559,7 @@ Reminder: for scalar records the `record` itself is also the `component`.
                    This should be written in the same unit system as `time`
                    (see `basePath`; i.e., it should be multiplied by
                    `timeUnitSI` to get the actual time in seconds.)
-	- example: In a staggered PIC code, if `time` is chosen to correspond to
+    - example: In a staggered PIC code, if `time` is chosen to correspond to
                the time at which the electric field is defined, and if `dt`
                is e.g. 1.e-5, `timeOffset` would be 0.5e-5 for the magnetic
                field and 0. for the electric field.

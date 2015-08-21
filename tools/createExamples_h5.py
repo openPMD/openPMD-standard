@@ -83,7 +83,7 @@ def setup_root_attr(f):
 
     # Recommended attributes
     f.attrs["author"] = np.string_("Axel Huebl <a.huebl@hzdr.de>")
-    f.attrs["software"] = np.string_("OpenPMD Example Script")
+    f.attrs["software"] = np.string_("openPMD Example Script")
     f.attrs["softwareVersion"] = np.string_("1.0.0")
     f.attrs["date"] = np.string_(
         datetime.datetime.now(tzlocal()).strftime('%Y-%m-%d %H:%M:%S %z'))

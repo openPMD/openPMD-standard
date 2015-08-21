@@ -127,7 +127,8 @@ contains the attributes:
 
   - `softwareVersion`
     - type: *(string)*
-    - description: the version of the software/code/simulation that created the file
+    - description: the version of the software/code/simulation that created the
+                   file
     - example: `1.2.1`, `80c7551`, `rev42`
 
   - `date`
@@ -160,7 +161,8 @@ Each file's *root* directory (path `/`) must further define the attributes:
     - type: *(string)*
     - description: tells if other iterations of this series, from the
                    file-format's API point of view, encoded in the same file or
-                   is an other `open/close` call necessary to access other iterations
+                   is an other `open/close` call necessary to access other
+                   iterations
     - allowed values:
       - `fileBased` (multiple files)
       - `groupBased` (one file)
@@ -187,7 +189,7 @@ Required Attributes for the `basePath`
 In addition to holding information about the iteration, each series of
 files  (`fileBased`) or series of groups (`groupBased`) should have
 attributes that describe the current time and the last
-time step. 
+time step.
 
  - `time`
    - type: *(float)*
@@ -222,9 +224,9 @@ respectively, depending on the (spatial) dimensionality of the record they
 represent.
 
 Records with only a scalar component are stored in a data set with the same name
-as the record. Vector and tensor records shall be represented component-wise as a
-*collection of individual scalar data sets* using a common sub-group that
-is equal to the record name.
+as the record. Vector and tensor records shall be represented component-wise as
+a *collection of individual scalar data sets* using a common sub-group that is
+equal to the record name.
 
 We refer to the scalar record itself and the vector sub-group as `record`, to
 the data sets in the vector sub-group as `components`. For scalar records,
@@ -290,8 +292,8 @@ meshes):
     - description: geometry of the mesh of the mesh record, right-handed
                    coordinate systems are imposed
     - allowed values:
-      - `cartesian`: standard Cartesian mesh, the standard order of axes indexing
-                     shall be `x`, `y`, `z`
+      - `cartesian`: standard Cartesian mesh, the standard order of axes
+                     indexing shall be `x`, `y`, `z`
       - `thetaMode`: regularly-spaced mesh in the r-z plane, with
                      Fourier decomposition in the azimuthal direction (See
                      [doi:10.1016/j.jcp.2008.11.017](http://dx.doi.org/10.1016/j.jcp.2008.11.017))
@@ -315,8 +317,9 @@ meshes):
                    `thetaMode`,  but can be omitted if geometry is `cartesian`
     - examples:
       - for `thetaMode` geometry:
-        - `m=3;imag=+` (3 *modes* and using a `+` sign for the definiton of the *imaginary* part)
-                        ![definition of imaginary part](img/cylindrical.png)
+        - `m=3;imag=+` (3 *modes* and using a `+` sign for the definiton of the
+                        *imaginary* part)
+                       ![definition of imaginary part](img/cylindrical.png)
 
   - `dataOrder`
     - type: *(string)*
@@ -367,8 +370,8 @@ meshes):
   - `gridGlobalOffset`
     - type: 1-dimensional array containing N *(double / REAL8)*
             elements, where N is the number of dimensions in the simulation
-    - description: start of the current domain of the simulation (position of the
-                   beginning of the first cell) in simulation units
+    - description: start of the current domain of the simulation (position of
+                   the beginning of the first cell) in simulation units
     - advice to implementors: the order of the N values must be identical to
                               the axes in `axisLabels`
 
@@ -376,9 +379,9 @@ meshes):
 
   - `gridUnitSI`
     - type: *(double / REAL8)*
-    - description: unit-conversion factor to multiply each value in `gridSpacing`
-                   and `gridGlobalOffset`, in order to convert from simulation units
-                   to SI units
+    - description: unit-conversion factor to multiply each value in
+                   `gridSpacing` and `gridGlobalOffset`, in order to convert
+                   from simulation units to SI units
     - example: `1.0e-9`
 
 The following attributes must be stored with each `scalar record` and each
@@ -390,9 +393,10 @@ The following attributes must be stored with each `scalar record` and each
     - range of each value: `[ 0.0 : 1.0 )`
     - description: relative position of the component on the current element of
                    the mesh/grid/node/cell/voxel;
-                   `0.0` means at the beginning of the mesh element and `1.0` is the
-                   beginning of the next mesh element;
-                   the same dimensionality N as in `gridSpacing` and `gridGlobalOffset`
+                   `0.0` means at the beginning of the mesh element and `1.0` is
+                   the beginning of the next mesh element;
+                   the same dimensionality N as in `gridSpacing` and
+                   `gridGlobalOffset`
 
 
 Particle Records
@@ -472,8 +476,9 @@ x = position_x_relative + position_x_offset
     - description: to allow post-processing, efficient checkpointing and
                    visualization tools to read records with the size of more
                    than the typical size of a local-node's RAM, this attribute
-                   allows to sub-sort records that are close in the n-dimensional
-                   `position` to ensure an intermediate level of data locality;
+                   allows to sub-sort records that are close in the
+                   n-dimensional `position` to ensure an intermediate level of
+                   data locality;
                    patches of particles must be hyperrectangles regarding
                    the `position` (including `particleOffset`s as described
                    above) of the particles within; the union of all particle

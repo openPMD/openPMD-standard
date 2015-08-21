@@ -299,7 +299,6 @@ def test_component(c, v) :
     # Second element : number of warnings
     result_array = np.array([0,0])
 
-    result_array += test_attr(f, v, "required", "openPMD", np.string_, "^[0-9]+\.[0-9]+\.[0-9]+$")
     if type(c) is h5.Group :
         # since this check tests components, this must be a constant
         # component: requires "value" and "shape" attributes

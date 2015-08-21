@@ -158,20 +158,38 @@ Mesh Based Records (Fields)
 
 ### Naming Conventions for `mesh record`s (field records)
 
-- fundamental fields: `E`, `B` for electric and magnetic fields
+- fundamental fields:
+  - `E`
+    - type: *(float)* or *(int)* or *(uint)*
+    - description: the electric field
+    - advice to implementors: a *(float)* type is likely the most frequent case
+                              for this record
+    - advice to implementors: must have
+                              `unitDimension = (1., 1., -3., -1., 0., 0., 0.)`
+                              (V/m = kg * m / (A * s^3))
+  - `B`
+    - type: *(float)* or *(int)* or *(uint)*
+    - description: the magnetic field
+    - advice to implementors: must have
+                              `unitDimension = (0., 1., -2., -1., 0., 0., 0.)`
+                              (T = kg / (A * s^2))
+    - advice to implementors: a *(float)* type is likely the most frequent case
+                              for this record
 
 - auxiliary fields:
   - `J`, `rho` for current density and charge density
 
-  - fields derived from particles: prefix them with `particleShortName_*`:
+  - fields derived from particles: prefix them with `particleName_*`:
     - examples:
-      - `current`: such as `electron_current`
-      - `density`: such as `electron_density`
+      - `J`: such as `electron_J`
+      - `density`: such as `electron_density` (elements per volume/area/line)
+      - `chargeDensity`: such as `electron_chargeDensity` (charge per
+                         volume/area/line)
       - `particleEnergy`: kinetic energy of all particles, with their weighted
                           contribution to a cell
       - `energyDensity`: same as `particleEnergy` but divided by `density`
-      - `particleCounter`: ignores the shape of a particle and just checks if the
-                           position of it "corresponds" to a cell
+      - `particleCounter`: ignores the shape of a particle and just checks if
+                           the position of it "corresponds" to a cell
 
 
 Particle Records

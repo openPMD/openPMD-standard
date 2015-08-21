@@ -220,12 +220,12 @@ field that should be distributed again on the cells.
     names directly
 
 
-Particle Records
-----------------
+Particle Records (Macroparticles)
+---------------------------------
 
 ### Additional Attributes for the `Group` of each Particle Species
 
-The following additional attributes are definied in this extension.
+The following additional attributes are defined in this extension.
 The individual requirement is given in `scope`.
 
   - `particleShape`
@@ -376,7 +376,7 @@ else :
 When added as records to a particle output, the following naming conventions
 shall be used to allow an easy identification of essential particle
 properties. If these namings are not used, tools might still detect a particles
-property by it's `unitDimension` as, e.g., *an* arbitary momentum (could be,
+property by it's `unitDimension` as, e.g., *an* arbitrary momentum (could be,
 e.g., an additional record defined by the user that stores the integrated
 momentum change due to collisions) but not as *the* particle momentum that
 should be used to push the particle.

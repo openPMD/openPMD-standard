@@ -1,9 +1,9 @@
 The openPMD Standard
 ====================
 
-VERSION: *draft* (August 20th, 2015)
+VERSION: **1.0.0** (August 21th, 2015)
 
-Conventions Throughout this Documents
+Conventions Throughout these Documents
 --------------------------------------
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
@@ -29,8 +29,8 @@ Accordingly, optional keywords and options are indicated via square brackets
 The Versions of this Standard
 -----------------------------
 
-Versions of the standard allow codes and implementors to easily differenciate
-between new updates that are incooperated.
+Versions of the standard allow codes and implementors to easily differentiate
+between new updates that are incorporated.
 
 The full version number is always used in format `<MAJOR>.<MINOR>.<REVISION>` .
 
@@ -96,7 +96,7 @@ Each file's *root* directory (path `/`) must at leat contain the attributes:
     - description: a common prefix for all data sets and sub-groups of a
                    specific iteration;
                    this string only indicates *how* the data is stored,
-                   to create a real path from it replace all occurences
+                   to create a real path from it replace all occurrences
                    of `%T` with the integer value of the iteration, e.g.,
                    `/data/%T` becomes `/data/100`
     - allowed value: fixed to `/data/%T/` for this version of the standard
@@ -153,7 +153,7 @@ Iterations can be encoded in either the file name of each master-file of a
 time step or in groups of the same file. (Here, an *iteration* refers
 to a single simulation cycle.)
 
-The choosen style shall not vary within a related set of iterations.
+The chosen style shall not vary within a related set of iterations.
 
 Each file's *root* directory (path `/`) must further define the attributes:
 
@@ -278,7 +278,7 @@ the `record` is the `component` (and vice versa).
 Mesh Based Records
 ------------------
 
-Mesh based records such as discreticed fields shall be represented as
+Mesh based records such as discretized fields shall be represented as
 homogenous records, usually in a N-dimensional matrix.
 
 ### Required Attributes for each `mesh record`
@@ -316,8 +316,8 @@ meshes):
                    `thetaMode`,  but can be omitted if geometry is `cartesian`
     - examples:
       - for `thetaMode` geometry:
-        - `m=3;imag=+` (3 *modes* and using a `+` sign for the definiton of the
-                        *imaginary* part)
+        - `m=3;imag=+` (3 *modes* and using a `+` sign for the definition of
+                        the *imaginary* part)
                        ![definition of imaginary part](img/cylindrical.png)
 
   - `dataOrder`
@@ -327,7 +327,7 @@ meshes):
                    these should be in the ordering of variation for the indexes
                    for matrices as defined by the index-operator (`[...][...]`)
                    of the writing code; can be omitted for 1D records
-    - rationale: in Fortran, ordering of matrixes is linearized in memory in
+    - rationale: in Fortran, ordering of matrices is linearized in memory in
                  column-major order whereas in C it is row-major; due to that
                  the index-operators in Fortran and C operate in exactly
                  opposite order;
@@ -387,7 +387,7 @@ The following attributes must be stored with each `scalar record` and each
 *component* of a `vector record`:
 
   - `position`
-    - type: 1-dimesional array of N *(float)* where N is the number of
+    - type: 1-dimensional array of N *(float)* where N is the number of
             dimensions in the simulation.
     - range of each value: `[ 0.0 : 1.0 )`
     - description: relative position of the component on the current element of
@@ -403,14 +403,14 @@ Particle Records
 
 Each `particle species` shall be represented as a group `particleName/` that
 contains all its records. Particles records are generally represented in
-one-dimensional contigous records, where the n-th entry in
+one-dimensional contiguous records, where the n-th entry in
 `particleName/recordNameA` and the n-th entry in `particleName/recordNameB`
 belong to the same particle.
 
 ### Naming conventions
 
 As with general `vector` records, compound particle vector records
-are again splitted in scalar components that are stored in a common
+are again split in scalar components that are stored in a common
 sub-group `particleName/recordName/`
 (see: *Scalar, Vector and Tensor Records*). Also, record components that are
 constant for all particles of a species (and iteration) can be replaced with a
@@ -505,7 +505,7 @@ another.
 
 To allow scaling data without reformatting it during the write process we
 provide a unit conversation factor, often called `unitSI` in the document,
-to transform it to a corresponding quanity in the International System of
+to transform it to a corresponding quantity in the International System of
 Units (SI).
 
 For each `mesh` or `particle` `record` and their `components` the following
@@ -540,7 +540,7 @@ Reminder: for scalar records the `record` itself is also the `component`.
                  to `(0., 0., 0., 0., 0., 0., 0.)`
     - advice to implementors: implement a lookup table for the most common
                               quantities/units in your simulation, e.g.,
-                              electric field stengths, mass, energy, etc.
+                              electric field strengths, mass, energy, etc.
                               in the respect of the power of the base units
                               given here
     - examples:
@@ -689,8 +689,8 @@ standard must fulfill the following requirements:
 
 - errors:
   - if the provided validator/checker scripts throw errors (and/or additional
-    voilations of the standard are present in the file due to missing coverage
-    of a certain critera in the scripts), the reader should not accept the
+    violations of the standard are present in the file due to missing coverage
+    of a certain criteria in the scripts), the reader should not accept the
     file
   - rationale: you are free to "try to parse" a file that is not valid openPMD
                but it is generally considered bad practice, leads to security

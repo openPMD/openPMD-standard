@@ -349,7 +349,7 @@ else :
                    `macroWeighted` flag)
     - advice to implementors: must have `weightingPower = 1` and
                               `unitDimension = (1., 1., -1., 0., 0., 0.)`
-                              (momentum = mass * length * time)
+                              (momentum = mass * length / time)
 
   - `position/` + components such as `x`, `y` and `z`
     - type: each component in *(float)* or *(int)* or *(uint)*
@@ -405,8 +405,6 @@ else :
                    `globalCellId` record, the `position` for `offset` and
                    `extend` refers to the `globalCellId` and not the in-cell
                    `position`
-    - advice to implementors: must have `weightingPower = 0` and
-                              `unitDimension = (0., ..., 0.)` (dimensionless)
 
 - **Optional:**
   - `id`

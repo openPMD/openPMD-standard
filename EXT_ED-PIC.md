@@ -348,7 +348,7 @@ else :
                    underlying individual particle (depending on the
                    `macroWeighted` flag)
     - advice to implementors: must have `weightingPower = 1` and
-                              `unitDimension = (1., 1., -1., 0., 0., 0.)`
+                              `unitDimension = (1., 1., -1., 0., 0., 0., 0.)`
                               (momentum = mass * length / time)
 
   - `position/` + components such as `x`, `y` and `z`
@@ -368,7 +368,7 @@ else :
                  positions; this division creates a connection between
                  particles and the fields on their cells
     - advice to implementors: must have `weightingPower = 0` and
-                              `unitDimension = (1., 0., 0., 0., 0., 0.)`
+                              `unitDimension = (1., 0., 0., 0., 0., 0., 0.)`
                               (length)
     - advice to implementors: a *(float)* type is likely the most frequent case
                               for this record
@@ -390,7 +390,7 @@ else :
                               particle from the base standard; see the base
                               standard for a code example
     - advice to implementors: must have `weightingPower = 0` and
-                              `unitDimension = (1., 0., 0., 0., 0., 0.)`
+                              `unitDimension = (1., 0., 0., 0., 0., 0., 0.)`
                               (length)
     - advice to implementors: an *(int)* or *(uint)* type is likely the most
                               frequent case for this record

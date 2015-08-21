@@ -525,9 +525,9 @@ def check_meshes(f, iteration, v, pic):
         result_array += test_attr(field, v, "required",
                                   "timeOffset", np.float_)
         result_array += test_attr(field, v, "required",
-                                  "gridSpacing", np.ndarray, np.float32)
+                                  "gridSpacing", np.ndarray, np.float_)
         result_array += test_attr(field, v, "required",
-                                  "gridGlobalOffset", np.ndarray, np.float32)
+                                  "gridGlobalOffset", np.ndarray, np.float_)
         result_array += test_attr(field, v, "required",
                                   "gridUnitSI", np.float64)
         result_array += test_attr(field, v, "required",
@@ -550,14 +550,14 @@ def check_meshes(f, iteration, v, pic):
         if is_scalar_record(field) :   # If the record is a scalar field
             result_array += test_component(field, v)
             result_array += test_attr(field, v,
-                                "required", "position", np.ndarray, np.float32)
+                                "required", "position", np.ndarray, np.float_)
         else:                          # If the record is a vector field
             # Loop over the components
             for component_name in field.keys():
                 component = field[component_name]
                 result_array += test_component(component, v)
                 result_array += test_attr(component, v,
-                                "required", "position", np.ndarray, np.float32)
+                                "required", "position", np.ndarray, np.float_)
 
     # Check for the attributes of the PIC extension,
     # if asked to do so by the user 
@@ -686,7 +686,7 @@ def check_particles(f, iteration, v, pic) :
 
         # Check the particlePatches record of the particles
         result_array += test_key(species, v, "recommended", "particlePatches")
-        if result_array[0] == 0 :
+        if "particlesPatches" in species.keys() :
             if len(species["particlePatches"].shape) != 1:
                 print("Error: `particlePatches` in (%s) is not an 1D array!" \
                       %(species.name) )

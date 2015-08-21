@@ -292,8 +292,7 @@ meshes):
     - description: geometry of the mesh of the mesh record, right-handed
                    coordinate systems are imposed
     - allowed values:
-      - `cartesian`: standard Cartesian mesh, the standard order of axes
-                     indexing shall be `x`, `y`, `z`
+      - `cartesian`: standard Cartesian mesh
       - `thetaMode`: regularly-spaced mesh in the r-z plane, with
                      Fourier decomposition in the azimuthal direction (See
                      [doi:10.1016/j.jcp.2008.11.017](http://dx.doi.org/10.1016/j.jcp.2008.11.017))

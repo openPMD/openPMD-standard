@@ -540,7 +540,7 @@ def check_meshes(f, iteration, v, pic):
         # Check for the attributes associated with the field boundaries
         result_array += test_attr(f[full_meshes_path], v, "required",
                                 "particleBoundary", np.ndarray, np.string_)
-        valid, field_boundary = get_attr(field, "fieldBoundary")
+        valid, field_boundary = get_attr(field, "particledBoundary")
         if (valid == True) and (field_boundary == "other") :
             result_array += test_attr(f[full_meshes_path], v, "required",
                     "particleBoundaryParameters", np.ndarray, np.string_)

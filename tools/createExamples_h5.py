@@ -309,7 +309,7 @@ def write_meshes(f, iteration):
     meshes.attrs["fieldSolver"] = np.string_("Yee")
     meshes.attrs["fieldBoundary"] = np.array(
         ["periodic", "periodic", "open", "open"])
-    particle.attrs["particleBoundary"] = np.array(
+    meshes.attrs["particleBoundary"] = np.array(
         ["periodic", "periodic", "absorbing", "absorbing"])
     meshes.attrs["currentSmoothing"] = np.string_("Binomial")
     meshes.attrs["currentSmoothingParameters"] = \

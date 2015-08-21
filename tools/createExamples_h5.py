@@ -83,9 +83,10 @@ def setup_root_attr(f):
 
     # Recommended attributes
     f.attrs["author"] = np.string_("Axel Huebl <a.huebl@hzdr.de>")
-    f.attrs["software"] = np.string_("OpenPMD Example Script")
+    f.attrs["software"] = np.string_("openPMD Example Script")
     f.attrs["softwareVersion"] = np.string_("1.0.0")
-    f.attrs["date"] = np.string_(datetime.datetime.now(tzlocal()).strftime('%Y-%m-%d %H:%M:%S %z'))
+    f.attrs["date"] = np.string_(
+        datetime.datetime.now(tzlocal()).strftime('%Y-%m-%d %H:%M:%S %z'))
 
     # Optional
     f.attrs["comment"] = np.string_("This is a dummy file for test purposes.")
@@ -94,7 +95,8 @@ def setup_root_attr(f):
 def write_rho_cylindrical(meshes, mode0, mode1):
     """
     Write the metadata and the data associated with the scalar field rho,
-    using the cylindrical representation (with azimuthal decomposition going up to m=1)
+    using the cylindrical representation (with azimuthal decomposition
+    going up to m=1)
 
     Parameters
     ----------
@@ -114,9 +116,10 @@ def write_rho_cylindrical(meshes, mode0, mode1):
     meshes.create_dataset( full_rho_path, (3, mode0.shape[0], mode0.shape[1]), \
                            dtype=np.float32)
     rho = meshes[full_rho_path]
-    rho.attrs["comment"] = np.string_("Density of electrons in azimuthal decomposition")
+    rho.attrs["comment"] = np.string_(
+        "Density of electrons in azimuthal decomposition")
 
-    # Create the dataset (cylindrical representation with azimuthal modes up to m=1)
+    # Create the dataset (cylindrical with azimuthal modes up to m=1)
     # The first axis has size 2m+1
     rho.attrs["geometry"] = np.string_("cylindrical")
     rho.attrs["geometryParameters"] = np.string_("m=1; imag=+")
@@ -126,14 +129,14 @@ def write_rho_cylindrical(meshes, mode0, mode1):
     rho.attrs["unitDimension"] = \
        np.array([-3.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0 ], dtype=np.float64)
        #           L    M    T    I  theta  N    J
-       # rho is in Coulomb per meter cube : C / m^3 = A * s / m^3 -> M^-3 * T * I
+       # rho is in Coulomb per meter cube: C / m^3 = A * s / m^3 -> M^-3 * T * I
 
     # Add time information
     rho.attrs["timeOffset"] = 0. # Time offset with basePath's time
 
     # Add information on the r-z grid
     rho.attrs["gridSpacing"] = np.array([1.0, 1.0], dtype=np.float32)  # dr, dz
-    rho.attrs["gridGlobalOffset"] = np.array([0.0, 0.0], dtype=np.float32) # rmin, zmin
+    rho.attrs["gridGlobalOffset"] = np.array([0.0, 0.0], dtype=np.float32) 
     rho.attrs["position"] = np.array([0.0, 0.0], dtype=np.float32)
     rho.attrs["gridUnitSI"] = np.float64(1.0)
     rho.attrs["dataOrder"] = np.string_("C")
@@ -238,7 +241,8 @@ def write_e_2d_cartesian(meshes, data_ex, data_ey, data_ez ):
     E.attrs["unitDimension"] = \
        np.array([1.0, 1.0, -3.0, -1.0, 0.0, 0.0, 0.0 ], dtype=np.float64)
        #          L    M     T     I  theta  N    J
-       # E is in volts per meters : V / m = kg * m / (A * s^3) -> L * M * T^-3 * I^-1
+       # E is in volts per meters: V / m = kg * m / (A * s^3)
+       # -> L * M * T^-3 * I^-1
 
     # Add specific information for PIC simulations at the group level
     add_EDPIC_attr_meshes(E)
@@ -387,7 +391,8 @@ def write_particles(f, iteration):
        #          L    M    T    I  theta  N    J
 
     # scalar particle records (non-const/individual per particle)
-    electrons.create_dataset("weighting", (globalNumParticles,), dtype=np.float32)
+    electrons.create_dataset("weighting", (globalNumParticles,),
+                             dtype=np.float32)
     weighting = electrons["weighting"]
     # macroWeighted: True(1) by definition
     # weightingPower == 1: since this is the identity of weighting,
@@ -398,8 +403,9 @@ def write_particles(f, iteration):
     weighting.attrs["timeOffset"] = 0.
     weighting.attrs["unitSI"] = np.float64(1.0)
     weighting.attrs["unitDimension"] = \
-       np.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ], dtype=np.float64) # plain floating point number
-
+       np.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ], dtype=np.float64) 
+    # plain floating point number
+       
     # Position of each particle
     electrons.create_group("position")
     position = electrons["position"]
@@ -475,23 +481,30 @@ def write_particles(f, iteration):
     # Record `particlePatches`
     #   recommended
     mpi_size = 4  # "emulate" example MPI run with 4 ranks
-    data_size = 2 + 2 * len(position.keys())  # 2 + 2 * Dimensionality of position record
+    data_size = 2 + 2 * len(position.keys())
+    # 2 + 2 * Dimensionality of position record
     grid_layout = np.array( [512, 128, 1] ) # global grid in cells
-    electrons.create_dataset("particlePatches", (data_size*mpi_size,), dtype=np.float64)
+    electrons.create_dataset("particlePatches",
+                             (data_size*mpi_size,), dtype=np.float64)
     particlePatches = electrons["particlePatches"]
 
-    for rank in np.arange(mpi_size): # each MPI rank would write it's part independently
+    for rank in np.arange(mpi_size):
+        # each MPI rank would write its part independently
         # numParticles: number of particles in this patch
         particlePatches[rank*data_size + 0] = globalNumParticles / mpi_size
         # numParticlesOffset: offset within the one-dimensional records where
         #                     the first particle in this patch is stored
-        particlePatches[rank*data_size + 1] = rank * globalNumParticles / mpi_size
+        particlePatches[rank*data_size + 1] = rank*globalNumParticles / mpi_size
         # offset and extend in the grid
-        #   example: 1D domain decompositon of a 3D simulation along the first axis
-        particlePatches[rank*data_size + 2] = rank * grid_layout[0] / mpi_size # 1st dimension spatial offset
-        particlePatches[rank*data_size + 3] = 0 # 2nd dimension spatial offset
-        particlePatches[rank*data_size + 4] = 0 # 3rd dimension spatial offset
-        particlePatches[rank*data_size + 5] = grid_layout[0] / mpi_size # 1st dimension spatial extend
+        # example: 1D domain decompositon of 3D simulation along the first axis
+        # 1st dimension spatial offset
+        particlePatches[rank*data_size + 2] = rank * grid_layout[0] / mpi_size
+        # 2nd dimension spatial offset 
+        particlePatches[rank*data_size + 3] = 0
+        # 3rd dimension spatial offset
+        particlePatches[rank*data_size + 4] = 0
+        # 1st dimension spatial extend
+        particlePatches[rank*data_size + 5] = grid_layout[0] / mpi_size 
         particlePatches[rank*data_size + 6] = 0 # 2nd dimension spatial extend
         particlePatches[rank*data_size + 7] = 0 # 3rd dimension spatial extend
 

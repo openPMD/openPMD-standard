@@ -224,7 +224,8 @@ def test_attr(f, v, request, name, is_type=None, type_format=None):
                 else:
                     result_array = np.array([0,0])
             else:
-                print("Error: Attribute %s in `%s` is not of type '%s' (is '%s')!" \
+                print(
+                "Error: Attribute %s in `%s` is not of type '%s' (is '%s')!" \
                 %(name, str(f.name), is_type.__name__, type(value).__name__) )
                 result_array = np.array([1,0])
         else:
@@ -314,7 +315,8 @@ def check_root_attr(f, v, pic):
     #   recommended
     result_array += test_attr(f, v, "recommended", "author", np.string_)
     result_array += test_attr(f, v, "recommended", "software", np.string_)
-    result_array += test_attr(f, v, "recommended", "softwareVersion", np.string_)
+    result_array += test_attr(f, v, "recommended",
+                              "softwareVersion", np.string_)
     result_array += test_attr(f, v, "recommended", "date", np.string_,
       "^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2} [\+|-][0-9]{4}$")
 
@@ -483,13 +485,18 @@ def check_meshes(f, iteration, v, pic):
         result_array += test_record(f[full_meshes_path], field_name)
         
         # General attributes of the record
-        result_array += test_attr(field, v, "required", "unitDimension", np.ndarray, np.float64)
-        result_array += test_attr(field, v, "required", "timeOffset", np.float_)
-
-        result_array += test_attr(field, v, "required", "gridSpacing", np.ndarray, np.float32)
-        result_array += test_attr(field, v, "required", "gridGlobalOffset", np.ndarray, np.float32)
-        result_array += test_attr(field, v, "required", "gridUnitSI", np.float64)
-        result_array += test_attr(field, v, "required", "dataOrder", np.string_)
+        result_array += test_attr(field, v, "required",
+                                  "unitDimension", np.ndarray, np.float64)
+        result_array += test_attr(field, v, "required",
+                                  "timeOffset", np.float_)
+        result_array += test_attr(field, v, "required",
+                                  "gridSpacing", np.ndarray, np.float32)
+        result_array += test_attr(field, v, "required",
+                                  "gridGlobalOffset", np.ndarray, np.float32)
+        result_array += test_attr(field, v, "required",
+                                  "gridUnitSI", np.float64)
+        result_array += test_attr(field, v, "required",
+                                  "dataOrder", np.string_)
         # Specific check for geometry
         geometry_test = test_attr(field, v, "required", "geometry", np.string_)
         result_array += geometry_test

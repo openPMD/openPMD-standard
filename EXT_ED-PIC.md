@@ -34,19 +34,28 @@ The individual requirement is given in `scope`.
     - description: Maxwell/field solver
     - allowed values:
       - `Yee` ([doi:10.1109/TAP.1966.1138693](http://dx.doi.org/10.1109/TAP.1966.1138693))
-      - `CK` (*Cole-Karkkainen* type solvers: [doi:10.1016/j.jcp.2011.04.003](http://dx.doi.org/10.1016/j.jcp.2011.04.003), [doi:10.1063/1.168620](http://dx.doi.org/10.1063/1.168620), [doi:10.1109/TAP.2002.801268](http://dx.doi.org/10.1109/TAP.2002.801268); M. Karkkainen et al., *Low-dispersion wake field calculation tools*, ICAP 2006)
+      - `CK` (*Cole-Karkkainen* type solvers: [doi:10.1016/j.jcp.2011.04.003](http://dx.doi.org/10.1016/j.jcp.2011.04.003),
+              [doi:10.1063/1.168620](http://dx.doi.org/10.1063/1.168620),
+              [doi:10.1109/TAP.2002.801268](http://dx.doi.org/10.1109/TAP.2002.801268);
+              M. Karkkainen et al., *Low-dispersion wake field calculation tools*, ICAP 2006)
       - `Lehe` ([doi:10.1103/PhysRevSTAB.16.021301](http://dx.doi.org/10.1103/PhysRevSTAB.16.021301))
-      - `DS` (*Directional Splitting* after Yasuhiko Sentoku, [doi:10.1140/epjd/e2014-50162-y](http://dx.doi.org/10.1140/epjd/e2014-50162-y))
-      - `PSTD` (*Pseudo-Spectral Time Domain*, e. g. Q. H. Liu, Letters 15 (3) (1997) 158–165)
-      - `PSATD` (*Pseudo-Spectral Time Domain*, I. Haber, R. Lee, H. Klein, J. Boris, Advances in electromagnetic simulation techniques, 1973)
+      - `DS` (*Directional Splitting* after Yasuhiko Sentoku,
+              [doi:10.1140/epjd/e2014-50162-y](http://dx.doi.org/10.1140/epjd/e2014-50162-y))
+      - `PSTD` (*Pseudo-Spectral Time Domain*, e.g.,
+                Q. H. Liu, Letters 15 (3) (1997) 158–165)
+      - `PSATD` (*Pseudo-Spectral Time Domain*, I. Haber, R. Lee, H. Klein,
+                 J. Boris, Advances in electromagnetic simulation techniques,
+                 1973)
       - `GPSTD`
       - `other`
       - `none`
 
   - `fieldSolverParameters`
     - type: *(string)*
-    - scope: *required* if `fieldSolver` is `other` or `GPSTD`, *optional* otherwise
-    - description: additional scheme and parameters specification for fields solvers. 
+    - scope: *required* if `fieldSolver` is `other` or `GPSTD`, *optional*
+             otherwise
+    - description: additional scheme and parameters specification for fields
+                   solvers
 
   - `fieldBoundary`
     - type: array of *(string)* of length 2 `N`
@@ -131,10 +140,12 @@ The individual requirement is given in `scope`.
     - allowed values:
       - `Marder` ([doi:10.1016/0021-9991(87)90043-X](http://dx.doi.org/10.1016/0021-9991(87)90043-X))
       - `Langdon` ([doi:10.1016/0010-4655(92)90105-8](http://dx.doi.org/10.1016/0010-4655(92)90105-8))
-      - `Boris` (Birdsall & Langdon, *Plasma Physics via Computer Simulation*, 15-6)
+      - `Boris` (Birdsall & Langdon, *Plasma Physics via Computer Simulation*,
+                 15-6)
       - `hyperbolic` (section III-B in [doi:10.1063/1.872648](http://dx.doi.org/10.1063/1.872648),
                       [doi:http://dx.doi.org/10.1006/jcph.2000.6507](http://dx.doi.org/10.1006/jcph.2000.6507),
-                      section 2.3 in [doi:10.1016/S0920-3796(96)00502-9](http://dx.doi.org/10.1016/S0920-3796(96)00502-9))
+                      section 2.3 in
+                      [doi:10.1016/S0920-3796(96)00502-9](http://dx.doi.org/10.1016/S0920-3796(96)00502-9))
       - `spectral` (various)
       - `other`
       - `none`
@@ -237,8 +248,10 @@ The individual requirement is given in `scope`.
       - `VillaBune` ([doi:10.1016/0010-4655(92)90169-Y](http://dx.doi.org/10.1016/0010-4655(92)90169-Y))
       - `Esirkepov` ([doi:10.1016/S0010-4655(00)00228-9](http://dx.doi.org/10.1016/S0010-4655(00)00228-9))
       - `ZigZag`
-      - `directBoris` (Birdsall & Langdon, *Plasma Physics via Computer Simulation*, 15-5)
-      - `directMorseNielson` (Birdsall & Langdon, *Plasma Physics via Computer Simulation*, 15-5)
+      - `directBoris` (Birdsall & Langdon,
+                       *Plasma Physics via Computer Simulation*, 15-5)
+      - `directMorseNielson` (Birdsall & Langdon,
+                              *Plasma Physics via Computer Simulation*, 15-5)
       - `other`
       - `none`
 
@@ -253,30 +266,33 @@ The individual requirement is given in `scope`.
     - scope: *required*
     - description: Particle-Pushing Algorithm
     - allowed values:
-      - `Boris` (J.P. Boris. *Relativistic plasma simulation-optimization of a hybrid code.* USA, 1970)
+      - `Boris` (J.P. Boris. *Relativistic plasma simulation-optimization of a*
+                 *hybrid code.* USA, 1970)
       - `Vay` ([doi:10.1063/1.2837054](http://dx.doi.org/10.1063/1.2837054))
       - `other`
 
   - `particleInterpolation`
     - type: *(string)*
     - scope: *required*
-    - description: method that was used to interpolate fields to particle positions,
-                   as described in [doi:10.1016/j.crme.2014.07.006](http://dx.doi.org/10.1016/j.crme.2014.07.006)
+    - description: method that was used to interpolate fields to particle
+                   positions, as described in
+                   [doi:10.1016/j.crme.2014.07.006](http://dx.doi.org/10.1016/j.crme.2014.07.006)
                    section 2.4
     - allowed values:
       - `uniform`: The fields are interpolated directly from the staggered grid
                    to the particle positions (with the same interpolation order
                    in all directions).
       - `energyConserving`: Also known as *Galerkin method*.
-                            The fields are interpolated directly from the staggered
-                            grid to the particle positions (with reduced
-                            interpolation order in the parallel direction). This
-                            scheme is energy conserving in the limit of infinitely
-                            small time steps.
-      - `momentumConserving`: The fields are first interpolated from the staggered
-                              grid points to the corners of each cell, and then from
-                              the cell corners to the particle position (with the
-                              same order of interpolation in all directions). This
+                            The fields are interpolated directly from the
+                            staggered grid to the particle positions (with
+                            reduced interpolation order in the parallel
+                            direction). This scheme is energy conserving in the
+                            limit of infinitely small time steps.
+      - `momentumConserving`: The fields are first interpolated from the
+                              staggered grid points to the corners of each
+                              cell, and then from the cell corners to the
+                              particle position (with the same order of
+                              interpolation in all directions). This
                               scheme is momentum conserving in the limit of
                               infinitely small time steps.
       - `other`
@@ -287,7 +303,7 @@ The individual requirement is given in `scope`.
     - type: *(string)*
     - scope: *required*
     - description: applied transformations or smoothing filters on copied
-                   versions of the fields while interpolating those to 
+                   versions of the fields while interpolating those to
                    the particle
     - allowed values:
       - `Binomial`
@@ -476,8 +492,8 @@ should be used to push the particle.
 
   - `neutronNumber`
     - type: *(float)* or *(int)* or *(uint)*
-    - description: the neutron number N = the mass number A - the atomic number Z
-                   of an ion/atom;
+    - description: the neutron number N = the mass number - A and
+                   the atomic number Z of an ion/atom;
                    to provide information to atomic physics algorithms
     - advice to implementors: must have `weightingPower = 1` and
                               `unitDimension = (0., ..., 0.)` (dimensionless)

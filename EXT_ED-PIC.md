@@ -190,12 +190,11 @@ field that should be distributed again on the cells.
                               for this record
 
 - auxiliary fields:
-  - `J`, `chargeDensity` for summed current density and charge density over
-    all particles, discretized on the mesh
-
-  - fields derived from particles: prefix them with `particleName_*`:
-    - examples:
-      - `J`: such as `electron_J`
+  - fields derived from particle species, discretized on the mesh (cells):
+    prefix them with `<particleSpecies>_*`:
+    - defined names and examples:
+      - `J`: such as `electron_J` for current densities created by the
+             particles in particle species `electron`
       - `density`: such as `electron_density` (elements per volume/area/line)
       - `chargeDensity`: such as `electron_chargeDensity` (charge per
                          volume/area/line)
@@ -204,6 +203,10 @@ field that should be distributed again on the cells.
       - `energyDensity`: same as `particleEnergy` but divided by `density`
       - `particleCounter`: ignores the shape of a particle and just checks if
                            the position of it "corresponds" to a cell
+
+  - to store the same quantities as above, but summed for each cell over all
+    particles in all particle species, skip the prefix and use the defined
+    names directly
 
 
 Particle Records

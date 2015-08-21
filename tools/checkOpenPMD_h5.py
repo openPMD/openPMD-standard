@@ -525,7 +525,7 @@ def check_meshes(f, iteration, v, pic):
         result_array += test_attr(f[full_meshes_path], v, "required",
                                   "fieldSolver", np.string_)
         valid, field_solver = get_attr(field, "fieldSolver")
-        if (valid == True) and (field_solver=="other") :
+        if (valid == True) and (field_solver in ["other", "GPSTD"]) :
             result_array += test_attr(f[full_meshes_path], v, "required",
                                       "fieldSolverParameters", np.string_)
 

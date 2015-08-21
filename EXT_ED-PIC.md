@@ -25,6 +25,8 @@ Mesh Based Records (Fields)
 
 ### Additional Attributes for the Group `meshesPath`
 
+The following additional attributes are defined to this extension.
+The individual requirement is given in `scope`.
 
   - `fieldSolver`
     - type: *(string)*
@@ -146,6 +148,9 @@ Mesh Based Records (Fields)
 
 ### Additional Attributes for each `mesh record` (field record)
 
+The following additional attributes for `mesh record`s are defined in this
+extension. The individual requirement is given in `scope`.
+
   - `fieldSmoothing`
     - type: *(string)*
     - scope: *required*
@@ -188,7 +193,7 @@ field that should be distributed again on the cells.
   - `J`, `chargeDensity` for summed current density and charge density over
     all particles, discretized on the mesh
 
-  - fields derived from particle: prefix them with `particleName_*`:
+  - fields derived from particles: prefix them with `particleName_*`:
     - examples:
       - `J`: such as `electron_J`
       - `density`: such as `electron_density` (elements per volume/area/line)
@@ -205,6 +210,9 @@ Particle Records
 ----------------
 
 ### Additional Attributes for the `Group` of each Particle Species
+
+The following additional attributes are definied in this extension.
+The individual requirement is given in `scope`.
 
   - `particleShape`
     - type: *(float)*
@@ -291,6 +299,9 @@ Particle Records
     - reserved for future use: `direction=array()`, `stride=array()`
 
 ### Additional Attributes for each Particle `Record`
+
+The following additional attributes for `particle record`s are defined in this
+extension. The individual requirement is given in `scope`.
 
 When using macroparticles (see below for the definition of the
 macroparticle `weighting`), there is an ambiguity regarding whether the

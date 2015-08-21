@@ -21,7 +21,7 @@ character arrays since they are the only ones that are likely to propagate
 through all file-format APIs and third-party programs that use them.
 
 Sometimes brackets `<Name>` are used for keywords while the `<>` only indicate
-the keyword is mandatory (but the `<>` itself shall not be written).
+the keyword is required (but the `<>` itself shall not be written).
 Accordingly, optional keywords and options are indicated via square brackets
 `[Name]`.
 
@@ -279,7 +279,7 @@ Mesh Based Records
 Mesh based records such as discreticed fields shall be represented as
 homogenous records, usually in a N-dimensional matrix.
 
-### Mandatory attributes for each `mesh record`
+### Required Attributes for each `mesh record`
 
 The following attributes must be stored additionally with the `meshName` record
 (which is a data set attribute for `scalar` or a group attribute for `vector`
@@ -413,7 +413,7 @@ sub-group `particleName/recordName/`
 constant for all particles of a species (and iteration) can be replaced with a
 short-hand notation (see: *Constant Record Components*).
 
-### Mandatory Records for each `Particle Species`
+### Required Records for each `Particle Species`
 
   - `position/` + components such as `x`, `y`, `z`
     - type: each component in *(float)* or *(int)* or *(uint)*
@@ -453,9 +453,7 @@ position_x_offset = get_component(species["positionOffset"], "x") \
 x = position_x_relative + position_x_offset
 ```
 
-### Additional `Records` for each `Particle Species`
-
-- **Recommended:**
+### Recommended `Records` for each `Particle Species`
 
   - `particlePatches`
     - type: one dimensional array of *(double)* values,
@@ -558,7 +556,7 @@ scale over various orders of magnitudes solely with the plasma frequency
 and the basic constants such as mass/charge of the simulated particles.
 
 In such a case, picking a *reference density* to determine the `unitSI`
-factors is mandatory to provide a fallback for compatibility.
+factors is required to provide a fallback for compatibility.
 
 For human readable output, it is *recommended* to add the actual string
 of the unit in the corresponding `comment` attribute.
@@ -583,7 +581,7 @@ number of dimensions of the record. It contains the number of elements of each
 dimension that are replaced with a constant value. For `mesh` based records,
 the order of the `N` values must be identical to the axes in `axisLabels`.
 
-Other mandatory attributes that where previously stored on the *data set* need
+Other required attributes that where previously stored on the *data set* need
 to be added to the new sub-group as well.
 
 Examples:
@@ -662,7 +660,7 @@ standard must fulfill the following requirements:
                  of major version changes;
                  see section "The versions of this standard"
 
-- warnings and additional constrains:
+- warnings and further constrains:
   - if the provided validator/checker scripts throw warnings (and the
     file does not violate the standard due to missing coverage of a certain
     critera in the scripts) the reader must be able to read the file
@@ -680,6 +678,6 @@ standard must fulfill the following requirements:
   - rationale: you are free to "try to parse" a file that is not valid openPMD
                but it is generally considered bad practice, leads to security
                problems, uncertainties in interpretation, blowed up code, etc.;
-               we strongly encourage to reject invalid files that claim to
+               we strongly recommend to reject invalid files that claim to
                fulfill the standard (e.g., with an error message pointing to
                the validator/checker scripts)

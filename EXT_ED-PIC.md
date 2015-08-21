@@ -25,10 +25,10 @@ Mesh Based Records (Fields)
 
 ### Additional Attributes for the Group `meshesPath`
 
-- **Required:**
 
   - `fieldSolver`
     - type: *(string)*
+    - scope: *required*
     - description: Maxwell/field solver
     - allowed values:
       - `Yee` ([doi:10.1109/TAP.1966.1138693](http://dx.doi.org/10.1109/TAP.1966.1138693))
@@ -41,34 +41,87 @@ Mesh Based Records (Fields)
       - `other`
       - `none`
 
-  - `fieldSolverOrder`
-    - type: *(float)*
-    - description: order of the `fieldSolver`
-    - examples:
-      - `2.0`
-      - `3.0`
-      - use `-1.0` for infinite order (for spectral solvers)
-
   - `fieldSolverParameters`
     - type: *(string)*
-    - description: additional parameters for fields solvers
-                   (may be specified further in the future)
+    - scope: *required* if `fieldSolver` is `other` or `GPSTD`, *optional* otherwise
+    - description: additional scheme and parameters specification for fields solvers. 
+
+  - `fieldBoundary`
+    - type: array of *(string)* of length 2 `N`
+    - scope: *required*
+    - description: boundary conditions in each direction (in the
+                   above, `N` is the dimensionality of the field mesh)
+                   ; the strings are stored in the following order:
+      - boundary at the *lower* end of the *first* label of `axisLabels`
+      - boundary at the *upper* end of the *first* label of `axisLabels`
+      - boundary at the *lower* end of the *second* label of `axisLabels`
+      - boundary at the *upper* end of the *second* label of `axisLabels`
+      - ...
+      - boundary at the *upper* end of the last label of `axisLabels`
+    - allowed values:
+      - `periodic`
+      - `open` (optionally add scheme specification, such as PML,
+                Silver-Muller, etc., in the `fieldBoundaryParameters` string)
+      - `reflecting` (optionally add scheme specification, such as
+                      Neumann-type or Dirichlet-type, in the
+                      `fieldBoundaryParameters` string)
+      - `other`
+
+  - `fieldBoundaryParameters`
+    - type: array of *(string)* of length 2 `N`
+    - scope: *required* if `fieldBoundary` is `other`, *optional* otherwise
+    - description: additional scheme and parameters specification for
+                   the boundary conditions
+
+  - `particleBoundary`
+    - type: array of *(string)* of length 2 `N`
+    - scope: *required*
+    - description: boundary conditions in each direction (in the above, `N` is
+                   the dimensionality of the field mesh)
+                   The strings are stored in the following order:
+      - boundary at the *lower* end of the *first* label of `axisLabels`
+      - boundary at the *upper* end of the *first* label of `axisLabels`
+      - boundary at the *lower* end of the *second* label of `axisLabels`
+      - boundary at the *upper* end of the *second* label of `axisLabels`
+      - ...
+      - boundary at the *upper* end of the last label of `axisLabels`
+    - allowed values:
+      - `periodic`
+      - `absorbing`
+      - `reflecting`
+      - `reinjecting` (optionally add scheme specification - such as
+        "thermal, T=1keV" - in the `particleBoundaryParameters` string)
+      - `other`
+
+  - `particleBoundaryParameters`
+    - type: array of *(string)* of length 2 `N`
+    - scope: *required* if `particleBoundary` is `other`, *optional* otherwise
+    - description: additional scheme and parameters specification for the
+                   boundary conditions
 
   - `currentSmoothing`
     - type: *(string)*
+    - scope: *required*
     - description: applied filters to the current field after the particles'
                    current deposition
     - note: may becomes a particle record attribute in the future
-    - allowed values: same as for `fieldSmoothing`
+    - allowed values:
+      - `Binomial`
+      - `other`
+      - `none`
 
   - `currentSmoothingParameters`
     - type: *(string)*
-    - description: required if `currentSmoothing` is not `none`, additional parameters to describe the applied filter further
+    - scope: *required* if `currentSmoothing` is not `none`
+    - description: additional parameters to describe the applied
+                   filter further
     - note: may becomes a particle record attribute in the future
-    - allowed values: same as for `fieldSmoothingParameters`
+    - example: `period=10;numPasses=4;compensator=true`
+    - reserved for future use: `direction=array()`, `stride=array()`
 
   - `chargeCorrection`
     - type: *(string)*
+    - scope: *required*
     - description: applied corrections to fields to ensure charge conservation
     - allowed values:
       - `Marder` ([doi:10.1016/0021-9991(87)90043-X](http://dx.doi.org/10.1016/0021-9991(87)90043-X))
@@ -82,26 +135,25 @@ Mesh Based Records (Fields)
       - `none`
 
   - `chargeCorrectionParameters`
-    - description: required if `chargeCorrection` is not `none`
+    - type: *(string)*
+    - scope: *required* if `chargeCorrection` is not `none`
+    - description: additional parameters to describe the charge
+      correction parameter
     - example: `period=100`
 
 ### Additional Attributes for each `mesh record` (field record)
 
-- **Required:**
-
   - `fieldSmoothing`
     - type: *(string)*
+    - scope: *required*
     - description: applied field filters for E and B
-    - allowed values:
-      - `Binomial`
-      - `other`
-      - `none`
+    - allowed values: same as for `fieldSmoothing`
 
   - `fieldSmoothingParameters`
     - type: *(string)*
-    - description: additional parameters to describe the applied filter further
-    - example: `period=10;numPasses=4;compensator=true`
-    - reserved for future use: `direction=array()`, `stride=array()`
+    - scope: *required* if `fieldSmoothing` is not `none`
+    - description: additional parameters to describe the applied filter
+                   further (similar to `currentSmoothingParameters`)
 
 ### Naming Conventions for `mesh record`s (field records)
 
@@ -126,10 +178,9 @@ Particle Records
 
 ### Additional Attributes for the `Group` of each Particle Species
 
-- **Required:**
-
   - `particleShape`
     - type: *(float)*
+    - scope: *required*
     - description: the order of the particle assignment function shape
                    (see *Hockney* reprint 1989, ISBN:0-85274-392-0, table 5-1)
     - example values:
@@ -141,6 +192,7 @@ Particle Records
 
   - `currentDeposition`
     - type: *(string)*
+    - scope: *required*
     - description: current deposition scheme
     - allowed values:
       - `VillaBune` ([doi:10.1016/0010-4655(92)90169-Y](http://dx.doi.org/10.1016/0010-4655(92)90169-Y))
@@ -153,11 +205,13 @@ Particle Records
 
   - `currentDepositionParameters`
     - type *(string)*
+    - scope: *optional*
     - description: further parameters for current deposition schemes;
                    reserved for future use
 
   - `particlePush`
     - type: *(string)*
+    - scope: *required*
     - description: Particle-Pushing Algorithm
     - allowed values:
       - `Boris` (J.P. Boris. *Relativistic plasma simulation-optimization of a hybrid code.* USA, 1970)
@@ -166,6 +220,7 @@ Particle Records
 
   - `particleInterpolation`
     - type: *(string)*
+    - scope: *required*
     - description: method that was used to interpolate fields to particle positions,
                    as described in [doi:10.1016/j.crme.2014.07.006](http://dx.doi.org/10.1016/j.crme.2014.07.006)
                    section 2.4
@@ -187,8 +242,11 @@ Particle Records
                               infinitely small time steps.
       - `other`
 
+
+
   - `particleSmoothing`
     - type: *(string)*
+    - scope: *required*
     - description: applied transformations or smoothing filters on copied
                    versions of the fields while interpolating those to 
                    the particle
@@ -199,8 +257,8 @@ Particle Records
 
   - `particleSmoothingParameters`
     - type: *(string)*
-    - description: required if `particleSmoothing` is not `none`;
-                   additional parameters to describe the applied filter further
+    - scope: *required* if `particleSmoothing` is not `none`
+    - description: additional parameters to describe the applied filter further
     - example: `period=1;numPasses=2;compensator=false`
     - reserved for future use: `direction=array()`, `stride=array()`
 
@@ -214,29 +272,33 @@ particle. Therefore, this extension requires the two following attributes:
 
 - `macroWeighted`
   - type: *(uint32)*
-  - description: indicates whether this quantity is written for the
-    underlying particle (`macroWeighted = 0`) or for the full
-    macroparticle (`macroWeighted = 1`)
-  - example: let us assume that a user writes the `charge` attribute
-    of a macroparticle that represents 100 electrons. If this user
-    chooses to write -1.6e-19 (charge of one individual electron) then
-    `macroWeighted` must be 0. If the user writes -1.6e-17 (total
-    charge of 100 electrons), then macroweighted must be 1.
+  - scope: *required*
+  - description: indicates whether this quantity is written for the underlying
+                 particle (`macroWeighted = 0`) or for the full macroparticle
+                 (`macroWeighted = 1`)
+  - example: Let us assume that a user writes the `charge` attribute of a
+             macroparticle that represents 100 electrons. If this user chooses
+             to write -1.6e-19 (charge of one individual electron) then
+             `macroWeighted` must be 0. If the user writes -1.6e-17 (total
+             charge of 100 electrons), then macroweighted must be 1
 
 - `weightingPower`
   - type: *(double / REAL8)*
+  - scope: *required*
   - description: indicates with which power of `weighting` (see below)
-    the quantity should be multiplied, in order to go from the
-    individual-particle representation to the full-macroparticle representation.
-  - example: let us consider a macroparticle that represents 100
-    electrons. In this case, `weighting` is w=100 and the
-    charge of each underlying individual particle is q=-1.6e-19. Then
-    the charge Q of the full macroparticle is given by: Q=q w^1 and
-    therefore `weightingPower` must be 1.
-  - advice to implementors: reading example (with h5py) and extracting
-    charge of the macroparticles in Python. When not absolutely necessary,
-    reading the additional `weighting` record can be avoided for performance
-    reasons like this:
+                 the quantity should be multiplied, in order to go from the
+                 individual-particle representation to the full-macroparticle
+                 representation
+  - example: Let us consider a macroparticle that represents 100 electrons.
+             In this case, `weighting` is w=100 and the charge of each
+             underlying individual particle is q=-1.6e-19. Then the charge Q of
+             the full macroparticle is given by: Q=q w^1 and therefore
+             `weightingPower` must be 1.
+  - advice to implementors: reading example (with h5py) and extracting charge
+                            of the macroparticles in Python. When not
+                            absolutely necessary, reading the additional
+                            `weighting` record can be avoided for performance
+                            reasons like this:
   ```python
 f = h5py.File('example.h5')
 species = f["<path_to_species_group>"]
@@ -257,16 +319,14 @@ else :
 
   - `charge`
     - type: *(float)*
-    - description: electric charge of the macroparticle or of the
-      underlying individual particle (depending on the `macroWeighted`
-      flag)
+    - description: electric charge of the macroparticle or of the underlying
+                   individual particle (depending on the `macroWeighted` flag)
     - advice to implementors: must have `weightingPower = 1`
 
   - `mass`
     - type: *(float)*
-    - description: mass of the macroparticle or of the
-      underlying individual particle (depending on the `macroWeighted`
-      flag)
+    - description: mass of the macroparticle or of the underlying individual
+                   particle (depending on the `macroWeighted` flag)
     - advice to implementors: must have `weightingPower = 1`
 
   - `weighting`
@@ -280,7 +340,8 @@ else :
   - `momentum/` + components such as `x`, `y` and `z`
     - type: each component in *(float)*
     - description: component-wise momentum of the macroparticle or of the
-      underlying individual particle (depending on the `macroWeighted` flag)
+                   underlying individual particle (depending on the
+                   `macroWeighted` flag)
     - advice to implementors: must have `weightingPower = 1`
 
   - `position/` + components such as `x`, `y` and `z`

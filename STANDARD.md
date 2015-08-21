@@ -463,7 +463,8 @@ x = position_x_relative + position_x_offset
       - `numParticles`: number of particles in this patch
       - `numParticlesOffset`: offset within the one-dimensional records where
                               the first particle in this patch is stored
-      - `offset`: n-values with positions where the particle patch begins; the
+      - `offset`: n-values with positions where the particle patch begins
+                  (including `particleOffset`s as described above); the
                   order of positions is given in component order
                   `x`[, `y`[, `z`]] of the species' `position` record and `n`
                   by the number of components of `position`
@@ -475,9 +476,9 @@ x = position_x_relative + position_x_offset
                    allows to sub-sort records that are close in the n-dimensional
                    `position` to ensure an intermediate level of data locality;
                    patches of particles must be hyperrectangles regarding
-                   the `position` of the particles within; the union of all
-                   particle patches must resemble all elements in the particle's
-                   records
+                   the `position` (including `particleOffset`s as described
+                   above) of the particles within; the union of all particle
+                   patches must resemble all elements in the particle's records
 
 
 Unit Systems and Dimensionality

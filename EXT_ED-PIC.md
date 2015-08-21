@@ -158,20 +158,38 @@ Mesh Based Records (Fields)
 
 ### Naming Conventions for `mesh record`s (field records)
 
-- fundamental fields: `E`, `B` for electric and magnetic fields
+- fundamental fields:
+  - `E`
+    - type: *(float)* or *(int)* or *(uint)*
+    - description: the electric field
+    - advice to implementors: a *(float)* type is likely the most frequent case
+                              for this record
+    - advice to implementors: must have
+                              `unitDimension = (1., 1., -3., -1., 0., 0., 0.)`
+                              (V/m = kg * m / (A * s^3))
+  - `B`
+    - type: *(float)* or *(int)* or *(uint)*
+    - description: the magnetic field
+    - advice to implementors: must have
+                              `unitDimension = (0., 1., -2., -1., 0., 0., 0.)`
+                              (T = kg / (A * s^2))
+    - advice to implementors: a *(float)* type is likely the most frequent case
+                              for this record
 
 - auxiliary fields:
   - `J`, `rho` for current density and charge density
 
-  - fields derived from particles: prefix them with `particleShortName_*`:
+  - fields derived from particles: prefix them with `particleName_*`:
     - examples:
-      - `current`: such as `electron_current`
-      - `density`: such as `electron_density`
+      - `J`: such as `electron_J`
+      - `density`: such as `electron_density` (elements per volume/area/line)
+      - `chargeDensity`: such as `electron_chargeDensity` (charge per
+                         volume/area/line)
       - `particleEnergy`: kinetic energy of all particles, with their weighted
                           contribution to a cell
       - `energyDensity`: same as `particleEnergy` but divided by `density`
-      - `particleCounter`: ignores the shape of a particle and just checks if the
-                           position of it "corresponds" to a cell
+      - `particleCounter`: ignores the shape of a particle and just checks if
+                           the position of it "corresponds" to a cell
 
 
 Particle Records
@@ -189,7 +207,7 @@ Particle Records
       - `1.` linear (CIC)
       - `2.` quadratic (TSC)
       - `3.` quadrilinear (PQS)
-      - or an other `floating point` number
+      - or any other positive `floating point` number
 
   - `currentDeposition`
     - type: *(string)*
@@ -319,7 +337,7 @@ else :
 - **Required:**
 
   - `charge`
-    - type: *(float)*
+    - type: *(float)* or *(int)* or *(uint)*
     - description: electric charge of the macroparticle or of the underlying
                    individual particle (depending on the `macroWeighted` flag)
     - advice to implementors: must have `weightingPower = 1` and
@@ -327,7 +345,7 @@ else :
                               (charge = current * time)
 
   - `mass`
-    - type: *(float)*
+    - type: *(float)* or *(int)* or *(uint)*
     - description: mass of the macroparticle or of the underlying individual
                    particle (depending on the `macroWeighted` flag)
     - advice to implementors: must have `weightingPower = 1` and
@@ -335,7 +353,7 @@ else :
                               (mass)
 
   - `weighting`
-    - type: *(float)*
+    - type: *(float)* or *(int)* or *(uint)*
     - description: the number of underlying individual particles that
                    the macroparticles represent
     - advice to implementors: must have `weightingPower = 1`,
@@ -343,7 +361,7 @@ else :
                               `unitDimension == (0., ..., 0.)`
 
   - `momentum/` + components such as `x`, `y` and `z`
-    - type: each component in *(float)*
+    - type: each component in *(float)* or *(int)* or *(uint)*
     - description: component-wise momentum of the macroparticle or of the
                    underlying individual particle (depending on the
                    `macroWeighted` flag)
@@ -401,10 +419,18 @@ else :
 
 - **Recommended:**
   - `particlePatches`
-    - description: if this record is used in combination with the
-                   `globalCellId` record, the `position` for `offset` and
-                   `extend` refers to the `globalCellId` and not the in-cell
-                   `position`
+    - description: if this record is used in combination with non-constant
+                   components in the `particleOffset` components, the
+                   position for `offset` and `extend` refers to the
+                   position of the beginning of the cell (see `positionOffset`)
+    - advice to implementors: the calculation and description of
+                              `position` and `positionOffset` is as in
+                              the base standard still the same;
+                              for non-constant components in `positionOffset`
+                              (beginning-of-cell representation) one can simply
+                              check `offset` and `extend` against the
+                              `positionOffset` record to select particles
+                              in patches "by cell"
 
 - **Optional:**
   - `id`
@@ -421,21 +447,21 @@ else :
                               `unitDimension = (0., ..., 0.)` (dimensionless)
 
   - `boundElectrons`
-    - type: *(float)*
+    - type: *(float)* or *(int)* or *(uint)*
     - description: number of bound electrons of an ion/atom;
                    to provide information to atomic physics algorithms
     - advice to implementors: must have `weightingPower = 1` and
                               `unitDimension = (0., ..., 0.)` (dimensionless)
 
   - `protonNumber`
-    - type: *(float)*
+    - type: *(float)* or *(int)* or *(uint)*
     - description: the atomic number Z of an ion/atom;
                    to provide information to atomic physics algorithms
     - advice to implementors: must have `weightingPower = 1` and
                               `unitDimension = (0., ..., 0.)` (dimensionless)
 
   - `neutronNumber`
-    - type: *(float)*
+    - type: *(float)* or *(int)* or *(uint)*
     - description: the neutron number N = the mass number A - the atomic number Z
                    of an ion/atom;
                    to provide information to atomic physics algorithms

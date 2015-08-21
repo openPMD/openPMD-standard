@@ -419,10 +419,18 @@ else :
 
 - **Recommended:**
   - `particlePatches`
-    - description: if this record is used in combination with the
-                   `globalCellId` record, the `position` for `offset` and
-                   `extend` refers to the `globalCellId` and not the in-cell
-                   `position`
+    - description: if this record is used in combination with non-constant
+                   components in the `particleOffset` components, the
+                   position for `offset` and `extend` refers to the
+                   position of the beginning of the cell (see `positionOffset`)
+    - advice to implementors: the calculation and description of
+                              `position` and `positionOffset` is as in
+                              the base standard still the same;
+                              for non-constant components in `positionOffset`
+                              (beginning-of-cell representation) one can simply
+                              check `offset` and `extend` against the
+                              `positionOffset` record to select particles
+                              in patches "by cell"
 
 - **Optional:**
   - `id`

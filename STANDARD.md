@@ -350,7 +350,7 @@ Reminder: for scalar records the `record` itself is also the `component`.
                  specific names or string representations;
                  does *not* represent if the record is a 1, 2 or 3D array
     - rationale: if the `record` is dimension-less, such as an index, set this
-                 to `[0.; 0.; 0.; 0.; 0.; 0.; 0.]`
+                 to `(0, 0, 0, 0, 0, 0, 0)`
     - advice to implementors: implement a lookup table for the most common
                               quantities/units in your simulation, e.g.,
                               electric field stengths, mass, energy, etc.
@@ -358,8 +358,12 @@ Reminder: for scalar records the `record` itself is also the `component`.
                               given here
     - examples:
       - "m / s" is of dimension `L=1` and `T=-1`,
-        store array `[1.; 0.; -1.; 0.; 0.; 0.; 0.]`
-      - "N = kg * m / s^2", store array `[1.; 1.; -2.; 0.; 0.; 0.; 0.]`
+        store array `(1, 0, -1, 0, 0, 0, 0)`
+      - "N = kg * m / s^2", store array `(1, 1, -2, 0, 0, 0, 0)`
+	  - magnetic field: "T = kg / (A * s^2)", store array `(0, 1, -2,
+        -1, 0, 0, 0)`
+	  - electric field: "V/m = kg * m / (A * s^3)", store array `(1, 1,
+        -3, -1, 0, 0, 0)`
 
   - `timeOffset`
     - type: *(float)*

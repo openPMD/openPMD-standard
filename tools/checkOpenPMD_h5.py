@@ -533,7 +533,7 @@ def check_meshes(f, iteration, v, pic):
         result_array += test_attr(f[full_meshes_path], v, "required",
                                 "fieldBoundary", np.ndarray, np.string_)
         valid, field_boundary = get_attr(field, "fieldBoundary")
-        if (valid == True) and (field_boundary=="other") :
+        if (valid == True) and (field_boundary == "other") :
             result_array += test_attr(f[full_meshes_path], v, "required",
                         "fieldBoundaryParameters", np.ndarray, np.string_)
 
@@ -541,7 +541,7 @@ def check_meshes(f, iteration, v, pic):
         result_array += test_attr(f[full_meshes_path], v, "required",
                                 "particleBoundary", np.ndarray, np.string_)
         valid, field_boundary = get_attr(field, "fieldBoundary")
-        if (valid == True) and (field_boundary=="other") :
+        if (valid == True) and (field_boundary == "other") :
             result_array += test_attr(f[full_meshes_path], v, "required",
                     "particleBoundaryParameters", np.ndarray, np.string_)
 
@@ -549,7 +549,7 @@ def check_meshes(f, iteration, v, pic):
         result_array += test_attr(f[full_meshes_path], v, "required",
                                   "currentSmoothing", np.string_)
         valid, current_smoothing = get_attr(field, "currentSmoothing")
-        if (valid == True) and (current_smoothing=="other") :
+        if (valid == True) and (current_smoothing == "other") :
             result_array += test_attr(f[full_meshes_path], v, "required",
                         "currentSmoothingParameters", np.string_)
     

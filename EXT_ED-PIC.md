@@ -52,12 +52,12 @@ Mesh Based Records (Fields)
     - description: boundary conditions in each direction (in the
                    above, `N` is the dimensionality of the field mesh)
                    ; the strings are stored in the following order:
-      - boundary at the *lower* end of the *first* label of `axisLabels`
-      - boundary at the *upper* end of the *first* label of `axisLabels`
-      - boundary at the *lower* end of the *second* label of `axisLabels`
-      - boundary at the *upper* end of the *second* label of `axisLabels`
+      - boundary at the *lower* end of the *first* axis as in `axisLabels`
+      - boundary at the *upper* end of the *first* axis as in `axisLabels`
+      - boundary at the *lower* end of the *second* axis as in `axisLabels`
+      - boundary at the *upper* end of the *second* axis as in `axisLabels`
       - ...
-      - boundary at the *upper* end of the last label of `axisLabels`
+      - boundary at the *upper* end of the last axis as in `axisLabels`
     - allowed values:
       - `periodic`
       - `open` (optionally add scheme specification, such as PML,
@@ -79,12 +79,13 @@ Mesh Based Records (Fields)
     - description: boundary conditions in each direction (in the above, `N` is
                    the dimensionality of the field mesh)
                    The strings are stored in the following order:
-      - boundary at the *lower* end of the *first* label of `axisLabels`
-      - boundary at the *upper* end of the *first* label of `axisLabels`
-      - boundary at the *lower* end of the *second* label of `axisLabels`
-      - boundary at the *upper* end of the *second* label of `axisLabels`
+
+      - boundary at the *lower* end of the *first* axis as in `axisLabels`
+      - boundary at the *upper* end of the *first* axis as in `axisLabels`
+      - boundary at the *lower* end of the *second* axis as in `axisLabels`
+      - boundary at the *upper* end of the *second* axis as in `axisLabels`
       - ...
-      - boundary at the *upper* end of the last label of `axisLabels`
+      - boundary at the *upper* end of the last axis as in `axisLabels`
     - allowed values:
       - `periodic`
       - `absorbing`

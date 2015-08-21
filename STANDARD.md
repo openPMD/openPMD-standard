@@ -435,12 +435,12 @@ meshes):
 
   - `dataOrder`
     - type: *(string)*
-    - description: used for the ordering of 1-dimensional arrays of N elements,
+    - description: used for the reading of 1-dimensional arrays of N elements,
                    where N is the number of dimensions in the simulation;
                    these should be in the ordering of variation for the indexes
                    for matrices as defined by the index-operator (`[...][...]`)
                    of the writing code; can be omitted for 1D records
-    - rationale: in Fortran ordering of matrixes is linearized in memory in
+    - rationale: in Fortran, ordering of matrixes is linearized in memory in
                  column-major order whereas in C it is row-major; due to that
                  the index-operators in Fortran and C operate in exactly
                  opposite order;
@@ -459,7 +459,7 @@ meshes):
     - advice to implementors: in the ordering of variation for the indexes for
                               matrices as defined by the index-operator
                               (`[...][...]`) of the writing code
-    - advice to implementors: query the records `dataOrder` to get the
+    - advice to implementors: query the record's `dataOrder` to get the
                               information if you need to invert the access to
                               `axisLabels` (and other attributes that use the
                               same definition)

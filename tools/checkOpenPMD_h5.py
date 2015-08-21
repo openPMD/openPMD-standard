@@ -268,13 +268,49 @@ def is_scalar_record(r):
         # or a scalar record with a constant component
 
         valid, value = get_attr(r, "value")
-        # constant components require a "value" attribute
+        # constant components require a "value" and a "shape" attribute
         if valid :
             return True
         else:
             return False
     else :
         return True
+
+def test_component(c, v) :
+    """
+    Checks if a record component defines all required attributes.
+
+    Parameters
+    ----------
+    c : an h5py.Group or h5py.Dataset object
+        the record component that shall be tested
+
+    v : bool
+        Verbose option
+
+    Returns
+    -------
+    An array with 2 elements :
+    - The first element is the number of errors encountered
+    - The second element is the number of warnings encountered
+    """
+    # Initialize the result array
+    # First element : number of errors
+    # Second element : number of warnings
+    result_array = np.array([0,0])
+
+    result_array += test_attr(f, v, "required", "openPMD", np.string_, "^[0-9]+\.[0-9]+\.[0-9]+$")
+    if type(c) is h5.Group :
+        # since this check tests components, this must be a constant
+        # component: requires "value" and "shape" attributes
+        result_array += test_attr(c, v, "required", "value") # type can be arbitrary
+        result_array += test_attr(c, v, "required", "shape", np.ndarray, np.uint64)
+
+    # default attributes for all components
+    result_array += test_attr(c, v, "required", "unitSI", np.float64)
+
+    return(result_array)
+
 
 def check_root_attr(f, v, pic):
     """
@@ -373,7 +409,7 @@ def check_iterations(f, v, pic) :
                     format_error = True                    
     # Detect any error and interrupt execution if one is found
     if format_error == True :
-        print("Error : it seems that the path of the data within the HDF5 file"
+        print("Error: it seems that the path of the data within the HDF5 file"
               "is not of the form '/data/%T/', where %T corresponds to an "
               "actual integer.")
         return(np.array([1, 0]))
@@ -513,16 +549,14 @@ def check_meshes(f, iteration, v, pic):
          
         # Attributes of the record's components
         if is_scalar_record(field) :   # If the record is a scalar field
-            result_array += test_attr(field, v,
-                                "required", "unitSI", np.float64)
+            result_array += test_component(field, v)
             result_array += test_attr(field, v,
                                 "required", "position", np.ndarray, np.float32)
         else:                          # If the record is a vector field
             # Loop over the components
             for component_name in field.keys():
                 component = field[component_name]
-                result_array += test_attr(component, v,
-                                "required", "unitSI", np.float64)
+                result_array += test_component(component, v)
                 result_array += test_attr(component, v,
                                 "required", "position", np.ndarray, np.float32)
 
@@ -639,11 +673,25 @@ def check_particles(f, iteration, v, pic) :
 
         # Check the position offset record of the particles
         result_array += test_key(species, v, "required", "positionOffset")
+        if result_array[0] == 0 :
+            position_dimensions = len(species["position"].keys())
+            positionOffset_dimensions = len(species["positionOffset"].keys())
+            if position_dimensions != positionOffset_dimensions :
+                print("Error: `position` (ndim=%s) and `positionOffset` " \
+                      "(ndim=%s) do not have the same dimensions in " \
+                      "species `%s`!" \
+                      %(str(position_dimensions), \
+                        str(positionOffset_dimensions),
+                        species.name) )
+                result_array += np.array([ 1, 0])
 
         # Check the particlePatches record of the particles
         result_array += test_key(species, v, "recommended", "particlePatches")
-        # to do: if particlePatches is found,
-        #        require size of start/extend to be same as dim of position
+        if result_array[0] == 0 :
+            if len(species["particlePatches"].shape) != 1:
+                print("Error: `particlePatches` in (%s) is not an 1D array!" \
+                      %(species.name) )
+                result_array += np.array([ 1, 0])
 
         # Check the records required by the PIC extension
         if pic :
@@ -651,7 +699,6 @@ def check_particles(f, iteration, v, pic) :
             result_array += test_key(species, v, "required", "charge")
             result_array += test_key(species, v, "required", "mass")
             result_array += test_key(species, v, "required", "weighting")
-            result_array += test_key(species, v, "recommended", "globalCellId")
             result_array += test_key(species, v, "optional", "boundElectrons")
             result_array += test_key(species, v, "optional", "protonNumber")
             result_array += test_key(species, v, "optional", "neutronNumber")
@@ -691,14 +738,12 @@ def check_particles(f, iteration, v, pic) :
                 # Attributes of the components
                 if is_scalar_record( species[record] ) : # Scalar record
                     dset = species[record]
-                    result_array += test_attr( dset, v,
-                            "required", "unitSI", np.float64)
+                    result_array += test_component(dset, v)
                 else : # Vector record
                     # Loop over the components
                     for component_name in species[record].keys():
                         dset = species[ os.path.join(record, component_name) ]
-                        result_array += test_attr( dset, v,
-                            "required", "unitSI", np.float64)
+                        result_array += test_component(dset, v)
                 
     return(result_array)
 

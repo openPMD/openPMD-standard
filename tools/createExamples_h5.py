@@ -207,7 +207,9 @@ def write_b_2d_cartesian(meshes, data_ez):
 
     # Fill the array with the field data
     B["x"].attrs["value"] = np.float(0.0)
+    B["x"].attrs["shape"] = np.array(B["z"].shape, dtype=np.uint64)
     B["y"].attrs["value"] = np.float(0.0)
+    B["y"].attrs["shape"] = np.array(B["z"].shape, dtype=np.uint64)
     B["z"][:,:] =  data_ez[:,:]
 
 def write_e_2d_cartesian(meshes, data_ex, data_ey, data_ez ):
@@ -361,6 +363,7 @@ def write_particles(f, iteration):
     electrons.create_group("charge")
     charge = electrons["charge"]
     charge.attrs["value"] = -1.0
+    charge.attrs["shape"] = np.array([globalNumParticles], dtype=np.uint64)
     # macroWeighted: False(0) the charge value is given for an underlying,
     #                real particle
     # weightingPower == 1: the charge of the macro particle scales linearly
@@ -379,6 +382,7 @@ def write_particles(f, iteration):
     electrons.create_group("mass")
     mass = electrons["mass"]
     mass.attrs["value"] = 1.0
+    mass.attrs["shape"] = np.array([globalNumParticles], dtype=np.uint64)
     # macroWeighted: False(0) the mass value is given for an underlying,
     #                real particle
     # weightingPower == 1: the mass of the macro particle scales linearly
@@ -436,11 +440,14 @@ def write_particles(f, iteration):
     offset = electrons["positionOffset"]
     # Constant components here (typical of a moving window along z)
     offset.create_group("x")
-    offset["x"].attrs["value"] = np.float32(0.) 
+    offset["x"].attrs["value"] = np.float32(0.)
+    offset["x"].attrs["shape"] = np.array([globalNumParticles], dtype=np.uint64)
     offset.create_group("y")
-    offset["y"].attrs["value"] = np.float32(0.)   
+    offset["y"].attrs["value"] = np.float32(0.)
+    offset["y"].attrs["shape"] = np.array([globalNumParticles], dtype=np.uint64)
     offset.create_group("z")
-    offset["z"].attrs["value"] = np.float32(100.)   
+    offset["z"].attrs["value"] = np.float32(100.)
+    offset["z"].attrs["shape"] = np.array([globalNumParticles], dtype=np.uint64)
     # Conversion factor to SI units
     offset["x"].attrs["unitSI"] = np.float64(1.e-9)
     offset["y"].attrs["unitSI"] = np.float64(1.e-9)

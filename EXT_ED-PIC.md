@@ -35,8 +35,8 @@ Mesh Based Records (Fields)
       - `CK` (*Cole-Karkkainen* type solvers: [doi:10.1016/j.jcp.2011.04.003](http://dx.doi.org/10.1016/j.jcp.2011.04.003), [doi:10.1063/1.168620](http://dx.doi.org/10.1063/1.168620), [doi:10.1109/TAP.2002.801268](http://dx.doi.org/10.1109/TAP.2002.801268); M. Karkkainen et al., *Low-dispersion wake field calculation tools*, ICAP 2006)
       - `Lehe` ([doi:10.1103/PhysRevSTAB.16.021301](http://dx.doi.org/10.1103/PhysRevSTAB.16.021301))
       - `DS` (*Directional Splitting* after Yasuhiko Sentoku, [doi:10.1140/epjd/e2014-50162-y](http://dx.doi.org/10.1140/epjd/e2014-50162-y))
-      - `PSTD`
-      - `PSATD`
+      - `PSTD` (*Pseudo-Spectral Time Domain*, e. g. Q. H. Liu, Letters 15 (3) (1997) 158–165)
+     - `PSATD` (*Pseudo-Spectral Time Domain*, I. Haber, R. Lee, H. Klein, J. Boris, Advances in electromagnetic simulation techniques, 1973)
       - `GPSTD`
       - `other`
       - `none`

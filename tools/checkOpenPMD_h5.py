@@ -19,6 +19,7 @@ import h5py as h5
 import numpy as np
 import re
 import string
+import collections # for isinstance
 import sys, getopt, os.path
 
 openPMD = "1.0.0"
@@ -182,10 +183,13 @@ def test_attr(f, v, request, name, is_type=None, type_format=None):
 
     is_type : (numpy or python) data type
         The type of the attribute. Default is "arbitrary" for None.
+        Can be a list of data types where at least one data type must match
+        but this list can not be combined with type_format.
 
     type_format: (numpy or python) data type
         Used with is_type to specify numpy ndarray dtypes or a
-        base np.string_ format regex.
+        base np.string_ format regex. Can be a list of data types
+        for ndarrays where at least one data type must match.
     
     Returns
     -------
@@ -201,34 +205,46 @@ def test_attr(f, v, request, name, is_type=None, type_format=None):
 
         # test type
         if is_type is not None:
-            if type(value) is is_type:
+            if not type_format is None and not is_type is np.string_ and \
+               not isinstance(type_format, collections.Iterable):
+                type_format = [type_format]
+                type_format_names = map(lambda x: x.__name__, type_format)
+            if not is_type is None and not isinstance(is_type, collections.Iterable):
+                is_type = [is_type]
+            is_type_names = map(lambda x: x.__name__, is_type)
+            # add for each type in is_type -> wrong, need to add this at the comparison level!
+            if type(value) in is_type:
                 # np.string_ format or general ndarray dtype text
                 if type(value) is np.string_ and type_format is not None:
                     regEx = re.compile(type_format)
-                    if regEx.match(value):
+                    if regEx.match(value) :
                         result_array = np.array([0,0])
                     else:
                         print("Error: Attribute %s in `%s` does not satisfy " \
                               "format (should be '%s')!" \
-                              %(name, str(f.name), type_format) )
+                              %(name, str(f.name), type_format.__name__) )
                         result_array = np.array([1,0])
+                # ndarray dtypes
                 elif type(value) is np.ndarray:
-                    if value.dtype.type is type_format:
+                    if value.dtype.type in type_format:
+                        result_array = np.array([0,0])
+                    elif type_format is None:
                         result_array = np.array([0,0])
                     else:
                         print("Error: Attribute %s in `%s` is not of type " \
                               "ndarray of '%s' (is ndarray of '%s')!" \
-                              %(name, str(f.name), type_format.__name__, \
+                              %(name, str(f.name), type_format_names, \
                               value.dtype.type.__name__) )
                         result_array = np.array([1,0])
                 else:
                     result_array = np.array([0,0])
             else:
                 print(
-                "Error: Attribute %s in `%s` is not of type '%s' (is '%s')!" \
-                %(name, str(f.name), is_type.__name__, type(value).__name__) )
+                 "Error: Attribute %s in `%s` is not of type '%s' (is '%s')!" \
+                 %(name, str(f.name), str(is_type_names), \
+                  type(value).__name__) )
                 result_array = np.array([1,0])
-        else:
+        else: # is_type is None (== arbitrary)
             result_array = np.array([0,0])
     else:
         if request == "required":
@@ -464,8 +480,8 @@ def check_base_path(f, iteration, v, pic):
     bp = f[base_path]
 
     # Check for the attributes of the STANDARD.md
-    result_array += test_attr(bp, v, "required", "time", np.float_)
-    result_array += test_attr(bp, v, "required", "dt", np.float_)
+    result_array += test_attr(bp, v, "required", "time", [np.float32, np.float64])
+    result_array += test_attr(bp, v, "required", "dt", [np.float32, np.float64])
     result_array += test_attr(bp, v, "required", "timeUnitSI", np.float64)
 
     return(result_array)
@@ -523,11 +539,11 @@ def check_meshes(f, iteration, v, pic):
         result_array += test_attr(field, v, "required",
                                   "unitDimension", np.ndarray, np.float64)
         result_array += test_attr(field, v, "required",
-                                  "timeOffset", np.float_)
+                                  "timeOffset", [np.float32, np.float64])
         result_array += test_attr(field, v, "required",
-                                  "gridSpacing", np.ndarray, np.float_)
+                                  "gridSpacing", np.ndarray, [np.float32, np.float64])
         result_array += test_attr(field, v, "required",
-                                  "gridGlobalOffset", np.ndarray, np.float_)
+                                  "gridGlobalOffset", np.ndarray, [np.float32, np.float64])
         result_array += test_attr(field, v, "required",
                                   "gridUnitSI", np.float64)
         result_array += test_attr(field, v, "required",
@@ -550,14 +566,14 @@ def check_meshes(f, iteration, v, pic):
         if is_scalar_record(field) :   # If the record is a scalar field
             result_array += test_component(field, v)
             result_array += test_attr(field, v,
-                                "required", "position", np.ndarray, np.float_)
+                                "required", "position", np.ndarray, [np.float32, np.float64])
         else:                          # If the record is a vector field
             # Loop over the components
             for component_name in field.keys():
                 component = field[component_name]
                 result_array += test_component(component, v)
                 result_array += test_attr(component, v,
-                                "required", "position", np.ndarray, np.float_)
+                                "required", "position", np.ndarray, [np.float32, np.float64])
 
     # Check for the attributes of the PIC extension,
     # if asked to do so by the user 
@@ -705,7 +721,7 @@ def check_particles(f, iteration, v, pic) :
         # Check the attributes associated with the PIC extension
         if pic :
             result_array += test_attr(species, v, "required",
-                                      "particleShape", np.float_)
+                                      "particleShape", [np.float32, np.float64])
             result_array += test_attr(species, v, "required",
                                       "currentDeposition", np.string_)
             result_array += test_attr(species, v, "required",
@@ -729,11 +745,11 @@ def check_particles(f, iteration, v, pic) :
                         "required", "unitDimension", np.ndarray, np.float64)
                 time_type = f[base_path].attrs["time"].dtype.type
                 result_array += test_attr(species[record], v, "required",
-                                        "timeOffset", time_type)
+                                          "timeOffset", time_type)
                 result_array += test_attr(species[record], v, "required",
                                           "weightingPower", np.float64)
                 result_array += test_attr(species[record], v, "required",
-                                        "macroWeighted", np.uint32)
+                                          "macroWeighted", np.uint32)
                 # Attributes of the components
                 if is_scalar_record( species[record] ) : # Scalar record
                     dset = species[record]

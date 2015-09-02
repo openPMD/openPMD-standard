@@ -41,13 +41,33 @@ such as, but not limited to
 Motivation
 ----------
 
-Open, hierarchical, machine-independent, self-describing binary data formats
+Open, hierarchical, machine-independent, self-describing (binary) data formats
 are available for a while now. Nevertheless, without a certain agreement for
-a domain of applications standard tasks like automated data processing and
+a domain of applications, standard tasks like automated data processing and
 import/export do not come for free.
 
 This standard tries to bridge the gap between the common "blob of data"
 and the *algorithms*, *methods* and/or *schemes* that created these.
+
+
+Users or "Why should I care?"
+-----------------------------
+
+If output from programs, devices (such as cameras), simulations or
+post-processed data-sets contain a minimal set of meta information as provided
+by **openPMD**, you can exchange data between those with minimal effort and you
+use the same tools for visualization.
+
+Furthermore, since **openPMD is not a file format** but just an object-oriented
+**markup** and **meta data naming convention** you can still use the large
+variety of tools that come with the *intrinsic data format* that you chose
+to use (e.g., HDF5 or ADIOS BP). Of course you are completely free to use your
+favorite software (open source or proprietary) to create or process your files.
+
+If the software you are using is not yet able to read/write the information
+needed to fulfill the openPMD standard, please talk to your software developers
+and point them to these documents: further adoptions of the current standard
+and contributions for the design of upcoming versions are very welcome!
 
 
 License
@@ -72,7 +92,9 @@ The following list of projects uses the
 - [libSplash](https://github.com/ComputationalRadiationPhysics/libSplash) (TU Dresden/HZDR, Germany)
   - domain: high-level C++ HDF5 library for mesh and particle records
   - [repository](https://github.com/ComputationalRadiationPhysics/libSplash) (LGPLv3+)
-  - status: upcoming version 2.0 will automatically write valid openPMD files (base standard)
+  - status:
+    - 1.3.0+: full API available to fulfill the standard (read+write)
+    - 2.0.0+ (upcoming): high-level interface for openPMD objects (base standard)
 
 ### Scientific Simulations
 
@@ -97,3 +119,11 @@ The following list of projects uses the
   - domain: serial post-processing tool for particle-in-cell codes
   - [repository](https://github.com/skuschel/postpic) (GPLv3+)
   - status: currently implementing (reader for base standard + ED-PIC)
+
+### Additional Tools
+
+We provide and collect further tools, software modules and plugins for popular
+frameworks in our GitHub organization:
+  https://github.com/openPMD
+
+Please check the individual repositories and feel free to contribute.

@@ -41,13 +41,33 @@ such as, but not limited to
 Motivation
 ----------
 
-Open, hierarchical, machine-independent, self-describing binary data formats
+Open, hierarchical, machine-independent, self-describing (binary) data formats
 are available for a while now. Nevertheless, without a certain agreement for
-a domain of applications standard tasks like automated data processing and
+a domain of applications, standard tasks like automated data processing and
 import/export do not come for free.
 
 This standard tries to bridge the gap between the common "blob of data"
 and the *algorithms*, *methods* and/or *schemes* that created these.
+
+
+Users or "Why should I care?"
+-----------------------------
+
+If output from programs, devices (such as cameras), simulations or
+post-processed data-sets contain a minimal set of meta information as provided
+by **openPMD**, you can exchange data between those with minimal effort and you
+use the same tools for visualization.
+
+Furthermore, since **openPMD is not a file format** but just an object-oriented
+**markup** and **meta data naming convention** you can still use the large
+variety of tools that come with the *intrinsic data format* that you chose
+to use (e.g., HDF5 or ADIOS BP). Of course you are completely free to use your
+favorite software (open source or proprietary) to create or process your files.
+
+If the software you are using is not yet able to read/write the information
+needed to fulfill the openPMD standard, please talk to your software developers
+and point them to these documents: further adoptions of the current standard
+and contributions for the design of upcoming versions are very welcome!
 
 
 License

@@ -2,7 +2,7 @@
 
 ### Original Design (2014-2015)
 
-- Axel Huebl (HZDR, a.huebl@hzdr.de)
+- Axel Huebl (HZDR, TU Dresden, a.huebl@hzdr.de)
 
 *Acknowledgements:* the design of this standard is based on the experiences
                     we gained in the last years implementing efficient,
@@ -17,9 +17,9 @@
 - Remi Lehe (LBNL)
 - Jean-Luc Vay (LBNL)
 - David P. Grote (LLNL)
-- Ivo Sbalzarini (MPI-CBG)
-- Michael Bussmann (HZDR)
+- Ivo Sbalzarini (TU Dresden, MPI-CBG)
 - Stephan Kuschel (IOQ Jena)
+- Michael Bussmann (HZDR)
 
 
 ### Reviewers and Substantive Contributions in Later Versions

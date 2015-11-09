@@ -1,7 +1,7 @@
 The openPMD Standard
 ====================
 
-VERSION: **1.0.0** (August 21th, 2015)
+VERSION: **1.0.0** (November 9th, 2015)
 
 Conventions Throughout these Documents
 --------------------------------------
@@ -458,31 +458,6 @@ position_x_offset = get_component(species["positionOffset"], "x") \
 x = position_x_relative + position_x_offset
 ```
 
-  - `particlePatches`
-    - scope: *recommended*
-    - type: one dimensional array of *(double)* values,
-            repeating the following entries for each particle patch:
-      - `numParticles`: number of particles in this patch
-      - `numParticlesOffset`: offset within the one-dimensional records where
-                              the first particle in this patch is stored
-      - `offset`: n-values with positions where the particle patch begins
-                  (including `particleOffset`s as described above); the
-                  order of positions is given in component order
-                  `x`[, `y`[, `z`]] of the species' `position` record and `n`
-                  by the number of components of `position`
-      - `extend`: n-values with extend of the particle patch; order and
-                  `n` are defined as in `offset`
-    - description: to allow post-processing, efficient checkpointing and
-                   visualization tools to read records with the size of more
-                   than the typical size of a local-node's RAM, this attribute
-                   allows to sub-sort records that are close in the
-                   n-dimensional `position` to ensure an intermediate level of
-                   data locality;
-                   patches of particles must be hyperrectangles regarding
-                   the `position` (including `particleOffset`s as described
-                   above) of the particles within; the union of all particle
-                   patches must resemble all elements in the particle's records
-
   - `id`
     - type: *(uint64 / UNSIGNED8)*
     - scope: *optional*
@@ -494,6 +469,65 @@ x = position_x_relative + position_x_offset
                    Also, when a particle exits the simulation box, its
                    identifying integer should not be reassigned to a new
                    particle.
+
+### Sub-Group for each `Particle Species`
+
+Within each particle species' group the sub-group `particlePatches` alongside
+it's records, as mentioned above, is *recommended* for parallel
+post-processing. The idea is to logically order the 1D array of attributes into
+local patches of particles that can be read and processed in parallel.
+
+To allow post-processing, efficient checkpointing and visualization tools to
+read records with the size of more than the typical size of a local-node's
+RAM, the records in this sub-group allow to sub-sort particle records that are
+close in the n-dimensional `position` to ensure an intermediate level of data
+locality. Patches of particles must be hyperrectangles regarding the `position`
+(including `particleOffset`s as described above) of the particles within. The
+union of all particle patches must resemble all elements in the particle's
+records.
+
+For the creation of those particle patches already existing information in
+memory layouts such as linked lists of particles or per-node domain
+decompositions can be reused. The most trivial (serial) implementation of a
+particle patch would be the description of a single patch spaning the whole
+spatial domain of particles.
+
+If the `particlePatches` sub-group exists, the following records within it
+are *required* and the entries in each record are stored in a per particle
+patch order:
+
+  - `numParticles`
+    - type: *(uint64 / UNSIGNED8)*
+    - description: number of particles in this patch
+    - examples:
+      - serial, one patch: the global number of all particles
+      - parallel, e.g. MPI: the number of particles of a MPI rank;
+                            the sum of all entries in this record is the global
+                            number of particles
+
+  - `numParticlesOffset`
+    - type: *(uint64 / UNSIGNED8)*
+    - description: offset within the one-dimensional records of the particle
+                   species where the first particle in this patch is stored
+    - examples:
+      - serial, one patch: `0`
+      - parallel, e.g. MPI: the number of particles of all MPI ranks' patches
+                            that were stored before this one
+
+  - `offset/` + components such as `x`, `y`, `z`
+    - type: each component in *(float)* or *(int)* or *(uint)*
+    - description: begin of particle positions where the particle patch begins
+                   (including `particleOffset`s as described above);
+                   defines the (inclusive) lower bound with positions that are
+                   associated with the patch;
+                   the same requirements as for regular record components apply
+
+  - `extend/` + components such as `x`, `y`, `z`
+    - type: each component in *(float)* or *(int)* or *(uint)*
+    - description: extend of the particle patch; the extend can be larger then
+                   required but the exact upper bound of position `offset` +
+                   `extend` is excluded from the patch;
+                   the same requirements as for regular record components apply
 
 
 Unit Systems and Dimensionality

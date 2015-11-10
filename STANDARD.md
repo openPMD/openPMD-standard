@@ -522,11 +522,11 @@ patch order:
                    associated with the patch;
                    the same requirements as for regular record components apply
 
-  - `extend/` + components such as `x`, `y`, `z`
+  - `extent/` + components such as `x`, `y`, `z`
     - type: each component in *(float)* or *(int)* or *(uint)*
-    - description: extend of the particle patch; the extend can be larger than
+    - description: extent of the particle patch; the extent can be larger than
                    required but the exact upper bound of position `offset` +
-                   `extend` is excluded from the patch;
+                   `extent` is excluded from the patch;
                    the same requirements as for regular record components apply
 
 

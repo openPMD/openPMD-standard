@@ -1,7 +1,7 @@
 The openPMD Standard
 ====================
 
-VERSION: **1.0.0** (November 9th, 2015)
+VERSION: **1.0.0** (November 10th, 2015)
 
 Conventions Throughout these Documents
 --------------------------------------
@@ -477,15 +477,14 @@ its records, as mentioned above, is *recommended* for parallel
 post-processing. The idea is to logically order the 1D arrays of attributes into
 local patches of particles that can be read and processed in parallel.
 
-To allow efficient parallel post-processing, checkpointing and
-visualization tools to
-read records with a size of more than the typical size of a local-node's
-RAM, the records in this sub-group allow to sub-sort particle records that are
-close in the n-dimensional `position` to ensure an intermediate level of data
-locality. Patches of particles must be hyperrectangles regarding the `position`
-(including `particleOffset`s as described above) of the particles within. The
-union of all particle patches must correspond to the complete particle's
-records.
+To allow efficient parallel post-processing, checkpointing and visualization
+tools to read records with a size of more than the typical size of a
+local-node's RAM, the records in this sub-group allow to sub-sort particle
+records that are close in the n-dimensional `position` to ensure an
+intermediate level of data locality. Patches of particles must be
+hyperrectangles regarding the `position` (including `particleOffset`s as
+described above) of the particles within. The union of all particle patches
+must correspond to the complete particle's records.
 
 For the creation of those particle patches, already existing information in
 memory layouts such as linked lists of particles or per-node domain
@@ -517,15 +516,17 @@ patch order:
 
   - `offset/` + components such as `x`, `y`, `z`
     - type: each component in *(float)* or *(int)* or *(uint)*
-    - description: absolute positions where the particle patch begins:
+    - description: absolute position (`position` + `positionOffset` as defined
+                   above) where the particle patch begins:
                    defines the (inclusive) lower bound with positions that are
                    associated with the patch;
                    the same requirements as for regular record components apply
 
   - `extent/` + components such as `x`, `y`, `z`
     - type: each component in *(float)* or *(int)* or *(uint)*
-    - description: extent of the particle patch; the extent can be larger than
-                   required but the exact upper bound of position `offset` +
+    - description: extent of the particle patch; the `offset` + `extent` must
+                   be larger than the maximum absolute position of particles in
+                   the patch as the exact upper bound of position `offset` +
                    `extent` is excluded from the patch;
                    the same requirements as for regular record components apply
 

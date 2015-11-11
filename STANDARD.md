@@ -1,7 +1,7 @@
 The openPMD Standard
 ====================
 
-VERSION: **1.0.0** (November 10th, 2015)
+VERSION: **1.0.0** (November 11th, 2015)
 
 Conventions Throughout these Documents
 --------------------------------------
@@ -12,10 +12,10 @@ interpreted as described in [RFC 2119](http://tools.ietf.org/html/rfc2119).
 
 All `keywords` in this standard are case-sensitive.
 
-The naming *(float)* without a closer specification is used if the user can
-choose which kind of floating point precision shall be used.
+The naming *(float)* without a closer specification is used if the implementor
+can choose which kind of floating point precision shall be used.
 The naming *(uint)* and *(int)* without a closer specification is used if the
-user can choose which kind of (un)signed integer type shall be used.
+implementor can choose which kind of (un)signed integer type shall be used.
 The naming for the type *(string)* refers to fixed-length, plain ASCII encoded
 character arrays since they are the only ones that are likely to propagate
 through all file-format APIs and third-party programs that use them.
@@ -38,8 +38,8 @@ Improvements will be sought to be backwards compatible, if that is not
 possible then changes in the major version of this standard indicate
 incompatibility.
 Minor version updates instead need to be backwards compatible and should for
-example only add optional information or tool updates.
-Revisions are reserved for minor typos in the documentation and tools (but not
+example only add new (ideally optional or recommended) keywords.
+Revisions are reserved for typos and clarification in the standard (but not
 for changes in keywords).
 
 
@@ -54,7 +54,7 @@ The used hierarchical data file format must provide the capability to
 while allowing for each of those to assign
 
   - multiple, distinct attributes
-    (values of basic and/or combined floating/integer types and strings)
+    (basic and array floating/integer types, strings)
   - with platform-independent representation.
 
 We define the following placeholders and reserved characters:
@@ -136,7 +136,7 @@ contains the attributes:
     - description: date of creation in format "YYYY-MM-DD HH:mm:ss tz"
     - example: `2015-12-02 17:48:42 +0100`
 
-Each group and path may contain the attribute **comment** for general
+Each group and data set may contain the attribute **comment** for general
 human-readable documentation, e.g., for features not yet covered by the
 standard:
 
@@ -443,7 +443,7 @@ def is_const_record(record_name, component_name) :
 
 def get_component(record_name, component_name) :
     if is_const_record(record_name, component_name) :
-        return record_name["component_name"].value
+        return record_name["component_name"].attrs["value"]
     else :
         record_name["component_name"][:]
 

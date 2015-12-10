@@ -100,14 +100,14 @@ Each file's *root* directory (path `/`) must at leat contain the attributes:
                    of `%T` with the integer value of the iteration, e.g.,
                    `/data/%T` becomes `/data/100`
     - allowed value: fixed to `/data/%T/` for this version of the standard
-	- remark: all the data that is formatted according to the present
+    - note: all the data that is formatted according to the present
       standard (i.e. both the meshes and the particles) is to be
       stored within a path of the form given by `basePath` (e.g. in
       the above example, the data will be stored within the path `/data/100/`).
-      If, for various reasons, a user wants to store **additional
-      data** that is not (or cannot be) formatted according to the
+      If, for various reasons, a user wants to store *additional
+      data* that is not (or cannot be) formatted according to the
       present standard (e.g. fields on an unstructured mesh),
-      this can be done be storing this data within a path that **is not**
+      this can be done be storing this data within a path that *is not*
       of the form given by `basePath` (e.g. `/extra_data`). In this
       way, the openPMD parsing tools will not parse this additional data. 
 

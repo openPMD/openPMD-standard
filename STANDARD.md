@@ -449,13 +449,13 @@ short-hand notation (see: *Constant Record Components*).
     - example: reading example (with h5py) in Python:
 ```python
 def is_const_record(record_name, component_name) :
-    return ("value" in record_name["component_name"].attrs.keys())
+    return ("value" in record_name[component_name].attrs.keys())
 
 def get_component(record_name, component_name) :
     if is_const_record(record_name, component_name) :
-        return record_name["component_name"].attrs["value"]
+        return record_name[component_name].attrs["value"]
     else :
-        record_name["component_name"][:]
+        record_name[component_name].value
 
 f = h5py.File('example.h5')
 species = f["<path_to_species_group>"]

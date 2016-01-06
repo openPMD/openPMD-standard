@@ -438,22 +438,22 @@ short-hand notation (see: *Constant Record Components*).
                               with `constant record components`
     - example: reading example (with h5py) in Python:
 ```python
-def is_const_record(record_name, component_name) :
-    return ("value" in record_name["component_name"].attrs.keys())
+def is_const_record(record, component_name) :
+    return ("value" in record[component_name].attrs.keys())
 
-def get_component(record_name, component_name) :
-    if is_const_record(record_name, component_name) :
-        return record_name["component_name"].attrs["value"]
+def get_component(record, component_name) :
+    if is_const_record(record, component_name) :
+        return record[component_name].attrs["value"]
     else :
-        record_name["component_name"][:]
+        return record[component_name].value
 
 f = h5py.File('example.h5')
 species = f["<path_to_species_group>"]
 
 position_x_relative = get_component(species["position"], "x") \
-                    * species["position"].attrs["unitSI"]
+                    * species["position/x"].attrs["unitSI"]
 position_x_offset = get_component(species["positionOffset"], "x") \
-                  * species["positionOffset"].attrs["unitSI"]
+                  * species["positionOffset/x"].attrs["unitSI"]
 
 x = position_x_relative + position_x_offset
 ```

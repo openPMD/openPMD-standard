@@ -428,6 +428,18 @@ short-hand notation (see: *Constant Record Components*).
 
 ### Records for each `Particle Species`
 
+  - `id`
+    - type: *(uint64 / UNSIGNED8)*
+    - scope: *optional*
+    - description: a globally-unique identifying integer for each particle,
+                   that can be used to, e.g., track particles. This
+                   identifying integer should be truly unique within the
+                   simulation; in particular, even among different particle
+                   species, two particles should not have the same id.
+                   Also, when a particle exits the simulation box, its
+                   identifying integer should not be reassigned to a new
+                   particle.
+
   - `position/` + components such as `x`, `y`, `z`
     - type: each component in *(float)* or *(int)* or *(uint)*
     - scope: *required*
@@ -448,37 +460,28 @@ short-hand notation (see: *Constant Record Components*).
                               with `constant record components`
     - example: reading example (with h5py) in Python:
 ```python
-def is_const_record(record, component_name) :
-    return ("value" in record[component_name].attrs.keys())
+def is_const_component(record_component):
+    return ("value" in record_component.attrs.keys())
 
-def get_component(record, component_name) :
-    if is_const_record(record, component_name) :
-        return record[component_name].attrs["value"]
-    else :
-        return record[component_name].value
+def get_component(group, component_name):
+    record_component = group[component_name]
+    unitSI = record_component.attrs["unitSI"]
+
+    if is_const_component(record_component):
+        return record_component.attrs["value"], unitSI
+    else:
+        return record_component.value, unitSI
 
 f = h5py.File('example.h5')
 species = f["<path_to_species_group>"]
 
-position_x_relative = get_component(species["position"], "x") \
-                    * species["position/x"].attrs["unitSI"]
-position_x_offset = get_component(species["positionOffset"], "x") \
-                  * species["positionOffset/x"].attrs["unitSI"]
+position_x_relative, unitXRel = get_component(species, "position/x")
+position_x_offset, unitXOff = get_component(species, "positionOffset/x")
 
-x = position_x_relative + position_x_offset
+x = position_x_relative * unitXRel + \
+    position_x_offset * unitXOff
 ```
 
-  - `id`
-    - type: *(uint64 / UNSIGNED8)*
-    - scope: *optional*
-    - description: a globally-unique identifying integer for each particle,
-                   that can be used to, e.g., track particles. This
-                   identifying integer should be truly unique within the
-                   simulation; in particular, even among different particle
-                   species, two particles should not have the same id.
-                   Also, when a particle exits the simulation box, its
-                   identifying integer should not be reassigned to a new
-                   particle.
 
 ### Sub-Group for each `Particle Species`
 

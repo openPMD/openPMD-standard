@@ -460,30 +460,17 @@ short-hand notation (see: *Constant Record Components*).
                               with `constant record components`
     - example: reading example (with h5py) in Python:
 ```python
-import numpy
-import h5py
-
-
 def is_const_component(record_component):
     return ("value" in record_component.attrs.keys())
 
-
-def get_component(group, component_name, allocate=False):
+def get_component(group, component_name):
     record_component = group[component_name]
     unitSI = record_component.attrs["unitSI"]
 
     if is_const_component(record_component):
-        cvalue = record_component.attrs["value"]
-        if allocate:
-            return cvalue * \
-                numpy.ones(shape=record_component.attrs["shape"],
-                           dtype=record_component.attrs["value"].dtype),
-                unitSI
-        else:
-            return cvalue, unitSI
+        return record_component.attrs["value"], unitSI
     else:
         return record_component.value, unitSI
-
 
 f = h5py.File('example.h5')
 species = f["<path_to_species_group>"]

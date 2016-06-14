@@ -166,7 +166,7 @@ extension. The individual requirement is given in `scope`.
     - type: *(string)*
     - scope: *required*
     - description: applied field filters for E and B
-    - allowed values: same as for `fieldSmoothing`
+    - allowed values: same as for `currentSmoothing`
 
   - `fieldSmoothingParameters`
     - type: *(string)*

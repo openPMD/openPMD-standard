@@ -495,7 +495,7 @@ tools to read records with a size of more than the typical size of a
 local-node's RAM, the records in this sub-group allow to sub-sort particle
 records that are close in the n-dimensional `position` to ensure an
 intermediate level of data locality. Patches of particles must be
-hyperrectangles regarding the `position` (including `particleOffset`s as
+hyperrectangles regarding the `position` (including `positionOffset`s as
 described above) of the particles within. The union of all particle patches
 must correspond to the complete particle's records.
 

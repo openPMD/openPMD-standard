@@ -464,7 +464,7 @@ should be used to push the particle.
 
   - `particlePatches`
     - description: if this sub-group is used in combination with non-constant
-                   components in the `particleOffset` components, the
+                   components in the `positionOffset` components, the
                    position for `offset` and `extent` refers to the
                    position of the beginning of the cell (see `positionOffset`)
     - advice to implementors: the calculation and description of

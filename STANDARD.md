@@ -246,7 +246,7 @@ the `record` is the `component` (and vice versa).
     - type: *(any type)*
     - data set: `recordName` unique name in group `basePath` +
                 `meshesPath` or alternatively in `basePath` +
-                `particleName` + `particlesPath`
+                `particlesPath` + `particleName`
     - examples:
       - `/data/meshes/temperature`
       - `/data/particles/electrons/charge`

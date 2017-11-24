@@ -12,9 +12,9 @@ interpreted as described in [RFC 2119](http://tools.ietf.org/html/rfc2119).
 
 All `keywords` in this standard are case-sensitive.
 
-The naming *(float)* without a closer specification is used if the implementor
+The naming *(floatX)* without a closer specification is used if the implementor
 can choose which kind of floating point precision shall be used.
-The naming *(uint)* and *(int)* without a closer specification is used if the
+The naming *(uintX)* and *(intX)* without a closer specification is used if the
 implementor can choose which kind of (un)signed integer type shall be used.
 The naming for the type *(string)* refers to fixed-length, plain ASCII encoded
 character arrays since they are the only ones that are likely to propagate
@@ -202,7 +202,7 @@ attributes that describe the current time and the last
 time step.
 
  - `time`
-   - type: *(float)*
+   - type: *(floatX)*
    - description: the time corresponding to this iteration. Because at
                   one given iteration, different quantities may be defined
                   at different times (e.g. in a staggered code), this time is
@@ -215,7 +215,7 @@ time step.
               then have a non-zero `timeOffset`.
 
  - `dt`
-   - type: *(float)*
+   - type: *(floatX)*
    - description: The latest time step (that was used to reach this iteration).
                   This is needed at the iteration level, since the time step
                   may vary from iteration to iteration in certain codes.
@@ -367,7 +367,7 @@ meshes):
       - `thetaMode` Fortran-style `A[r,z]` write: `("r", "z")` and `dataOrder='F'`
 
   - `gridSpacing`
-    - type: 1-dimensional array containing N *(float)*
+    - type: 1-dimensional array containing N *(floatX)*
             elements, where N is the number of dimensions in the simulation
     - description: spacing of the grid points along each dimension (in the
                    units of the simulation); this refers to the spacing of the
@@ -398,7 +398,7 @@ The following attributes must be stored with each `scalar record` and each
 *component* of a `vector record`:
 
   - `position`
-    - type: 1-dimensional array of N *(float)* where N is the number of
+    - type: 1-dimensional array of N *(floatX)* where N is the number of
             dimensions in the simulation.
     - range of each value: `[ 0.0 : 1.0 )`
     - description: relative position of the component on the current element of
@@ -442,14 +442,14 @@ short-hand notation (see: *Constant Record Components*).
                    particle.
 
   - `position/` + components such as `x`, `y`, `z`
-    - type: each component in *(float)* or *(int)* or *(uint)*
+    - type: each component in *(floatX)* or *(intX)* or *(uintX)*
     - scope: *required*
     - description: component-wise position of a particle, relative to
                    `positionOffset`
     - example: use only `x` and `y` in 2D, use `x` in 1D
 
   - `positionOffset/` + components such as `x`, `y`, `z`
-    - type: each component in *(float)* or *(int)* or *(uint)*
+    - type: each component in *(floatX)* or *(intX)* or *(uintX)*
     - scope: *required*
     - description: an offset to be added to each element of `position`
     - rationale: for precision reasons and visualization purposes, it is
@@ -529,7 +529,7 @@ patch order:
                             that were stored before this one
 
   - `offset/` + components such as `x`, `y`, `z`
-    - type: each component in *(float)* or *(int)* or *(uint)*
+    - type: each component in *(floatX)* or *(intX)* or *(uintX)*
     - description: absolute position (`position` + `positionOffset` as defined
                    above) where the particle patch begins:
                    defines the (inclusive) lower bound with positions that are
@@ -537,7 +537,7 @@ patch order:
                    the same requirements as for regular record components apply
 
   - `extent/` + components such as `x`, `y`, `z`
-    - type: each component in *(float)* or *(int)* or *(uint)*
+    - type: each component in *(floatX)* or *(intX)* or *(uintX)*
     - description: extent of the particle patch; the `offset` + `extent` must
                    be larger than the maximum absolute position of particles in
                    the patch as the exact upper bound of position `offset` +
@@ -602,7 +602,7 @@ Reminder: for scalar records the `record` itself is also the `component`.
                         `(1., 1., -3., -1., 0., 0., 0.)`
 
   - `timeOffset`
-    - type: *(float)*
+    - type: *(floatX)*
     - description: the offset between the time at which this record is
                    defined and the `time` attribute of the `basePath` level.
                    This should be written in the same unit system as `time`

@@ -356,14 +356,15 @@ meshes):
     - advice to implementors: in the ordering of variation for the indexes for
                               matrices as defined by the index-operator
                               (`[...][...]`) of the writing code
-    - advice to implementors: query the record's `dataOrder` to get the
+    - advice to implementors: on read, query the record's `dataOrder` to get the
                               information if you need to invert the access to
                               `axisLabels` (and other attributes that use the
                               same definition)
     - examples:
-      - 3D `cartesian`: `("x", "y", "z")` or `("z", "y", "x")`
-      - 2D `cartesian`: `("x", "y")` or `("y", "x")`
-      - `thetaMode`: `("r", "z")` or `("z", "r")`
+      - 3D `cartesian` C-style `A[z,y,x]` write: `("z", "y", "x")` and `dataOrder='C'`
+      - 2D `cartesian` C-style `A[y,x]` write: `("y", "x")` and `dataOrder='C'`
+      - 2D `cartesian` Fortran-style `A[x,y]` write: `("x", "y")` and `dataOrder='F'`
+      - `thetaMode` Fortran-style `A[r,z]` write: `("r", "z")` and `dataOrder='F'`
 
   - `gridSpacing`
     - type: 1-dimensional array containing N *(float)*

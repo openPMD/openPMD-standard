@@ -12,10 +12,12 @@ interpreted as described in [RFC 2119](http://tools.ietf.org/html/rfc2119).
 
 All `keywords` in this standard are case-sensitive.
 
-The naming *(floatX)* without a closer specification is used if the implementor
-can choose which kind of floating point precision shall be used.
-The naming *(uintX)* and *(intX)* without a closer specification is used if the
-implementor can choose which kind of (un)signed integer type shall be used.
+The naming *(floatX)* without further specification is used if the implementor
+can choose which kind of floating point precision shall be used
+(e.g. *(float16)*, *(float32)*, *(float64)*, *(float128)*, etc.).
+The naming *(uintX)* and *(intX)* without further specification is used if the
+implementor can choose which kind of (un)signed integer type shall be used
+(e.g. *(int32)*, *(uint64)*, etc.).
 The naming for the type *(string)* refers to fixed-length, plain ASCII encoded
 character arrays since they are the only ones that are likely to propagate
 through all file-format APIs and third-party programs that use them.

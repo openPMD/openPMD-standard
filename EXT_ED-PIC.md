@@ -341,7 +341,7 @@ particle. Therefore, this extension requires the two following attributes:
              charge of 100 electrons), then macroweighted must be 1
 
 - `weightingPower`
-  - type: *(double / REAL8)*
+  - type: *(float64 / REAL8)*
   - scope: *required*
   - description: indicates with which power of `weighting` (see below)
                  the quantity should be multiplied, in order to go from the

@@ -223,7 +223,7 @@ time step.
                   may vary from iteration to iteration in certain codes.
 
  - `timeUnitSI`
-    - type: *(double / REAL8)*
+    - type: *(float64 / REAL8)*
     - description: a conversation factor to convert `time` and `dt` to `seconds`
     - example: `1.0e-16`
 
@@ -380,7 +380,7 @@ meshes):
                               the axes in `axisLabels`
 
   - `gridGlobalOffset`
-    - type: 1-dimensional array containing N *(double / REAL8)*
+    - type: 1-dimensional array containing N *(float64 / REAL8)*
             elements, where N is the number of dimensions in the simulation
     - description: start of the current domain of the simulation (position of
                    the beginning of the first cell) in simulation units
@@ -390,7 +390,7 @@ meshes):
     - example: `(0.0, 100.0, 0.0)` or `(0.5, 0.5, 0.5)`
 
   - `gridUnitSI`
-    - type: *(double / REAL8)*
+    - type: *(float64 / REAL8)*
     - description: unit-conversion factor to multiply each value in
                    `gridSpacing` and `gridGlobalOffset`, in order to convert
                    from simulation units to SI units
@@ -567,7 +567,7 @@ attributes must be added:
 Reminder: for scalar records the `record` itself is also the `component`.
 
   - `unitSI`
-    - type: *(double / REAL8*)
+    - type: *(float64 / REAL8*)
     - description: a conversation factor to multiply data with to be
                    represented in SI
     - rationale: can also be used to scale a dimension-less `component`
@@ -578,7 +578,7 @@ Reminder: for scalar records the `record` itself is also the `component`.
 ### Required for each `Record`
 
   - `unitDimension`
-    - type: array of 7 *(double / REAL8)*
+    - type: array of 7 *(float64 / REAL8)*
     - description: powers of the 7 base measures characterizing the record's
                    unit in SI (length L, mass M, time T, electric current I,
                    thermodynamic temperature theta, amount of substance N,

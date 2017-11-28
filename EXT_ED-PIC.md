@@ -184,20 +184,20 @@ field that should be distributed again on the cells.
 
 - fundamental fields:
   - `E`
-    - type: *(float)* or *(int)* or *(uint)*
+    - type: *(floatX)* or *(intX)* or *(uintX)*
     - description: the electric field
-    - advice to implementors: a *(float)* type is likely the most frequent case
+    - advice to implementors: a *(floatX)* type is likely the most frequent case
                               for this record
     - advice to implementors: must have
                               `unitDimension = (1., 1., -3., -1., 0., 0., 0.)`
                               (V/m = kg * m / (A * s^3))
   - `B`
-    - type: *(float)* or *(int)* or *(uint)*
+    - type: *(floatX)* or *(intX)* or *(uintX)*
     - description: the magnetic field
     - advice to implementors: must have
                               `unitDimension = (0., 1., -2., -1., 0., 0., 0.)`
                               (T = kg / (A * s^2))
-    - advice to implementors: a *(float)* type is likely the most frequent case
+    - advice to implementors: a *(floatX)* type is likely the most frequent case
                               for this record
 
 - auxiliary fields:
@@ -229,7 +229,7 @@ The following additional attributes are defined in this extension.
 The individual requirement is given in `scope`.
 
   - `particleShape`
-    - type: *(float)*
+    - type: *(floatX)*
     - scope: *required*
     - description: the order of the particle assignment function shape
                    (see *Hockney* reprint 1989, ISBN:0-85274-392-0, table 5-1)
@@ -341,7 +341,7 @@ particle. Therefore, this extension requires the two following attributes:
              charge of 100 electrons), then macroweighted must be 1
 
 - `weightingPower`
-  - type: *(double / REAL8)*
+  - type: *(float64 / REAL8)*
   - scope: *required*
   - description: indicates with which power of `weighting` (see below)
                  the quantity should be multiplied, in order to go from the
@@ -382,7 +382,7 @@ momentum change due to collisions) but not as *the* particle momentum that
 should be used to push the particle.
 
   - `charge`
-    - type: *(float)* or *(int)* or *(uint)*
+    - type: *(floatX)* or *(intX)* or *(uintX)*
     - description: electric charge of the macroparticle or of the underlying
                    individual particle (depending on the `macroWeighted` flag)
     - advice to implementors: must have `weightingPower = 1` and
@@ -390,7 +390,7 @@ should be used to push the particle.
                               (charge = current * time)
 
   - `mass`
-    - type: *(float)* or *(int)* or *(uint)*
+    - type: *(floatX)* or *(intX)* or *(uintX)*
     - description: mass of the macroparticle or of the underlying individual
                    particle (depending on the `macroWeighted` flag)
     - advice to implementors: must have `weightingPower = 1` and
@@ -398,7 +398,7 @@ should be used to push the particle.
                               (mass)
 
   - `weighting`
-    - type: *(float)* or *(int)* or *(uint)*
+    - type: *(floatX)* or *(intX)* or *(uintX)*
     - description: the number of underlying individual particles that
                    the macroparticles represent
     - advice to implementors: must have `weightingPower = 1`,
@@ -406,7 +406,7 @@ should be used to push the particle.
                               `unitDimension == (0., ..., 0.)`
 
   - `momentum/` + components such as `x`, `y` and `z`
-    - type: each component in *(float)* or *(int)* or *(uint)*
+    - type: each component in *(floatX)* or *(intX)* or *(uintX)*
     - description: component-wise momentum of the macroparticle or of the
                    underlying individual particle (depending on the
                    `macroWeighted` flag)
@@ -415,7 +415,7 @@ should be used to push the particle.
                               (momentum = mass * length / time)
 
   - `position/` + components such as `x`, `y` and `z`
-    - type: each component in *(float)* or *(int)* or *(uint)*
+    - type: each component in *(floatX)* or *(intX)* or *(uintX)*
     - description: component-wise position of a particle, relative to
                    `positionOffset`
       - in the case where the `component`s of `positionOffset` are constant,
@@ -426,19 +426,19 @@ should be used to push the particle.
         `positionOffset` must represent the position of the beginning of the
         cell (see below)
     - rationale: dividing the particle position in a beginning of the cell
-                 (as *(int)*) and in-cell position (as *(float)*) can
+                 (as *(intX)*) and in-cell position (as *(floatX)*) can
                  dramatically improve the precision of stored particle
                  positions; this division creates a connection between
                  particles and the fields on their cells
     - advice to implementors: must have `weightingPower = 0` and
                               `unitDimension = (1., 0., 0., 0., 0., 0., 0.)`
                               (length)
-    - advice to implementors: a *(float)* type is likely the most frequent case
+    - advice to implementors: a *(floatX)* type is likely the most frequent case
                               for this record
     - example: use only `x` and `y` in 2D
 
   - `positionOffset/` + components such as `x`, `y` and `z`
-    - type: each component in *(float)* or *(int)* or *(uint)*
+    - type: each component in *(floatX)* or *(intX)* or *(uintX)*
     - description: if the `component`s of this record are non-constant
                    this must represent the position of the beginning of the
                    cell the particle is associated with;
@@ -455,7 +455,7 @@ should be used to push the particle.
     - advice to implementors: must have `weightingPower = 0` and
                               `unitDimension = (1., 0., 0., 0., 0., 0., 0.)`
                               (length)
-    - advice to implementors: an *(int)* or *(uint)* type is likely the most
+    - advice to implementors: an *(intX)* or *(uintX)* type is likely the most
                               frequent case for this record
     - advice to implementors: if you want to neglect the relation between
                               particles and their cells, simply store this
@@ -477,21 +477,21 @@ should be used to push the particle.
                               in patches "by cell"
 
   - `boundElectrons`
-    - type: *(float)* or *(int)* or *(uint)*
+    - type: *(floatX)* or *(intX)* or *(uintX)*
     - description: number of bound electrons of an ion/atom;
                    to provide information to atomic physics algorithms
     - advice to implementors: must have `weightingPower = 1` and
                               `unitDimension = (0., ..., 0.)` (dimensionless)
 
   - `protonNumber`
-    - type: *(float)* or *(int)* or *(uint)*
+    - type: *(floatX)* or *(intX)* or *(uintX)*
     - description: the atomic number Z of an ion/atom;
                    to provide information to atomic physics algorithms
     - advice to implementors: must have `weightingPower = 1` and
                               `unitDimension = (0., ..., 0.)` (dimensionless)
 
   - `neutronNumber`
-    - type: *(float)* or *(int)* or *(uint)*
+    - type: *(floatX)* or *(intX)* or *(uintX)*
     - description: the neutron number N = the mass number - A and
                    the atomic number Z of an ion/atom;
                    to provide information to atomic physics algorithms

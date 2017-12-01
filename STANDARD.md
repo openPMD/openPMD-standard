@@ -1,7 +1,7 @@
 The openPMD Standard
 ====================
 
-VERSION: **1.0.0** (November 11th, 2015)
+VERSION: **1.0.1** (December 1st, 2017)
 
 Conventions Throughout these Documents
 --------------------------------------
@@ -75,7 +75,7 @@ Each file's *root* directory (path `/`) must at leat contain the attributes:
     - description: (targeted) version of the format in "MAJOR.MINOR.REVISION",
                    see section "The versions of this standard",
                    minor and revision must not be neglected
-    - example: `1.0.0`
+    - example: `1.0.1`
 
   - `openPMDextension`
     - type: *(uint32)*

@@ -1,7 +1,7 @@
 The openPMD Standard
 ====================
 
-VERSION: **1.0.0** (November 11th, 2015)
+VERSION: **1.0.1** (December 1st, 2017)
 
 Conventions Throughout these Documents
 --------------------------------------
@@ -12,10 +12,12 @@ interpreted as described in [RFC 2119](http://tools.ietf.org/html/rfc2119).
 
 All `keywords` in this standard are case-sensitive.
 
-The naming *(float)* without a closer specification is used if the implementor
-can choose which kind of floating point precision shall be used.
-The naming *(uint)* and *(int)* without a closer specification is used if the
-implementor can choose which kind of (un)signed integer type shall be used.
+The naming *(floatX)* without further specification is used if the implementor
+can choose which kind of floating point precision shall be used
+(e.g. *(float16)*, *(float32)*, *(float64)*, *(float128)*, etc.).
+The naming *(uintX)* and *(intX)* without further specification is used if the
+implementor can choose which kind of (un)signed integer type shall be used
+(e.g. *(int32)*, *(uint64)*, etc.).
 The naming for the type *(string)* refers to fixed-length, plain ASCII encoded
 character arrays since they are the only ones that are likely to propagate
 through all file-format APIs and third-party programs that use them.
@@ -73,7 +75,7 @@ Each file's *root* directory (path `/`) must at leat contain the attributes:
     - description: (targeted) version of the format in "MAJOR.MINOR.REVISION",
                    see section "The versions of this standard",
                    minor and revision must not be neglected
-    - example: `1.0.0`
+    - example: `1.0.1`
 
   - `openPMDextension`
     - type: *(uint32)*
@@ -100,6 +102,16 @@ Each file's *root* directory (path `/`) must at leat contain the attributes:
                    of `%T` with the integer value of the iteration, e.g.,
                    `/data/%T` becomes `/data/100`
     - allowed value: fixed to `/data/%T/` for this version of the standard
+    - note: all the data that is formatted according to the present
+      standard (i.e. both the meshes and the particles) is to be
+      stored within a path of the form given by `basePath` (e.g. in
+      the above example, the data will be stored within the path `/data/100/`).
+      If, for various reasons, a user wants to store *additional
+      data* that is not (or cannot be) formatted according to the
+      present standard (e.g. fields on an unstructured mesh),
+      this can be done be storing this data within a path that *is not*
+      of the form given by `basePath` (e.g. `/extra_data`). In this
+      way, the openPMD parsing tools will not parse this additional data. 
 
   - `meshesPath`
     - type: *(string)*
@@ -192,7 +204,7 @@ attributes that describe the current time and the last
 time step.
 
  - `time`
-   - type: *(float)*
+   - type: *(floatX)*
    - description: the time corresponding to this iteration. Because at
                   one given iteration, different quantities may be defined
                   at different times (e.g. in a staggered code), this time is
@@ -205,13 +217,13 @@ time step.
               then have a non-zero `timeOffset`.
 
  - `dt`
-   - type: *(float)*
+   - type: *(floatX)*
    - description: The latest time step (that was used to reach this iteration).
                   This is needed at the iteration level, since the time step
                   may vary from iteration to iteration in certain codes.
 
  - `timeUnitSI`
-    - type: *(double / REAL8)*
+    - type: *(float64 / REAL8)*
     - description: a conversation factor to convert `time` and `dt` to `seconds`
     - example: `1.0e-16`
 
@@ -246,7 +258,7 @@ the `record` is the `component` (and vice versa).
     - type: *(any type)*
     - data set: `recordName` unique name in group `basePath` +
                 `meshesPath` or alternatively in `basePath` +
-                `particleName` + `particlesPath`
+                `particlesPath` + `particleName`
     - examples:
       - `/data/meshes/temperature`
       - `/data/particles/electrons/charge`
@@ -346,17 +358,18 @@ meshes):
     - advice to implementors: in the ordering of variation for the indexes for
                               matrices as defined by the index-operator
                               (`[...][...]`) of the writing code
-    - advice to implementors: query the record's `dataOrder` to get the
+    - advice to implementors: on read, query the record's `dataOrder` to get the
                               information if you need to invert the access to
                               `axisLabels` (and other attributes that use the
                               same definition)
     - examples:
-      - 3D `cartesian`: `("x", "y", "z")` or `("z", "y", "x")`
-      - 2D `cartesian`: `("x", "y")` or `("y", "x")`
-      - `thetaMode`: `("r", "z")` or `("z", "r")`
+      - 3D `cartesian` C-style `A[z,y,x]` write: `("z", "y", "x")` and `dataOrder='C'`
+      - 2D `cartesian` C-style `A[y,x]` write: `("y", "x")` and `dataOrder='C'`
+      - 2D `cartesian` Fortran-style `A[x,y]` write: `("x", "y")` and `dataOrder='F'`
+      - `thetaMode` Fortran-style `A[r,z]` write: `("r", "z")` and `dataOrder='F'`
 
   - `gridSpacing`
-    - type: 1-dimensional array containing N *(float)*
+    - type: 1-dimensional array containing N *(floatX)*
             elements, where N is the number of dimensions in the simulation
     - description: spacing of the grid points along each dimension (in the
                    units of the simulation); this refers to the spacing of the
@@ -367,7 +380,7 @@ meshes):
                               the axes in `axisLabels`
 
   - `gridGlobalOffset`
-    - type: 1-dimensional array containing N *(double / REAL8)*
+    - type: 1-dimensional array containing N *(float64 / REAL8)*
             elements, where N is the number of dimensions in the simulation
     - description: start of the current domain of the simulation (position of
                    the beginning of the first cell) in simulation units
@@ -377,7 +390,7 @@ meshes):
     - example: `(0.0, 100.0, 0.0)` or `(0.5, 0.5, 0.5)`
 
   - `gridUnitSI`
-    - type: *(double / REAL8)*
+    - type: *(float64 / REAL8)*
     - description: unit-conversion factor to multiply each value in
                    `gridSpacing` and `gridGlobalOffset`, in order to convert
                    from simulation units to SI units
@@ -387,7 +400,7 @@ The following attributes must be stored with each `scalar record` and each
 *component* of a `vector record`:
 
   - `position`
-    - type: 1-dimensional array of N *(float)* where N is the number of
+    - type: 1-dimensional array of N *(floatX)* where N is the number of
             dimensions in the simulation.
     - range of each value: `[ 0.0 : 1.0 )`
     - description: relative position of the component on the current element of
@@ -418,46 +431,6 @@ short-hand notation (see: *Constant Record Components*).
 
 ### Records for each `Particle Species`
 
-  - `position/` + components such as `x`, `y`, `z`
-    - type: each component in *(float)* or *(int)* or *(uint)*
-    - scope: *required*
-    - description: component-wise position of a particle, relative to
-                   `positionOffset`
-    - example: use only `x` and `y` in 2D, use `x` in 1D
-
-  - `positionOffset/` + components such as `x`, `y`, `z`
-    - type: each component in *(float)* or *(int)* or *(uint)*
-    - scope: *required*
-    - description: an offset to be added to each element of `position`
-    - rationale: for precision reasons and visualization purposes, it is
-                 often more useful to define all positions of an iteration
-                 relative to an offset; extensions might use this record to
-                 define relations to mesh records
-    - advice to implementors: to reduce read/write accesses and memory
-                              consumption, it is often useful to implement this
-                              with `constant record components`
-    - example: reading example (with h5py) in Python:
-```python
-def is_const_record(record_name, component_name) :
-    return ("value" in record_name["component_name"].attrs.keys())
-
-def get_component(record_name, component_name) :
-    if is_const_record(record_name, component_name) :
-        return record_name["component_name"].attrs["value"]
-    else :
-        record_name["component_name"][:]
-
-f = h5py.File('example.h5')
-species = f["<path_to_species_group>"]
-
-position_x_relative = get_component(species["position"], "x") \
-                    * species["position"].attrs["unitSI"]
-position_x_offset = get_component(species["positionOffset"], "x") \
-                  * species["positionOffset"].attrs["unitSI"]
-
-x = position_x_relative + position_x_offset
-```
-
   - `id`
     - type: *(uint64 / UNSIGNED8)*
     - scope: *optional*
@@ -469,6 +442,49 @@ x = position_x_relative + position_x_offset
                    Also, when a particle exits the simulation box, its
                    identifying integer should not be reassigned to a new
                    particle.
+
+  - `position/` + components such as `x`, `y`, `z`
+    - type: each component in *(floatX)* or *(intX)* or *(uintX)*
+    - scope: *required*
+    - description: component-wise position of a particle, relative to
+                   `positionOffset`
+    - example: use only `x` and `y` in 2D, use `x` in 1D
+
+  - `positionOffset/` + components such as `x`, `y`, `z`
+    - type: each component in *(floatX)* or *(intX)* or *(uintX)*
+    - scope: *required*
+    - description: an offset to be added to each element of `position`
+    - rationale: for precision reasons and visualization purposes, it is
+                 often more useful to define all positions of an iteration
+                 relative to an offset; extensions might use this record to
+                 define relations to mesh records
+    - advice to implementors: to reduce read/write accesses and memory
+                              consumption, it is often useful to implement this
+                              with `constant record components`
+    - example: reading example (with h5py) in Python:
+```python
+def is_const_component(record_component):
+    return ("value" in record_component.attrs.keys())
+
+def get_component(group, component_name):
+    record_component = group[component_name]
+    unitSI = record_component.attrs["unitSI"]
+
+    if is_const_component(record_component):
+        return record_component.attrs["value"], unitSI
+    else:
+        return record_component.value, unitSI
+
+f = h5py.File('example.h5')
+species = f["<path_to_species_group>"]
+
+position_x_relative, unitXRel = get_component(species, "position/x")
+position_x_offset, unitXOff = get_component(species, "positionOffset/x")
+
+x = position_x_relative * unitXRel + \
+    position_x_offset * unitXOff
+```
+
 
 ### Sub-Group for each `Particle Species`
 
@@ -482,7 +498,7 @@ tools to read records with a size of more than the typical size of a
 local-node's RAM, the records in this sub-group allow to sub-sort particle
 records that are close in the n-dimensional `position` to ensure an
 intermediate level of data locality. Patches of particles must be
-hyperrectangles regarding the `position` (including `particleOffset`s as
+hyperrectangles regarding the `position` (including `positionOffset`s as
 described above) of the particles within. The union of all particle patches
 must correspond to the complete particle's records.
 
@@ -515,7 +531,7 @@ patch order:
                             that were stored before this one
 
   - `offset/` + components such as `x`, `y`, `z`
-    - type: each component in *(float)* or *(int)* or *(uint)*
+    - type: each component in *(floatX)* or *(intX)* or *(uintX)*
     - description: absolute position (`position` + `positionOffset` as defined
                    above) where the particle patch begins:
                    defines the (inclusive) lower bound with positions that are
@@ -523,7 +539,7 @@ patch order:
                    the same requirements as for regular record components apply
 
   - `extent/` + components such as `x`, `y`, `z`
-    - type: each component in *(float)* or *(int)* or *(uint)*
+    - type: each component in *(floatX)* or *(intX)* or *(uintX)*
     - description: extent of the particle patch; the `offset` + `extent` must
                    be larger than the maximum absolute position of particles in
                    the patch as the exact upper bound of position `offset` +
@@ -551,7 +567,7 @@ attributes must be added:
 Reminder: for scalar records the `record` itself is also the `component`.
 
   - `unitSI`
-    - type: *(double / REAL8*)
+    - type: *(float64 / REAL8*)
     - description: a conversation factor to multiply data with to be
                    represented in SI
     - rationale: can also be used to scale a dimension-less `component`
@@ -562,7 +578,7 @@ Reminder: for scalar records the `record` itself is also the `component`.
 ### Required for each `Record`
 
   - `unitDimension`
-    - type: array of 7 *(double / REAL8)*
+    - type: array of 7 *(float64 / REAL8)*
     - description: powers of the 7 base measures characterizing the record's
                    unit in SI (length L, mass M, time T, electric current I,
                    thermodynamic temperature theta, amount of substance N,
@@ -588,7 +604,7 @@ Reminder: for scalar records the `record` itself is also the `component`.
                         `(1., 1., -3., -1., 0., 0., 0.)`
 
   - `timeOffset`
-    - type: *(float)*
+    - type: *(floatX)*
     - description: the offset between the time at which this record is
                    defined and the `time` attribute of the `basePath` level.
                    This should be written in the same unit system as `time`

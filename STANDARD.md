@@ -143,6 +143,21 @@ contains the attributes:
                    file
     - example: `1.2.1`, `80c7551`, `rev42`
 
+  - `softwareDependencies`
+    - type: *(string)*
+    - description: dependencies of `software` that were used when
+                   `software` created the file,
+                   semicolon-separated list in the format `<name>/<version>`
+                   (`<name>` must be without spaces)
+    - example: `gcc/5.4.0;boost/1.66.0;nvcc/9.1;python/3.6;adios/1.13;hdf5/1.8.17`
+
+  - `machine`
+    - type: *(string)*
+    - description: the machine or relevant hardware that created the file;
+                   as semicolon-separated list if needed
+    - example: `summit-ornl` (HPC cluster),
+               `pco.pixelfly-usb` (scientific 14bit CCD camera)
+
   - `date`
     - type: *(string)*
     - description: date of creation in format "YYYY-MM-DD HH:mm:ss tz"

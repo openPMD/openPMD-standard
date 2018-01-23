@@ -113,16 +113,26 @@ Each file's *root* group (path `/`) must at least contain the attributes:
       of the form given by `basePath` (e.g. `/extra_data`). In this
       way, the openPMD parsing tools will not parse this additional data. 
 
+The following attributes are *optional* in each each file's *root* directory
+(path `/`) and indicate if a file contains mesh and/or particle records. It is
+*required* to set them if one wants to store mesh and/or particle records.
+
   - `meshesPath`
     - type: *(string)*
     - description: path *relative* from the `basePath` to the mesh records
     - example: `meshes/`
+    - note: if this attribute is missing, the file is interpreted as if it
+      contains *no mesh records*! If the attribute is set, the group behind
+      it *must* exist!
 
   - `particlesPath`
     - type: *(string)*
     - description: path *relative* from the `basePath` to the groups for each
                    particle species and the records they include
     - example: `particles/`
+    - note: if this attribute is missing, the file is interpreted as if it
+      contains *no particle records*! If the attribute is set, the group behind
+      it *must* exist!
 
 It is *recommended* that each file's *root* group (path `/`) further
 contains the attributes:

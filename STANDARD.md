@@ -68,7 +68,7 @@ We define the following placeholders and reserved characters:
 **Paths** to **groups** end on `/`, e.g., `/mySubGroup/` and **data sets** end
 without a `/`, e.g., `dataSet` or `/path/to/dataSet`.
 
-Each file's *root* group (path `/`) must at leat contain the attributes:
+Each file's *root* group (path `/`) must at least contain the attributes:
 
   - `openPMD`
     - type: *(string)*

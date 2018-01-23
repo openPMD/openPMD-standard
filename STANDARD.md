@@ -295,7 +295,7 @@ homogenous records, usually in a N-dimensional matrix.
 
 ### Required Attributes for each `mesh record`
 
-The following attributes must be stored additionally with the `meshName` record
+The following attributes must be stored additionally with each `mesh record`
 (which is a data set attribute for `scalar` or a group attribute for `vector`
 meshes):
 

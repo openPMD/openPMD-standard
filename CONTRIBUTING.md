@@ -38,8 +38,34 @@ upcoming version, tracks the corresponding issues and their status (from
 `proposed` to `accepted` to `implemented`). It is important for
 the prioritization and organization of tasks.
 
-How to implement a change, using a pull request
------------------------------------------------
+How to implement a change, through a pull request
+-------------------------------------------------
+
+In order to order to implement a change in the text of the standard,
+and propose it via a pull request, please follow this process (*Note*: this assumes familiarity with `git`.):
+
+- **Fork the [official repository for the openPMD
+standard](https://github.com/openPMD/openPMD-standard)**.
+("Forking" means creating a local copy of the official repository, in
+your personal Github account.) This is done by clicking the `Fork` button
+in the upper right corner of [this page](https://github.com/openPMD/openPMD-standard).
+
+ - **Clone the fork to your local computer, and a create a new branch**:
+    * `git clone git@github.com:<YourUserName>/openPMD-standard.git`
+    * `cd openPMD-standard`
+    * `git remote add mainline git@github.com:openPMD/openPMD-standard.git` (add the official repository for updates)
+    * `git fetch mainline` (get latest updates from official repository)
+    * `git checkout mainline/upcoming-<versionNumber> -b <newBranch>`: where
+    `<versionNumber>` should be replaced by the number of the next upcoming
+    version: see [this
+    page](https://github.com/openPMD/openPMD-standard/branches),
+    and where `<newBranch>` should be replaced by a name that is representative
+    of the change that you wish to implement.
+
+- **Implement changes in the files, and commit them using `git`**
+
+- Once you are done with the implementation: **push the changes to your fork**:
+    `git push -u origin`
 
 License Model
 -------------

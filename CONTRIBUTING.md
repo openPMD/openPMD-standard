@@ -67,6 +67,19 @@ in the upper right corner of [this page](https://github.com/openPMD/openPMD-stan
 - Once you are done with the implementation: **push the changes to your fork**:
     `git push -u origin`
 
+- **Create a pull request**:
+    * Point your web browser to `https://github.com/<YourUserName>/openPMD-standard/pulls`, where `<YourUserName>` should be replaced by your Github username.
+    * Click the button `New pull request`
+    * For `base fork`, select `upcoming-*` ; for `head fork` select the name
+    of your new branch.
+    * Click `Create pull request`
+    * In the description section of the pull request, briefly describe the
+    changes that you are making. Please link the Github issue that this is
+    related to. You can use [this template](https://github.com/openPMD/openPMD-standard/blob/upcoming-1.1.0/.github/PULL_REQUEST_TEMPLATE.md) in order to explain how this affects other
+    tools that rely on the openPMD standard.
+    * Click again `Create pull request`
+
+
 License Model
 -------------
 

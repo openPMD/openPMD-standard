@@ -1,7 +1,7 @@
 Contributing to the openPMD standard
 ======================================
 
-The openPMD standard can evolve in order to accommodate the needs of the community. This results in successive [*versions* of the standard](https://github.com/openPMD/openPMD-standard/blob/1.0.1/STANDARD.md#the-versions-of-this-standard). This document explains the process through which the standard evolves, and how to contribute to it.
+The openPMD standard can evolve in order to accommodate the needs of the community. This results in successive [*versions* of the standard](https://github.com/openPMD/openPMD-standard/blob/1.0.1/STANDARD.md#the-versions-of-this-standard). This document explains the process by which the standard evolves, and how to contribute to it.
 
 Update Cycle
 ------------
@@ -31,20 +31,20 @@ of the `latest` branch and tagging it with a new **official version number**.)
 Tools that use the openPMD standard should then be adapted, so that they can
 properly parse openPMD files that conform to this new official version.
 
-Note that this 3-step process in reflected in the [Projects
+Note that this 3-step process is reflected in the [Projects
 tab](https://github.com/openPMD/openPMD-standard/projects). This page
 lists the upcoming versions that are being considered, and, for each
 upcoming version, tracks the corresponding issues and their status (from
-`proposed` to `accepted` to `implemented`). It is important for
+`proposed` to `accepted` to `implemented`). The Projects tab is important for
 the prioritization and organization of tasks.
 
 How to implement a change, through a pull request
 -------------------------------------------------
 
-In order to order to implement a change in the text of the standard,
-and propose it via a pull request, please follow this process (*Note*: this assumes familiarity with `git`.):
+In order to implement a change in the text of the standard,
+please follow this process (*Note*: this assumes familiarity with `git`):
 
-- **Fork the [official repository for the openPMD
+- **Fork the [official repository of the openPMD
 standard](https://github.com/openPMD/openPMD-standard)**.
 ("Forking" means creating a local copy of the official repository, in
 your personal Github account.) This is done by clicking the `Fork` button
@@ -57,8 +57,8 @@ in the upper right corner of [this page](https://github.com/openPMD/openPMD-stan
     * `git fetch mainline` (get latest updates from official repository)
     * `git checkout mainline/upcoming-<versionNumber> -b <newBranch>`: where
     `<versionNumber>` should be replaced by the number of the next upcoming
-    version: see [this
-    page](https://github.com/openPMD/openPMD-standard/branches),
+    version (see [this
+    page](https://github.com/openPMD/openPMD-standard/branches)),
     and where `<newBranch>` should be replaced by a name that is representative
     of the change that you wish to implement.
 
@@ -70,7 +70,7 @@ in the upper right corner of [this page](https://github.com/openPMD/openPMD-stan
 - **Create a pull request**:
     * Point your web browser to `https://github.com/<YourUserName>/openPMD-standard/pulls`, where `<YourUserName>` should be replaced by your Github username.
     * Click the button `New pull request`
-    * For `base fork`, select `upcoming-*` ; for `head fork` select the name
+    * For `base fork`, select `upcoming-*` ; for `head fork`, select the name
     of your new branch.
     * Click `Create pull request`
     * In the description section of the pull request, briefly describe the

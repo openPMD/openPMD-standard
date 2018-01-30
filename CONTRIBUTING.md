@@ -13,30 +13,37 @@ ask for clarification, etc. by opening a new issue
 [here](https://github.com/openPMD/openPMD-standard/issues). The proposed
 changes/features/question will then be discussed by the members of the
 openPMD community (or anyone interested, really) in the `Comments` section of
-this issue. The openPMD admins will usually add a label specifying the version
-of the standard in which this should be implemented.
+this issue. The openPMD maintainers will usually add a label specifying the
+scope and impact of the change. Also, the maintainers will usually organize
+the issue in the [Projects tab](https://github.com/openPMD/openPMD-standard/projects)
+(see more below), and specify the upcoming version of the standard in which
+this issue should tentatively be implemented. (This may be the next upcoming
+version, or a later one.)
 
 - **Pull requests:** Once an issue is well-understood and a clear solution
 emerges, anyone can volunteer to implement it in the text of the standard. This
 is done by creating a pull request (see below for more details on how to
 create a pull request). Pull requests are then reviewed by the community, and
-eventually merged by the openPMD admins (@ax3l and @RemiLehe) into the
+eventually merged by the openPMD maintainers (@ax3l and @RemiLehe) into the
 `upcoming-*` branch (where `*` is replaced by the number of the next upcoming
 version), so that the corresponding changes will be included in the next release.
 
 - **New releases:** Once all the issues that have been labeled for the next
 upcoming version have been resolved (e.g. via pull requests), the openPMD
-admins will create a new official version (by merging the `upcoming-*` on top
+maintainers will create a new official version (by merging the `upcoming-*` on top
 of the `latest` branch and tagging it with a new **official version number**.)
 Tools that use the openPMD standard should then be adapted, so that they can
 properly parse openPMD files that conform to this new official version.
 
 Note that this 3-step process is reflected in the [Projects
-tab](https://github.com/openPMD/openPMD-standard/projects). This page
+tab](https://github.com/openPMD/openPMD-standard/projects). The Projects tab is important for the prioritization and organization of tasks. It
 lists the upcoming versions that are being considered, and, for each
 upcoming version, tracks the corresponding issues and their status (from
-`proposed` to `accepted` to `implemented`). The Projects tab is important for
-the prioritization and organization of tasks.
+`proposed` to `accepted` to `implemented`). Note that issues evolve and can be
+postponed for later releases, or sometimes even dismissed.
+(It does *not* mean that the issue is bad or irrelevant, but rather e.g.
+that no clear solution emerged yet, or that a solution exists but does not
+benefit from being standardized in openPMD.)
 
 How to implement a change, through a pull request
 -------------------------------------------------
@@ -78,6 +85,9 @@ in the upper right corner of [this page](https://github.com/openPMD/openPMD-stan
     related to. You can use [this template](https://github.com/openPMD/openPMD-standard/blob/upcoming-1.1.0/.github/PULL_REQUEST_TEMPLATE.md) in order to explain how this affects other
     tools that rely on the openPMD standard.
     * Click again `Create pull request`
+
+Note that pull request should only be created for the **next** upcoming version.
+In other words, we only work on **one** version/release of the standard at a given time.
 
 
 License Model

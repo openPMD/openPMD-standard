@@ -21,8 +21,9 @@ this issue should tentatively be implemented. (This may be the next upcoming
 version, or a later one.)
 
 - **Pull requests:** Once an issue is well-understood and a clear solution
-emerges, anyone can volunteer to implement it in the text of the standard. This
-is done by creating a pull request (see below for more details on how to
+emerges, anyone can volunteer (via a comment in the issue)
+to implement it in the text of the standard. This is 
+then done by creating a pull request (see below for more details on how to
 create a pull request). Pull requests are then reviewed by the community, and
 eventually merged by the openPMD maintainers (@ax3l and @RemiLehe) into the
 `upcoming-*` branch (where `*` is replaced by the number of the next upcoming

@@ -269,7 +269,7 @@ The individual requirement is given in `scope`.
       - `Boris` (J.P. Boris. *Relativistic plasma simulation-optimization of a*
                  *hybrid code.* USA, 1970)
       - `Vay` ([doi:10.1063/1.2837054](https://dx.doi.org/10.1063/1.2837054))
-      - `streaming` (constantly moving with initial momentum)
+      - `free-streaming` (constantly moving with initial momentum)
       - `LLRK4` (reduced Laundau-Lifshitz pusher via RK4 and classical
                  radiation reaction,
                  [doi:10.1016/j.cpc.2016.04.002](https://dx.doi.org/10.1016/j.cpc.2016.04.002))

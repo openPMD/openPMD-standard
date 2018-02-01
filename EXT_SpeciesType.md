@@ -40,46 +40,46 @@ This attribute can be used with any `record` (including `mesh records`).
 
 ### SubAtomic Particles
 
-  - `subatomic:antimuon`
-  - `subatomic:antiproton`
-  - `subatomic:bottom`
-  - `subatomic:charm-antiquark`
-  - `subatomic:charm-quark`
-  - `subatomic:deuteron`
-  - `subatomic:down-antiquark`
-  - `subatomic:down-quark`
-  - `subatomic:electron`
-  - `subatomic:electron-neutrino`
-  - `subatomic:gluon`
-  - `subatomic:graviton`
-  - `subatomic:higgs-boson`
-  - `subatomic:muon`
-  - `subatomic:muon-neutrino`
-  - `subatomic:neutron`
-  - `subatomic:photon`
-  - `subatomic:pion`
-  - `subatomic:positron`
-  - `subatomic:proton`
-  - `subatomic:strange-antiquark`
-  - `subatomic:strange-quark`
-  - `subatomic:tao-antiquark`
-  - `subatomic:tao-quark`
-  - `subatomic:tao-neutrino`
-  - `subatomic:top-antiquark`
-  - `subatomic:top-quark`
-  - `subatomic:up-antiquark`
-  - `subatomic:up-quark`
-  - `subatomic:w-boson`
-  - `subatomic:z-boson`
+  - `antimuon`
+  - `antiproton`
+  - `bottom`
+  - `charm-antiquark`
+  - `charm-quark`
+  - `deuteron`
+  - `down-antiquark`
+  - `down-quark`
+  - `electron`
+  - `electron-neutrino`
+  - `gluon`
+  - `graviton`
+  - `higgs-boson`
+  - `muon`
+  - `muon-neutrino`
+  - `neutron`
+  - `photon`
+  - `pion`
+  - `positron`
+  - `proton`
+  - `strange-antiquark`
+  - `strange-quark`
+  - `tao-antiquark`
+  - `tao-quark`
+  - `tao-neutrino`
+  - `top-antiquark`
+  - `top-quark`
+  - `up-antiquark`
+  - `up-quark`
+  - `w-boson`
+  - `z-boson`
 
 ### Atoms & Isotopes
 
 Element namings follow the abbreviated namings of the periodic table, defined
 by *The International Union of Pure and Applied Chemistry* (IUPAC).
-They are prefixed with `element:`, e.g. `element:Si`.
+An example would be `Si` for silicate.
 
-Closer specifications of isotopes are denoted by a `isotope:` prefix followed
-by the isotopic number followed by the chemical symbol, e.g.: `isotope:3He`
+Closer specifications of isotopes are denoted by a pound symbol `#` followed
+by the isotopic number followed by the chemical symbol, e.g.: `#3He`
 for Helium-3.
 
 Charge states shall not be specified here but rather in `attributes`
@@ -87,4 +87,8 @@ Charge states shall not be specified here but rather in `attributes`
 
 ### Molecules
 
-Use standard chemical notation with a `molecule:` prefix, e.g.: `molecule:H20`.
+Use standard chemical notation, e.g.: `H20`.
+
+The isotope prefix can be used with molecules as well.
+Examples for heavy water: `#2H2O` for two deuterium and `#2HHO` for one
+deuterium.

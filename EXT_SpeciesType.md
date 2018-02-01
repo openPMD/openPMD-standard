@@ -21,8 +21,10 @@ extension:
 
 - `SpeciesType`
   - type: *(string)*
-  - scope: *recommended*
-  - description: particle species in this record, semicolon-separated list
+  - scope: *optional*
+  - description: particle species in this record. If there are multiple
+                 species to be specified, they can be specified using a
+                 semicolon separated list.
   - allowed values:
     - *see the lists below* and additionally
     - `other` if none of the ones below applies, user are free to append a
@@ -36,45 +38,53 @@ extension:
 
 This attribute can be used with any `record` (including `mesh records`).
 
-### SubAtomic Particle Names
+### SubAtomic Particles
 
-  - `antimuon`
-  - `antiproton`
-  - `bottom`
-  - `charm-antiquark`
-  - `charm-quark`
-  - `deuteron`
-  - `down-antiquark`
-  - `down-quark`
-  - `electron`
-  - `electron-neutrino`
-  - `gluon`
-  - `graviton`
-  - `higgs-boson`
-  - `muon`
-  - `muon-neutrino`
-  - `neutron`
-  - `photon`
-  - `pion`
-  - `positron`
-  - `proton`
-  - `strange-antiquark`
-  - `strange-quark`
-  - `tao-antiquark`
-  - `tao-quark`
-  - `tao-neutrino`
-  - `top-antiquark`
-  - `top-quark`
-  - `up-antiquark`
-  - `up-quark`
-  - `w-boson`
-  - `z-boson`
+  - `subatomic:antimuon`
+  - `subatomic:antiproton`
+  - `subatomic:bottom`
+  - `subatomic:charm-antiquark`
+  - `subatomic:charm-quark`
+  - `subatomic:deuteron`
+  - `subatomic:down-antiquark`
+  - `subatomic:down-quark`
+  - `subatomic:electron`
+  - `subatomic:electron-neutrino`
+  - `subatomic:gluon`
+  - `subatomic:graviton`
+  - `subatomic:higgs-boson`
+  - `subatomic:muon`
+  - `subatomic:muon-neutrino`
+  - `subatomic:neutron`
+  - `subatomic:photon`
+  - `subatomic:pion`
+  - `subatomic:positron`
+  - `subatomic:proton`
+  - `subatomic:strange-antiquark`
+  - `subatomic:strange-quark`
+  - `subatomic:tao-antiquark`
+  - `subatomic:tao-quark`
+  - `subatomic:tao-neutrino`
+  - `subatomic:top-antiquark`
+  - `subatomic:top-quark`
+  - `subatomic:up-antiquark`
+  - `subatomic:up-quark`
+  - `subatomic:w-boson`
+  - `subatomic:z-boson`
 
 ### Atoms & Isotopes
 
-Isotopes are denoted by a pound symbol `#` followed by the isotopic number followed by the chemical symbol, e.g.: `#3He` for Helium-3.
-Element namings follow the abbreviated namings of the periodic table, defined by *The International Union of Pure and Applied Chemistry* (IUPAC).
+Element namings follow the abbreviated namings of the periodic table, defined
+by *The International Union of Pure and Applied Chemistry* (IUPAC).
+They are prefixed with `element:`, e.g. `element:Si`.
+
+Closer specifications of isotopes are denoted by a `isotope:` prefix followed
+by the isotopic number followed by the chemical symbol, e.g.: `isotope:3He`
+for Helium-3.
+
+Charge states shall not be specified here but rather in `attributes`
+(`mesh record`) or `records` or a `particle species`.
 
 ### Molecules
 
-Use standard chemical notation, e.g.: `H20`.
+Use standard chemical notation with a `molecule:` prefix, e.g.: `molecule:H20`.

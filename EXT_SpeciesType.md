@@ -82,9 +82,8 @@ Specifications of isotopes are denoted by a pound symbol `#` followed
 by the isotopic number followed by the chemical symbol, e.g.: `#3He`
 for Helium-3.
 
-Charge states shall not be encoded here.
-An extension that specifies `charge` can further define its appropriate
-location (e.g. `attribute` or `constant particle record`).
+The charge state is not encoded by the `SpeciesType` attribute.
+Any extension using this standard can define how to specify the charge state.
 
 ### Molecules
 

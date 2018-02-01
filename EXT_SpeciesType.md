@@ -76,14 +76,15 @@ This attribute can be used with any `record` (including `mesh records`).
 
 Element namings follow the abbreviated namings of the periodic table, defined
 by *The International Union of Pure and Applied Chemistry* (IUPAC).
-An example would be `Si` for silicate.
+An example would be `Si` for silicon.
 
-Closer specifications of isotopes are denoted by a pound symbol `#` followed
+Specifications of isotopes are denoted by a pound symbol `#` followed
 by the isotopic number followed by the chemical symbol, e.g.: `#3He`
 for Helium-3.
 
-Charge states shall not be specified here but rather in `attributes`
-(`mesh record`) or `records` or a `particle species`.
+Charge states shall not be encoded here.
+An extension that specifies `charge` can further define its appropriate
+location (e.g. `attribute` or `constant particle record`).
 
 ### Molecules
 

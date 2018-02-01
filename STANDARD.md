@@ -730,6 +730,8 @@ defined:
 
 - **ED-PIC**: electro-dynamic/static particle-in-cell codes,
   see [EXT_ED-PIC.md](EXT_ED-PIC.md).
+- **SpeciesType**: naming lists for particle species,
+  see [EXT_SpeciesType.md](EXT_SpeciesType.md).
 
 Extensions to similar domains such as fluid, finite-element or
 molecular-dynamics simulations, CCD images or other particle and/or mesh-based

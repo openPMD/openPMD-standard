@@ -1,7 +1,7 @@
 Contributing to the openPMD standard
 ======================================
 
-The openPMD standard can evolve in order to accommodate the needs of the community. This results in successive [*versions* of the standard](https://github.com/openPMD/openPMD-standard/blob/1.0.1/STANDARD.md#the-versions-of-this-standard). This document explains the process by which the standard evolves, and how to contribute to it.
+The openPMD standard can evolve in order to accommodate the needs of the community. This results in successive [*versions* of the standard](https://github.com/openPMD/openPMD-standard/blob/1.1.0/STANDARD.md#the-versions-of-this-standard). This document explains the process by which the standard evolves, and how to contribute to it.
 
 Update Cycle
 ------------

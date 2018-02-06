@@ -38,39 +38,40 @@ extension:
 
 This attribute can be used with any `record` (including `mesh records`).
 
-### SubAtomic Particles
+### Elementary Particles
 
-  - `antimuon`
-  - `antiproton`
-  - `bottom`
-  - `charm-antiquark`
-  - `charm-quark`
-  - `deuteron`
-  - `down-antiquark`
-  - `down-quark`
-  - `electron`
-  - `electron-neutrino`
-  - `gluon`
-  - `graviton`
-  - `higgs-boson`
-  - `muon`
-  - `muon-neutrino`
-  - `neutron`
-  - `photon`
-  - `pion`
-  - `positron`
-  - `proton`
-  - `strange-antiquark`
-  - `strange-quark`
-  - `tao-antiquark`
-  - `tao-quark`
-  - `tao-neutrino`
-  - `top-antiquark`
-  - `top-quark`
-  - `up-antiquark`
-  - `up-quark`
-  - `w-boson`
-  - `z-boson`
+Namings for fundamental fermions and their anti-matter particles.
+
+Quarks:
+  - `up` (`anti-up`)
+  - `down` (`anti-down`)
+  - `charm` (`anti-charm`)
+  - `strange` (`anti-strange`)
+  - `top` (`anti-top`)
+  - `bottom` (`anti-bottom`)
+
+Leptons:
+  - `electron` (`positron`)
+  - `electron-neutrino` (`anti-electron-neutrino`)
+  - `muon` (`anti-muon`)
+  - `muon-neutrino` (`anti-muon-neutrino`)
+  - `tau` (`anti-tau`)
+  - `tau-neutrino` (`anti-tau-neutrino`)
+
+Gauge & Higgs Bosons:
+- `photon`
+- `gluon`
+- `w-boson`
+- `z-boson`
+- `higgs`
+
+### Hadrons and Jets
+
+We currently do not define spellings of hadrons besides the commonly used ones
+below and suggest for this version to use `other:` with namings from the
+[particle data group (PDG)](http://pdg.lbl.gov/). Other means of grouping e.g.
+jets can be used, e.g. additional attributes outside of the definition of this
+extension.
 
 ### Atoms & Isotopes
 

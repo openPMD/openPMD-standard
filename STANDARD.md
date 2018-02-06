@@ -1,7 +1,7 @@
 The openPMD Standard
 ====================
 
-VERSION: **1.0.1** (December 1st, 2017)
+VERSION: **1.1.0** (Feburary 6th, 2018)
 
 Conventions Throughout these Documents
 --------------------------------------
@@ -68,14 +68,14 @@ We define the following placeholders and reserved characters:
 **Paths** to **groups** end on `/`, e.g., `/mySubGroup/` and **data sets** end
 without a `/`, e.g., `dataSet` or `/path/to/dataSet`.
 
-Each file's *root* directory (path `/`) must at leat contain the attributes:
+Each file's *root* group (path `/`) must at least contain the attributes:
 
   - `openPMD`
     - type: *(string)*
     - description: (targeted) version of the format in "MAJOR.MINOR.REVISION",
                    see section "The versions of this standard",
                    minor and revision must not be neglected
-    - example: `1.0.1`
+    - example: `1.1.0`
 
   - `openPMDextension`
     - type: *(uint32)*
@@ -113,18 +113,28 @@ Each file's *root* directory (path `/`) must at leat contain the attributes:
       of the form given by `basePath` (e.g. `/extra_data`). In this
       way, the openPMD parsing tools will not parse this additional data. 
 
+The following attributes are *optional* in each each file's *root* group
+(path `/`) and indicate if a file contains mesh and/or particle records. It is
+*required* to set them if one wants to store mesh and/or particle records.
+
   - `meshesPath`
     - type: *(string)*
     - description: path *relative* from the `basePath` to the mesh records
     - example: `meshes/`
+    - note: if this attribute is missing, the file is interpreted as if it
+      contains *no mesh records*! If the attribute is set, the group behind
+      it *must* exist!
 
   - `particlesPath`
     - type: *(string)*
     - description: path *relative* from the `basePath` to the groups for each
                    particle species and the records they include
     - example: `particles/`
+    - note: if this attribute is missing, the file is interpreted as if it
+      contains *no particle records*! If the attribute is set, the group behind
+      it *must* exist!
 
-It is *recommended* that each file's *root* directory (path `/`) further
+It is *recommended* that each file's *root* group (path `/`) further
 contains the attributes:
 
   - `author`
@@ -148,6 +158,25 @@ contains the attributes:
     - description: date of creation in format "YYYY-MM-DD HH:mm:ss tz"
     - example: `2015-12-02 17:48:42 +0100`
 
+It is *optional* that each file's *root* group (path `/`) further contains
+the attributes:
+
+  - `softwareDependencies`
+    - type: *(string)*
+    - description: dependencies of `software` that were used when
+                   `software` created the file,
+                   semicolon-separated list
+    - examples:
+      - `gcc@5.4.0;boost@1.66.0;nvcc@9.1;python@3.6;adios@1.13;hdf5@1.8.17`
+      - a long-time archived container image: `registry.example.com/user/repo:version`
+
+  - `machine`
+    - type: *(string)*
+    - description: the machine or relevant hardware that created the file;
+                   as semicolon-separated list if needed
+    - example: `summit-ornl` (HPC cluster),
+               `pco.pixelfly-usb` (scientific 14bit CCD camera)
+
 Each group and data set may contain the attribute **comment** for general
 human-readable documentation, e.g., for features not yet covered by the
 standard:
@@ -167,7 +196,7 @@ to a single simulation cycle.)
 
 The chosen style shall not vary within a related set of iterations.
 
-Each file's *root* directory (path `/`) must further define the attributes:
+Each file's *root* group (path `/`) must further define the attributes:
 
   - `iterationEncoding`
     - type: *(string)*
@@ -295,7 +324,7 @@ homogenous records, usually in a N-dimensional matrix.
 
 ### Required Attributes for each `mesh record`
 
-The following attributes must be stored additionally with the `meshName` record
+The following attributes must be stored additionally with each `mesh record`
 (which is a data set attribute for `scalar` or a group attribute for `vector`
 meshes):
 

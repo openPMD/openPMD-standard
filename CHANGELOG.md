@@ -1,6 +1,42 @@
 Changelog for the openPMD Standard
 ==================================
 
+1.1.0
+-----
+**Date:** 2018-02-06
+
+Base paths for mesh- and particle-only files and updated attributes.
+
+This release defines how to handle files that only contain mesh or particle
+records gracefully. New attributes have been defined to document software
+dependencies and utilized hardware. The ED-PIC extension updated values for
+particle pushers. It further improves wordings for consistency throughout the
+standard.
+
+## Changes to "1.0.1"
+
+### Base Standard
+
+- **minor changes:**
+  - `meshesPath` & `particlesPath`: optional (only when needed) #171
+  - optional attributes to document software dependencies & hardware #170
+    - `softwareDependencies`
+    - `machine`
+- **backwards compatible changes:**
+  - fix wording: `meshName` means `mesh record` #168
+  - fix wording: root path is a "group" as well #169
+
+### Extension
+
+- `ED-PIC`:
+  - **minor changes:**
+    - `particlePush`: additional values defined #172
+
+### Data Converter
+
+No data conversion needed.
+
+
 1.0.1
 -----
 **Date:** 2017-12-01

@@ -362,7 +362,7 @@ particle. Therefore, this extension requires the two following attributes:
                             absolutely necessary, reading the additional
                             `weighting` record can be avoided for performance
                             reasons like this:
-  ```python
+```python
 f = h5py.File('example.h5')
 species = f["<path_to_species_group>"]
 q = species["charge"][:]

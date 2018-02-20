@@ -15,7 +15,7 @@
 ## Affected Components
 
 - `base`
-- `EXT-...`
+- `EXT: ...`
 
 ## Logic Changes
 
@@ -27,7 +27,7 @@
 *What would a writer need to change?*
 *Does this pull request change the interpretation of existing data writers?*
 
-- `libopenPMD` (upcoming): https://github.com/ComputationalRadiationPhysics/libopenPMD/...
+- `openPMD-api` (upcoming): https://github.com/openPMD/openPMD-api/...
 
 ## Reader Changes
 
@@ -39,13 +39,13 @@
 - `openPMD-viewer`: https://github.com/openPMD/openPMD-viewer/...
 - `yt`: https://github.com/yt-project/yt/...
 - `VisIt`: https://github.com/openPMD/openPMD-visit-plugin
-- `libopenPMD` (upcoming): https://github.com/ComputationalRadiationPhysics/libopenPMD/...
-- `XDMF` (upcoming): https://github.com/openPMD/openPMD-tools/...
+- `openPMD-api` (upcoming): https://github.com/openPMD/openPMD-api/...
+- `XDMF` (upcoming): https://github.com/openPMD/openPMD-converter/...
 
-## Data Converter
+## Data Updater
 
 *How does this affect already existing files with previous versions of the standard?*
 *Is this change possible to be expressed in a way, that an automated tool can update the file?*
 *Link code/pull requests that implement the upgrade logic!*
 
-- https://github.com/openPMD/openPMD-converter/...
+- https://github.com/openPMD/openPMD-updater/...

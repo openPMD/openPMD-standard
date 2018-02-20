@@ -3,8 +3,6 @@ Convention for Specifying Particle Species
 
 openPMD extension name: `SpeciesType`
 
-openPMD extension ID: `4`
-
 
 Introduction
 ------------
@@ -43,27 +41,27 @@ This attribute can be used with any `record` (including `mesh records`).
 Namings for fundamental fermions and their anti-matter particles.
 
 Quarks:
-  - `up` (`anti-up`)
-  - `down` (`anti-down`)
-  - `charm` (`anti-charm`)
-  - `strange` (`anti-strange`)
-  - `top` (`anti-top`)
-  - `bottom` (`anti-bottom`)
+  - `up`, `anti-up`
+  - `down`, `anti-down`
+  - `charm`, `anti-charm`
+  - `strange`, `anti-strange`
+  - `top`, `anti-top`
+  - `bottom`, `anti-bottom`
 
 Leptons:
-  - `electron` (`positron`)
-  - `electron-neutrino` (`anti-electron-neutrino`)
-  - `muon` (`anti-muon`)
-  - `muon-neutrino` (`anti-muon-neutrino`)
-  - `tau` (`anti-tau`)
-  - `tau-neutrino` (`anti-tau-neutrino`)
+  - `electron`, `positron`
+  - `electron-neutrino`, `anti-electron-neutrino`
+  - `muon`, `anti-muon`
+  - `muon-neutrino`, `anti-muon-neutrino`
+  - `tau`, `anti-tau`
+  - `tau-neutrino`, `anti-tau-neutrino`
 
 Gauge & Higgs Bosons:
-- `photon`
-- `gluon`
-- `w-boson`
-- `z-boson`
-- `higgs`
+  - `photon`
+  - `gluon`
+  - `w-boson`
+  - `z-boson`
+  - `higgs`
 
 ### Hadrons and Jets
 
@@ -72,6 +70,11 @@ below and suggest for this version to use `other:` with namings from the
 [particle data group (PDG)](http://pdg.lbl.gov/). Other means of grouping e.g.
 jets can be used, e.g. additional attributes outside of the definition of this
 extension.
+
+Examples:
+  - `proton`, `anti-proton`
+  - `other:neutron`, `other:anti-neutron`
+  - `other:kaon`, ...
 
 ### Atoms & Isotopes
 

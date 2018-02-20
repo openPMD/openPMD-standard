@@ -77,22 +77,6 @@ Each file's *root* group (path `/`) must at least contain the attributes:
                    minor and revision must not be neglected
     - example: `1.1.0`
 
-  - `openPMDextension`
-    - type: *(uint32)*
-    - description: the bit-mask of unique IDs of applied extensions of the
-                   openPMD standard
-                   (see: *Domain-Specific Extensions*);
-                   to test for a specific extension `ID` perform a bit-wise
-                   `AND` operation on `openPMDextension`:
-                   `extension_1_used = (( openPMDextension AND ID ) == ID)`
-    - note: if only one extension is used at a time, the value for
-            `openPMDextension` is simply the `ID` of the extension
-    - examples:
-      - `0`: only the base standard is used
-      - `1`: the base standard and the extension with ID `1` apply for the file
-      - general case (discouraged in this version of the standard):
-             `openPMDextension=0 OR <ID1> OR <ID2> OR <...>` (bit-wise `OR`)
-
   - `basePath`
     - type: *(string)*
     - description: a common prefix for all data sets and sub-groups of a
@@ -112,6 +96,27 @@ Each file's *root* group (path `/`) must at least contain the attributes:
       this can be done be storing this data within a path that *is not*
       of the form given by `basePath` (e.g. `/extra_data`). In this
       way, the openPMD parsing tools will not parse this additional data. 
+
+The following attribute is *optional* in each each file's *root* group
+(path `/`) and indicates if a file also follows an openPMD extension
+(see: *Domain-Specific Extensions*) on top of the base standard. It is
+*required* to set them if one wants to declare an openPMD extension.
+
+  - `openPMDextension`
+    - type: *(string)*
+    - description: the unique openPMD extension name of applied extensions on
+                   top of the openPMD base standard
+                   (see: *Domain-Specific Extensions*);
+                   multiple extensions can be activated at the same time and
+                   must appear as semicolon-separated list
+    - note: do not create this attribute if no extension is used
+    - note: if only one extension is used at a time, the value for
+            `openPMDextension` is simply the name of the extension
+    - examples:
+      - `ED-PIC`: the base standard and the extension with name `ED-PIC` apply
+                  for the file
+      - `ED-PIC;SpeciesType`: the base standard and the extensions `ED-PIC` and
+                              `SpeciesType` are used
 
 The following attributes are *optional* in each each file's *root* group
 (path `/`) and indicate if a file contains mesh and/or particle records. It is

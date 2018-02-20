@@ -3,8 +3,6 @@ Domain-Specific Naming Conventions for Electro-Dynamic/Static PIC Codes
 
 openPMD extension name: `ED-PIC`
 
-openPMD extension ID: `1`
-
 
 Introduction
 ------------

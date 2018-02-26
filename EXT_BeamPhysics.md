@@ -1,7 +1,7 @@
 Extension to the openPMD Standard for Describing Particle Beams and X-rays
 ==========================================
 
-Version 1.0.0 (March 1, 2018)
+Version 2.0.0
 
 Overview
 ------------
@@ -30,45 +30,26 @@ coordinate system is fixed with respect to the building or room where the machin
 machine itself.
 
 - **Lattice coordinate system**: The curvilinear coordinate system whose "longitudinal"
-coordinate (typically called **s**) typically runs through the nominal centers of the elements
-in the machine. Typically, the **lattice** coordinate system is used to describe misalignments
-of lattice elements with respect to the rest of the lattice.
+coordinate (**s**) typically runs through the nominal centers of the elements
+in the machine. The **lattice** coordinate system is often used to describe particle positions.
 
-- **Group**: A **group** is a container structure containing
-a set of zero or more **attributes**, a set of zero or more **groups** (which can be called
-**sub-groups**), and a set of zero or more **datasets**. Note: In HDF5, these are also
-called **groups**.
+- **Macro-particle**: Macro-particles are simulation particles that represent multiple real particles.
 
-- **Dataset**: A **dataset** is a structure that contains a set of zero or more **attributes** and a
-data aray (which may be multidimensional).  Note: In HDF5, these are also called **datasets**.
-
-- **Record**: A **record** is a **group** (without any sub-groups) or a **dataset** that contains data
-on a physical quantity like particle charge or electric field. There are two types of **records**:
-    - **scalar records** hold scalar quantity
-    values (like particle charge). If all the particles have the same charge, the value of the charge
-    is stored as an attribute of the **record** and there is no associated data array. That is, the
-    **record** is a **group**. If the particles have differing charges, the values are stored in an array
-    of the **scalar record**. In this case the **scalar record** is a **dataset**.
-    - **vector records** hold a set of **datasets**. In this case the **record** is a **group**.
-        - Example: A **record** named **E** for holding electric field values may have three datasets holding
-        the components of the field named **E/x**, **E/y**, and **E/z**.
-
-- **Attribute**: An **attribute** is a variable associated with a **group** along with a
-value. Example: **snapshotPath** is a string variable associated with the root **/** group.
-
-- **Polar coordinates**: **Polar** coordinates are **(r, theta, phi)** where **r** is the radius, **theta** is he angle
+- **Polar coordinates**: **Polar** coordinates are **(r, theta, phi)** where **r** is the radius, **theta** is the angle
 from the **z** or **s** axis, and **phi** is the projected azimuthal angle in the **(x, y)**
 plane.
 
-- **Particle Root Group**: The **Particle Root Group** is the root group for specifying a group of particles. There can be multiple **particle root groups** in a data file. For example, a set of particle bunches might specify one particle root group for each bunch. See the Base Standard for more information.
+- **Particle Root Group**: The **Particle Root Group** is a group for specifying a group of particles. See the Base Standard for more information.
+
+- **Phase Space Coordinates**: Phase space coordinates are ordered (x, px, y, py, z, pz).
 
 Notes:
 ------
 
 - When using the **lattice** coordinate system, the `position` coordinates are **(x, y, s)** where
-nominally **x** is the "radial" component,
-**y** is the "vertical" coordinate, and **s** is the lattice longitudinal coordinate.
+nominally **x** is the "horizontal" component, **y** is the "vertical" coordinate, and **s** is the lattice longitudinal coordinate.
 
+- T
 
 Additional File Root Group (path `/`) Attributes
 -------------------------
@@ -115,7 +96,7 @@ For each **particle root group** the following attributes are defined:
 branch index integer, and **element-index** is the associated lattice element index within the branch.
 
 - `locationInElement`
-  - Type Optional *(int)*
+  - Type Optional *(string)*
   - Description: This attribute is used with  `latticeElementID`/`latticeElementName` to specify
   the origin where the particle or particles are measured with respect in the **lattice** coordinate system.   
   - The origin is always on the longitudinal axis (x = y = 0) of the **lattice** coordinate system.
@@ -132,20 +113,9 @@ does not necessarily provide enough information to determine where a particle is
     - Description: Normalization used for momentum values.
     - Possible values:
         - `referenceTotalMomentum`: Normalize with respect to the `referenceTotalMomentum` attribute
-        - `referenceEnergy`: Normalize with respect to the `referenceEenergy` attribute.
+        - `referenceEnergy`: Normalize with respect to the `referenceEnergy` attribute.
         - `none`: No normalization.
 
-- `referenceEnergy`
-    - Type: Optional *(float)* attribute.
-    - Description: Specifies the reference energy from which the `energy` is measured with respect to.
-
-- `referenceTotalMomentum`
-    - Type: Optional *(float)* attribute
-    - Description: Specifies the reference total momentum from which the total momentum is measured with respect to.
-
-- `totalCharge`
-    - Type: Optional *(float)* attribute.
-    - Description: The total charge of all the particles.
 
 Per-Particle Records of the `Particle Root Group`
 ---------------------
@@ -154,11 +124,23 @@ The following records store data on a particle by particle basis.
 
 - `time-refTime`
 - Type: Optional *(float)*
-- Description: Particle time minus the referece time.
+- Description: Particle time minus the reference time.
 
 - `energy/`
   - Type: Optional *(float)*
-  - Description: The total energy of the particles relative to the `referenceEnergy` attribute.
+  - Description: The total energy of the particles. This record may be used instead of specifying the `pz` phase space coordinate.
+  - Attributes: The following attributes are defined.
+    - `relative`:
+      - Type: Required **(bool)**
+      - Description: Is the energy relative to the `referenceEnergy`?
+    - `normalized`:
+      - Type: Required **(bool)**
+      - Description: Is the energy normalized by the `totalMomentum`?
+  - Examples: [E = Energy, E0 = `referenceEnergy`, p0 = `totalMomentum`]
+    - `relative` = `F`, `normalized` = `F`  --> Energy = E
+    - `relative` = `F`, `normalized` = `T`  --> Energy = E / p0
+    - `relative` = `T`, `normalized` = `F`  --> Energy = E - E0
+    - `relative` = `T`, `normalized` = `T`  --> Energy = (E - E0) / p0
 
 - `electricField/`
     - Type: Optional 2-component *(float)*
@@ -167,18 +149,15 @@ The following records store data on a particle by particle basis.
         - For each component, the field is specified using either (`amplitude`, `phase`) or (`Real`, `Imaginary`)
         subcomponents.
 
-- `macroCharge/`
-    - Type: Optional *(float)*
-    - Description: "Macro"-particles are simulation particles that represent multiple real particles.
-    The `macroCharge` is the the total charge of the collection of particles that a macro-particle
-    represents.
-
 - `momentum/`
     - Type: Optional 2 or 3-vector *(float)*
     - Description: The total momentum of the particles relative to the `momentumOrigin` attribute.
     - Components: (`px`, `py`) or (`px`, `py`, `pz`).
-    - Note: A program using phase space coordinates to describe particle positions will typically use the transverse momentum
-    `px` and `py` along with the `totalMomentum` or `energy` records.
+    - Attributes: The following attributes are defined.
+      - `normalized`:
+        - Type: Required **(bool)**
+        - Description: Is the energy normalized by the `referenceTotalMomentum`? That is, is `px` equal to Px or Px/P0 (where Px is the true momentum component and P0 is `referenceTotalMomentum`)?
+    - Note: A program using phase space coordinates to describe particle positions will typically use the transverse momentum `px` and `py` along with the `totalMomentum` or `energy` records.
 
 - `pathLength/`
     - Type: Optional *(float)*
@@ -222,6 +201,11 @@ The following records store data on a particle by particle basis.
     - Type: Optional *(float)*
     - Description: The total momentum of the particles relative to the `referenceTotalMomentum` attribute.
 
+- `weighting/`
+    - Type: Optional *(float)*
+    - Description: If macro-particles are being simulated, the `weighting` is the the total charge or total number of the collection of particles that a macro-particle represents.
+
+
 Non Per-Particle Records of the `Particle Root Group`
 ---------------------
 
@@ -254,6 +238,17 @@ The following possible records of the `Particle Root Group` are for specifying p
   - Position Transformation: Position_global = W_matrix * Position_lattice + R_frame
   - Momentum transformation: Momentum_global = W_matrix * Momentum_lattice
 
+- `referenceEnergy`
+  - Type: Optional *(float)* attribute.
+  - Description: Specifies the reference energy from which the `energy` is measured with respect to.
+
+- `referenceTotalMomentum`
+  - Type: Optional *(float)* attribute
+  - Description: Specifies the reference total momentum from which the total momentum is measured with respect to.
+
+- `totalCharge`
+  - Type: Optional *(float)* attribute.
+  - Description: The total charge of all the particles.
 
 Particle Record Dataset Attributes
 -----------------------------

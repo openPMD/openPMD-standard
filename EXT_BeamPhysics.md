@@ -135,12 +135,12 @@ The following records store data on a particle by particle basis.
       - Description: Is the energy relative to the `referenceEnergy`?
     - `normalized`:
       - Type: Required **(bool)**
-      - Description: Is the energy normalized by the `totalMomentum`?
-  - Examples: [E = Energy, E0 = `referenceEnergy`, p0 = `totalMomentum`]
-    - `relative` = `F`, `normalized` = `F`  --> Energy = E
-    - `relative` = `F`, `normalized` = `T`  --> Energy = E / p0
-    - `relative` = `T`, `normalized` = `F`  --> Energy = E - E0
-    - `relative` = `T`, `normalized` = `T`  --> Energy = (E - E0) / p0
+      - Description: Is the energy normalized by the `referenceTotalMomentum`?
+  - Examples: [E = Absolute Energy, E0 = `referenceEnergy`, p0 = `referenceTotalMomentum`]
+    - `relative` = `F`, `normalized` = `F`  --> `Energy` = E
+    - `relative` = `F`, `normalized` = `T`  --> `Energy` = E / p0
+    - `relative` = `T`, `normalized` = `F`  --> `Energy` = E - E0
+    - `relative` = `T`, `normalized` = `T`  --> `Energy` = (E - E0) / p0
 
 - `electricField/`
     - Type: Optional 2-component *(float)*
@@ -199,7 +199,21 @@ The following records store data on a particle by particle basis.
 
 - `totalMomentum/`
     - Type: Optional *(float)*
-    - Description: The total momentum of the particles relative to the `referenceTotalMomentum` attribute.
+    - Description: The total momentum of the particles.
+
+    - Attributes: The following attributes are defined.
+      - `relative`:
+        - Type: Required **(bool)**
+        - Description: Is the energy relative to the `referenceTotalMomentum`?
+      - `normalized`:
+        - Type: Required **(bool)**
+        - Description: Is the energy normalized by the `totalMomentum`?
+    - Examples: [P =  Absolute total momentum, P0 = `referenceTotalMomentum`, p0 = `referencetotalMomentum`]
+      - `relative` = `F`, `normalized` = `F`  --> `totalMomentum` = P
+      - `relative` = `F`, `normalized` = `T`  --> `totalMomentum` = P / p0
+      - `relative` = `T`, `normalized` = `F`  --> `totalMomentum` = P - P0
+      - `relative` = `T`, `normalized` = `T`  --> `totalMomentum` = (P - P0) / p0
+
 
 - `weighting/`
     - Type: Optional *(float)*

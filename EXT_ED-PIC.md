@@ -364,7 +364,8 @@ particle. Therefore, this extension requires the two following attributes:
 f = h5py.File('example.h5')
 species = f["<path_to_species_group>"]
 q = species["charge"][:]
-u_si = q.attrs["unitSI"]
+u_si = q.attrs.get("unitSI", default=1.)
+# `default` handles the case where conversion to SI is not provided
 p = q.attrs["weightingPower"]
 if q.attrs["macroWeighted"] == 0 and p != 0:
     w = species["weighting"][:]

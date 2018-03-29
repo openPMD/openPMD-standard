@@ -507,7 +507,8 @@ def is_const_component(record_component):
 
 def get_component(group, component_name):
     record_component = group[component_name]
-    unitSI = record_component.attrs["unitSI"]
+    unitSI = record_component.attrs.get("unitSI", default=1.)
+    # `default` handles the case where conversion to SI is not provided
 
     if is_const_component(record_component):
         return record_component.attrs["value"], unitSI

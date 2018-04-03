@@ -73,7 +73,8 @@ extension.
 
 Examples:
   - `proton`, `anti-proton`
-  - `other:neutron`, `other:anti-neutron`
+  - `neutron`, `anti-neutron`
+  - `other:sigma`, `other:anti-sigma`
   - `other:kaon`, ...
 
 ### Atoms & Isotopes

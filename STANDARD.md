@@ -191,6 +191,7 @@ standard:
     - description: an arbitrary comment
     - example: `After each time step we randomly removed 5 particles.`
 
+
 Iterations and Time Series
 --------------------------
 
@@ -507,8 +508,8 @@ def is_const_component(record_component):
 
 def get_component(group, component_name):
     record_component = group[component_name]
-    unitSI = record_component.attrs.get("unitSI", default=1.)
     # `default` handles the case where conversion to SI is not provided
+    unitSI = record_component.attrs.get("unitSI", default=1.)
 
     if is_const_component(record_component):
         return record_component.attrs["value"], unitSI
@@ -590,21 +591,18 @@ patch order:
 Unit Systems and Dimensionality
 -------------------------------
 
-All datasets and attributes can be written in arbitrary units, in the openPMD
-file. Typically, this will be the unit system adopted internally by the
-software that writes the openPMD file (e.g. the unit system adopted internally
+All datasets and attributes can be written in arbitrary units, in openPMD. 
+Typically, this will be the unit system adopted internally by the
+software that writes openPMD (e.g. the unit system adopted internally
 by a physics simulation code), in order to avoid a reduction in performance
 associated with unit conversion during the write process.
 
 However, for each dataset and attribute, it is **very strongly** recommended to
 provide the conversion factor from the chosen unit system to the International
-System of Units (SI). (See the description of the attributes `timeUnitSI`, `gridUnitSI` and `unitSI`, in the present document.) This allows
+System of Units (SI). (See the description of the attributes `timeUnitSI`, 
+`gridUnitSI` and `unitSI`, in the present document.) This allows
 the reading softwares to convert the datasets to units that any user can
-understand, without requiring them to know the chosen units system.
-
-(Note that, for human readable output, it is possible to add the actual string
-of the unit in the corresponding `comment` attribute, for purely informational
-purposes.)
+understand, without requiring them to know the chosen unit system.
 
 In some exceptional cases, the software that produces the openPMD data may
 not have a well-defined conversion to the SI system. (This is the case for

@@ -17,7 +17,7 @@ Additional Record Attribute
 The following additional attribute for openPMD `mesh records` and
 `particle groups` is defined in this extension:
 
-- `SpeciesType`
+- `speciesType`
   - type: *(string)*
   - scope: *optional*
   - description: particle species in this record. If there are multiple
@@ -87,7 +87,7 @@ Specifications of isotopes are denoted by a pound symbol `#` followed
 by the isotopic number followed by the chemical symbol, e.g.: `#3He`
 for Helium-3.
 
-The charge state is not encoded by the `SpeciesType` attribute.
+The charge state is not encoded by the `speciesType` attribute.
 Any extension using this standard can define how to specify the charge state.
 
 ### Molecules

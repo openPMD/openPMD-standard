@@ -14,8 +14,8 @@ particle physics.
 Additional Record Attribute
 ---------------------------
 
-The following additional attribute for openPMD `records` is defined in this
-extension:
+The following additional attribute for openPMD `mesh records` and
+`particle groups` is defined in this extension:
 
 - `SpeciesType`
   - type: *(string)*

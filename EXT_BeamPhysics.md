@@ -14,10 +14,10 @@ How to Use this Extension
 
 The `BeamPhysics` extension to the openPMD standard is indicated in a data file by the setting of the `openPMDextension` attribute:
 ```
-  openPMDextension = BeamPhysics, SpeciesType
+  openPMDextension = BeamPhysics;SpeciesType
 ```
 
-Note: The `SpeciesType` extension must be used when using the `BeamPhysics` extension.
+Note: The `speciesType` extension must be used when using the `BeamPhysics` extension.
 
 Definitions
 -----------
@@ -70,21 +70,21 @@ The following attributes are defined for the file root group.
 
 For each **particle root group** the following attributes are defined:
 
-- `SpeciesType`
+- `speciesType`
   - Type: Required *(string)*
   - Description: The name of the particle species. Species names must conform to the
-  `SpeciesType` extension.
+  `speciesType` extension.
   - Example: `electron`, `H2O`.
 
 - `charge`
   - Type: Optional *(int)*
   - Description: The charge state of the particles. Not needed if the charge can be computed
-  from knowledge of the `SpeciesType`.
+  from knowledge of the `speciesType`.
 
 - `latticeElementName`
   - Type: Optional *(string)*
   - Description: The name of the lattice element the particle or particles are in. This only makes sense if all
-  particles are in the same lattice element. Also see: `latticeElementID` and `locaitonInElement`.
+  particles are in the same lattice element. Also see: `latticeElementID` and `locationInElement`.
 
 - `latticeElementID`
   - Type Optional *(string)*

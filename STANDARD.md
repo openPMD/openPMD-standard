@@ -95,7 +95,7 @@ Each file's *root* group (path `/`) must at least contain the attributes:
       present standard (e.g. fields on an unstructured mesh),
       this can be done be storing this data within a path that *is not*
       of the form given by `basePath` (e.g. `/extra_data`). In this
-      way, the openPMD parsing tools will not parse this additional data. 
+      way, the openPMD parsing tools will not parse this additional data.
 
 The following attribute is *optional* in each each file's *root* group
 (path `/`) and indicates if a file also follows an openPMD extension
@@ -424,11 +424,29 @@ meshes):
     - example: `(0.0, 100.0, 0.0)` or `(0.5, 0.5, 0.5)`
 
   - `gridUnitSI`
-    - type: *(float64 / REAL8)*
+    - type: 1-dimensional array containing N *(float64 / REAL8)*
+            elements, where N is the number of dimensions in the simulation
     - description: unit-conversion factor to multiply each value in
                    `gridSpacing` and `gridGlobalOffset`, in order to convert
                    from simulation units to SI units
-    - example: `1.0e-9`
+    - example: `(1.0e-9, 1.0e-9, 1.0e-6)`
+
+  - `gridUnitDimension`
+    - type: array of 7 N *(float64 / REAL8)*
+            elements, where N is the number of dimensions in the simulation
+    - description: powers of the 7 base measures characterizing the
+            grid axes's dimensions (length L, mass M, time T,
+            electric current I, thermodynamic temperature theta,
+            amount of substance N, luminous intensity J)
+    - note: this is similar to `unitDimension`, but applies to each axis
+        The 7 numbers characterizing the dimension of an axis are stored
+        contiguously in this 1D array.
+    - examples:
+        - For a 2D spatial grid (`L=1`), store array
+        `(1., 0., 0., 0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0.)`
+        - For a 2D phase space (Unit "m" along the first axis
+        and "kg.m.s-1" along the second axis), store array
+        `(1., 0., 0., 0., 0., 0., 0., 1., 1., -1., 0., 0., 0., 0. )`
 
 The following attributes must be stored with each `scalar record` and each
 *component* of a `vector record`:

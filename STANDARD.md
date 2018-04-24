@@ -366,41 +366,29 @@ meshes):
                         the *imaginary* part)
                        ![definition of imaginary part](img/cylindrical.png)
 
-  - `dataOrder`
-    - type: *(string)*
-    - description: used for the reading of 1-dimensional arrays of N elements,
-                   where N is the number of dimensions in the simulation;
-                   these should be in the ordering of variation for the indexes
-                   for matrices as defined by the index-operator (`[...][...]`)
-                   of the writing code; can be omitted for 1D records
-    - rationale: in Fortran, ordering of matrices is linearized in memory in
-                 column-major order whereas in C it is row-major; due to that
-                 the index-operators in Fortran and C operate in exactly
-                 opposite order;
-                 supported file-formats keep the order of the writing code's
-                 record components; we still need to store additional
-                 information such as `axisLabels` in a defined order
-    - allowed values:
-      - `C` if data is written by C or a C-like language such as C++, Python,
-        Java
-      - `F` if data is written by a Fortran code
-
   - `axisLabels`
     - type: 1-dimensional array containing N *(string)*
             elements, where N is the number of dimensions in the simulation
-    - description: ordering of the labels for the `geometry` of the mesh
-    - advice to implementors: in the ordering of variation for the indexes for
-                              matrices as defined by the index-operator
-                              (`[...][...]`) of the writing code
-    - advice to implementors: on read, query the record's `dataOrder` to get the
-                              information if you need to invert the access to
-                              `axisLabels` (and other attributes that use the
-                              same definition)
+    - description: this attribute assigns human-readible labels for the
+                   indices `i`, `j`, `k`, etc. denoting the axes of a mesh
+                   `A_{i,j,k}`
+    - advice to implementors: dimensions shall be ordered from slowest to
+                              fastest varying index when accessing the mesh
+                              contiguously (as 1D flattened logical memory)
+    - advice to implementors: if you access a ND array in C-like languages,
+                              a matrix `A[i,j,k]` will have its first index
+                              as the slowest varying index (e.g. `i`);
+    -                         if you access a ND array Fortran-like,
+                              a matrix `A(i,j,k)` will have its last index
+                              as the slowest varying index (e.g. `k`);
     - examples:
-      - 3D `cartesian` C-style `A[z,y,x]` write: `("z", "y", "x")` and `dataOrder='C'`
-      - 2D `cartesian` C-style `A[y,x]` write: `("y", "x")` and `dataOrder='C'`
-      - 2D `cartesian` Fortran-style `A[x,y]` write: `("x", "y")` and `dataOrder='F'`
-      - `thetaMode` Fortran-style `A[r,z]` write: `("r", "z")` and `dataOrder='F'`
+      - 3D `cartesian` mesh accessed in C-like as `A[z,y,x]` will have `z` as
+        its slowest varying index name and `axisLabels`: `("z", "y", "x")`
+      - 3D `cartesian` mesh accessed in C-like as `A[x,y,z]` will have `x` as
+        its slowest varying index name and `axisLabels`: `("x", "y", "z")`
+      - 2D `cartesian` mesh accessed in Fortran-like as `A(x,y)` will have `y` as
+        its slowest varying index name and `axisLabels`: `("y", "x")`
+      - `thetaMode` accessed Fortran-like `A(r,z)`, `axisLabels`: `("z", "r")`
 
   - `gridSpacing`
     - type: 1-dimensional array containing N *(floatX)*

@@ -1,16 +1,16 @@
 Extension to the openPMD Standard for Describing Particle Beams and X-rays
-==========================================
+==========================================================================
 
 Version 2.0.0
 
 Overview
-------------
+--------
 
 The `BeamPhysics` extension to the openPMD standard is meant for describing particles and fields commonly encountered
 in accelerator physics simulations.
 
 How to Use this Extension
----------------
+-------------------------
 
 The `BeamPhysics` extension to the openPMD standard is indicated in a data file by the setting of the `openPMDextension` attribute:
 ```
@@ -24,16 +24,13 @@ Definitions
 
 - **Lattice**: A **lattice** is the arrangement of elements in a machine such as a particle accelerator.
 
-- **Global coordinate system**: The **global** coordinate system is a coordinate system that is
-used to describe the position and orientation of machine elements in space. That is, the **global**
-coordinate system is fixed with respect to the building or room where the machine is placed independent of the
+- **Global coordinate system**: The **global** coordinate system is a coordinate system that is used to describe the position and orientation of machine elements in space. That is, the **global** coordinate system is fixed with respect to the building or room where the machine is placed independent of the
 machine itself.
 
 - **Lattice coordinate system**: The curvilinear coordinate system whose "longitudinal"
-coordinate (**s**) typically runs through the nominal centers of the elements
-in the machine. The **lattice** coordinate system is often used to describe particle positions.
+coordinate (**s**) typically runs through the nominal centers of the elements in the machine. The **lattice** coordinate system is often used to describe particle positions.
 
-- **Macro-particle**: Macro-particles are simulation particles that represent multiple real particles.
+- **Macro-particle**: Macro-particles are simulation particles that represent multiple real particles. The number of real particles that a macro-particle represents affects the calculation of the field due to a macro-particle but does not affect tracking.
 
 - **Polar coordinates**: **Polar** coordinates are **(r, theta, phi)** where **r** is the radius, **theta** is the angle
 from the **z** or **s** axis, and **phi** is the projected azimuthal angle in the **(x, y)**
@@ -49,10 +46,8 @@ Notes:
 - When using the **lattice** coordinate system, the `position` coordinates are **(x, y, s)** where
 nominally **x** is the "horizontal" component, **y** is the "vertical" coordinate, and **s** is the lattice longitudinal coordinate.
 
-- T
-
 Additional File Root Group (path `/`) Attributes
--------------------------
+------------------------------------------------
 
 The following attributes are defined for the file root group.
 
@@ -66,7 +61,7 @@ The following attributes are defined for the file root group.
 
 
 `Particle Root Group` Attributes
----------------------
+--------------------------------
 
 For each **particle root group** the following attributes are defined:
 
@@ -80,6 +75,27 @@ For each **particle root group** the following attributes are defined:
   - Type: Optional *(int)*
   - Description: The charge state of the particles. Not needed if the charge can be computed
   from knowledge of the `speciesType`.
+
+- `referenceMomentum`
+  - Type: Optional *(float)*
+  - Description: Reference momentum Possibly used for normalizing particle momentum values.
+
+- `referenceTotalEnergy`
+  - Type: Optional *(string)*
+  - Description: Reference total (kinetic + rest mass) energy. Possibly used for normalizing particle momentum values.
+
+
+Per-Particle Records of the `Particle Root Group`
+-------------------------------------------------
+
+The following records store data on a particle-by-particle basis.
+
+- `electricField/`
+    - Type: Optional 2-component *(float)*
+    - Description: Electric field. Used for photons only.
+    - Components: (`x`, `y`).
+        - For each component, the field is specified using either (`amplitude`, `phase`) or (`Real`, `Imaginary`)
+        subcomponents.
 
 - `latticeElementName`
   - Type: Optional *(string)*
@@ -96,68 +112,44 @@ For each **particle root group** the following attributes are defined:
 branch index integer, and **element-index** is the associated lattice element index within the branch.
 
 - `locationInElement`
-  - Type Optional *(string)*
-  - Description: This attribute is used with  `latticeElementID`/`latticeElementName` to specify
-  the origin where the particle or particles are measured with respect in the **lattice** coordinate system.   
-  - The origin is always on the longitudinal axis (x = y = 0) of the **lattice** coordinate system.
+  - Type Optional *(integer)*
+  - Description: The program generating the data file may model a lattice element using a "hard edge" model where the fringe fields at the ends of the element are modeled as having zero longitudinal length. In such a case, if a particle is at the end of the lattice element, it is important to know if the particle is outside of the fringe or if the particle is inside the fringe within the body of the element. Note that with a hard edge fringe, the longitudinal **s**-position does not necessarily provide enough information to determine where a particle is with respect to an edge field. Another situation where `locationInElement` is useful is with zero length elements that affect the particle transport (such as zero length multipole elements). If the program generating the data file does **not** use any hard edge models or zero length non-marker elements, `locationInElement` should not be present since this parameter is meaningless in this case.
   - Possible values:    
-    - `Upstream-End`: Upstream end of element outside of any edge fields.
-    - `<s-position>`: Where `<s-position>` is a number. Inside the element at a distance, given by `<s-position>`,
-    from the upsteam end of the element.
-    - `Downstream-End`: Downstream end of the element outside of any edge fields.
-  - Note: Since some programs will model edge fields of a lattice element as having zero length, the longitudinal **s**-position
-does not necessarily provide enough information to determine where a particle is with respect to an edge field so `Upstream-End` and `Downstream-End` are provided.
-
-- `momentumNormalization`
-    - Type: Optional *(string)*
-    - Description: Normalization used for momentum values.
-    - Possible values:
-        - `referenceTotalMomentum`: Normalize with respect to the `referenceTotalMomentum` attribute
-        - `referenceEnergy`: Normalize with respect to the `referenceEnergy` attribute.
-        - `none`: No normalization.
-
-
-Per-Particle Records of the `Particle Root Group`
----------------------
-
-The following records store data on a particle by particle basis.
-
-- `time-refTime`
-- Type: Optional *(float)*
-- Description: Particle time minus the reference time.
-
-- `energy/`
-  - Type: Optional *(float)*
-  - Description: The total energy of the particles. This record may be used instead of specifying the `pz` phase space coordinate.
-  - Attributes: The following attributes are defined.
-    - `relative`:
-      - Type: Required **(bool)**
-      - Description: Is the energy relative to the `referenceEnergy`?
-    - `normalized`:
-      - Type: Required **(bool)**
-      - Description: Is the energy normalized by the `referenceTotalMomentum`?
-  - Examples: [E = Absolute Energy, E0 = `referenceEnergy`, p0 = `referenceTotalMomentum`]
-    - `relative` = `F`, `normalized` = `F`  --> `Energy` = E
-    - `relative` = `F`, `normalized` = `T`  --> `Energy` = E / p0
-    - `relative` = `T`, `normalized` = `F`  --> `Energy` = E - E0
-    - `relative` = `T`, `normalized` = `T`  --> `Energy` = (E - E0) / p0
-
-- `electricField/`
-    - Type: Optional 2-component *(float)*
-    - Description: Electric field. Used for photons only.
-    - Components: (`x`, `y`).
-        - For each component, the field is specified using either (`amplitude`, `phase`) or (`Real`, `Imaginary`)
-        subcomponents.
+    - -1: Upstream end of element outside of the upstream fringe edge.
+    - 0: Inside the element.
+    - 1: Downstream end of the element outside outside the downstream fringe edge.
 
 - `momentum/`
-    - Type: Optional 2 or 3-vector *(float)*
-    - Description: The total momentum of the particles relative to the `momentumOrigin` attribute.
-    - Components: (`px`, `py`) or (`px`, `py`, `pz`).
-    - Attributes: The following attributes are defined.
-      - `normalized`:
-        - Type: Required **(bool)**
-        - Description: Is the energy normalized by the `referenceTotalMomentum`? That is, is `px` equal to Px or Px/P0 (where Px is the true momentum component and P0 is `referenceTotalMomentum`)?
-    - Note: A program using phase space coordinates to describe particle positions will typically use the transverse momentum `px` and `py` along with the `totalMomentum` or `energy` records.
+  - Type: Optional 2 or 3-vector *(float)*
+  - Description: The momentum vector of the particles.
+  - Components: (`px`, `py`, `pz`).
+  - Attributes:
+    - `pxType`:
+      - Type: Required **(string)**
+      - Description: Describes how the `px` component is to be interpreted.
+      - Possible values: [Where: Px =  Momentum component, P0 = `referenceMomentum`]
+        - `Px`: `px` is the x-component of the momentum.
+        - `Px/P0`: `px` is the momentum normalized by the reference momentum.
+    - `pyType`:
+      - Type: Required **(string)**
+      - Description: Describes how the `py` component is to be interpreted.
+      - Possible values: [Where: Py =  Momentum component , P0 = `referenceMomentum`]
+        - `Py`: `py` is the y-component of the momentum.
+        - `Py/P0`: `py` is the momentum normalized by the reference momentum.
+    - `pzType`:
+      - Type: Required **(string)**
+      - Description: Describes how the `pz` component is to be interpreted.
+      - Possible values: [Where: E = Total energy, P = momentum magnitude, E0 = `referenceTotalEnergy`, P0 = `referenceMomentum`, Pz = momentum component, dE = E - E0, dP = P - P0]
+        - `Pz`
+        - `Pz/P0`
+        - `P`
+        - `P/P0`
+        - `dP`
+        - `dP/P0`
+        - `E`
+        - `E/P0`
+        - `dE`
+        - `dE/P0`
 
 - `pathLength/`
     - Type: Optional *(float)*
@@ -166,13 +158,17 @@ The following records store data on a particle by particle basis.
 - `position`
     - Type: Required 3-vector *(float)*
     - Description: Position relative to the coordinate origin.
-    - Components: (`x`, `y`, `<z-coord>`) where `<z-coord>` is one of:
-        - `z`: True longitudinal coordinate.
-        - `-beta.c.dt`: Phase space coordinate conjugate to a momentum based "pz".
-        - `-beta.c.t`:Phase space coordinate conjugate to a momentum based "pz".
-        - `-c.dt`: Phase space coordinate conjugate to an energy based "pz".
-        - `-c.t`: Phase space coordinate conjugate to an energy based "pz".
-        - Where: **beta** = particle speed, **c** = speed of light, **t** = time, and **dt** = time relative to the reference time.
+    - Components: (`x`, `y`, `z`)
+    - Attributes:
+      - `zType`:
+        - Type: Required **(string)**
+        - Description: Describes how the `z` component is to be interpreted.
+        - Possible values: [Where: **beta** = particle speed, **c** = speed of light, **t** = time, and **dt** = time relative to the reference time.]
+          - `-beta.c.dt`: `z` component is the phase space coordinate conjugate to a momentum based "pz".
+          - `-beta.c.t`: `z` component is the phase space coordinate conjugate to a momentum based "pz".
+          - `-c.dt`: `z` component is the phase space coordinate conjugate to an energy based "pz".
+          - `-c.t`: `z` component is the phase space coordinate conjugate to an energy based "pz".
+          - `z`: `z` component is the true longitudinal coordinate.
 
 - `refTime/`
     - Type: Optional *(float)*
@@ -181,7 +177,12 @@ The following records store data on a particle by particle basis.
 
 - `s-Position`
     - Type: Optional *(float)*
-    - Description: Absolute longitudinal distance in **lattice** coordinates.  
+    - Description: Longitudinal distance of the particle in **lattice** coordinates. This attribute establishes
+    the origin for the (x, y) transverse plane where the particle is measured with respect to in the **lattice** coordinate system.   
+    - Attribute:
+      - `absolute`:
+        - Type: Required **(bool)**
+        - Description: `True` = Absolute position from the beginning of the lattice. `False` = Relative position measured from the beginning of the element the particle is in specified by `latticeElementName` and/or `latticeElementID`.
 
 - `speed/`
     - Type: Optional *(float)*
@@ -197,23 +198,13 @@ The following records store data on a particle by particle basis.
     - Description: Absolute particle time. Note: Particles may have different times if the snapshot
     is, for example, taken at constant **s**.
 
-- `totalMomentum/`
-    - Type: Optional *(float)*
-    - Description: The total momentum of the particles.
+- `time-refTime`
+  - Type: Optional *(float)*
+  - Description: Particle time minus the reference time.
 
-    - Attributes: The following attributes are defined.
-      - `relative`:
-        - Type: Required **(bool)**
-        - Description: Is the energy relative to the `referenceTotalMomentum`?
-      - `normalized`:
-        - Type: Required **(bool)**
-        - Description: Is the energy normalized by the `totalMomentum`?
-    - Examples: [P =  Absolute total momentum, P0 = `referenceTotalMomentum`, p0 = `referencetotalMomentum`]
-      - `relative` = `F`, `normalized` = `F`  --> `totalMomentum` = P
-      - `relative` = `F`, `normalized` = `T`  --> `totalMomentum` = P / p0
-      - `relative` = `T`, `normalized` = `F`  --> `totalMomentum` = P - P0
-      - `relative` = `T`, `normalized` = `T`  --> `totalMomentum` = (P - P0) / p0
-
+- `velocity`
+  - Type: Required 3-vector *(float)*
+  - Description: (`Vx`, `Vy`, `Vz`) velocity vector.
 
 - `weighting/`
     - Type: Optional *(float)*
@@ -221,7 +212,7 @@ The following records store data on a particle by particle basis.
 
 
 Non Per-Particle Records of the `Particle Root Group`
----------------------
+-----------------------------------------------------
 
 The following possible records of the `Particle Root Group` are for specifying properties of the entire group of particles.
 
@@ -252,11 +243,11 @@ The following possible records of the `Particle Root Group` are for specifying p
   - Position Transformation: Position_global = W_matrix * Position_lattice + R_frame
   - Momentum transformation: Momentum_global = W_matrix * Momentum_lattice
 
-- `referenceEnergy`
+- `referenceTotalEnergy`
   - Type: Optional *(float)* attribute.
-  - Description: Specifies the reference energy from which the `energy` is measured with respect to.
+  - Description: Specifies the reference energy from which the `totalEnergy` is measured with respect to.
 
-- `referenceTotalMomentum`
+- `referenceMomentum`
   - Type: Optional *(float)* attribute
   - Description: Specifies the reference total momentum from which the total momentum is measured with respect to.
 
@@ -265,7 +256,7 @@ The following possible records of the `Particle Root Group` are for specifying p
   - Description: The total charge of all the particles.
 
 Particle Record Dataset Attributes
------------------------------
+----------------------------------
 
 The following attributes can be used with any dataset:
 

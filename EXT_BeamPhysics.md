@@ -24,17 +24,13 @@ Definitions
 
 - **Lattice**: A **lattice** is the arrangement of elements in a machine such as a particle accelerator.
 
-- **Global coordinate system**: The **global** coordinate system is a coordinate system that is used to describe the position and orientation of machine elements in space. That is, the **global** coordinate system is fixed with respect to the building or room where the machine is placed independent of the
-machine itself.
+- **Global coordinate system**: The **global** coordinate system is a coordinate system that is used to describe the position and orientation of machine elements in space. That is, the **global** coordinate system is fixed with respect to the building or room where the machine is placed independent of the machine itself.
 
-- **Lattice coordinate system**: The curvilinear coordinate system whose "longitudinal"
-coordinate (**s**) typically runs through the nominal centers of the elements in the machine. The **lattice** coordinate system is often used to describe particle positions.
+- **Lattice coordinate system**: The curvilinear coordinate system whose "longitudinal" coordinate (**s**) typically runs through the nominal centers of the elements in the machine. The **lattice** coordinate system is often used to describe particle positions.
 
 - **Macro-particle**: Macro-particles are simulation particles that represent multiple real particles. The number of real particles that a macro-particle represents affects the calculation of the field due to a macro-particle but does not affect tracking.
 
-- **Polar coordinates**: **Polar** coordinates are **(r, theta, phi)** where **r** is the radius, **theta** is the angle
-from the **z** or **s** axis, and **phi** is the projected azimuthal angle in the **(x, y)**
-plane.
+- **Polar coordinates**: **Polar** coordinates are **(r, theta, phi)** where **r** is the radius, **theta** is the angle from the **z** or **s** axis, and **phi** is the projected azimuthal angle in the **(x, y)** plane.
 
 - **Particle Root Group**: The **Particle Root Group** is a group for specifying a group of particles. See the Base Standard for more information.
 
@@ -43,8 +39,7 @@ plane.
 Notes:
 ------
 
-- When using the **lattice** coordinate system, the `position` coordinates are **(x, y, s)** where
-nominally **x** is the "horizontal" component, **y** is the "vertical" coordinate, and **s** is the lattice longitudinal coordinate.
+- When using the **lattice** coordinate system, the `position` coordinates are **(x, y, s)** or **(x, y, z)** where, nominally, **x** is the "horizontal" component, **y** is the "vertical" coordinate, and **s** or **z** is the lattice longitudinal coordinate.
 
 Additional File Root Group (path `/`) Attributes
 ------------------------------------------------
@@ -65,12 +60,6 @@ The following attributes are defined for the file root group.
 
 For each **particle root group** the following attributes are defined:
 
-- `speciesType`
-  - Type: Required *(string)*
-  - Description: The name of the particle species. Species names must conform to the
-  `speciesType` extension.
-  - Example: `electron`, `H2O`.
-
 - `charge`
   - Type: Optional *(int)*
   - Description: The charge state of the particles. Not needed if the charge can be computed
@@ -83,6 +72,12 @@ For each **particle root group** the following attributes are defined:
 - `referenceTotalEnergy`
   - Type: Optional *(string)*
   - Description: Reference total (kinetic + rest mass) energy. Possibly used for normalizing particle momentum values.
+
+  - `speciesType`
+    - Type: Required *(string)*
+    - Description: The name of the particle species. Species names must conform to the
+    `speciesType` extension.
+    - Example: `electron`, `H2O`.
 
 
 Per-Particle Records of the `Particle Root Group`
@@ -120,7 +115,7 @@ branch index integer, and **element-index** is the associated lattice element in
     - 1: Downstream end of the element outside outside the downstream fringe edge.
 
 - `momentum/`
-  - Type: Optional 2 or 3-vector *(float)*
+  - Type: Optional 3-vector *(float)*
   - Description: The momentum vector of the particles.
   - Components: (`px`, `py`, `pz`).
   - Attributes:
@@ -186,7 +181,7 @@ branch index integer, and **element-index** is the associated lattice element in
 
 - `speed/`
     - Type: Optional *(float)*
-    - Description: The speed of the particles.
+    - Description: The speed (velocity magnitude) of a particle.
 
 - `spin/`
     - Type: Optional 3-vector *(float)*

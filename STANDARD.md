@@ -95,7 +95,7 @@ Each file's *root* group (path `/`) must at least contain the attributes:
       present standard (e.g. fields on an unstructured mesh),
       this can be done be storing this data within a path that *is not*
       of the form given by `basePath` (e.g. `/extra_data`). In this
-      way, the openPMD parsing tools will not parse this additional data.
+      way, the openPMD data readers will not parse this additional data.
 
 The following attribute is *optional* in each each file's *root* group
 (path `/`) and indicates if a file also follows an openPMD extension
@@ -425,7 +425,7 @@ meshes):
 
   - `gridUnitSI`
     - type: 1-dimensional array containing N *(float64 / REAL8)*
-            elements, where N is the number of dimensions in the simulation
+            elements, where N is the number of dimensions in the simulation. Dimensions shall be ordered from fastest to slowest varying index of the described mesh.
     - description: unit-conversion factor to multiply each value in
                    `gridSpacing` and `gridGlobalOffset`, in order to convert
                    from simulation units to SI units
@@ -433,7 +433,7 @@ meshes):
 
   - `gridUnitDimension`
     - type: array of 7 N *(float64 / REAL8)*
-            elements, where N is the number of dimensions in the simulation
+            elements, where N is the number of dimensions in the simulation. Dimensions shall be ordered from fastest to slowest varying index of the described mesh.
     - description: powers of the 7 base measures characterizing the
             grid axes's dimensions (length L, mass M, time T,
             electric current I, thermodynamic temperature theta,
@@ -441,12 +441,13 @@ meshes):
     - note: this is similar to `unitDimension`, but applies to each axis
         The 7 numbers characterizing the dimension of an axis are stored
         contiguously in this 1D array.
-    - examples:
+    - examples (with `L`, `M` and `T` as defined in `unitDimension`)
         - For a 2D spatial grid (`L=1`), store array
         `(1., 0., 0., 0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0.)`
-        - For a 2D phase space (Unit "m" along the first axis
-        and "kg.m.s-1" along the second axis), store array
+        - For a 2D phase space (Dimension "L" along the first axis
+        and "L*M/T" along the second axis), store array
         `(1., 0., 0., 0., 0., 0., 0., 1., 1., -1., 0., 0., 0., 0. )`
+
 
 The following attributes must be stored with each `scalar record` and each
 *component* of a `vector record`:

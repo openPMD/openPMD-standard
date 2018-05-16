@@ -431,7 +431,7 @@ on Unit Systems and Dimensionality, further below):
 
   - `gridUnitSI`
     - type: 1-dimensional array containing N *(float64 / REAL8)*
-            elements, where N is the number of dimensions in the simulation. Dimensions shall be ordered from fastest to slowest varying index of the described mesh.
+            elements, where N is the number of dimensions in the simulation. Dimensions shall be ordered from slowest to fastest varying index of the described mesh.
     - description: unit-conversion factor to multiply each value in
                    `gridSpacing` and `gridGlobalOffset`, in order to convert
                    from simulation units to SI units
@@ -439,7 +439,7 @@ on Unit Systems and Dimensionality, further below):
 
   - `gridUnitDimension`
     - type: array of 7 N *(float64 / REAL8)*
-            elements, where N is the number of dimensions in the simulation. Dimensions shall be ordered from fastest to slowest varying index of the described mesh.
+            elements, where N is the number of dimensions in the simulation. Dimensions shall be ordered from slowest to fastest varying index of the described mesh.
     - description: powers of the 7 base measures characterizing the
             grid axes's dimensions (length L, mass M, time T,
             electric current I, thermodynamic temperature theta,

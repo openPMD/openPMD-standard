@@ -256,6 +256,9 @@ time step.
                   This is needed at the iteration level, since the time step
                   may vary from iteration to iteration in certain codes.
 
+In addition, the following attribute is *recommended* (see the section
+on Unit Systems and Dimensionality, further below):
+
  - `timeUnitSI`
     - type: *(float64 / REAL8)*
     - description: a conversation factor to convert `time` and `dt` to `seconds`
@@ -423,6 +426,9 @@ meshes):
 
     - example: `(0.0, 100.0, 0.0)` or `(0.5, 0.5, 0.5)`
 
+In addition, the following attribute is *recommended* (see the section
+on Unit Systems and Dimensionality, further below):
+
   - `gridUnitSI`
     - type: 1-dimensional array containing N *(float64 / REAL8)*
             elements, where N is the number of dimensions in the simulation. Dimensions shall be ordered from fastest to slowest varying index of the described mesh.
@@ -521,7 +527,8 @@ def is_const_component(record_component):
 
 def get_component(group, component_name):
     record_component = group[component_name]
-    unitSI = record_component.attrs["unitSI"]
+    # `default` handles the case where conversion to SI is not provided
+    unitSI = record_component.attrs.get("unitSI", default=1.)
 
     if is_const_component(record_component):
         return record_component.attrs["value"], unitSI
@@ -603,19 +610,34 @@ patch order:
 Unit Systems and Dimensionality
 -------------------------------
 
-While this standard does not impose any unit system on the data that is stored
-itself, it still requires a common interface to convert one unit system to
-another.
+All datasets and attributes can be written in arbitrary units, in openPMD.
+Typically, this will be the unit system adopted internally by the
+software that writes openPMD (e.g. the unit system adopted internally
+by a physics simulation code), in order to avoid a reduction in performance
+associated with unit conversion during the write process.
 
-To allow scaling data without reformatting it during the write process we
-provide a unit conversation factor, often called `unitSI` in the document,
-to transform it to a corresponding quantity in the International System of
-Units (SI).
+However, for each dataset and attribute, it is **very strongly** recommended to
+provide the conversion factor from the chosen unit system to the International
+System of Units (SI). (See the description of the attributes `timeUnitSI`,
+`gridUnitSI` and `unitSI`, in the present document.) This allows
+the reading softwares to convert the datasets to units that any user can
+understand, without requiring them to know the chosen unit system.
+
+In some exceptional cases, the software that produces the openPMD data may
+not have a well-defined conversion to the SI system. (This is the case for
+instance for plasma simulation codes where quantities are scaled with respect to
+a given plasma density, and where this density could have any value.)
+In this case, the attributes `timeUnitSI`, `gridUnitSI` and `unitSI` can
+be omitted. However, note that, in this case, the reading softwares will
+not be able to tell the user in which units the data is, and this will require
+the user to have in-depth knowledge of the chosen unit system.
+**Therefore, unless there is a very good reason to omit the conversion factors
+to the SI system, it is very strongly recommended to include them.**
 
 For each `mesh` or `particle` `record` and their `components` the following
-attributes must be added:
+attributes are defined:
 
-### Required for each `Record Component`
+### Recommended for each `Record Component`
 
 Reminder: for scalar records the `record` itself is also the `component`.
 
@@ -667,20 +689,6 @@ Reminder: for scalar records the `record` itself is also the `component`.
                the time at which the electric field is defined, and if `dt`
                is e.g. 1.e-5, `timeOffset` would be 0.5e-5 for the magnetic
                field and 0. for the electric field.
-
-### Advice to Implementors
-
-For the special case of simulations, there can be the situation that a certain
-process scales independently of a given fixed reference quantity that
-can be expressed in SI, e.g., the growth rate of a plasma instability can
-scale over various orders of magnitudes solely with the plasma frequency
-and the basic constants such as mass/charge of the simulated particles.
-
-In such a case, picking a *reference density* to determine the `unitSI`
-factors is required to provide a fallback for compatibility.
-
-For human readable output, it is *recommended* to add the actual string
-of the unit in the corresponding `comment` attribute.
 
 
 Constant Record Components

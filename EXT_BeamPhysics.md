@@ -77,7 +77,7 @@ For each **particle root group** the following attributes are defined:
   - Possible values:    
     - -1: Upstream end of element outside of the upstream fringe edge.
     - 0: Inside the element.
-    - 1: Downstream end of the element outside outside the downstream fringe edge.
+    - 1: Downstream end of the element outside the downstream fringe edge.
 
 - `referenceMomentum`
   - Type: Optional *(float)*

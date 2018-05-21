@@ -17,7 +17,7 @@ The `BeamPhysics` extension to the openPMD standard is indicated in a data file 
   openPMDextension = BeamPhysics;SpeciesType
 ```
 
-Note: The `speciesType` extension must be used when using the `BeamPhysics` extension.
+Note: The `SpeciesType` extension must be used when using the `BeamPhysics` extension.
 
 Definitions
 -----------
@@ -60,10 +60,24 @@ The following attributes are defined for the file root group.
 
 For each **particle root group** the following attributes are defined:
 
-- `charge`
-  - Type: Optional *(int)*
-  - Description: The charge state of the particles. Not needed if the charge can be computed
-  from knowledge of the `speciesType`.
+- `latticeElementName`
+  - Type: Optional *(string)*
+  - Description: The name of the lattice element the particle or particles are in. This only makes sense if all particles are in the same lattice element. Also see: `latticeElementID` and `locationInElement`.
+
+- `latticeElementID`
+  - Type Optional *(string)*
+  - Description: The ID string for the lattice element given by `latticeElementName`. The idea is that while more than one lattice element may have the same name, the ID string will be unique.
+  - This, along with `locationInElement` sets the origin for specifying particle positions in the **lattice** coordinate system.
+  - Example: With [Bmad](https://www.classe.cornell.edu/bmad/) based programs the ID string is of the form
+    **branch-index>>element-index** where **branch-index** is the associated branch index integer, and **element-index** is the associated lattice element index within the branch.
+
+- `locationInElement`
+  - Type Optional *(integer)*
+  - Description: The program generating the data file may model a lattice element using a "hard edge" model where the fringe fields at the ends of the element are modeled as having zero longitudinal length. In such a case, if a particle is at the end of the lattice element, it is important to know if the particle is outside of the fringe or if the particle is inside the fringe within the body of the element. Note that with a hard edge fringe, the longitudinal **s**-position does not necessarily provide enough information to determine where a particle is with respect to an edge field. Another situation where `locationInElement` is useful is with zero length elements that affect the particle transport (such as zero length multipole elements). If the program generating the data file does **not** use any hard edge models or zero length non-marker elements, `locationInElement` should not be present since this parameter is meaningless in this case.
+  - Possible values:    
+    - -1: Upstream end of element outside of the upstream fringe edge.
+    - 0: Inside the element.
+    - 1: Downstream end of the element outside outside the downstream fringe edge.
 
 - `referenceMomentum`
   - Type: Optional *(float)*
@@ -73,11 +87,10 @@ For each **particle root group** the following attributes are defined:
   - Type: Optional *(string)*
   - Description: Reference total (kinetic + rest mass) energy. Possibly used for normalizing particle momentum values.
 
-  - `speciesType`
-    - Type: Required *(string)*
-    - Description: The name of the particle species. Species names must conform to the
-    `speciesType` extension.
-    - Example: `electron`, `H2O`.
+- `speciesType`
+  - Type: Required *(string)*
+  - Description: The name of the particle species. Species names must conform to the `SpeciesType` extension.
+  - Example: `electron`, `H2O`.
 
 
 Per-Particle Records of the `Particle Root Group`
@@ -85,34 +98,17 @@ Per-Particle Records of the `Particle Root Group`
 
 The following records store data on a particle-by-particle basis.
 
+- `charge`
+  - Type: Optional *(int)*
+  - Description: The charge state of the particles. Not needed if the charge can be computed
+  from knowledge of the `SpeciesType`.
+
 - `electricField/`
     - Type: Optional 2-component *(float)*
     - Description: Electric field. Used for photons only.
     - Components: (`x`, `y`).
         - For each component, the field is specified using either (`amplitude`, `phase`) or (`Real`, `Imaginary`)
         subcomponents.
-
-- `latticeElementName`
-  - Type: Optional *(string)*
-  - Description: The name of the lattice element the particle or particles are in. This only makes sense if all
-  particles are in the same lattice element. Also see: `latticeElementID` and `locationInElement`.
-
-- `latticeElementID`
-  - Type Optional *(string)*
-  - Description: The ID string for the lattice element given by `latticeElementName`. The idea is that while more than
-    one lattice element may have the same name, the ID string will be unique.
-  - This, along with `locationInElement` sets the origin for specifying particle positions in the **lattice** coordinate system.
-  - Example: With [Bmad](https://www.classe.cornell.edu/bmad/) based programs the ID string is of the form
-    **branch-index>>element-index** where **branch-index** is the associated
-branch index integer, and **element-index** is the associated lattice element index within the branch.
-
-- `locationInElement`
-  - Type Optional *(integer)*
-  - Description: The program generating the data file may model a lattice element using a "hard edge" model where the fringe fields at the ends of the element are modeled as having zero longitudinal length. In such a case, if a particle is at the end of the lattice element, it is important to know if the particle is outside of the fringe or if the particle is inside the fringe within the body of the element. Note that with a hard edge fringe, the longitudinal **s**-position does not necessarily provide enough information to determine where a particle is with respect to an edge field. Another situation where `locationInElement` is useful is with zero length elements that affect the particle transport (such as zero length multipole elements). If the program generating the data file does **not** use any hard edge models or zero length non-marker elements, `locationInElement` should not be present since this parameter is meaningless in this case.
-  - Possible values:    
-    - -1: Upstream end of element outside of the upstream fringe edge.
-    - 0: Inside the element.
-    - 1: Downstream end of the element outside outside the downstream fringe edge.
 
 - `momentum/`
   - Type: Optional 3-vector *(float)*
@@ -150,7 +146,7 @@ branch index integer, and **element-index** is the associated lattice element in
     - Type: Optional *(float)*
     - Description: Length that a particle has traveled.
 
-- `position`
+- `position/`
     - Type: Required 3-vector *(float)*
     - Description: Position relative to the coordinate origin.
     - Components: (`x`, `y`, `z`)
@@ -170,7 +166,7 @@ branch index integer, and **element-index** is the associated lattice element in
     - Description: The reference particle time.
     Note that the reference time is a function of **s** and therefore can be different for different particles.
 
-- `s-Position`
+- `s-Position/`
     - Type: Optional *(float)*
     - Description: Longitudinal distance of the particle in **lattice** coordinates. This attribute establishes
     the origin for the (x, y) transverse plane where the particle is measured with respect to in the **lattice** coordinate system.   
@@ -193,7 +189,7 @@ branch index integer, and **element-index** is the associated lattice element in
     - Description: Absolute particle time. Note: Particles may have different times if the snapshot
     is, for example, taken at constant **s**.
 
-- `time-refTime`
+- `time-refTime/`
   - Type: Optional *(float)*
   - Description: Particle time minus the reference time.
 
@@ -237,14 +233,6 @@ The following possible records of the `Particle Root Group` are for specifying p
   coordinates.
   - Position Transformation: Position_global = W_matrix * Position_lattice + R_frame
   - Momentum transformation: Momentum_global = W_matrix * Momentum_lattice
-
-- `referenceTotalEnergy`
-  - Type: Optional *(float)* attribute.
-  - Description: Specifies the reference energy from which the `totalEnergy` is measured with respect to.
-
-- `referenceMomentum`
-  - Type: Optional *(float)* attribute
-  - Description: Specifies the reference total momentum from which the total momentum is measured with respect to.
 
 - `totalCharge`
   - Type: Optional *(float)* attribute.

@@ -142,7 +142,7 @@ The following records store data on a particle-by-particle basis.
         - `dE`
         - `dE/P0`
 
-- `pathLength/`
+- `pathLength`
     - Type: Optional *(float)*
     - Description: Length that a particle has traveled.
 
@@ -161,12 +161,12 @@ The following records store data on a particle-by-particle basis.
           - `-c.t`: `z` component is the phase space coordinate conjugate to an energy based "pz".
           - `z`: `z` component is the true longitudinal coordinate.
 
-- `refTime/`
+- `refTime`
     - Type: Optional *(float)*
     - Description: The reference particle time.
     Note that the reference time is a function of **s** and therefore can be different for different particles.
 
-- `s-Position/`
+- `s-Position`
     - Type: Optional *(float)*
     - Description: Longitudinal distance of the particle in **lattice** coordinates. This attribute establishes
     the origin for the (x, y) transverse plane where the particle is measured with respect to in the **lattice** coordinate system.   
@@ -175,7 +175,7 @@ The following records store data on a particle-by-particle basis.
         - Type: Required **(bool)**
         - Description: `True` = Absolute position from the beginning of the lattice. `False` = Relative position measured from the beginning of the element the particle is in specified by `latticeElementName` and/or `latticeElementID`.
 
-- `speed/`
+- `speed`
     - Type: Optional *(float)*
     - Description: The speed (velocity magnitude) of a particle.
 
@@ -184,17 +184,17 @@ The following records store data on a particle-by-particle basis.
     - Description: Particle spin.
     - Components: (`x`, `y`, `s`) or (`r`, `theta`, `phi`).
 
-- `time/`
+- `time`
     - Type: Optional *(float)*
     - Description: Absolute particle time. Note: Particles may have different times if the snapshot
     is, for example, taken at constant **s**.
 
-- `time-refTime/`
+- `time-refTime`
   - Type: Optional *(float)*
   - Description: Particle time minus the reference time.
 
-- `velocity`
-  - Type: Required 3-vector *(float)*
+- `velocity/`
+  - Type: Optional 3-vector *(float)*
   - Description: (`Vx`, `Vy`, `Vz`) velocity vector.
 
 - `weighting/`

@@ -166,7 +166,7 @@ The following records store data on a particle-by-particle basis.
     - Description: The reference particle time.
     Note that the reference time is a function of **s** and therefore can be different for different particles.
 
-- `s-Position`
+- `sPosition`
     - Type: Optional *(float)*
     - Description: Longitudinal distance of the particle in **lattice** coordinates. This attribute establishes
     the origin for the (x, y) transverse plane where the particle is measured with respect to in the **lattice** coordinate system.   

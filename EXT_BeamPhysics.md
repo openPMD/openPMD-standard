@@ -58,7 +58,7 @@ The following attributes are defined for the file root group.
 `Particle Root Group` Attributes
 --------------------------------
 
-For each **particle root group** the following attributes are defined:
+For each **particle root group** the following components are defined:
 
 - `latticeElementName`
   - Type: Optional *(string)*

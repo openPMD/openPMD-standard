@@ -154,11 +154,11 @@ The following records store data on a particle-by-particle basis.
       - `zType`:
         - Type: Required **(string)**
         - Description: Describes how the `z` component is to be interpreted.
-        - Possible values: [Where: **beta** = particle speed, **c** = speed of light, **t** = time, and **dt** = time relative to the reference time.]
-          - `-beta.c.dt`: `z` component is the phase space coordinate conjugate to a momentum based "pz".
-          - `-beta.c.t`: `z` component is the phase space coordinate conjugate to a momentum based "pz".
-          - `-c.dt`: `z` component is the phase space coordinate conjugate to an energy based "pz".
-          - `-c.t`: `z` component is the phase space coordinate conjugate to an energy based "pz".
+        - Possible values: [Where: **beta** = particle speed/speed of light, **c** = speed of light, **t** = time, and **dt** = time - reference time.]
+          - `-beta*c*dt`: `z` component is the phase space coordinate conjugate to a momentum based "pz".
+          - `-beta*c*t`: `z` component is the phase space coordinate conjugate to a momentum based "pz".
+          - `-c*dt`: `z` component is the phase space coordinate conjugate to an energy based "pz".
+          - `-c*t`: `z` component is the phase space coordinate conjugate to an energy based "pz".
           - `z`: `z` component is the true longitudinal coordinate.
 
 - `refTime/`

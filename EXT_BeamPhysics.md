@@ -41,10 +41,10 @@ Notes:
 
 - When using the **lattice** coordinate system, the `position` coordinates are **(x, y, s)** or **(x, y, z)** where, nominally, **x** is the "horizontal" component, **y** is the "vertical" coordinate, and **s** or **z** is the lattice longitudinal coordinate.
 
-Additional File Root Group (path `/`) Attributes
+Additional File Root Group (path `/`) records
 ------------------------------------------------
 
-The following attributes are defined for the file root group.
+The following records are defined for the file root group.
 
 - `latticeName`
   - Type: Optional *(string)*
@@ -55,10 +55,10 @@ The following attributes are defined for the file root group.
   - Description: The location of the root lattice file.
 
 
-`Particle Root Group` Attributes
+`Particle Root Group` records
 --------------------------------
 
-For each **particle root group** the following components are defined:
+For each **particle root group** the following records are defined:
 
 - `latticeElementName`
   - Type: Optional *(string)*
@@ -168,7 +168,7 @@ The following records store data on a particle-by-particle basis.
 
 - `sPosition`
     - Type: Optional *(float)*
-    - Description: Longitudinal distance of the particle in **lattice** coordinates. This attribute establishes
+    - Description: Longitudinal distance of the particle in **lattice** coordinates. This record establishes
     the origin for the (x, y) transverse plane where the particle is measured with respect to in the **lattice** coordinate system.   
     - Attribute:
       - `absolute`:

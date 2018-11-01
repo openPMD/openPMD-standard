@@ -82,35 +82,6 @@ The individual requirement is given in `scope`.
     - description: additional scheme and parameters specification for
                    the boundary conditions
 
-  - `particleBoundary`
-    - type: array of *(string)* of length 2 `N`
-    - scope: *required*
-    - description: boundary conditions in each direction (in the above, `N` is
-                   the dimensionality of the field mesh)
-                   The strings are stored in the following order:
-
-      - boundary at the *lower* end of the *first* axis as in `axisLabels`
-      - boundary at the *upper* end of the *first* axis as in `axisLabels`
-      - boundary at the *lower* end of the *second* axis as in `axisLabels`
-      - boundary at the *upper* end of the *second* axis as in `axisLabels`
-      - ...
-      - boundary at the *upper* end of the last axis as in `axisLabels`
-    - allowed values:
-      - `periodic`
-      - `absorbing`
-      - `reflecting`
-      - `reinjecting` (optionally add scheme specification - such as
-        "thermal, T=1keV" - in the `particleBoundaryParameters` string)
-      - `other`
-    - note: currently all particles must have the same boundary condition,
-            might become a particle attribute in the future
-
-  - `particleBoundaryParameters`
-    - type: array of *(string)* of length 2 `N`
-    - scope: *required* if `particleBoundary` is `other`, *optional* otherwise
-    - description: additional scheme and parameters specification for the
-                   boundary conditions
-
   - `currentSmoothing`
     - type: *(string)*
     - scope: *required*
@@ -258,6 +229,35 @@ The individual requirement is given in `scope`.
     - scope: *optional*
     - description: further parameters for current deposition schemes;
                    reserved for future use
+
+  - `particleBoundary`
+    - type: array of *(string)* of length 2 `N`
+    - scope: *required*
+    - description: boundary conditions in each direction (in the above, `N` is
+                   the dimensionality of the field mesh)
+                   The strings are stored in the following order:
+
+      - boundary at the *lower* end of the *first* axis as in `axisLabels`
+      - boundary at the *upper* end of the *first* axis as in `axisLabels`
+      - boundary at the *lower* end of the *second* axis as in `axisLabels`
+      - boundary at the *upper* end of the *second* axis as in `axisLabels`
+      - ...
+      - boundary at the *upper* end of the last axis as in `axisLabels`
+    - allowed values:
+      - `periodic`
+      - `absorbing`
+      - `reflecting`
+      - `reinjecting` (optionally add scheme specification - such as
+        "thermal, T=1keV" - in the `particleBoundaryParameters` string)
+      - `other`
+    - note: currently all particles must have the same boundary condition,
+            might become a particle attribute in the future
+
+  - `particleBoundaryParameters`
+    - type: array of *(string)* of length 2 `N`
+    - scope: *required* if `particleBoundary` is `other`, *optional* otherwise
+    - description: additional scheme and parameters specification for the
+                   boundary conditions
 
   - `particlePush`
     - type: *(string)*

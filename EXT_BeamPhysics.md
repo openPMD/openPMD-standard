@@ -142,6 +142,10 @@ The following records store data on a particle-by-particle basis.
         - `dE`
         - `dE/P0`
 
+- `particleStatus`
+    - Type: Optional *(int)*
+    - Description: Integer indicating whether a particle is "alive" or "dead" (for example, has hit the vacuum chamber wall). A zero value indicates the particle is alive and any other value indicates that the particle is dead. Programs are free to distinguish how a particle died by assigning different non-zero values to "modes of death". For example, a program might want to differentiate between particles that are dead due to hitting one surface verses hitting a different surface.
+
 - `pathLength`
     - Type: Optional *(float)*
     - Description: Length that a particle has traveled.

@@ -133,7 +133,11 @@ The following records store data on a particle-by-particle basis.
         - `dE`
         - `dE/P0`
       - Physical definitions:
-         - `Px` = $m c \gamma\beta_x$
+         - `Px` = m*c*gamma*beta_x
+         - `Py` = m*c*gamma*beta_y
+         - `Pz` = m*c*gamma*beta_z
+         - `P` = m*c*gamma*beta
+         - `E` = m*c*gamma
        
 
 - `particleStatus`

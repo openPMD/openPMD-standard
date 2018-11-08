@@ -114,12 +114,12 @@ The following records store data on a particle-by-particle basis.
   - Type: Optional 3-vector *(float)*
   - Description: The momentum vector of the particles.
   - Components: (`px`, `py`, `pz`).
-    - For each component, the convenction is specified by the attribute:
+    - For each component, the covention is specified by the attribute:
     - `convention`:
       - Type: Required **(string)**
       - Description: Describes how the component is to be interpreted.
-      - Possible values: 
-        - `Px`: `px` is the x-component of the momentum.
+      - Possible values  [Where: Px =  Momentum component, P0 = `referenceMomentum`, E = Total energy, P = momentum magnitude, E0 = `referenceTotalEnergy`, dE = E - E0, dP = P - P0]:
+        - `Px`: `px` is the x-component of the momentum: $m c \gamma\beta_x$
         - `Px/P0`: `px` is the momentum normalized by the reference momentum.
         - `Py/P0`: `py` is the momentum normalized by the reference momentum.
         - `Pz`
@@ -132,7 +132,7 @@ The following records store data on a particle-by-particle basis.
         - `E/P0`
         - `dE`
         - `dE/P0`
-        [Where: Px =  Momentum component, P0 = `referenceMomentum`, E = Total energy, P = momentum magnitude, E0 = `referenceTotalEnergy`, dE = E - E0, dP = P - P0]
+       
 
 - `particleStatus`
     - Type: Optional *(int)*

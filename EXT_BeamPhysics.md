@@ -137,7 +137,7 @@ The following records store data on a particle-by-particle basis.
          - `Py = m*c*gamma*beta_y`
          - `Pz = m*c*gamma*beta_z` 
          - `P  = m*c*gamma*beta` Total Momentum
-         - `E  = m*c*gamma` Total Energy
+         - `E  = m*c^2*gamma` Total Energy
        
 
 - `particleStatus`

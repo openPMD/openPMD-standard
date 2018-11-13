@@ -95,7 +95,7 @@ Each file's *root* group (path `/`) must at least contain the attributes:
       present standard (e.g. fields on an unstructured mesh),
       this can be done be storing this data within a path that *is not*
       of the form given by `basePath` (e.g. `/extra_data`). In this
-      way, the openPMD parsing tools will not parse this additional data.
+      way, the openPMD data readers will not parse this additional data.
 
 The following attribute is *optional* in each each file's *root* group
 (path `/`) and indicates if a file also follows an openPMD extension
@@ -430,11 +430,32 @@ In addition, the following attribute is *recommended* (see the section
 on Unit Systems and Dimensionality, further below):
 
   - `gridUnitSI`
-    - type: *(float64 / REAL8)*
+    - type: 1-dimensional array containing N *(float64 / REAL8)*
+            elements, where N is the number of dimensions in the simulation.
+            The order of the N values must be identical to the axes in `axisLabels`.
     - description: unit-conversion factor to multiply each value in
                    `gridSpacing` and `gridGlobalOffset`, in order to convert
                    from simulation units to SI units
-    - example: `1.0e-9`
+    - example: `(1.0e-9, 1.0e-9, 1.0e-6)`
+
+  - `gridUnitDimension`
+    - type: 1-dimensional array of 7 N *(float64 / REAL8)*
+            elements, where N is the number of dimensions in the simulation.
+            The order of the N 7-value arrays must be identical to the axes in `axisLabels`.
+    - description: powers of the 7 base measures characterizing the
+            grid axes's dimensions (length L, mass M, time T,
+            electric current I, thermodynamic temperature theta,
+            amount of substance N, luminous intensity J)
+    - note: this is similar to `unitDimension`, but applies to each axis
+        The 7 numbers characterizing the dimension of an axis are stored
+        contiguously in this 1D array.
+    - examples (with `L`, `M` and `T` as defined in `unitDimension`)
+        - For a 2D spatial grid (`L=1`), store array
+        `(1., 0., 0., 0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0.)`
+        - For a 2D phase space (Dimension "L" along the first axis
+        and "L*M/T" along the second axis), store array
+        `(1., 0., 0., 0., 0., 0., 0., 1., 1., -1., 0., 0., 0., 0. )`
+
 
 The following attributes must be stored with each `scalar record` and each
 *component* of a `vector record`:
@@ -591,7 +612,7 @@ patch order:
 Unit Systems and Dimensionality
 -------------------------------
 
-All datasets and attributes can be written in arbitrary units, in openPMD. 
+All datasets and attributes can be written in arbitrary units, in openPMD.
 Typically, this will be the unit system adopted internally by the
 software that writes openPMD (e.g. the unit system adopted internally
 by a physics simulation code), in order to avoid a reduction in performance
@@ -599,7 +620,7 @@ associated with unit conversion during the write process.
 
 However, for each dataset and attribute, it is **very strongly** recommended to
 provide the conversion factor from the chosen unit system to the International
-System of Units (SI). (See the description of the attributes `timeUnitSI`, 
+System of Units (SI). (See the description of the attributes `timeUnitSI`,
 `gridUnitSI` and `unitSI`, in the present document.) This allows
 the reading softwares to convert the datasets to units that any user can
 understand, without requiring them to know the chosen unit system.

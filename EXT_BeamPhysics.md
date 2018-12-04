@@ -115,22 +115,16 @@ The following records store data on a particle-by-particle basis.
   - Description: The momentum vector of the particles.
   - Components: (`px`, `py`, `pz`).
   - Attributes:
-    - `pxType`:
+    - `pxyType`:
       - Type: Required **(string)**
-      - Description: Describes how the `px` component is to be interpreted.
-      - Possible values: [Where: Px =  Momentum component, P0 = `referenceMomentum`]
-        - `Px`: `px` is the x-component of the momentum.
-        - `Px/P0`: `px` is the momentum normalized by the reference momentum.
-    - `pyType`:
-      - Type: Required **(string)**
-      - Description: Describes how the `py` component is to be interpreted.
-      - Possible values: [Where: Py =  Momentum component , P0 = `referenceMomentum`]
-        - `Py`: `py` is the y-component of the momentum.
-        - `Py/P0`: `py` is the momentum normalized by the reference momentum.
+      - Description: Describes how the `px` and `py` components are to be interpreted.
+      - Possible values: [Where: Pxy =  x or y momentum component, P0 = `referenceMomentum`]
+        - `Pxy`: `px` and `py` are the x and y-components of the momentum.
+        - `Pxy/P0`: `px` and `py` are the x and y-components of the momentum normalized by the reference momentum.
     - `pzType`:
       - Type: Required **(string)**
       - Description: Describes how the `pz` component is to be interpreted.
-      - Possible values: [Where: E = Total energy, P = momentum magnitude, E0 = `referenceTotalEnergy`, P0 = `referenceMomentum`, Pz = momentum component, dE = E - E0, dP = P - P0]
+      - Possible values: [Where: E = Total energy, P = momentum magnitude, E0 = `referenceTotalEnergy`, P0 = `referenceMomentum`, Pz = momentum component along the z-axis, dE = E - E0, dP = P - P0]
         - `Pz`
         - `Pz/P0`
         - `P`

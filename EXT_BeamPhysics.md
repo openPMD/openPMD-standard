@@ -114,27 +114,25 @@ The following records store data on a particle-by-particle basis.
   - Type: Optional 3-vector *(float)*
   - Description: The momentum vector of the particles.
   - Components: (`px`, `py`, `pz`).
-  - Attributes:
-    - `pxyType`:
-      - Type: Required **(string)**
-      - Description: Describes how the `px` and `py` components are to be interpreted.
-      - Possible values: [Where: Pxy =  x or y momentum component, P0 = `referenceMomentum`]
-        - `Pxy`: `px` and `py` are the x and y-components of the momentum.
-        - `Pxy/P0`: `px` and `py` are the x and y-components of the momentum normalized by the reference momentum.
-    - `pzType`:
-      - Type: Required **(string)**
-      - Description: Describes how the `pz` component is to be interpreted.
-      - Possible values: [Where: E = Total energy, P = momentum magnitude, E0 = `referenceTotalEnergy`, P0 = `referenceMomentum`, Pz = momentum component along the z-axis, dE = E - E0, dP = P - P0]
-        - `Pz`
-        - `Pz/P0`
-        - `P`
-        - `P/P0`
-        - `dP`
-        - `dP/P0`
-        - `E`
-        - `E/P0`
-        - `dE`
-        - `dE/P0`
+  - Physical definitions:
+    - `Px = m*c*gamma*beta_x` 
+    - `Py = m*c*gamma*beta_y`
+    - `Pz = m*c*gamma*beta_z` 
+    
+- `momentumOffset/`
+  - Type: Optional 3-vector *(float)*
+  - Description: offset for each momentum component. 
+  - Components: (`px`, `py`, `pz`).
+
+- `totalMomentum/`
+  - Type: Optional *(float)*
+  - Description: Total momentum 
+  - Physical definition: `p = sqrt(px^2 + py^2 + pz^2)`
+
+- `totalEnergy/`
+  - Type: Optional *(float)*
+  - Description: Total momentum 
+  - Physical definition: `E = sqrt[(c*px)^2 + (c*py)^2 + (c*pz^2) + (m*c^2)^2]`
 
 - `particleStatus`
     - Type: Optional *(int)*

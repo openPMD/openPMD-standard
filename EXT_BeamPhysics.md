@@ -98,10 +98,9 @@ Per-Particle Records of the `Particle Root Group`
 
 The following records store data on a particle-by-particle basis.
 
-- `charge`
+- `charge/`
   - Type: Optional *(int)*
-  - Description: The charge state of the particles. Not needed if the charge can be computed
-  from knowledge of the `SpeciesType`.
+  - Description: The charge state of the particles. Used for atoms and molecules. Not needed if the charge can be computed from knowledge of the `SpeciesType` (That is, a fundamental particle). Also see `weighting`.
 
 - `electricField/`
     - Type: Optional 2-component *(float)*
@@ -115,9 +114,9 @@ The following records store data on a particle-by-particle basis.
   - Description: The momentum vector of the particles.
   - Components: (`px`, `py`, `pz`).
   - Physical definitions:
-    - `Px = m*c*gamma*beta_x`
-    - `Py = m*c*gamma*beta_y`
-    - `Pz = m*c*gamma*beta_z`
+    - `px = m * gamma * V_x`
+    - `py = m * gamma * V_y`
+    - `pz = m * gamma * V_z`
 
 - `momentumOffset/`
   - Type: Optional 3-vector *(float)*
@@ -129,63 +128,59 @@ The following records store data on a particle-by-particle basis.
   - Description: Total momentum
   - Physical definition: `p = sqrt(px^2 + py^2 + pz^2)`
 
+- `totalMomentumOffset/`
+  - Type: Optional *(float)*
+  - Description: Offset for the total momentum.
+
 - `totalEnergy/`
   - Type: Optional *(float)*
   - Description: Total momentum
   - Physical definition: `E = sqrt[(c*px)^2 + (c*py)^2 + (c*pz^2) + (m*c^2)^2]`
 
-- `particleStatus`
+- `totalEnergyOffset/`
+  - Type: Optional *(float)*
+  - Description: Offset for the total momentum.
+
+- `particleStatus/`
     - Type: Optional *(int)*
     - Description: Integer indicating whether a particle is "alive" or "dead" (for example, has hit the vacuum chamber wall). A zero value indicates the particle is alive and any other value indicates that the particle is dead. Programs are free to distinguish how a particle died by assigning different non-zero values to "modes of death". For example, a program might want to differentiate between particles that are dead due to hitting one surface verses hitting a different surface.
 
-- `pathLength`
+- `pathLength/`
     - Type: Optional *(float)*
     - Description: Length that a particle has traveled.
 
 - `position/`
     - Type: Required 3-vector *(float)*
-    - Description: Position relative to the coordinate origin.
+    - Description: Position relative to the curvilinear coordinate origin.
     - Components: (`x`, `y`, `z`)
     - Attributes:
-      - `zType`:
-        - Type: Required *(string)*
-        - Description: Describes how the `z` component is to be interpreted.
-        - Possible values: [Where: **beta** = particle speed/speed of light, **c** = speed of light, **t** = time, and **dt** = time - reference time.]
-          - `-beta*c*dt`: `z` component is the phase space coordinate conjugate to a momentum based "pz".
-          - `-beta*c*t`: `z` component is the phase space coordinate conjugate to a momentum based "pz".
-          - `-c*dt`: `z` component is the phase space coordinate conjugate to an energy based "pz".
-          - `-c*t`: `z` component is the phase space coordinate conjugate to an energy based "pz".
-          - `z`: `z` component is the true longitudinal coordinate.
 
-- `refTime`
+- `positionOffset/`
+    - Type: Optional 3-vector *(float)*
+    - Description: Offset for each position component.
+    - Components: (`x`, `y`, `z`)
+    - Attributes:
+
+- `refTime/`
     - Type: Optional *(float)*
     - Description: The reference particle time.
     Note that the reference time is a function of **s** and therefore can be different for different particles.
 
-- `sPosition`
-    - Type: Optional *(float)*
-    - Description: Longitudinal distance of the particle in **lattice** coordinates. This record establishes
-    the origin for the (x, y) transverse plane where the particle is measured with respect to in the **lattice** coordinate system.   
-    - Attribute:
-      - `absolute`:
-        - Type: Required *(bool)*
-        - Description: `True` = Absolute position from the beginning of the lattice. `False` = Relative position measured from the beginning of the element the particle is in specified by `latticeElementName` and/or `latticeElementID`.
-
-- `speed`
+- `speed/`
     - Type: Optional *(float)*
     - Description: The speed (velocity magnitude) of a particle.
 
 - `spin/`
     - Type: Optional 3-vector *(float)*
     - Description: Particle spin.
-    - Components: (`x`, `y`, `s`) or (`r`, `theta`, `phi`).
+    - Components: (`x`, `y`, `z`) or (`r`, `theta`, `phi`).
 
-- `time`
+- `time/`
     - Type: Optional *(float)*
     - Description: Absolute particle time. Note: Particles may have different times if the snapshot
     is, for example, taken at constant **s**.
 
-- `time-refTime`
+- `time-refTime/`
   - Type: Optional *(float)*
   - Description: Particle time minus the reference time.
 
@@ -195,7 +190,7 @@ The following records store data on a particle-by-particle basis.
 
 - `weighting/`
     - Type: Optional *(float)*
-    - Description: If macro-particles are being simulated, the `weighting` is the the total charge or total number of the collection of particles that a macro-particle represents.
+    - Description: If macro-particles are being simulated, the `weighting` is the the total charge or total number of the collection of particles that a macro-particle represents. Also see `charge`.
 
 
 Non Per-Particle Records of the `Particle Root Group`

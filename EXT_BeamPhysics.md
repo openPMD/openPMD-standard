@@ -41,8 +41,8 @@ Notes:
 
 - When using the **lattice** coordinate system, the `position` coordinates are **(x, y, s)** or **(x, y, z)** where, nominally, **x** is the "horizontal" component, **y** is the "vertical" coordinate, and **s** or **z** is the lattice longitudinal coordinate.
 
-Additional File Root Group (path `/`) records
-------------------------------------------------
+Additional File Root Group (Path `/`) Records
+---------------------------------------------
 
 The following records are defined for the file root group.
 
@@ -56,7 +56,7 @@ The following records are defined for the file root group.
 
 
 `Particle Root Group` records
---------------------------------
+-----------------------------
 
 For each **particle root group** the following records are defined:
 
@@ -115,23 +115,23 @@ The following records store data on a particle-by-particle basis.
   - Description: The momentum vector of the particles.
   - Components: (`px`, `py`, `pz`).
   - Physical definitions:
-    - `Px = m*c*gamma*beta_x` 
+    - `Px = m*c*gamma*beta_x`
     - `Py = m*c*gamma*beta_y`
-    - `Pz = m*c*gamma*beta_z` 
-    
+    - `Pz = m*c*gamma*beta_z`
+
 - `momentumOffset/`
   - Type: Optional 3-vector *(float)*
-  - Description: offset for each momentum component. 
+  - Description: offset for each momentum component.
   - Components: (`px`, `py`, `pz`).
 
 - `totalMomentum/`
   - Type: Optional *(float)*
-  - Description: Total momentum 
+  - Description: Total momentum
   - Physical definition: `p = sqrt(px^2 + py^2 + pz^2)`
 
 - `totalEnergy/`
   - Type: Optional *(float)*
-  - Description: Total momentum 
+  - Description: Total momentum
   - Physical definition: `E = sqrt[(c*px)^2 + (c*py)^2 + (c*pz^2) + (m*c^2)^2]`
 
 - `particleStatus`
@@ -148,7 +148,7 @@ The following records store data on a particle-by-particle basis.
     - Components: (`x`, `y`, `z`)
     - Attributes:
       - `zType`:
-        - Type: Required **(string)**
+        - Type: Required *(string)*
         - Description: Describes how the `z` component is to be interpreted.
         - Possible values: [Where: **beta** = particle speed/speed of light, **c** = speed of light, **t** = time, and **dt** = time - reference time.]
           - `-beta*c*dt`: `z` component is the phase space coordinate conjugate to a momentum based "pz".
@@ -168,7 +168,7 @@ The following records store data on a particle-by-particle basis.
     the origin for the (x, y) transverse plane where the particle is measured with respect to in the **lattice** coordinate system.   
     - Attribute:
       - `absolute`:
-        - Type: Required **(bool)**
+        - Type: Required *(bool)*
         - Description: `True` = Absolute position from the beginning of the lattice. `False` = Relative position measured from the beginning of the element the particle is in specified by `latticeElementName` and/or `latticeElementID`.
 
 - `speed`

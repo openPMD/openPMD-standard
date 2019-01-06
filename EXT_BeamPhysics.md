@@ -111,12 +111,9 @@ The following records store data on a particle-by-particle basis.
 
 - `momentum/`
   - Type: Optional 3-vector *(float)*
-  - Description: The momentum vector of the particles.
+  - Description: The momentum vector of the particles relative to `momentumOffset`
   - Components: (`px`, `py`, `pz`).
-  - Physical definitions:
-    - `px = m * gamma * V_x`
-    - `py = m * gamma * V_y`
-    - `pz = m * gamma * V_z`
+  - True momentum = `momentum + momentumOffset`
 
 - `momentumOffset/`
   - Type: Optional 3-vector *(float)*
@@ -125,8 +122,7 @@ The following records store data on a particle-by-particle basis.
 
 - `totalMomentum/`
   - Type: Optional *(float)*
-  - Description: Total momentum
-  - Physical definition: `p = sqrt(px^2 + py^2 + pz^2)`
+  - Description: Total momentum relative to the totalMomentumOffset. That is, True total momentum = `totalMomentum + totalMomentumOffset`.
 
 - `totalMomentumOffset/`
   - Type: Optional *(float)*
@@ -134,8 +130,7 @@ The following records store data on a particle-by-particle basis.
 
 - `totalEnergy/`
   - Type: Optional *(float)*
-  - Description: Total momentum
-  - Physical definition: `E = sqrt[(c*px)^2 + (c*py)^2 + (c*pz^2) + (m*c^2)^2]`
+  - Description: Total energy relative to the totalEnergyOffset. That is, true total energy = `totalEnergy + totalEnergyOffset`.
 
 - `totalEnergyOffset/`
   - Type: Optional *(float)*
@@ -151,20 +146,15 @@ The following records store data on a particle-by-particle basis.
 
 - `position/`
     - Type: Required 3-vector *(float)*
-    - Description: Position relative to the curvilinear coordinate origin.
     - Components: (`x`, `y`, `z`)
-    - Attributes:
+    - Description: particle Position relative to the `positionOffset`.
+    That is, true position relative to the curvilinear coordinate origin = `position + positionOffset`.
 
 - `positionOffset/`
     - Type: Optional 3-vector *(float)*
-    - Description: Offset for each position component.
+    - Description: Offset for each particle position component relative to the curvilinear coordinate origin.
     - Components: (`x`, `y`, `z`)
     - Attributes:
-
-- `refTime/`
-    - Type: Optional *(float)*
-    - Description: The reference particle time.
-    Note that the reference time is a function of **s** and therefore can be different for different particles.
 
 - `speed/`
     - Type: Optional *(float)*
@@ -177,12 +167,12 @@ The following records store data on a particle-by-particle basis.
 
 - `time/`
     - Type: Optional *(float)*
-    - Description: Absolute particle time. Note: Particles may have different times if the snapshot
-    is, for example, taken at constant **s**.
+    - Description: Time relative to `timeOffset`. That is, absolute time = `time + timeOffset`.
 
-- `time-refTime/`
-  - Type: Optional *(float)*
-  - Description: Particle time minus the reference time.
+- `timeOffset`
+    - Type: Optional *(float)*
+    - Description: The reference particle time.
+    Note that the reference time is a function of **s** and therefore can be different for different particles.
 
 - `velocity/`
   - Type: Optional 3-vector *(float)*

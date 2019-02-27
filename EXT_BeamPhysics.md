@@ -103,11 +103,19 @@ The following records store data on a particle-by-particle basis.
   - Description: The charge state of the particles. Used for atoms and molecules. Not needed if the charge can be computed from knowledge of the `SpeciesType` (That is, a fundamental particle). Also see `weighting`.
 
 - `electricField/`
-    - Type: Optional 2-component *(float)*
-    - Description: Electric field. Used for photons only.
-    - Components: (`x`, `y`).
-        - For each component, the field is specified using either (`amplitude`, `phase`) or (`Real`, `Imaginary`)
-        subcomponents.
+    - Type: Optional 3-vector *(float)*
+    - Description: External electric field at the particle. 
+    - Components: (`x`, `y`, `z`).
+
+- `magneticField/`
+    - Type: Optional 3-vector *(float)*
+    - Description: External magnetic field at the particle. 
+    - Components: (`x`, `y`, `z`).
+
+- `photonPolarization/`
+    - Type: Optional 2-vector *(complex)*
+    - Description: Polarization of the photon
+    - Components: (`x`, `y`), transverse to the direction of the photon.
 
 - `momentum/`
   - Type: Optional 3-vector *(float)*

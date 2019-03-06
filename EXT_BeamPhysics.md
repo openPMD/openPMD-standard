@@ -100,16 +100,16 @@ The following records store data on a particle-by-particle basis.
 
 - `charge/`
   - Type: Optional *(int)*
-  - Description: The charge state of the particles. Used for atoms and molecules. Not needed if the charge can be computed from knowledge of the `SpeciesType` (That is, a fundamental particle). Also see `weighting`.
+  - Description: The charge state of the particles. Used for atoms and molecules. Not needed if the charge can be computed from knowledge of the `SpeciesType` (That is, a fundamental particle). Also see `weight`.
 
 - `electricField/`
     - Type: Optional 3-vector *(float)*
-    - Description: External electric field at the particle. 
+    - Description: External electric field at the particle.
     - Components: (`x`, `y`, `z`).
 
 - `magneticField/`
     - Type: Optional 3-vector *(float)*
-    - Description: External magnetic field at the particle. 
+    - Description: External magnetic field at the particle.
     - Components: (`x`, `y`, `z`).
 
 - `photonPolarization/`
@@ -186,9 +186,9 @@ The following records store data on a particle-by-particle basis.
   - Type: Optional 3-vector *(float)*
   - Description: (`Vx`, `Vy`, `Vz`) velocity vector.
 
-- `weighting/`
+- `weight/`
     - Type: Optional *(float)*
-    - Description: If macro-particles are being simulated, the `weighting` is the the total charge or total number of the collection of particles that a macro-particle represents. Also see `charge`.
+    - Description: If macro-particles are being simulated, the `weight` is the total charge of a macro-particle or the total number of particles that a macro-particle represents. Also see `charge`.
 
 
 Non Per-Particle Records of the `Particle Root Group`

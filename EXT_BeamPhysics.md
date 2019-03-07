@@ -96,25 +96,22 @@ The following records store data on a particle-by-particle basis.
 
 - `charge/`
   - Type: Optional *(int)*
-  - Description: The charge state of the particles. Used for atoms and molecules. Not needed if the charge can be computed from knowledge of the `SpeciesType` (That is, a fundamental particle). Also see `weighting`.
+  - Description: The charge state of the particles. Used for atoms and molecules. Not needed if the charge can be computed from knowledge of the `SpeciesType` (That is, a fundamental particle). Also see `weight`.
 
 - `electricField/`
-  - Type: Optional 2-component *(float)*
-  - Description: Electric field. Used for photons only.
-  - Components: (`x`, `y`).
-      - For each component, the field is specified using either (`amplitude`, `phase`) or (`Real`, `Imaginary`) subcomponents.
+    - Type: Optional 3-vector *(float)*
+    - Description: External electric field at the particle.
+    - Components: (`x`, `y`, `z`).
 
-- `elementIndex/`
-  - Type Optional *(int)*
-  - Description: The unique index number assigned to the lattice element the particle is in.
+- `magneticField/`
+    - Type: Optional 3-vector *(float)*
+    - Description: External magnetic field at the particle.
+    - Components: (`x`, `y`, `z`).
 
-- `locationInElement`
-  - Type Optional *(integer)*
-  - Description: The program generating the data file may model a lattice element using a "hard edge" model where the fringe fields at the ends of the element are modeled as having zero longitudinal length. In such a case, if a particle is at the end of the lattice element, it is important to know if the particle is outside of the fringe or if the particle is inside the fringe within the body of the element. Note that with a hard edge fringe, the longitudinal **s**-position does not necessarily provide enough information to determine where a particle is with respect to an edge field. Another situation where `locationInElement` is useful is with zero length elements that affect the particle transport (such as zero length multipole elements). If the program generating the data file does **not** use any hard edge models or zero length non-marker elements, `locationInElement` should not be present since this parameter is meaningless in this case.
-  - Possible values:    
-    - -1: Upstream end of element outside of the upstream fringe edge.
-    - 0: Inside the element.
-    - 1: Downstream end of the element outside the downstream fringe edge.
+- `photonPolarization/`
+    - Type: Optional 2-vector *(complex)*
+    - Description: Polarization of the photon
+    - Components: (`x`, `y`), transverse to the direction of the photon.
 
 - `momentum/`
   - Type: Optional 3-vector *(float)*
@@ -210,9 +207,9 @@ The following records store data on a particle-by-particle basis.
   - Type: Optional 3-vector *(float)*
   - Description: (`Vx`, `Vy`, `Vz`) velocity vector.
 
-- `weighting/`
+- `weight/`
     - Type: Optional *(float)*
-    - Description: If macro-particles are being simulated, the `weighting` is the the total charge or total number of the collection of particles that a macro-particle represents. Also see `charge`.
+    - Description: If macro-particles are being simulated, the `weight` is the total charge of a macro-particle or the total number of particles that a macro-particle represents. Also see `charge`.
 
 
 Non Per-Particle Records of the `Particle Root Group`

@@ -24,11 +24,15 @@ Definitions
 
 - **Lattice**: A **lattice** is the arrangement of elements in a machine such as a particle accelerator.
 
+- **Lattice branches**: The lattices of some programs can contain multiple connected beam lines or rings. For example, an injection line connected to a storage ring connected to X-ray beam lines. Each line or ring is called a **branch**. In the above example, the injection line is one branch, the storage ring another branch, and each X-ray beam line is a branch.
+
 - **Global coordinate system**: The **global** coordinate system is a coordinate system that is used to describe the position and orientation of machine elements in space. That is, the **global** coordinate system is fixed with respect to the building or room where the machine is placed independent of the machine itself.
 
 - **Lattice coordinate system**: The curvilinear coordinate system whose "longitudinal" coordinate (**s**) typically runs through the nominal centers of the elements in the machine. The **lattice** coordinate system is often used to describe particle positions.
 
 - **Macro-particle**: Macro-particles are simulation particles that represent multiple real particles. The number of real particles that a macro-particle represents affects the calculation of the field due to a macro-particle but does not affect tracking.
+
+- **Particle coordinate system**: The coordinate system with respect to which particles positions and momenta are given. Some programs use the **global coordinate system** as the **particle coordinate system** while other programs use a coordinate system that is derived from the curvilinear **lattice coordinate system**.
 
 - **Polar coordinates**: **Polar** coordinates are **(r, theta, phi)** where **r** is the radius, **theta** is the angle from the **z** or **s** axis, and **phi** is the projected azimuthal angle in the **(x, y)** plane.
 
@@ -58,18 +62,51 @@ The following records are defined for the file root group.
 `Particle Root Group` records
 -----------------------------
 
-For each **particle root group** the following records are defined:
+For each **particle root group** the following attributes are defined:
+
+- `chargeDead`
+  - Type: Optional *(float)*
+  - Description: The total charge of all the dead particles.
+
+- `chargeLive`
+  - Type: Optional *(float)*
+  - Description: The total charge of all the live particles.
 
 - `latticeElementName`
   - Type: Optional *(string)*
-  - Description: The name of the lattice element the particle or particles are in. This only makes sense if all particles are in the same lattice element. Also see: `latticeElementID` and `locationInElement`.
+  - Description: The name of the lattice element the particle are in. This only makes sense if all particles are in the same element. [Keep in mind that if particles are lost and the lost particles are also included in the file, not all particles may be in the same element.] Also see: `locationInElement`.
 
-- `latticeElementID`
-  - Type Optional *(string)*
-  - Description: The ID string for the lattice element given by `latticeElementName`. The idea is that while more than one lattice element may have the same name, the ID string will be unique.
-  - This, along with `locationInElement` sets the origin for specifying particle positions in the **lattice** coordinate system.
-  - Example: With [Bmad](https://www.classe.cornell.edu/bmad/) based programs the ID string is of the form
-    **branch-index>>element-index** where **branch-index** is the associated branch index integer, and **element-index** is the associated lattice element index within the branch.
+- `speciesType`
+  - Type: Required *(string)*
+  - Description: The name of the particle species. Species names must conform to the `SpeciesType` extension.
+  - Example: `electron`, `H2O`.
+
+- `totalCharge`
+  - Type: Optional *(float)*
+  - Description: The total charge of all the particles.
+
+Per-Particle Records of the `Particle Root Group`
+-------------------------------------------------
+
+The following records store data on a particle-by-particle basis.
+
+- `branchIndex/`
+  - Type Optional *(int)*
+  - Description: The unique index number assigned to the lattice branch the particle is in.
+
+- `charge/`
+  - Type: Optional *(int)*
+  - Description: The charge state of the particles. Used for atoms and molecules. Not needed if the charge can be computed from knowledge of the `SpeciesType` (That is, a fundamental particle). Also see `weighting`.
+
+- `electricField/`
+  - Type: Optional 2-component *(float)*
+  - Description: Electric field. Used for photons only.
+  - Components: (`x`, `y`).
+      - For each component, the field is specified using either (`amplitude`, `phase`) or (`Real`, `Imaginary`) subcomponents.
+
+- `elementIndex/`
+  - Type Optional *(int)*
+  - Description: The unique index number assigned to the lattice element the particle is in.
 
 - `locationInElement`
   - Type Optional *(integer)*
@@ -78,36 +115,6 @@ For each **particle root group** the following records are defined:
     - -1: Upstream end of element outside of the upstream fringe edge.
     - 0: Inside the element.
     - 1: Downstream end of the element outside the downstream fringe edge.
-
-- `referenceMomentum`
-  - Type: Optional *(float)*
-  - Description: Reference momentum Possibly used for normalizing particle momentum values.
-
-- `referenceTotalEnergy`
-  - Type: Optional *(string)*
-  - Description: Reference total (kinetic + rest mass) energy. Possibly used for normalizing particle momentum values.
-
-- `speciesType`
-  - Type: Required *(string)*
-  - Description: The name of the particle species. Species names must conform to the `SpeciesType` extension.
-  - Example: `electron`, `H2O`.
-
-
-Per-Particle Records of the `Particle Root Group`
--------------------------------------------------
-
-The following records store data on a particle-by-particle basis.
-
-- `charge/`
-  - Type: Optional *(int)*
-  - Description: The charge state of the particles. Used for atoms and molecules. Not needed if the charge can be computed from knowledge of the `SpeciesType` (That is, a fundamental particle). Also see `weighting`.
-
-- `electricField/`
-    - Type: Optional 2-component *(float)*
-    - Description: Electric field. Used for photons only.
-    - Components: (`x`, `y`).
-        - For each component, the field is specified using either (`amplitude`, `phase`) or (`Real`, `Imaginary`)
-        subcomponents.
 
 - `momentum/`
   - Type: Optional 3-vector *(float)*
@@ -119,6 +126,18 @@ The following records store data on a particle-by-particle basis.
   - Type: Optional 3-vector *(float)*
   - Description: offset for each momentum component.
   - Components: (`px`, `py`, `pz`).
+
+- `referenceMomentum`
+  - Type: Optional *(float)*
+  - Description: Reference momentum Possibly used for normalizing particle momentum values.
+
+- `referenceTotalEnergy`
+  - Type: Optional *(float)*
+  - Description: Reference total (kinetic + rest mass) energy. Possibly used for normalizing particle momentum values.
+
+- `sPosition`
+  - Type: Optional *(float)*
+  - Description: The value of the longitudinal position in the curvilinear lattice coordinate system.
 
 - `totalMomentum/`
   - Type: Optional *(float)*
@@ -136,9 +155,22 @@ The following records store data on a particle-by-particle basis.
   - Type: Optional *(float)*
   - Description: Offset for the total momentum.
 
+- `particleCoordinatesToGlobalTransformation/`
+  - Type: Optional group.
+  - Description: Defines the transformation from the coordinates used to describe a particle to the **global** coordinate system.
+  - `R_frame`:
+    - Required 3-vector *(float)* Attribute
+    - Description: specifying the (x, y, z) position of the coordinate origin that the particles are measured with respect to in the **global** coordinate frame.
+  - `W_matrix`:
+    - Required 3 x 3 matrix *(float)*
+    - Description: Dataset holding the 3x3 transformation matrix from  coordinates to **global**
+  coordinates.
+  - Position Transformation: Position_global = W_matrix * (position + positionOffset) + R_frame
+  - Momentum transformation: Momentum_global = W_matrix * (momentum + momentumOffset)
+
 - `particleStatus/`
     - Type: Optional *(int)*
-    - Description: Integer indicating whether a particle is "alive" or "dead" (for example, has hit the vacuum chamber wall). A zero value indicates the particle is alive and any other value indicates that the particle is dead. Programs are free to distinguish how a particle died by assigning different non-zero values to "modes of death". For example, a program might want to differentiate between particles that are dead due to hitting one surface verses hitting a different surface.
+    - Description: Integer indicating whether a particle is "alive" or "dead" (for example, has hit the vacuum chamber wall). A zero value indicates the particle is alive and any other value indicates that the particle is dead. Programs are free to distinguish how a particle died by assigning different non-zero values to "modes of death". For example, a program might want to differentiate between particles that are dead due to hitting the side walls versus reversing the direction longitudinally in an RF cavity.
 
 - `pathLength/`
     - Type: Optional *(float)*
@@ -148,11 +180,11 @@ The following records store data on a particle-by-particle basis.
     - Type: Required 3-vector *(float)*
     - Components: (`x`, `y`, `z`)
     - Description: particle Position relative to the `positionOffset`.
-    That is, true position relative to the curvilinear coordinate origin = `position + positionOffset`.
+    That is, true position relative to the coordinate origin = `position + positionOffset`.
 
 - `positionOffset/`
     - Type: Optional 3-vector *(float)*
-    - Description: Offset for each particle position component relative to the curvilinear coordinate origin.
+    - Description: Offset for each particle position component relative to the coordinate origin.
     - Components: (`x`, `y`, `z`)
     - Attributes:
 
@@ -199,25 +231,6 @@ The following possible records of the `Particle Root Group` are for specifying p
 - `phaseSpaceThirdOrderMoment/`
   - Type: Optional 6x6x6-tensor *(float)*
   - Description: Third order beam moments.
-
-- `latticeToGlobalTransformation/`
-  - Type: Optional group.
-  - Description: Defines the transformation from **lattice** coordinates to **global** coordinates for a position
-  specified by `latticeElementName`/`latticeElementID` and `locationInElement`.
-  - `R_frame`:
-    - Required 3-vector *(float)* Attribute
-    - Description: specifying the (x, y, z) position of the **lattice** coordinate origin with respect
-  to the **global** coordinates.
-  - `W_matrix`:
-    - Required 3 x 3 matrix *(float)*
-    - Description: Dataset holding the 3x3 transformation matrix from **lattice** coordinates to **global**
-  coordinates.
-  - Position Transformation: Position_global = W_matrix * Position_lattice + R_frame
-  - Momentum transformation: Momentum_global = W_matrix * Momentum_lattice
-
-- `totalCharge`
-  - Type: Optional *(float)* attribute.
-  - Description: The total charge of all the particles.
 
 Particle Record Dataset Attributes
 ----------------------------------

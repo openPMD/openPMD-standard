@@ -64,10 +64,6 @@ The following records are defined for the file root group.
 
 For each **particle root group** the following attributes are defined:
 
-- `chargeDead`
-  - Type: Optional *(float)*
-  - Description: The total charge of all the dead particles.
-
 - `chargeLive`
   - Type: Optional *(float)*
   - Description: The total charge of all the live particles.

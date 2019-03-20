@@ -72,6 +72,10 @@ For each **particle root group** the following attributes are defined:
   - Type: Optional *(string)*
   - Description: The name of the lattice element the particle are in. This only makes sense if all particles are in the same element. [Keep in mind that if particles are lost and the lost particles are also included in the file, not all particles may be in the same element.] Also see: `locationInElement`.
 
+- `numParticles`
+  - Type: Required *(int)*
+  - Description: The number of particles in the group.
+
 - `speciesType`
   - Type: Required *(string)*
   - Description: The name of the particle species. Species names must conform to the `SpeciesType` extension.

@@ -57,7 +57,7 @@ The following records are defined for the file root group.
   - Description: The location of the root lattice file.
 
 
-`Particle Root Group` records
+`Particle Root Group` Records
 -----------------------------
 
 For each **particle root group** the following attributes are defined:

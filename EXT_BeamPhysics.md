@@ -38,8 +38,6 @@ Definitions
 
 - **Particle Root Group**: The **Particle Root Group** is a group for specifying a group of particles. See the Base Standard for more information.
 
-- **Phase Space Coordinates**: Phase space coordinates are ordered (x, px, y, py, z, pz).
-
 Notes:
 ------
 
@@ -123,13 +121,13 @@ The following records store data on a particle-by-particle basis.
 - `momentum/`
   - Type: Optional 3-vector *(float)*
   - Description: The momentum vector of the particles relative to `momentumOffset`
-  - Components: (`px`, `py`, `pz`).
+  - Components: (`x`, `y`, `z`).
   - True momentum = `momentum + momentumOffset`
 
 - `momentumOffset/`
   - Type: Optional 3-vector *(float)*
   - Description: offset for each momentum component.
-  - Components: (`px`, `py`, `pz`).
+  - Components: (`x`, `y`, `z`).
 
 - `photonPolarization/`
     - Type: Optional 2-vector *(complex)*
@@ -217,7 +215,7 @@ The following records store data on a particle-by-particle basis.
 
 - `velocity/`
   - Type: Optional 3-vector *(float)*
-  - Description: (`Vx`, `Vy`, `Vz`) velocity vector.
+  - Description: (`x`, `y`, `z`) velocity vector.
 
 - `weight/`
     - Type: Optional *(float)*

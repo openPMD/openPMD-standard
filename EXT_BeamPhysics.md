@@ -66,6 +66,10 @@ For each **particle root group** the following attributes are defined:
   - Type: Optional *(float)*
   - Description: The total charge of all the live particles.
 
+- `chargeUnitSI`
+  - Type: *(float)*. Only required if `chargeLive` or `totalCharge` is present. 
+  - Description: Unit conversion factor to multiply `chargeLive` or `totalCharge` by in order to convert to SI units.
+
 - `latticeElementName`
   - Type: Optional *(string)*
   - Description: The name of the lattice element the particle are in. This only makes sense if all particles are in the same element. [Keep in mind that if particles are lost and the lost particles are also included in the file, not all particles may be in the same element.] Also see: `locationInElement`.
@@ -81,7 +85,7 @@ For each **particle root group** the following attributes are defined:
 
 - `totalCharge`
   - Type: Optional *(float)*
-  - Description: The total charge of all the particles.
+  - Description: The total charge of all the particles alive and dead.
 
 Per-Particle Records of the `Particle Root Group`
 -------------------------------------------------
@@ -94,7 +98,7 @@ The following records store data on a particle-by-particle basis.
 
 - `charge/`
   - Type: Optional *(int)*
-  - Description: The charge state of the particles. Used for atoms and molecules. Not needed if the charge can be computed from knowledge of the `SpeciesType` (That is, a fundamental particle). Also see `weight`.
+  - Description: The charge state of the particles. Used for atoms and molecules. Not needed if the charge can be computed from knowledge of the `SpeciesType` (That is, is a fundamental particle). Also see `weight`.
 
 - `electricField/`
     - Type: Optional 3-vector *(float)*
@@ -219,7 +223,7 @@ The following records store data on a particle-by-particle basis.
 
 - `weight/`
     - Type: Optional *(float)*
-    - Description: If macro-particles are being simulated, the `weight` is the total charge of a macro-particle or the total number of particles that a macro-particle represents. Also see `charge`.
+    - Description: If macro-particles are being simulated, the `weight` is the total charge of a macro-particle. This is proportional to the number of particles that a macro-particle represents. Also see `charge`.
 
 
 Non Per-Particle Records of the `Particle Root Group`

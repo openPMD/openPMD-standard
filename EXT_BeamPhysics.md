@@ -43,10 +43,14 @@ Notes:
 
 - When using the **lattice** coordinate system, the `position` coordinates are **(x, y, s)** or **(x, y, z)** where, nominally, **x** is the "horizontal" component, **y** is the "vertical" coordinate, and **s** or **z** is the lattice longitudinal coordinate.
 
-Additional File Root Group (Path `/`) Records
----------------------------------------------
+Additional File Root Group (Path `/`) Attributes
+------------------------------------------------
 
 The following records are defined for the file root group.
+
+- `fileType`
+  - Type: Optional *(string)*
+  - Description: The type of data being stored in the file. If present, must be set to `openPMD`. This attribute is used in systems where different data files can contain different types of data and allows for quick identification of the what type of data is in a given file.
 
 - `latticeName`
   - Type: Optional *(string)*
@@ -57,8 +61,8 @@ The following records are defined for the file root group.
   - Description: The location of the root lattice file.
 
 
-`Particle Root Group` Records
------------------------------
+`Particle Root Group` Attributes
+--------------------------------
 
 For each **particle root group** the following attributes are defined:
 

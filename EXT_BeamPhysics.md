@@ -96,7 +96,7 @@ The following records store data on a particle-by-particle basis.
   - Type Optional *(int)*
   - Description: The unique index number assigned to the lattice branch the particle is in.
 
-- `charge/`
+- `chargeState/`
   - Type: Optional *(int)*
   - Description: The charge state of the particles. Used for atoms and molecules. Not needed if the charge can be computed from knowledge of the `SpeciesType` (That is, is a fundamental particle). Also see `weight`.
 

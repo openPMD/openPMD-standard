@@ -67,11 +67,11 @@ The following records are defined for the file root group.
 For each **particle root group** the following attributes are defined:
 
 - `chargeLive`
-  - Type: Optional *(float)*
+  - Type: Optional *(real)*
   - Description: The total charge of all the live particles.
 
 - `chargeUnitSI`
-  - Type: *(float)*. Only required if `chargeLive` or `totalCharge` is present. 
+  - Type: *(real)*. Only required if `chargeLive` or `totalCharge` is present. 
   - Description: Unit conversion factor to multiply `chargeLive` or `totalCharge` by in order to convert to SI units.
 
 - `latticeElementName`
@@ -88,7 +88,7 @@ For each **particle root group** the following attributes are defined:
   - Example: `electron`, `H2O`.
 
 - `totalCharge`
-  - Type: Optional *(float)*
+  - Type: Optional *(real)*
   - Description: The total charge of all the particles alive and dead.
 
 Per-Particle Records of the `Particle Root Group`
@@ -105,7 +105,7 @@ The following records store data on a particle-by-particle basis.
   - Description: The charge state of the particles. Used for atoms and molecules. Not needed if the charge can be computed from knowledge of the `SpeciesType` (That is, is a fundamental particle). Also see `weight`.
 
 - `electricField/`
-    - Type: Optional 3-vector *(float)*
+    - Type: Optional 3-vector *(real)*
     - Description: External electric field at the particle.
     - Components: (`x`, `y`, `z`).
 
@@ -114,7 +114,7 @@ The following records store data on a particle-by-particle basis.
    - Description: The unique index number assigned to the lattice element the particle is in.
 
 - `magneticField/`
-    - Type: Optional 3-vector *(float)*
+    - Type: Optional 3-vector *(real)*
     - Description: External magnetic field at the particle.
     - Components: (`x`, `y`, `z`).
 
@@ -127,14 +127,14 @@ The following records store data on a particle-by-particle basis.
      - 1: Downstream end of the element outside the downstream fringe edge.
 
 - `momentum/`
-  - Type: Optional 3-vector *(float)*
+  - Type: Optional 3-vector *(real)*
   - Description: The momentum vector of the particles relative to `momentumOffset`
   - Components: (`x`, `y`, `z`).
   - True momentum = `momentum + momentumOffset`
 
 - `momentumOffset/`
-  - Type: Optional 3-vector *(float)*
-  - Description: offset for each momentum component.
+  - Type: Optional 3-vector *(real)*
+  - Description: Base momentum from which `momentum` is measured. That is, True momentum = `momentum + momentumOffset`. Assumed zero if not present.
   - Components: (`x`, `y`, `z`).
 
 - `photonPolarization/`
@@ -142,42 +142,26 @@ The following records store data on a particle-by-particle basis.
     - Description: Polarization of the photon
     - Components: (`x`, `y`), transverse to the direction of the photon.
 
-- `referenceMomentum`
-  - Type: Optional *(float)*
-  - Description: Reference momentum Possibly used for normalizing particle momentum values.
-
-- `referenceTotalEnergy`
-  - Type: Optional *(float)*
-  - Description: Reference total (kinetic + rest mass) energy. Possibly used for normalizing particle momentum values.
-
 - `sPosition`
-  - Type: Optional *(float)*
+  - Type: Optional *(real)*
   - Description: The value of the longitudinal position in the curvilinear lattice coordinate system.
 
 - `totalMomentum/`
-  - Type: Optional *(float)*
-  - Description: Total momentum relative to the totalMomentumOffset. That is, True total momentum = `totalMomentum + totalMomentumOffset`.
+  - Type: Optional *(real)*
+  - Description: Total momentum relative to the totalMomentumOffset. That is, True total momentum = `totalMomentum + totalMomentumOffset`. Assumed zero if not present.
 
 - `totalMomentumOffset/`
-  - Type: Optional *(float)*
-  - Description: Offset for the total momentum.
-
-- `totalEnergy/`
-  - Type: Optional *(float)*
-  - Description: Total energy relative to the totalEnergyOffset. That is, true total energy = `totalEnergy + totalEnergyOffset`.
-
-- `totalEnergyOffset/`
-  - Type: Optional *(float)*
-  - Description: Offset for the total momentum.
+  - Type: Optional *(real)*
+  - Description: Base total momentum from which `totalMomentum` is measured. That is, True total momentum = `totalMomentum + totalMomentumOffset`. Some programs will use `totalMomentumOffset/` to store the **reference momentum** in which case `totalMomentum` will then be the deviation from the referece.
 
 - `particleCoordinatesToGlobalTransformation/`
   - Type: Optional group.
   - Description: Defines the transformation from the coordinates used to describe a particle to the **global** coordinate system.
   - `R_frame`:
-    - Required 3-vector *(float)* Attribute
+    - Required 3-vector *(real)* Attribute
     - Description: specifying the (x, y, z) position of the coordinate origin that the particles are measured with respect to in the **global** coordinate frame.
   - `W_matrix`:
-    - Required 3 x 3 matrix *(float)*
+    - Required 3 x 3 matrix *(real)*
     - Description: Dataset holding the 3x3 transformation matrix from  coordinates to **global**
   coordinates.
   - Position Transformation: Position_global = W_matrix * (position + positionOffset) + R_frame
@@ -188,45 +172,44 @@ The following records store data on a particle-by-particle basis.
     - Description: Integer indicating whether a particle is "alive" or "dead" (for example, has hit the vacuum chamber wall). A value of one indicates the particle is alive and any other value indicates that the particle is dead. Programs are free to distinguish how a particle died by assigning different non-unit values to `particleStatus`. For example, a program might want to differentiate between particles that are dead due to hitting the side walls versus reversing the direction longitudinally in an RF cavity.
 
 - `pathLength/`
-    - Type: Optional *(float)*
+    - Type: Optional *(real)*
     - Description: Length that a particle has traveled.
 
 - `position/`
-    - Type: Required 3-vector *(float)*
+    - Type: Required 3-vector *(real)*
     - Components: (`x`, `y`, `z`)
     - Description: particle Position relative to the `positionOffset`.
     That is, true position relative to the coordinate origin = `position + positionOffset`.
 
 - `positionOffset/`
-    - Type: Optional 3-vector *(float)*
-    - Description: Offset for each particle position component relative to the coordinate origin.
+    - Type: Optional 3-vector *(real)*
+    - Description: Offset for each particle position component relative to the coordinate origin. Assumed zero if not present.
     - Components: (`x`, `y`, `z`)
     - Attributes:
 
 - `speed/`
-    - Type: Optional *(float)*
+    - Type: Optional *(real)*
     - Description: The speed (velocity magnitude) of a particle.
 
 - `spin/`
-    - Type: Optional 3-vector *(float)*
+    - Type: Optional 3-vector *(real)*
     - Description: Particle spin.
     - Components: (`x`, `y`, `z`) or (`r`, `theta`, `phi`).
 
 - `time/`
-    - Type: Optional *(float)*
+    - Type: Optional *(real)*
     - Description: Time relative to `timeOffset`. That is, absolute time = `time + timeOffset`.
 
-- `timeOffset`
-    - Type: Optional *(float)*
-    - Description: The reference particle time.
-    Note that the reference time is a function of **s** and therefore can be different for different particles.
+- `timeOffset/`
+    - Type: Optional *(real)*
+    - Description: Base time from which `time` is measured. That is, absolute time = `time + timeOffset`. Assumed zero if not present. Some programs will use the `timeOffset` to store the **reference time** in which case `time` will then be the deviation from the reference.
 
 - `velocity/`
-  - Type: Optional 3-vector *(float)*
+  - Type: Optional 3-vector *(real)*
   - Description: (`x`, `y`, `z`) velocity vector.
 
 - `weight/`
-    - Type: Optional *(float)*
+    - Type: Optional *(real)*
     - Description: If macro-particles are being simulated, the `weight` is the total charge of a macro-particle. This is proportional to the number of particles that a macro-particle represents. Also see `charge`.
 
 
@@ -236,16 +219,12 @@ Non Per-Particle Records of the `Particle Root Group`
 The following possible records of the `Particle Root Group` are for specifying properties of the entire group of particles.
 
 - `phaseSpaceFirstOrderMoment/`
-  - Type: Optional 6-vector *(float)*
-  - Description: First order beam moments.
+  - Type: Optional 6-vector *(real)*
+  - Description: First order beam moments of `(x, px, y, py, z, pz)`.
 
 - `phaseSpaceSecondOrderMoment/`
-  - Type: Optional 6x6-matrix *(float)*
-  - Description: Second order beam moments.
-
-- `phaseSpaceThirdOrderMoment/`
-  - Type: Optional 6x6x6-tensor *(float)*
-  - Description: Third order beam moments.
+  - Type: Optional 6x6-matrix *(real)*
+  - Description: Second order beam moments of `(x, px, y, py, z, pz)`.
 
 Particle Record Dataset Attributes
 ----------------------------------
@@ -253,9 +232,9 @@ Particle Record Dataset Attributes
 The following attributes can be used with any dataset:
 
 - `minValue`:
-  - Type: Optional *(float)*
+  - Type: Optional *(real)*
   - Description: Minimum of the data.
 
 - `maxValue`:
-  - Type: Optional *(float)*
+  - Type: Optional *(real)*
   - Description: Maximum of the data.

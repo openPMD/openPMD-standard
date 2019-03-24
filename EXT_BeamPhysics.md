@@ -206,7 +206,7 @@ The following records store data on a particle-by-particle basis.
 
 - `velocity/`
   - Type: Optional 3-vector *(real)*
-  - Description: (`x`, `y`, `z`) velocity vector.
+  - Description: (`x`, `y`, `z`) velocity vector. Meant to be used for photons where using `momentum` is not appropriate.
 
 - `weight/`
     - Type: Optional *(real)*

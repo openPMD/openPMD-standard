@@ -1,5 +1,5 @@
-Extension to the openPMD Standard for Describing Particle Beams and X-rays
-==========================================================================
+BeamPhysics Extension to the openPMD Standard for Describing Particle Beams, Photons, and External Fields
+=========================================================================================================
 
 Version 2.0.0
 
@@ -36,7 +36,7 @@ Definitions
 
 - **Polar coordinates**: **Polar** coordinates are **(r, theta, phi)** where **r** is the radius, **theta** is the angle from the **z** or **s** axis, and **phi** is the projected azimuthal angle in the **(x, y)** plane.
 
-- **Particle Root Group**: The **Particle Root Group** is a group for specifying a group of particles. See the Base Standard for more information.
+- **Particle Group**: The **Particle Group** is a group for specifying a set of particles such as the particles in a bunch. The Beam Physics extension defines a standard for the  **Particle Group** as discussed below.
 
 Notes:
 ------
@@ -60,18 +60,23 @@ The following records are defined for the file root group.
   - Type: Optional *(string)*
   - Description: The location of the root lattice file.
 
+Particle Group Standard
+============================
 
-`Particle Root Group` Attributes
+The **Particle Group** is a group for specifying a set of particles such as the particles in a bunch. Multiple **Particle Groups** can be defined in a file. The path for a **Particle Group** is given by the **basePath** and **particlesPath** attributes in the file root group as discussed in the base OpenPMD standard. For example, if **basePath** is  "/data/%T/", and **ParticlesPath** is "particles/", then **Particle Groups** paths would be of the form "/data/%T/particles/" where "%T" is an integer. EG: "/data/37/particles/".
+
+
+`Particle Group` Attributes
 --------------------------------
 
-For each **particle root group** the following attributes are defined:
+For each **particle group** the following attributes are defined:
 
 - `chargeLive`
   - Type: Optional *(real)*
   - Description: The total charge of all the live particles.
 
 - `chargeUnitSI`
-  - Type: *(real)*. Only required if `chargeLive` or `totalCharge` is present. 
+  - Type: *(real)*. Only required if `chargeLive` or `totalCharge` is present.
   - Description: Unit conversion factor to multiply `chargeLive` or `totalCharge` by in order to convert to SI units.
 
 - `latticeElementName`
@@ -91,7 +96,7 @@ For each **particle root group** the following attributes are defined:
   - Type: Optional *(real)*
   - Description: The total charge of all the particles alive and dead.
 
-Per-Particle Records of the `Particle Root Group`
+Per-Particle Records of the `Particle Group`
 -------------------------------------------------
 
 The following records store data on a particle-by-particle basis.
@@ -213,10 +218,10 @@ The following records store data on a particle-by-particle basis.
     - Description: If macro-particles are being simulated, the `weight` is the total charge of a macro-particle. This is proportional to the number of particles that a macro-particle represents. Also see `charge`.
 
 
-Non Per-Particle Records of the `Particle Root Group`
+Non Per-Particle Records of the `Particle Group`
 -----------------------------------------------------
 
-The following possible records of the `Particle Root Group` are for specifying properties of the entire group of particles.
+The following possible records of the `Particle Group` are for specifying properties of the entire group of particles.
 
 - `phaseSpaceFirstOrderMoment/`
   - Type: Optional 6-vector *(real)*
@@ -238,3 +243,25 @@ The following attributes can be used with any dataset:
 - `maxValue`:
   - Type: Optional *(real)*
   - Description: Maximum of the data.
+
+External Mesh Fields Groups
+===========================
+
+The **external mesh field group** is a group for specifying electric and/or magnetic fields, due to a lattice element, at regularly spaced grid points. For example, the fields due to an RF cavity or the fields due to a magnet. Multiple **external mesh field groups** can be defined in a file. The path for a **external mesh field group** is given by the **basePath** and **meshesPath** attributes in the file root group as discussed in the base OpenPMD standard. For example, if **basePath** is  "/data/%T/", and **meshesPath** is "ExternalField/", then **External mesh field group** paths would be of the form "/data/%T/ExternalField/" where "%T" is an integer. EG: "/data/37/ExternalField/".
+
+AC fields can be described using complex numbers. The actual field is the real part of `Z * Exp[-i omega (t - t0)]` where `Z` is the field complex number, `omega` is the field frequency, `t` is the time, and `t0` is a reference time.
+
+`External Fields Group` Attributes
+----------------------------------
+
+- `branchIndex/`
+  - Type Optional *(int)*
+  - Description: The unique index number assigned to the lattice branch the lattice element associated with the fields.
+
+- `elementIndex/`
+  - Type Optional *(int)*
+  - Description: The unique index number assigned to the lattice element associated with the fields.
+
+- `latticeElementName`
+  - Type: Optional *(string)*
+  - Description: The name of the lattice element associated with the fields.

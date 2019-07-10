@@ -247,7 +247,7 @@ The following attributes can be used with any dataset:
 External Mesh Fields Groups
 ===========================
 
-The **external mesh field group** is a group for specifying electric and/or magnetic fields, due to a lattice element, at regularly spaced grid points. For example, the fields due to an RF cavity or the fields due to a magnet. Multiple **external mesh field groups** can be defined in a file. The path for a **external mesh field group** is given by the **basePath** and **meshesPath** attributes in the file root group as discussed in the base OpenPMD standard. For example, if **basePath** is  "/data/%T/", and **meshesPath** is "ExternalField/", then **External mesh field group** paths would be of the form "/data/%T/ExternalField/" where "%T" is an integer. EG: "/data/37/ExternalField/".
+The **external mesh field group** is a group for specifying electric and/or magnetic fields, due to a lattice element, at regularly spaced grid points. For example, the fields due to an RF cavity or the fields due to a magnet. Multiple **external mesh field groups** can be defined in a file. The path for a **external mesh field group** is given by the **basePath** and **meshesPath** attributes in the file root group as discussed in the base OpenPMD standard. For example, if **basePath** is  "/data/%T/", and **meshesPath** is "ExternalFieldMesh/", then **External mesh field group** paths would be of the form "/data/%T/ExternalFieldMesh/" where "%T" is an integer. EG: "/data/37/ExternalFieldMesh/".
 
 AC fields can be described using complex numbers. The actual field is the real part of `Z * Exp[-i omega (t - t0)]` where `Z` is the field complex number, `omega` is the field frequency, `t` is the time, and `t0` is a reference time.
 

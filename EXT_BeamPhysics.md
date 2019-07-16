@@ -265,7 +265,7 @@ Notes
 
 - `gridCurvatureRadius`
   - Type: Optional *(real)*
-  - Description: Only used if `gridGeometry` is set to `xyz`. A zero value indicates that the grid is rectilinear. A non-zero value indicates that the grid is curved. The curvature is in the **(x, z)** plane with positive **x** pointing away from the center of curvature if `gridCurvatureRadius` is positive and vice versa for negative values. `gridCurvatureRadius` is the radius for the lines **x = 0** at constant **y**. 
+  - Description: Only used if `gridGeometry` is set to `xyz`. A zero value indicates that the grid is rectilinear. A non-zero value indicates that the grid is curved. The curvature is in the **(x, z)** plane with positive **x** pointing away from the center of curvature if `gridCurvatureRadius` is positive and vice versa for negative values. `gridCurvatureRadius` is the radius for the lines **x = 0** at constant **y**.
 
 - `eleAnchorPt`
   - Type: Optional *(string)*
@@ -290,11 +290,6 @@ Notes
   - Type: Required 2-vector or 3-vector *(real)*
   - Description: Spacing between grid points. This is a 2-vector if `gridGeometry` is set to `rotationally_symmetric_rz` and is a 3-vector if `gridGeometry` is set to `xyz`.
 
-
-- `harmonic`
-  - Type: Required *(int)*
-  - Description: Harmonic number of the fundamental frequency. A value of zero implies a DC field.
-
 - `gridLowerBound`
   - Type: Required 2-vector or 3-vector *(int)*
   - Description: Lower bound of the grid index. This is a 2-vector if `gridGeometry` is set to `rotationally_symmetric_rz` and is a 3-vector if `gridGeometry` is set to `xyz`. Note: The grid upper bound will be `gridLowerBound` + `gridSize` - 1.
@@ -306,6 +301,15 @@ Notes
 - `gridOriginOffset`
   - Type: Required 2-vector or 3-vector *(real)*
   - Description: distance from `eleAnchorPt` to the grid origin point. This is a 2-vector if `gridGeometry` is set to `rotationally_symmetric_rz` and is a 3-vector if `gridGeometry` is set to `xyz`.
+
+
+- `harmonic`
+  - Type: Required *(int)*
+  - Description: Harmonic number of the fundamental frequency. A value of zero implies a DC field.
+
+- `name`
+  - Type: Optional *(string)*
+  - Description: Name to be used to identify the grid.
 
 `External Fields Group` Records
 -------------------------------

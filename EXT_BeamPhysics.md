@@ -278,11 +278,11 @@ where `Z` is the field complex number, `f` is the Oscillation frequency, `t` is 
 
 - `fieldScale`
   - Type: Optional *(real)*
-  - Description: A scale factor that is used to scale the fields. If not present then a value of 1 is assumed.
+  - Description: A scale factor that is used to scale the fields. Default is 1.
 
 - `fieldPhase`
   - Type Optional *(real)*
-  - Description: Phase offset for oscillating fields. See the note above.
+  - Description: Phase offset for oscillating fields. See the note above. Default is zero.
 
 - `fundamentalFrequency`
   - Type: Optional *(real)*

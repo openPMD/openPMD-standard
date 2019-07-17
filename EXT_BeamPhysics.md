@@ -257,7 +257,11 @@ The **external mesh field group** is a group for specifying electric and/or magn
 Notes
 -----
 
-- AC fields can be described using complex numbers. The actual field is the real part of `Z * Exp[-i omega (t - t0)]` where `Z` is the field complex number, `omega` is the field frequency, `t` is the time, and `t0` is a reference time.
+- AC fields can be described using complex numbers. The actual field is the real part of
+
+    Z &ast; Exp[-2 &ast; pi &ast; I &ast; (f &ast; t + phi)]
+
+where `Z` is the field complex number, `f` is the Oscillation frequency, `t` is the time, and `phi0` is a reference time.
 
 
 `External Fields Group` Attributes
@@ -265,10 +269,10 @@ Notes
 
 - `gridCurvatureRadius`
   - Type: Optional *(real)*
-  - Description: Only used if `gridGeometry` is set to `xyz`. A zero value indicates that the grid is rectilinear. A non-zero value indicates that the grid is curved. The curvature is in the **(x, z)** plane with positive **x** pointing away from the center of curvature if `gridCurvatureRadius` is positive and vice versa for negative values. `gridCurvatureRadius` is the radius for the lines **x = 0** at constant **y**. 
+  - Description: Only used if `gridGeometry` is set to `xyz`. A zero value (the default) indicates that the grid is rectilinear. A non-zero value indicates that the grid is curved. The curvature is in the **(x, z)** plane with positive **x** pointing away from the center of curvature if `gridCurvatureRadius` is positive and vice versa for negative values. `gridCurvatureRadius` is the radius for the lines **x = 0** at constant **y**.
 
 - `eleAnchorPt`
-  - Type: Optional *(string)*
+  - Type: Required *(string)*
   - Description: Point on the lattice element that the grid origin is referenced to. Possible values are: `beginning`, `center`, or `end`. The `beginning` point is at
   the entrance end of the element, the `center` point is at the center of the element and the `end` point is at the exit end of the element. All three points are on the reference orbit.
 
@@ -276,6 +280,9 @@ Notes
   - Type: Optional *(real)*
   - Description: A scale factor that is used to scale the fields. If not present then a value of 1 is assumed.
 
+- `fieldPhase`
+  - Type Optional *(real)*
+  - Description: Phase offset for oscillating fields. See the note above.
 
 - `fundamentalFrequency`
   - Type: Optional *(real)*

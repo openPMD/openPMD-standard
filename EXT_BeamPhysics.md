@@ -297,11 +297,6 @@ where `Z` is the field complex number, `f` is the Oscillation frequency, `t` is 
   - Type: Required 2-vector or 3-vector *(real)*
   - Description: Spacing between grid points. This is a 2-vector if `gridGeometry` is set to `rotationally_symmetric_rz` and is a 3-vector if `gridGeometry` is set to `xyz`.
 
-
-- `harmonic`
-  - Type: Required *(int)*
-  - Description: Harmonic number of the fundamental frequency. A value of zero implies a DC field.
-
 - `gridLowerBound`
   - Type: Required 2-vector or 3-vector *(int)*
   - Description: Lower bound of the grid index. This is a 2-vector if `gridGeometry` is set to `rotationally_symmetric_rz` and is a 3-vector if `gridGeometry` is set to `xyz`. Note: The grid upper bound will be `gridLowerBound` + `gridSize` - 1.
@@ -313,6 +308,15 @@ where `Z` is the field complex number, `f` is the Oscillation frequency, `t` is 
 - `gridOriginOffset`
   - Type: Required 2-vector or 3-vector *(real)*
   - Description: distance from `eleAnchorPt` to the grid origin point. This is a 2-vector if `gridGeometry` is set to `rotationally_symmetric_rz` and is a 3-vector if `gridGeometry` is set to `xyz`.
+
+
+- `harmonic`
+  - Type: Required *(int)*
+  - Description: Harmonic number of the fundamental frequency. A value of zero implies a DC field.
+
+- `name`
+  - Type: Optional *(string)*
+  - Description: Name to be used to identify the grid.
 
 `External Fields Group` Records
 -------------------------------

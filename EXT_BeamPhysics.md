@@ -315,7 +315,7 @@ where `Z` is the field complex number, `f` is the Oscillation frequency, `t` is 
   - Description: Name to be used to identify the grid.
 
 - `RFphase`
-  - Type Optional *(real)*
+  - Type Required if `harmonic` is not zero *(real)*
   - Description: Phase offset for oscillating fields. See the note above. Default is zero.
 
 `External Fields Group` Records

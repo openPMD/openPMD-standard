@@ -280,10 +280,6 @@ where `Z` is the field complex number, `f` is the Oscillation frequency, `t` is 
   - Type: Optional *(real)*
   - Description: A scale factor that is used to scale the fields. Default is 1.
 
-- `fieldPhase`
-  - Type Optional *(real)*
-  - Description: Phase offset for oscillating fields. See the note above. Default is zero.
-
 - `fundamentalFrequency`
   - Type: Optional *(real)*
   - Description: The fundamental RF frequency. Used for AC fields.
@@ -317,6 +313,10 @@ where `Z` is the field complex number, `f` is the Oscillation frequency, `t` is 
 - `name`
   - Type: Optional *(string)*
   - Description: Name to be used to identify the grid.
+
+- `RFphase`
+  - Type Optional *(real)*
+  - Description: Phase offset for oscillating fields. See the note above. Default is zero.
 
 `External Fields Group` Records
 -------------------------------

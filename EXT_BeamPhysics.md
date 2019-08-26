@@ -142,10 +142,15 @@ The following records store data on a particle-by-particle basis.
   - Description: Base momentum from which `momentum` is measured. That is, True momentum = `momentum + momentumOffset`. Assumed zero if not present.
   - Components: (`x`, `y`, `z`).
 
-- `photonPolarization/`
-    - Type: Optional 2-vector *(complex)*
-    - Description: Polarization of the photon
-    - Components: (`x`, `y`), transverse to the direction of the photon.
+- `photonPolarizationAmplitude/`
+  - Type: Optional 2-vector *(real)*
+  - Description: Polarization amplitude of the photon.
+  - Components: (`x`, `y`).
+
+- `photonPolarizationPhase/`
+  - Type: Optional 2-vector *(real)*
+  - Description: Polarization phase of the photon.
+  - Components: (`x`, `y`).
 
 - `sPosition`
   - Type: Optional *(real)*
@@ -253,7 +258,11 @@ The **external mesh field group** is a group for specifying electric and/or magn
 Notes
 -----
 
-- AC fields can be described using complex numbers. The actual field is the real part of `Z * Exp[-i omega (t - t0)]` where `Z` is the field complex number, `omega` is the field frequency, `t` is the time, and `t0` is a reference time.
+- AC fields can be described using complex numbers. The actual field is the real part of
+
+    Z &ast; Exp[-2 &ast; pi &ast; I &ast; (f &ast; t + phi)]
+
+where `Z` is the field complex number, `f` is the Oscillation frequency, `t` is the time, and `phi0` is a reference time.
 
 
 `External Fields Group` Attributes
@@ -261,17 +270,15 @@ Notes
 
 - `gridCurvatureRadius`
   - Type: Optional *(real)*
-  - Description: Only used if `gridGeometry` is set to `xyz`. A zero value indicates that the grid is rectilinear. A non-zero value indicates that the grid is curved. The curvature is in the **(x, z)** plane with positive **x** pointing away from the center of curvature if `gridCurvatureRadius` is positive and vice versa for negative values. `gridCurvatureRadius` is the radius for the lines **x = 0** at constant **y**.
+  - Description: Only used if `gridGeometry` is set to `rectangular`. A zero value (the default) indicates that the grid is rectilinear. A non-zero value indicates that the grid is curved. The curvature is in the **(x, z)** plane with positive **x** pointing away from the center of curvature if `gridCurvatureRadius` is positive and vice versa for negative values. `gridCurvatureRadius` is the radius for the lines **x = 0** at constant **y**.
 
 - `eleAnchorPt`
-  - Type: Optional *(string)*
-  - Description: Point on the lattice element that the grid origin is referenced to. Possible values are: `beginning`, `center`, or `end`. The `beginning` point is at
-  the entrance end of the element, the `center` point is at the center of the element and the `end` point is at the exit end of the element. All three points are on the reference orbit.
+  - Type: Required *(string)*
+  - Description: Point on the lattice element that the grid origin is referenced to. Possible values are: `beginning`, `center`, or `end`. The `beginning` point is at the entrance end of the element, the `center` point is at the center of the element and the `end` point is at the exit end of the element. All three points are on the reference orbit.
 
 - `fieldScale`
   - Type: Optional *(real)*
-  - Description: A scale factor that is used to scale the fields. If not present then a value of 1 is assumed.
-
+  - Description: A scale factor that is used to scale the fields. Default is 1.
 
 - `fundamentalFrequency`
   - Type: Optional *(real)*
@@ -279,24 +286,24 @@ Notes
 
 - `gridGeometry`
   - Type: Required *(string)*
-  - Description: Values are `xyz` or `rotationally_symmetric_rz`. The `xyz` value is for a 3D **(x, y, z)** grid with field components **(Bx, By, Bz)** and/or **(Ex, Ey, Ez)**. The `rotationally_symmetric_rz` value is for a 2D **(r, z)** grid with field components **(Br, Bphi, Bz)** and/or **(Er, Ephi, Ez)** field components.
+  - Description: Values are `rectangular` or `cylindrical`. The `rectangular` value is for a **(x, y, z)** grid with field components **(Bx, By, Bz)** and/or **(Ex, Ey, Ez)**. The `cylindrical` value is for a  **(r, theta, z)** grid with field components **(Br, Btheta, Bz)** and/or **(Er, Etheta, Ez)** field components. Note: If the grid size in the `theta` direction is 1, the field is taken to be axially symmetric.
 
 
 - `gridSpacing`
-  - Type: Required 2-vector or 3-vector *(real)*
-  - Description: Spacing between grid points. This is a 2-vector if `gridGeometry` is set to `rotationally_symmetric_rz` and is a 3-vector if `gridGeometry` is set to `xyz`.
+  - Type: Required 3-vector *(real)*
+  - Description: Spacing between grid points.
 
 - `gridLowerBound`
-  - Type: Required 2-vector or 3-vector *(int)*
-  - Description: Lower bound of the grid index. This is a 2-vector if `gridGeometry` is set to `rotationally_symmetric_rz` and is a 3-vector if `gridGeometry` is set to `xyz`. Note: The grid upper bound will be `gridLowerBound` + `gridSize` - 1.
+  - Type: Required 3-vector *(int)*
+  - Description: Lower bound of the grid index. Note: The grid upper bound will be `gridLowerBound` + `gridSize` - 1.
 
 - `gridSize`
-  - Type: Required 2-vector or 3-vector *(int)*
-  - Description: Size of the grid. This is a 2-vector if `gridGeometry` is set to `rotationally_symmetric_rz` and is a 3-vector if `gridGeometry` is set to `xyz`.
+  - Type: Required 3-vector *(int)*
+  - Description: Size of the grid.
 
 - `gridOriginOffset`
-  - Type: Required 2-vector or 3-vector *(real)*
-  - Description: distance from `eleAnchorPt` to the grid origin point. This is a 2-vector if `gridGeometry` is set to `rotationally_symmetric_rz` and is a 3-vector if `gridGeometry` is set to `xyz`.
+  - Type: Required 3-vector *(real)*
+  - Description: distance from `eleAnchorPt` to the grid origin point.
 
 
 - `harmonic`
@@ -307,17 +314,17 @@ Notes
   - Type: Optional *(string)*
   - Description: Name to be used to identify the grid.
 
-`External Fields Group` Records
--------------------------------
+- `RFphase`
+  - Type Required if `harmonic` is not zero *(real)*
+  - Description: Phase offset for oscillating fields. See the note above. Default is zero.
+
+
+Per-grid `External Fields Group` Records for `(x, y, z)` Grids
+--------------------------------------------------------------
 
 - `Bx`, `By`, `Bz`
   - Type: Optional (Either all must be present or all must be absent) *(complex)*
-  - Description: Magnetic field components. Used with `gridGeometry` set to `xyz`. If the field is DC, only the real component should be nonzero.
-
-
-- `Br`, `Bphi`, `Bz`
-  - Type: Optional (Either all must be present or all must be absent) *(complex)*
-  - Description: Magnetic field components. Used with `gridGeometry` set to `rotationally_symmetric_rz`. If the field is DC, only the real component should be nonzero.
+  - Description: Magnetic field components using rectangular coordinates. Used with `gridGeometry` set to `rectangular`. If the field is DC (`harmonic` is zero), only the real component should be nonzero.
 
 
 - `Ex`, `Ey`, `Ez`
@@ -325,6 +332,17 @@ Notes
   - Description: Electric field components. Used with `gridGeometry` set to `xyz`.If the field is DC, only the real component should be nonzero.
 
 
-- `Er`, `Ephi`, `Ez`
+Per-grid `External Fields Group` Records for `(r, theta, z)` Grids
+--------------------------------------------------------------
+
+Note: If the grid size in the `theta` direction is 1, the field is taken to be axially symmetric.
+
+
+- `Br`, `Btheta`, `Bz`
+  - Type: Optional (Either all must be present or all must be absent) *(complex)*
+  - Description: Magnetic field components using cylindrical coordinates. Used with `gridGeometry` set to `cylindrical`. If the field is DC (`harmonic` is zero), only the real component should be nonzero.
+
+
+- `Er`, `Etheta`, `Ez`
   - Type: Optional (Either all must be present or all must be absent) *(complex)*
   - Description: Electric field components. Used with `gridGeometry` set to `rotationally_symmetric_rz`. If the field is DC, only the real component should be nonzero.

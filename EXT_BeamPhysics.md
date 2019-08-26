@@ -192,10 +192,6 @@ The following records store data on a particle-by-particle basis.
     - Components: (`x`, `y`, `z`)
     - Attributes:
 
-- `speed/`
-    - Type: Optional *(real)*
-    - Description: The speed (velocity magnitude) of a particle.
-
 - `spin/`
     - Type: Optional 3-vector *(real)*
     - Description: Particle spin.

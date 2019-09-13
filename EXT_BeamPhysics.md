@@ -59,9 +59,9 @@ The following records are defined for the file root group.
   - description: The location of the root lattice file.
 
 Particle Group Standard
-============================
+=======================
 
-The **Particle Group** is a group for specifying a set of particles such as the particles in a bunch. Multiple **Particle Groups** can be defined in a file. The path for a **Particle Group** is given by the **basePath** and **particlesPath** attributes in the file root group as discussed in the base OpenPMD standard. For example, if **basePath** is  "/data/%T/", and **ParticlesPath** is "particles/", then **Particle Groups** paths would be of the form "/data/%T/particles/" where "%T" is an integer. EG: "/data/37/particles/".
+The **Particle Group** is a group for specifying a set of particles such as the particles in a bunch. Multiple **Particle Groups** can be defined in a file. The path for a **Particle Group** is given by the **basePath** and **particlesPath** attributes in the file root group as discussed in the base OpenPMD standard. For example, if **basePath** is  `/data/%T/`, and **ParticlesPath** is `particles/`, then **Particle Groups** paths would be of the form `/data/%T/particles/` where `%T` is an integer. EG: `/data/37/particles/`.
 
 
 `Particle Group` Attributes
@@ -95,7 +95,7 @@ For each **particle group** the following attributes are defined:
   - description: The total charge of all the particles alive and dead.
 
 Per-Particle Records of the `Particle Group`
--------------------------------------------------
+--------------------------------------------
 
 The following records store data on a particle-by-particle basis.
 
@@ -125,9 +125,9 @@ The following records store data on a particle-by-particle basis.
    - type Optional *(integer)*
    - description: The program generating the data file may model a lattice element using a "hard edge" model where the fringe fields at the ends of the element are modeled as having zero longitudinal length. In such a case, if a particle is at the end of the lattice element, it is important to know if the particle is outside of the fringe or if the particle is inside the fringe within the body of the element. Note that with a hard edge fringe, the longitudinal **s**-position does not necessarily provide enough information to determine where a particle is with respect to an edge field. Another situation where `locationInElement` is useful is with zero length elements that affect the particle transport (such as zero length multipole elements). If the program generating the data file does **not** use any hard edge models or zero length non-marker elements, `locationInElement` should not be present since this parameter is meaningless in this case.
    - Possible values:    
-     - -1: Upstream end of element outside of the upstream fringe edge.
-     - 0: Inside the element.
-     - 1: Downstream end of the element outside the downstream fringe edge.
+     - `-1`: Upstream end of element outside of the upstream fringe edge.
+     - `0`: Inside the element.
+     - `1`: Downstream end of the element outside the downstream fringe edge.
 
 - `momentum/`
   - type: Optional 3-vector *(real)*
@@ -167,7 +167,7 @@ The following records store data on a particle-by-particle basis.
   - description: Defines the transformation from the coordinates used to describe a particle to the **global** coordinate system.
   - `R_frame`:
     - Required 3-vector *(real)* Attribute
-    - description: specifying the (x, y, z) position of the coordinate origin that the particles are measured with respect to in the **global** coordinate frame.
+    - description: Specifying the (`x`, `y`, `z`) position of the coordinate origin that the particles are measured with respect to in the **global** coordinate frame.
   - `W_matrix`:
     - Required 3 x 3 matrix *(real)*
     - description: Dataset holding the 3x3 transformation matrix from  coordinates to **global**
@@ -217,7 +217,7 @@ The following records store data on a particle-by-particle basis.
 
 
 Non Per-Particle Records of the `Particle Group`
------------------------------------------------------
+------------------------------------------------
 
 The following possible records of the `Particle Group` are for specifying properties of the entire group of particles.
 

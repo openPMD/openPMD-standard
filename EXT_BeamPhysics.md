@@ -4,8 +4,7 @@ BeamPhysics Extension to the openPMD Standard for Describing Particle Beams, Pho
 Overview
 --------
 
-The `BeamPhysics` extension to the openPMD standard is meant for describing particles and fields commonly encountered
-in accelerator physics simulations.
+The `BeamPhysics` extension to the openPMD standard is meant for describing particles and fields commonly encountered in accelerator physics simulations.
 
 How to Use this Extension
 -------------------------

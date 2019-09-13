@@ -47,16 +47,16 @@ Additional File Root Group (Path `/`) Attributes
 The following records are defined for the file root group.
 
 - `fileType`
-  - Type: Optional *(string)*
-  - Description: The type of data being stored in the file. If present, must be set to `openPMD`. This attribute is used in systems where different data files can contain different types of data and allows for quick identification of the what type of data is in a given file.
+  - type: Optional *(string)*
+  - description: The type of data being stored in the file. If present, must be set to `openPMD`. This attribute is used in systems where different data files can contain different types of data and allows for quick identification of the what type of data is in a given file.
 
 - `latticeName`
-  - Type: Optional *(string)*
-  - Description: The name of the lattice.
+  - type: Optional *(string)*
+  - description: The name of the lattice.
 
 - `latticeFile`
-  - Type: Optional *(string)*
-  - Description: The location of the root lattice file.
+  - type: Optional *(string)*
+  - description: The location of the root lattice file.
 
 Particle Group Standard
 ============================
@@ -70,29 +70,29 @@ The **Particle Group** is a group for specifying a set of particles such as the 
 For each **particle group** the following attributes are defined:
 
 - `chargeLive`
-  - Type: Optional *(real)*
-  - Description: The total charge of all the live particles.
+  - type: Optional *(real)*
+  - description: The total charge of all the live particles.
 
 - `chargeUnitSI`
-  - Type: *(real)*. Only required if `chargeLive` or `totalCharge` is present.
-  - Description: Unit conversion factor to multiply `chargeLive` or `totalCharge` by in order to convert to SI units.
+  - type: *(real)*. Only required if `chargeLive` or `totalCharge` is present.
+  - description: Unit conversion factor to multiply `chargeLive` or `totalCharge` by in order to convert to SI units.
 
 - `latticeElementName`
-  - Type: Optional *(string)*
-  - Description: The name of the lattice element the particle are in. This only makes sense if all particles are in the same element. [Keep in mind that if particles are lost and the lost particles are also included in the file, not all particles may be in the same element.] Also see: `locationInElement`.
+  - type: Optional *(string)*
+  - description: The name of the lattice element the particle are in. This only makes sense if all particles are in the same element. [Keep in mind that if particles are lost and the lost particles are also included in the file, not all particles may be in the same element.] Also see: `locationInElement`.
 
 - `numParticles`
-  - Type: Required *(int)*
-  - Description: The number of particles in the group.
+  - type: Required *(int)*
+  - description: The number of particles in the group.
 
 - `speciesType`
-  - Type: Required *(string)*
-  - Description: The name of the particle species. Species names must conform to the `SpeciesType` extension.
+  - type: Required *(string)*
+  - description: The name of the particle species. Species names must conform to the `SpeciesType` extension.
   - Example: `electron`, `H2O`.
 
 - `totalCharge`
-  - Type: Optional *(real)*
-  - Description: The total charge of all the particles alive and dead.
+  - type: Optional *(real)*
+  - description: The total charge of all the particles alive and dead.
 
 Per-Particle Records of the `Particle Group`
 -------------------------------------------------
@@ -100,121 +100,120 @@ Per-Particle Records of the `Particle Group`
 The following records store data on a particle-by-particle basis.
 
 - `branchIndex/`
-  - Type Optional *(int)*
-  - Description: The unique index number assigned to the lattice branch the particle is in.
+  - type Optional *(int)*
+  - description: The unique index number assigned to the lattice branch the particle is in.
 
 - `chargeState/`
-  - Type: Optional *(int)*
-  - Description: The charge state of the particles. Used for atoms and molecules. Not needed if the charge can be computed from knowledge of the `SpeciesType` (That is, is a fundamental particle). Also see `weight`.
+  - type: Optional *(int)*
+  - description: The charge state of the particles. Used for atoms and molecules. Not needed if the charge can be computed from knowledge of the `SpeciesType` (That is, is a fundamental particle). Also see `weight`.
 
 - `electricField/`
-    - Type: Optional 3-vector *(real)*
-    - Description: External electric field at the particle.
-    - Components: (`x`, `y`, `z`).
+    - type: Optional 3-vector *(real)*
+    - description: External electric field at the particle.
+    - components: (`x`, `y`, `z`).
 
  - `elementIndex/`
-   - Type Optional *(int)*
-   - Description: The unique index number assigned to the lattice element the particle is in.
+   - type Optional *(int)*
+   - description: The unique index number assigned to the lattice element the particle is in.
 
 - `magneticField/`
-    - Type: Optional 3-vector *(real)*
-    - Description: External magnetic field at the particle.
-    - Components: (`x`, `y`, `z`).
+    - type: Optional 3-vector *(real)*
+    - description: External magnetic field at the particle.
+    - components: (`x`, `y`, `z`).
 
 - `locationInElement`
-   - Type Optional *(integer)*
-   - Description: The program generating the data file may model a lattice element using a "hard edge" model where the fringe fields at the ends of the element are modeled as having zero longitudinal length. In such a case, if a particle is at the end of the lattice element, it is important to know if the particle is outside of the fringe or if the particle is inside the fringe within the body of the element. Note that with a hard edge fringe, the longitudinal **s**-position does not necessarily provide enough information to determine where a particle is with respect to an edge field. Another situation where `locationInElement` is useful is with zero length elements that affect the particle transport (such as zero length multipole elements). If the program generating the data file does **not** use any hard edge models or zero length non-marker elements, `locationInElement` should not be present since this parameter is meaningless in this case.
+   - type Optional *(integer)*
+   - description: The program generating the data file may model a lattice element using a "hard edge" model where the fringe fields at the ends of the element are modeled as having zero longitudinal length. In such a case, if a particle is at the end of the lattice element, it is important to know if the particle is outside of the fringe or if the particle is inside the fringe within the body of the element. Note that with a hard edge fringe, the longitudinal **s**-position does not necessarily provide enough information to determine where a particle is with respect to an edge field. Another situation where `locationInElement` is useful is with zero length elements that affect the particle transport (such as zero length multipole elements). If the program generating the data file does **not** use any hard edge models or zero length non-marker elements, `locationInElement` should not be present since this parameter is meaningless in this case.
    - Possible values:    
      - -1: Upstream end of element outside of the upstream fringe edge.
      - 0: Inside the element.
      - 1: Downstream end of the element outside the downstream fringe edge.
 
 - `momentum/`
-  - Type: Optional 3-vector *(real)*
-  - Description: The momentum vector of the particles relative to `momentumOffset`
-  - Components: (`x`, `y`, `z`).
-  - True momentum = `momentum + momentumOffset`
+  - type: Optional 3-vector *(real)*
+  - description: The momentum vector of the particles relative to `momentumOffset`
+  - components: (`x`, `y`, `z`).
+  - true momentum = `momentum + momentumOffset`
 
 - `momentumOffset/`
-  - Type: Optional 3-vector *(real)*
-  - Description: Base momentum from which `momentum` is measured. That is, True momentum = `momentum + momentumOffset`. Assumed zero if not present.
-  - Components: (`x`, `y`, `z`).
+  - type: Optional 3-vector *(real)*
+  - description: Base momentum from which `momentum` is measured. That is, True momentum = `momentum + momentumOffset`. Assumed zero if not present.
+  - components: (`x`, `y`, `z`).
 
 - `photonPolarizationAmplitude/`
-  - Type: Optional 2-vector *(real)*
-  - Description: Polarization amplitude of the photon.
-  - Components: (`x`, `y`).
+  - type: Optional 2-vector *(real)*
+  - description: Polarization amplitude of the photon.
+  - components: (`x`, `y`).
 
 - `photonPolarizationPhase/`
-  - Type: Optional 2-vector *(real)*
-  - Description: Polarization phase of the photon.
-  - Components: (`x`, `y`).
+  - type: Optional 2-vector *(real)*
+  - description: Polarization phase of the photon.
+  - components: (`x`, `y`).
 
 - `sPosition`
-  - Type: Optional *(real)*
-  - Description: The value of the longitudinal position in the curvilinear lattice coordinate system.
+  - type: Optional *(real)*
+  - description: The value of the longitudinal position in the curvilinear lattice coordinate system.
 
 - `totalMomentum/`
-  - Type: Optional *(real)*
-  - Description: Total momentum relative to the totalMomentumOffset. That is, True total momentum = `totalMomentum + totalMomentumOffset`. Assumed zero if not present.
+  - type: Optional *(real)*
+  - description: Total momentum relative to the totalMomentumOffset. That is, True total momentum = `totalMomentum + totalMomentumOffset`. Assumed zero if not present.
 
 - `totalMomentumOffset/`
-  - Type: Optional *(real)*
-  - Description: Base total momentum from which `totalMomentum` is measured. That is, True total momentum = `totalMomentum + totalMomentumOffset`. Some programs will use `totalMomentumOffset/` to store the **reference momentum** in which case `totalMomentum` will then be the deviation from the referece.
+  - type: Optional *(real)*
+  - description: Base total momentum from which `totalMomentum` is measured. That is, True total momentum = `totalMomentum + totalMomentumOffset`. Some programs will use `totalMomentumOffset/` to store the **reference momentum** in which case `totalMomentum` will then be the deviation from the referece.
 
 - `particleCoordinatesToGlobalTransformation/`
-  - Type: Optional group.
-  - Description: Defines the transformation from the coordinates used to describe a particle to the **global** coordinate system.
+  - type: Optional group.
+  - description: Defines the transformation from the coordinates used to describe a particle to the **global** coordinate system.
   - `R_frame`:
     - Required 3-vector *(real)* Attribute
-    - Description: specifying the (x, y, z) position of the coordinate origin that the particles are measured with respect to in the **global** coordinate frame.
+    - description: specifying the (x, y, z) position of the coordinate origin that the particles are measured with respect to in the **global** coordinate frame.
   - `W_matrix`:
     - Required 3 x 3 matrix *(real)*
-    - Description: Dataset holding the 3x3 transformation matrix from  coordinates to **global**
+    - description: Dataset holding the 3x3 transformation matrix from  coordinates to **global**
   coordinates.
   - Position Transformation: Position_global = W_matrix * (position + positionOffset) + R_frame
   - Momentum transformation: Momentum_global = W_matrix * (momentum + momentumOffset)
 
 - `particleStatus/`
-    - Type: Optional *(int)*
-    - Description: Integer indicating whether a particle is "alive" or "dead" (for example, has hit the vacuum chamber wall). A value of one indicates the particle is alive and any other value indicates that the particle is dead. Programs are free to distinguish how a particle died by assigning different non-unit values to `particleStatus`. For example, a program might want to differentiate between particles that are dead due to hitting the side walls versus reversing the direction longitudinally in an RF cavity.
+    - type: Optional *(int)*
+    - description: Integer indicating whether a particle is "alive" or "dead" (for example, has hit the vacuum chamber wall). A value of one indicates the particle is alive and any other value indicates that the particle is dead. Programs are free to distinguish how a particle died by assigning different non-unit values to `particleStatus`. For example, a program might want to differentiate between particles that are dead due to hitting the side walls versus reversing the direction longitudinally in an RF cavity.
 
 - `pathLength/`
-    - Type: Optional *(real)*
-    - Description: Length that a particle has traveled.
+    - type: Optional *(real)*
+    - description: Length that a particle has traveled.
 
 - `position/`
-    - Type: Required 3-vector *(real)*
-    - Components: (`x`, `y`, `z`)
-    - Description: particle Position relative to the `positionOffset`.
+    - type: Required 3-vector *(real)*
+    - components: (`x`, `y`, `z`)
+    - description: particle Position relative to the `positionOffset`.
     That is, true position relative to the coordinate origin = `position + positionOffset`.
 
 - `positionOffset/`
-    - Type: Optional 3-vector *(real)*
-    - Description: Offset for each particle position component relative to the coordinate origin. Assumed zero if not present.
-    - Components: (`x`, `y`, `z`)
-    - Attributes:
+    - type: Optional 3-vector *(real)*
+    - description: Offset for each particle position component relative to the coordinate origin. Assumed zero if not present.
+    - components: (`x`, `y`, `z`)
 
 - `spin/`
-    - Type: Optional 3-vector *(real)*
-    - Description: Particle spin.
-    - Components: (`x`, `y`, `z`) or (`r`, `theta`, `phi`).
+    - type: Optional 3-vector *(real)*
+    - description: Particle spin.
+    - components: (`x`, `y`, `z`) or (`r`, `theta`, `phi`).
 
 - `time/`
-    - Type: Optional *(real)*
-    - Description: Time relative to `timeOffset`. That is, absolute time = `time + timeOffset`.
+    - type: Optional *(real)*
+    - description: Time relative to `timeOffset`. That is, absolute time = `time + timeOffset`.
 
 - `timeOffset/`
-    - Type: Optional *(real)*
-    - Description: Base time from which `time` is measured. That is, absolute time = `time + timeOffset`. Assumed zero if not present. Some programs will use the `timeOffset` to store the **reference time** in which case `time` will then be the deviation from the reference.
+    - type: Optional *(real)*
+    - description: Base time from which `time` is measured. That is, absolute time = `time + timeOffset`. Assumed zero if not present. Some programs will use the `timeOffset` to store the **reference time** in which case `time` will then be the deviation from the reference.
 
 - `velocity/`
-  - Type: Optional 3-vector *(real)*
-  - Description: (`x`, `y`, `z`) velocity vector. Meant to be used for photons where using `momentum` is not appropriate.
+  - type: Optional 3-vector *(real)*
+  - description: (`x`, `y`, `z`) velocity vector. Meant to be used for photons where using `momentum` is not appropriate.
 
 - `weight/`
-    - Type: Optional *(real)*
-    - Description: If macro-particles are being simulated, the `weight` is the total charge of a macro-particle. This is proportional to the number of particles that a macro-particle represents. Also see `charge`.
+    - type: Optional *(real)*
+    - description: If macro-particles are being simulated, the `weight` is the total charge of a macro-particle. This is proportional to the number of particles that a macro-particle represents. Also see `charge`.
 
 
 Non Per-Particle Records of the `Particle Group`
@@ -223,12 +222,12 @@ Non Per-Particle Records of the `Particle Group`
 The following possible records of the `Particle Group` are for specifying properties of the entire group of particles.
 
 - `phaseSpaceFirstOrderMoment/`
-  - Type: Optional 6-vector *(real)*
-  - Description: First order beam moments of `(x, px, y, py, z, pz)`.
+  - type: Optional 6-vector *(real)*
+  - description: First order beam moments of `(x, px, y, py, z, pz)`.
 
 - `phaseSpaceSecondOrderMoment/`
-  - Type: Optional 6x6-matrix *(real)*
-  - Description: Second order beam moments of `(x, px, y, py, z, pz)`.
+  - type: Optional 6x6-matrix *(real)*
+  - description: Second order beam moments of `(x, px, y, py, z, pz)`.
 
 Particle Record Dataset Attributes
 ----------------------------------
@@ -236,22 +235,22 @@ Particle Record Dataset Attributes
 The following attributes can be used with any dataset:
 
 - `minValue`:
-  - Type: Optional *(real)*
-  - Description: Minimum of the data.
+  - type: Optional *(real)*
+  - description: Minimum of the data.
 
 - `maxValue`:
-  - Type: Optional *(real)*
-  - Description: Maximum of the data.
+  - type: Optional *(real)*
+  - description: Maximum of the data.
 
 External Mesh Fields Groups
 ===========================
 
 The **external mesh field group** is a group for specifying electric and/or magnetic fields, due to a lattice element, at regularly spaced grid points. For example, the fields due to an RF cavity or the fields due to a magnet. Multiple **external mesh field groups** can be defined in a file. The path for a **external mesh field group** is given by the **externalFieldPath** in the file root group:
 - `externalFieldPath`
-  - Type: Required if there are external mesh field group(s) *(string)*
-  - Description: Base path to the external mesh field groups. Use the **%T** construct if there are multiple meshes present.
-  - Example: `/ExternalFieldMesh/%T/`. Base paths to the external fields group, in this case, would be `/ExternalFieldMesh/1/`, etc.
-  - Example: `/ExternalFieldMesh/`. In this case there is only one external fields group.
+  - type: Required if there are external mesh field group(s) *(string)*
+  - description: Base path to the external mesh field groups. Use the **%T** construct if there are multiple meshes present.
+  - example: `/ExternalFieldMesh/%T/`. Base paths to the external fields group, in this case, would be `/ExternalFieldMesh/1/`, etc.
+  - example: `/ExternalFieldMesh/`. In this case there is only one external fields group.
 
 Notes
 -----
@@ -267,67 +266,67 @@ where `Z` is the field complex number, `f` is the Oscillation frequency, `t` is 
 ----------------------------------
 
 - `gridCurvatureRadius`
-  - Type: Optional *(real)*
-  - Description: Only used if `gridGeometry` is set to `rectangular`. A zero value (the default) indicates that the grid is rectilinear. A non-zero value indicates that the grid is curved. The curvature is in the **(x, z)** plane with positive **x** pointing away from the center of curvature if `gridCurvatureRadius` is positive and vice versa for negative values. `gridCurvatureRadius` is the radius for the lines **x = 0** at constant **y**.
+  - type: Optional *(real)*
+  - description: Only used if `gridGeometry` is set to `rectangular`. A zero value (the default) indicates that the grid is rectilinear. A non-zero value indicates that the grid is curved. The curvature is in the **(x, z)** plane with positive **x** pointing away from the center of curvature if `gridCurvatureRadius` is positive and vice versa for negative values. `gridCurvatureRadius` is the radius for the lines **x = 0** at constant **y**.
 
 - `eleAnchorPt`
-  - Type: Required *(string)*
-  - Description: Point on the lattice element that the grid origin is referenced to. Possible values are: `beginning`, `center`, or `end`. The `beginning` point is at the entrance end of the element, the `center` point is at the center of the element and the `end` point is at the exit end of the element. All three points are on the reference orbit.
+  - type: Required *(string)*
+  - description: Point on the lattice element that the grid origin is referenced to. Possible values are: `beginning`, `center`, or `end`. The `beginning` point is at the entrance end of the element, the `center` point is at the center of the element and the `end` point is at the exit end of the element. All three points are on the reference orbit.
 
 - `fieldScale`
-  - Type: Optional *(real)*
-  - Description: A scale factor that is used to scale the fields. Default is 1.
+  - type: Optional *(real)*
+  - description: A scale factor that is used to scale the fields. Default is 1.
 
 - `fundamentalFrequency`
-  - Type: Optional *(real)*
-  - Description: The fundamental RF frequency. Used for AC fields.
+  - type: Optional *(real)*
+  - description: The fundamental RF frequency. Used for AC fields.
 
 - `gridGeometry`
-  - Type: Required *(string)*
-  - Description: Values are `rectangular` or `cylindrical`. The `rectangular` value is for a **(x, y, z)** grid with field components **(Bx, By, Bz)** and/or **(Ex, Ey, Ez)**. The `cylindrical` value is for a  **(r, theta, z)** grid with field components **(Br, Btheta, Bz)** and/or **(Er, Etheta, Ez)** field components. Note: If the grid size in the `theta` direction is 1, the field is taken to be axially symmetric.
+  - type: Required *(string)*
+  - description: Values are `rectangular` or `cylindrical`. The `rectangular` value is for a **(x, y, z)** grid with field components **(Bx, By, Bz)** and/or **(Ex, Ey, Ez)**. The `cylindrical` value is for a  **(r, theta, z)** grid with field components **(Br, Btheta, Bz)** and/or **(Er, Etheta, Ez)** field components. Note: If the grid size in the `theta` direction is 1, the field is taken to be axially symmetric.
 
 
 - `gridSpacing`
-  - Type: Required 3-vector *(real)*
-  - Description: Spacing between grid points.
+  - type: Required 3-vector *(real)*
+  - description: Spacing between grid points.
 
 - `gridLowerBound`
-  - Type: Required 3-vector *(int)*
-  - Description: Lower bound of the grid index. Note: The grid upper bound will be `gridLowerBound` + `gridSize` - 1.
+  - type: Required 3-vector *(int)*
+  - description: Lower bound of the grid index. Note: The grid upper bound will be `gridLowerBound` + `gridSize` - 1.
 
 - `gridSize`
-  - Type: Required 3-vector *(int)*
-  - Description: Size of the grid.
+  - type: Required 3-vector *(int)*
+  - description: Size of the grid.
 
 - `gridOriginOffset`
-  - Type: Required 3-vector *(real)*
-  - Description: distance from `eleAnchorPt` to the grid origin point.
+  - type: Required 3-vector *(real)*
+  - description: distance from `eleAnchorPt` to the grid origin point.
 
 
 - `harmonic`
-  - Type: Required *(int)*
-  - Description: Harmonic number of the fundamental frequency. A value of zero implies a DC field.
+  - type: Required *(int)*
+  - description: Harmonic number of the fundamental frequency. A value of zero implies a DC field.
 
 - `name`
-  - Type: Optional *(string)*
-  - Description: Name to be used to identify the grid.
+  - type: Optional *(string)*
+  - description: Name to be used to identify the grid.
 
 - `RFphase`
-  - Type Required if `harmonic` is not zero *(real)*
-  - Description: Phase offset for oscillating fields. See the note above. Default is zero.
+  - type Required if `harmonic` is not zero *(real)*
+  - description: Phase offset for oscillating fields. See the note above. Default is zero.
 
 
 Per-grid `External Fields Group` Records for `(x, y, z)` Grids
 --------------------------------------------------------------
 
 - `Bx`, `By`, `Bz`
-  - Type: Optional (Either all must be present or all must be absent) *(complex)*
-  - Description: Magnetic field components using rectangular coordinates. Used with `gridGeometry` set to `rectangular`. If the field is DC (`harmonic` is zero), only the real component should be nonzero.
+  - type: Optional (Either all must be present or all must be absent) *(complex)*
+  - description: Magnetic field components using rectangular coordinates. Used with `gridGeometry` set to `rectangular`. If the field is DC (`harmonic` is zero), only the real component should be nonzero.
 
 
 - `Ex`, `Ey`, `Ez`
-  - Type: Optional (Either all must be present or all must be absent) *(complex)*
-  - Description: Electric field components. Used with `gridGeometry` set to `xyz`.If the field is DC, only the real component should be nonzero.
+  - type: Optional (Either all must be present or all must be absent) *(complex)*
+  - description: Electric field components. Used with `gridGeometry` set to `xyz`.If the field is DC, only the real component should be nonzero.
 
 
 Per-grid `External Fields Group` Records for `(r, theta, z)` Grids
@@ -337,10 +336,10 @@ Note: If the grid size in the `theta` direction is 1, the field is taken to be a
 
 
 - `Br`, `Btheta`, `Bz`
-  - Type: Optional (Either all must be present or all must be absent) *(complex)*
-  - Description: Magnetic field components using cylindrical coordinates. Used with `gridGeometry` set to `cylindrical`. If the field is DC (`harmonic` is zero), only the real component should be nonzero.
+  - type: Optional (Either all must be present or all must be absent) *(complex)*
+  - description: Magnetic field components using cylindrical coordinates. Used with `gridGeometry` set to `cylindrical`. If the field is DC (`harmonic` is zero), only the real component should be nonzero.
 
 
 - `Er`, `Etheta`, `Ez`
-  - Type: Optional (Either all must be present or all must be absent) *(complex)*
-  - Description: Electric field components. Used with `gridGeometry` set to `rotationally_symmetric_rz`. If the field is DC, only the real component should be nonzero.
+  - type: Optional (Either all must be present or all must be absent) *(complex)*
+  - description: Electric field components. Used with `gridGeometry` set to `rotationally_symmetric_rz`. If the field is DC, only the real component should be nonzero.

@@ -331,7 +331,7 @@ Per-grid `External Fields Group` Records for `(x, y, z)` Grids
 
 
 Per-grid `External Fields Group` Records for `(r, theta, z)` Grids
---------------------------------------------------------------
+------------------------------------------------------------------
 
 Note: If the grid size in the `theta` direction is 1, the field is taken to be axially symmetric.
 

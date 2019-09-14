@@ -44,7 +44,7 @@ The individual requirement is given in `scope`.
       (r) or reciprocal (k) space.
     - allowed values:
       - `r`: The field is given in cartesian space.
-      - `k`: The field is given in reciprocal space.
+      - `k`: The field is given in reciprocmal space.
 
   - `R_x`
     - type: *(floatX)*

@@ -13,6 +13,8 @@ This standard is not yet finished and is currently based on EXT_BeamPhysics / EX
 
 Each record needs to have the same length, as the n'th index for each record correspond to particle n.
 
+Coordinates are defined with z in the beam direction and if possible y in the direction opposite gravity.
+
 Particle Records
 ----------------
 

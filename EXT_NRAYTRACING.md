@@ -11,39 +11,102 @@ This extention is designed for transfer of neutron particle states between neutr
 The neutrons are saved in rays with a given weight corresponding to expected intensity.
 This standard is not yet finished and is currently based on EXT_BeamPhysics / EXT_WAVEFRONT
 
+Each record needs to have the same length, as the n'th index for each record correspond to particle n.
+
 Particle Records
 ----------------
 
 - `position/`
-    - type: Required 3-vector *(real)*
-    - components: (`x`, `y`, `z`)
+    - type: Required
     - description: particle Position relative to the `positionOffset`.
     That is, true position relative to the coordinate origin = `position + positionOffset`.
+    - `position/x` 
+        - type: Required *(real)*
+        - description: x coordinate
+        - unitDimension: [m] (1., 0., 0., 0., 0., 0., 0.)
+        - unitSI: 1.0      
+    - `position/y` 
+        - type: Required *(real)*
+        - description: y coordinate
+        - unitDimension: [m] (1., 0., 0., 0., 0., 0., 0.)        
+        - unitSI: 1.0      
+    - `position/z` 
+        - type: Required *(real)*
+        - description: z coordinate
+        - unitDimension: [m] (1., 0., 0., 0., 0., 0., 0.)        
+        - unitSI: 1.0
 
 - `positionOffset/`
-    - type: Optional 3-vector *(real)*
-    - description: Offset for each particle position component relative to the coordinate origin. Assumed zero if not present.
-    - components: (`x`, `y`, `z`)
+    - type: Optional
+    - description: Offset for each particle position component relative to the coordinate origin. Assumed zero if not present. If only one present, assumed the same for each particle.
+    - `position/x` 
+        - type: Optional *(real)*
+        - description: x coordinate offset
+        - unitDimension: [m] (1., 0., 0., 0., 0., 0., 0.)
+        - unitSI: 1.0      
+    - `position/y` 
+        - type: Optional *(real)*
+        - description: y coordinate offset
+        - unitDimension: [m] (1., 0., 0., 0., 0., 0., 0.)        
+        - unitSI: 1.0      
+    - `position/z` 
+        - type: Optional *(real)*
+        - description: z coordinate offset
+        - unitDimension: [m] (1., 0., 0., 0., 0., 0., 0.)   
+        - unitSI: 1.0      
+    
+- `velocity/`
+    - type: Required
+    - description: (`x`, `y`, `z`) velocity vector. Used over momentum due to direct relevance for ray-tracing.
+    - `velocity/x` 
+        - type: Required *(real)*
+        - description: x velocity
+        - unitDimension: [m/s] (1., 0., -1.0, 0., 0., 0., 0.)
+        - unitSI: 1.0      
+    - `velocity/y` 
+        - type: Required *(real)*
+        - description: y velocity
+        - unitDimension: [m/s] (1., 0., -1.0, 0., 0., 0., 0.)    
+        - unitSI: 1.0      
+    - `velocity/z` 
+        - type: Required *(real)*
+        - description: z velocity
+        - unitDimension: [m/s] (1., 0., -1.0, 0., 0., 0., 0.)
+        - unitSI: 1.0
     
 - `spin/`
-    - type: Optional 3-vector *(real)*
-    - description: Particle spin.
-    - components: (`x`, `y`, `z`) or (`r`, `theta`, `phi`).
+    - type: Optional 
+    - description: Particle spin direction, no unit
+    - `spin/x` 
+        - type: Optional *(real)*
+        - description: x component of spin
+        - unitDimension: [unitless] (0., 0., 0., 0., 0., 0., 0.)
+        - unitSI: 1.0
+    - `spin/y` 
+        - type: Optional *(real)*
+        - description: y component of spin
+        - unitDimension: [unitless] (0., 0., 0., 0., 0., 0., 0.)
+        - unitSI: 1.0
+    - `spin/z` 
+        - type: Optional *(real)*
+        - description: z component of spin
+        - unitDimension: [unitless] (0., 0., 0., 0., 0., 0., 0.)
+        - unitSI: 1.0        
     
 - `time/`
-    - type: Optional *(real)*
+    - type: Required *(real)*
     - description: Time relative to `timeOffset`. That is, absolute time = `time + timeOffset`.
+    - unitDimension: [unitless] (0., 0., 0., 1., 0., 0., 0., 0.)
+    - unitSI: 1.0        
     
 - `timeOffset/`
     - type: Optional *(real)*
     - description: Base time from which `time` is measured. That is, absolute time = `time + timeOffset`. Assumed zero if not present. Some programs will use the `timeOffset` to store the **reference time** in which case `time` will then be the deviation from the reference.
-
-- `velocity/`
-  - type: Required 3-vector *(real)*
-  - description: (`x`, `y`, `z`) velocity vector. Meant to be used for photons where using `momentum` is not appropriate.
+    - unitDimension: [unitless] (0., 0., 0., 1., 0., 0., 0., 0.)
+    - unitSI: 1.0            
 
 - `weight/`
     - type: Required *(real)*
     - description: Weight of the neutron ray with the physical unit of intensity, neutrons per second. When simulating a source with a given intensity, this intensity is split up into weights of the neutron rays that will be simulated.
-    
-    
+    - unitDimension: [unitless] (0., 0., 0., 1., 0., 0., 0., 0.)
+    - unitSI: 1.0

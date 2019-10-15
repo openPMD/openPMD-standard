@@ -17,7 +17,7 @@ Particle Based Records (Fields)
 
 ### Root attributes
 
-- `openPMD`: `0.0.1`
+- `openPMD`: `0.0.2`
 - `openPMDextension`: `PRAYTRACE`
 - `author`: `Aljosa Hafner <aljosa.hafner@ceric-eric.eu>`
 - `date`: `10.10.2019 00:00:00 +0100`

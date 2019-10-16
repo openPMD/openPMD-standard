@@ -33,7 +33,7 @@ data/1/particles/rays/1...N/
 
 ### Scope
 
-- Required
+Required
 
 - `position/`
 	- `x`, `y`, `z`
@@ -47,7 +47,7 @@ data/1/particles/rays/1...N/
 - `phase`
 	- `sPol`, `pPol`
 	
-- Optional
+Optional
 
 - `deadAlive`
 - `opticalPath`
@@ -71,7 +71,7 @@ data/1/particles/rays/1...N/
 	- `S3`
 - `power`
 
-### Required attributes for the individual ray in 'particles/rays/1...N/'
+### Required attributes for the individual ray in `particles/rays/1...N/`
 
 	- `position/`
 		- `x`

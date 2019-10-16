@@ -9,7 +9,7 @@ Introduction
 
 This extension to the openPMD addresses the domain-specific requirements
 met in raytracing codes (e.g. OASYS). Each ray has the information stored
-in its own record, e.g. data/1/particles/rays/1...N/ and therefore
+in its own record, e.g. data/1/particles/rays/1...nRays/ and therefore
 has to have the same length.
 
 Particle Based Records (Fields)
@@ -17,10 +17,10 @@ Particle Based Records (Fields)
 
 ### Root attributes
 
-- `openPMD`: `0.0.2`
+- `openPMD`: `0.0.3`
 - `openPMDextension`: `PRAYTRACE`
 - `author`: `Aljosa Hafner <aljosa.hafner@ceric-eric.eu>`
-- `date`: `10.10.2019 00:00:00 +0100`
+- `date`: `16.10.2019 00:00:00 +0100`
 - `nRays`
 	- type: *(uintX)*
 	- description: Number of initialised rays
@@ -29,7 +29,7 @@ Particle Based Records (Fields)
 	- unitDimension: [unitless] (0., 0., 0., 0., 0., 0., 0.)
 
 ### Structure
-data/1/particles/rays/1...N/
+data/1/particles/rays/1...nRays/
 
 ### Scope
 
@@ -71,7 +71,7 @@ Optional
 	- `S3`
 - `power`
 
-### Required attributes for the individual ray in `particles/rays/1...N/`
+### Required attributes for the individual ray in `particles/rays/1...nRays/`
 
 - `position/`
 	- `x`

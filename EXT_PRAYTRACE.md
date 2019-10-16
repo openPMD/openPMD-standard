@@ -9,7 +9,7 @@ Introduction
 
 This extension to the openPMD addresses the domain-specific requirements
 met in raytracing codes (e.g. OASYS). Each ray has the information stored
-in its own record, e.g. data/1/particles/rays/0...N/positions and therefore
+in its own record, e.g. data/1/particles/rays/1...N/ and therefore
 has to have the same length.
 
 Particle Based Records (Fields)
@@ -29,24 +29,64 @@ Particle Based Records (Fields)
 	- unitDimension: [unitless] (0., 0., 0., 0., 0., 0., 0.)
 
 ### Structure
-data/1/particlesPath/rays/0...N/position...
+data/1/particles/rays/1...N/
 
-### Attributes for the individual ray in 'particlesPath/rays/0...N/'
+### Scope
+
+- Required
+
+- `position/`
+	- `x`, `y`, `z`
+- `direction/`
+	- `x`, `y`, `z`
+- `eFieldSPolarisation/`
+	- `x`, `y`, `z`
+- `eFieldPPolarisation/`
+	- `x`, `y`, `z`
+- `photonEnergy`
+- `phase`
+	- `sPol`, `pPol`
+	
+- Optional
+
+- `deadAlive`
+- `opticalPath`
+- `wavelength`
+- `R`
+- `grazingAngle`
+- `eFieldMagnitude`
+- `intensity/`
+	- `total`
+	- `sPol`
+	- `pPol`
+- `wavevector/`
+	- `k`
+	- `x`
+	- `y`
+	- `z`
+- `stokesParams/`
+	- `S0`
+	- `S1`
+	- `S2`
+	- `S3`
+- `power`
+
+### Required attributes for the individual ray in 'particles/rays/1...N/'
 
 	- `position/`
-		- `position/x`
+		- `x`
 			- type: *(floatX)*
 			- description: *x-* coordinate
 			- scope: *required*
 			- unitSI: 1.0
 			- unitDimension: [m] (1., 0., 0., 0., 0., 0., 0.)
-		- `position/y`
+		- `y`
 			- type: *(floatX)*
 			- description: *y-* coordinate
 			- scope: *required*
 			- unitSI: 1.0
 			- unitDimension: [m] (1., 0., 0., 0., 0., 0., 0.)
-		- `position/z`
+		- `z`
 			- type: *(floatX)*
 			- description: *z-* coordinates
 			- scope: *required*
@@ -54,19 +94,19 @@ data/1/particlesPath/rays/0...N/position...
 			- unitDimension: [m] (1., 0., 0., 0., 0., 0., 0.)
 	
 	- `direction/'
-		- `direction/x`
+		- `x`
 			- type: *(floatX)*
 			- description: *x-* direction
 			- scope: *required*
 			- unitSI: 1.0
 			- unitDimension: [m] (1., 0., 0., 0., 0., 0., 0.)
-		- `direction/y`
+		- `y`
 			- type: *(floatX)*
 			- description: *x-* direction
 			- scope: *required*
 			- unitSI: 1.0
 			- unitDimension: [m] (1., 0., 0., 0., 0., 0., 0.)
-		- `direction/z`
+		- `z`
 			- type: *(floatX)*
 			- description: *x-* direction
 			- scope: *required*
@@ -74,41 +114,41 @@ data/1/particlesPath/rays/0...N/position...
 			- unitDimension: [m] (1., 0., 0., 0., 0., 0., 0.)
 
 	- `eFieldSPolarisation/`
-		- `eFieldSPolarisation/x`
-			- type: *(complexX)*
-			- description: S polarisation along *x-* coordinate
+		- `x`
+			- type: *(floatX)*
+			- description: S polarised E field, *x* component
 			- scope: *required*
 			- unitSI: 1.0
 			- unitDimension: [sqrt(V / m) = sqrt(kg m s^-3 A^-1)] (1/2, 1/2, -3/2, -1/2, 0., 0., 0.)
-		- `eFieldSPolarisation/y`
-			- type: *(complexX)*
-			- description: S polarisation along *y-* coordinate
+		- `y`
+			- type: *(floatX)*
+			- description: S polarised E field, *y* component
 			- scope: *required*
 			- unitSI: 1.0
 			- unitDimension: [sqrt(V / m) = sqrt(kg m s^-3 A^-1)] (1/2, 1/2, -3/2, -1/2, 0., 0., 0.)
-		- `eFieldSPolarisation/z`
-			- type: *(complexX)*
-			- description: S polarisation along *z-* coordinate
+		- `z`
+			- type: *(floatX)*
+			- description: S polarised E field, *z* component
 			- scope: *required*
 			- unitSI: 1.0
 			- unitDimension: [sqrt(V / m) = sqrt(kg m s^-3 A^-1)] (1/2, 1/2, -3/2, -1/2, 0., 0., 0.)
 	
 	- `eFieldPPolarisations/`
-		- `eFieldPPolarisations/x`
-			- type: *(complexX)*
-			- description: P polarisation along *x-* coordinate
+		- `x`
+			- type: *(floatX)*
+			- description: P polarised E field, *x* component
 			- scope: *required*
 			- unitSI: 1.0
 			- unitDimension: [sqrt(V / m) = sqrt(kg m s^-3 A^-1)] (1/2, 1/2, -3/2, -1/2, 0., 0., 0.)
-		- `eFieldPPolarisations/y`
-			- type: *(complexX)*
-			- description: P polarisation along *y-* coordinate
+		- `y`
+			- type: *(floatX)*
+			- description: P polarised E field, *y* component
 			- scope: *required*
 			- unitSI: 1.0
 			- unitDimension: [sqrt(V / m) = sqrt(kg m s^-3 A^-1)] (1/2, 1/2, -3/2, -1/2, 0., 0., 0.)
-		- `eFieldPPolarisations/z`
-			- type: *(complexX)*
-			- description: P polarisation along *z-* coordinate
+		- `z`
+			- type: *(floatX)*
+			- description: P polarised E field, *z* component
 			- scope: *required*	
 			- unitSI: 1.0
 			- unitDimension: [sqrt(V / m) = sqrt(kg m s^-3 A^-1)] (1/2, 1/2, -3/2, -1/2, 0., 0., 0.)
@@ -121,20 +161,20 @@ data/1/particlesPath/rays/0...N/position...
 		- unitDimension: [J = kg m^2 s^-2] (2., 1., -2., 0., 0., 0., 0.)
 	
 	- `phase/`
-		- `phase/sPol`
+		- `sPol`
 			- type: *(complexX)*
 			- description: phase for S polarisation
 			- scope: *required*
 			- unitSI: 1.0
 			- unitDimension: [unitless] (0., 0., 0., 0., 0., 0., 0.)
-		- `phase/pPol`
+		- `pPol`
 			- type: *(complexX)*
 			- description: phase for P polarisation
 			- scope: *required*
 			- unitSI: 1.0
 			- unitDimension: [unitless] (0., 0., 0., 0., 0., 0., 0.)
 	
-### Additional Attributes for the Group `particlesPath`
+### Additional Attributes for the Group `particles`
 
 The following additional attributes are optional.
 
@@ -179,19 +219,19 @@ The following additional attributes are optional.
 		- unitDimension: [sqrt(V m^-1) = sqrt(kg m s^-3 A^-1)] (1/2, 1/2, -3/2, -1/2, 0., 0., 0.)
 		
 	- `intensity/`
-		- `intensity/total`
+		- `total`
 			- type: *(floatX)*
 			- description: |E_SPol|^2 + |E_PPol|^2
 			- scope *optional*
 			- unitSI: 1.0
 			- unitDimension: [V m^-1 = kg m s^-3 A^-1] (1., 1., -3., -1., 0., 0., 0.)
-		- `intensity/sPol`
+		- `sPol`
 		-	 type: *(floatX)*
 			- description: |E_SPol|^2
 			- scope *optional*
 			- unitSI: 1.0
 			- unitDimension: [V m^-1 = kg m s^-3 A^-1] (1., 1., -3., -1., 0., 0., 0.)
-		- `intensity/pPol`
+		- `pPol`
 			- type: *(floatX)*
 			- description: |E_PPol|^2
 			- scope *optional*
@@ -199,25 +239,25 @@ The following additional attributes are optional.
 			- unitDimension: [V m^-1 = kg m s^-3 A^-1] (1., 1., -3., -1., 0., 0., 0.)
 		
 	- `wavevector/`
-		- `wavevector/k`
+		- `k`
 			- type: *(complexX)*
 			- description: |k|, magnitude of the wavevector
 			- scope: *optional*
 			- unitSI: 1.0
 			- unitDimension: [m^-1] (-1., 0., 0., 0., 0., 0., 0.)
-		- `wavevector/x`
+		- `x`
 			- type: *(floatX)*
 			- description: k_x, *x-* component of the wavevector
 			- scope: *optional*
 			- unitSI: 1.0
 			- unitDimension: [m^-1] (-1., 0., 0., 0., 0., 0., 0.)
-		- `wavevector/y`
+		- `y`
 			- type: *(floatX)*
 			- description: k_y, *y-* component of the wavevector
 			- scope: *optional*
 			- unitSI: 1.0
 			- unitDimension: [m^-1] (-1., 0., 0., 0., 0., 0., 0.)
-		- `wavevector/z`
+		- `z`
 			- type: *(floatX)*
 			- description: k_z, *z-* component of the wavevector
 			- scope: *optional*
@@ -225,25 +265,25 @@ The following additional attributes are optional.
 			- unitDimension: [m^-1] (-1., 0., 0., 0., 0., 0., 0.)
 	
 	- `stokesParams/`
-		- 'stokesParams/S0'
+		- `S0`
 			- type: *(floatX)*
 			- description: |E_SPol|^2 + |E_PPol|^2, same as total intensity
 			- scope *optional*
 			- unitSI: 1.0
 			- unitDimension: [V m^-1 = kg m s^-3 A^-1] (1., 1., -3., -1., 0., 0., 0.)
-		- 'stokesParams/S1'
+		- `S1`
 			- type: *(floatX)*
 			- description: |E_PPol|^2 - |E_SPol|^2
 			- scope *optional*
 			- unitSI: 1.0
 			- unitDimension: [V m^-1 = kg m s^-3 A^-1] (1., 1., -3., -1., 0., 0., 0.)
-		- 'stokesParams/S2'
+		- `S2`
 			- type: *(floatX)*
 			- description: 2|E_SPol||E_PPol|cos(phaseSPol - phasePPol)
 			- scope *optional*
 			- unitSI: 1.0
 			- unitDimension: [V m^-1 = kg m s^-3 A^-1] (1., 1., -3., -1., 0., 0., 0.)
-		- 'stokesParams/S3'
+		- `S3`
 			- type: *(floatX)*
 			- description: 2|E_SPol||E_PPol|sin(phaseSPol - phasePPol)
 			- scope *optional*

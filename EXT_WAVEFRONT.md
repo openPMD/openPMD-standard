@@ -26,6 +26,8 @@ The individual requirement is given in `scope`.
   - `photon energy`
     - type: *(floatX)* or *(intX)* or *(uintX)*
     - description: The central photon energy of the wavefield.
+    - `unitDimension = (1., 0., 0., 0., 0., 0., 0.)` (m)1
+    - `unitSI = 1.602176634e−19`
     - scope: *required*
 
   - `temporal domain`

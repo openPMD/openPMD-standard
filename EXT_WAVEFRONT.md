@@ -7,15 +7,14 @@ openPMD extension name: `WAVEFRONT`
 Introduction
 ------------
 
-This extension is specifically designed for the domain of electro-dynamic and
-electro-static particle-in-cell (PIC) codes.
+This extension is specifically designed for the domain of coherent wavefront propagation codes.
 
-Mesh Based Records (Fields)
----------------------------
+Additional Group to store constant data (parameters)
+----------------------------------------------------
 
-### Additional Attributes for the Group `meshesPath`
+### Additional Group `params`
 
-The following additional attributes are defined to this extension.
+The top level Group `params` contains data which is constant for all records.
 The individual requirement is given in `scope`.
 
   - `beamline`
@@ -26,7 +25,7 @@ The individual requirement is given in `scope`.
   - `photon energy`
     - type: *(floatX)* or *(intX)* or *(uintX)*
     - description: The central photon energy of the wavefield.
-    - `unitDimension = (1., 0., 0., 0., 0., 0., 0.)` (m)1
+    - `unitDimension = (1., 0., 0., 0., 0., 0., 0.)` (m)
     - `unitSI = 1.602176634e−19`
     - scope: *required*
 
@@ -80,6 +79,9 @@ The individual requirement is given in `scope`.
                               `unitDimension = (1., 0., 0., 0., 0., 0., 0.)`
                               (m)
 
+
+Mesh records
+------------
 
 ### Naming Conventions for `mesh record`s (field records)
 

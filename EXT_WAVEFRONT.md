@@ -46,7 +46,7 @@ The individual requirement is given in `scope`.
       - `r`: The field is given in cartesian space.
       - `k`: The field is given in reciprocmal space.
 
-  - `R_x`
+  - `R/x`
     - type: *(floatX)*
     - scope: *required*
     - description: Horizontal wavefront curvature radius.
@@ -54,7 +54,7 @@ The individual requirement is given in `scope`.
                               `unitDimension = (1., 0., 0., 0., 0., 0., 0.)`
                               (m)
 
-  - `R_y`
+  - `R/y`
     - type: *(floatX)*
     - scope: *required*
     - description: Vertical wavefront curvature radius.
@@ -62,7 +62,7 @@ The individual requirement is given in `scope`.
                               `unitDimension = (1., 0., 0., 0., 0., 0., 0.)`
                               (m)
 
-  - `Delta R_x`
+  - `Delta_R/x`
     - type: *(floatX)*
     - scope: *required*
     - description: Error in horizontal wavefront curvature radius.
@@ -70,7 +70,7 @@ The individual requirement is given in `scope`.
                               `unitDimension = (1., 0., 0., 0., 0., 0., 0.)`
                               (m)
 
-  - `Delta R_y`
+  - `Delta_R/y`
     - type: *(floatX)*
     - scope: *required*
     - description: Error in vertical wavefront curvature radius.
@@ -85,7 +85,7 @@ When added to an output, the following naming conventions shall be used for
 electric field `mesh records`.
 
 - fundamental fields:
-  - `E_real`
+  - `E_real/x` and `E_real/y`
     - type: *(floatX)* or *(intX)* or *(uintX)*
     - description: the real part of the complex electric field.
     - advice to implementors: a *(floatX)* type is likely the most frequent case
@@ -97,8 +97,8 @@ electric field `mesh records`.
                               `unitDimension = (0., -1,0, 0., 0., 0., 0., 0.)`
                               ((J / eV)^{1/2} / m  = m^{-1})
                               if attribute `Fourier domain` is 'frequency`.
-
-  - `E_imag`
+ 
+ - `E_imag/x` and `E_imag/y`
     - type: *(floatX)* or *(intX)* or *(uintX)*
     - description: the imaginary part of the complex electric field.
     - advice to implementors: a *(floatX)* type is likely the most frequent case

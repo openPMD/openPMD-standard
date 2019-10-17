@@ -22,17 +22,17 @@ Particle Records
     - type: Required
     - description: particle Position relative to the `positionOffset`.
     That is, true position relative to the coordinate origin = `position + positionOffset`.
-    - `position/x` 
+    - `x` 
         - type: Required *(real)*
         - description: x coordinate
         - unitDimension: [m] (1., 0., 0., 0., 0., 0., 0.)
         - unitSI: 1.0      
-    - `position/y` 
+    - `y` 
         - type: Required *(real)*
         - description: y coordinate
         - unitDimension: [m] (1., 0., 0., 0., 0., 0., 0.)        
         - unitSI: 1.0      
-    - `position/z` 
+    - `z` 
         - type: Required *(real)*
         - description: z coordinate
         - unitDimension: [m] (1., 0., 0., 0., 0., 0., 0.)        
@@ -41,17 +41,17 @@ Particle Records
 - `positionOffset/`
     - type: Optional
     - description: Offset for each particle position component relative to the coordinate origin. Assumed zero if not present. If only one present, assumed the same for each particle.
-    - `position/x` 
+    - `x` 
         - type: Optional *(real)*
         - description: x coordinate offset
         - unitDimension: [m] (1., 0., 0., 0., 0., 0., 0.)
         - unitSI: 1.0      
-    - `position/y` 
+    - `y` 
         - type: Optional *(real)*
         - description: y coordinate offset
         - unitDimension: [m] (1., 0., 0., 0., 0., 0., 0.)        
         - unitSI: 1.0      
-    - `position/z` 
+    - `z` 
         - type: Optional *(real)*
         - description: z coordinate offset
         - unitDimension: [m] (1., 0., 0., 0., 0., 0., 0.)   
@@ -60,17 +60,17 @@ Particle Records
 - `velocity/`
     - type: Required
     - description: (`x`, `y`, `z`) velocity vector. Used over momentum due to direct relevance for ray-tracing.
-    - `velocity/x` 
+    - `x` 
         - type: Required *(real)*
         - description: x velocity
         - unitDimension: [m/s] (1., 0., -1.0, 0., 0., 0., 0.)
         - unitSI: 1.0      
-    - `velocity/y` 
+    - `y` 
         - type: Required *(real)*
         - description: y velocity
         - unitDimension: [m/s] (1., 0., -1.0, 0., 0., 0., 0.)    
         - unitSI: 1.0      
-    - `velocity/z` 
+    - `z` 
         - type: Required *(real)*
         - description: z velocity
         - unitDimension: [m/s] (1., 0., -1.0, 0., 0., 0., 0.)
@@ -79,17 +79,17 @@ Particle Records
 - `spin/`
     - type: Optional 
     - description: Particle spin direction, no unit
-    - `spin/x` 
+    - `x` 
         - type: Optional *(real)*
         - description: x component of spin
         - unitDimension: [unitless] (0., 0., 0., 0., 0., 0., 0.)
         - unitSI: 1.0
-    - `spin/y` 
+    - `y` 
         - type: Optional *(real)*
         - description: y component of spin
         - unitDimension: [unitless] (0., 0., 0., 0., 0., 0., 0.)
         - unitSI: 1.0
-    - `spin/z` 
+    - `z` 
         - type: Optional *(real)*
         - description: z component of spin
         - unitDimension: [unitless] (0., 0., 0., 0., 0., 0., 0.)

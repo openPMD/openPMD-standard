@@ -9,16 +9,12 @@ Introduction
 
 This extension is specifically designed for the domain of coherent wavefront propagation codes.
 
-Additional Group to store constant data (parameters)
-----------------------------------------------------
-
-### Additional Group `params`
-
-The top level Group `params` contains data which is constant for all records.
-The individual requirement is given in `scope`.
+Additional attributes on `series`
+---------------------------------
+On the `series` object, set the following attributes:
 
   - `beamline`
-    - type: array *(string)*
+    - type: *(string)*
     - scope: *optional*
     - description: The string representation of the optical beamline.
 

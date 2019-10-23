@@ -18,13 +18,6 @@ On the `series` object, set the following attributes:
     - scope: *optional*
     - description: The string representation of the optical beamline.
 
-  - `photon energy`
-    - type: *(floatX)* or *(intX)* or *(uintX)*
-    - description: The central photon energy of the wavefield.
-    - `unitDimension = (1., 0., 0., 0., 0., 0., 0.)` (m)
-    - `unitSI = 1.602176634e−19`
-    - scope: *required*
-
   - `temporal domain`
     - type: *(string)*
     - scope: *required*
@@ -43,7 +36,22 @@ On the `series` object, set the following attributes:
       - `r`: The field is given in cartesian space.
       - `k`: The field is given in reciprocmal space.
 
-  - `R/x`
+Additional records
+------------------
+- `z coordinate`
+    -type: *(floatX)*
+    -description: The z coordinate with respect to the beamline origin.
+    - `unitDimension = (1., 0., 0., 0., 0., 0., 0.)` (m)
+    - scope: *required*
+
+- `photon energy`
+    - type: *(floatX)* or *(intX)* or *(uintX)*
+    - description: The central photon energy of the wavefield.
+    - `unitDimension = (1., 2., -2., 0., 0., 0., 0.)` (J = kg m^2/s^2)
+    - `unitSI = 1.602176634e−19`
+    - scope: *required*
+
+- `R/x`
     - type: *(floatX)*
     - scope: *required*
     - description: Horizontal wavefront curvature radius.
@@ -51,7 +59,7 @@ On the `series` object, set the following attributes:
                               `unitDimension = (1., 0., 0., 0., 0., 0., 0.)`
                               (m)
 
-  - `R/y`
+- `R/y`
     - type: *(floatX)*
     - scope: *required*
     - description: Vertical wavefront curvature radius.
@@ -59,7 +67,7 @@ On the `series` object, set the following attributes:
                               `unitDimension = (1., 0., 0., 0., 0., 0., 0.)`
                               (m)
 
-  - `Delta_R/x`
+- `Delta_R/x`
     - type: *(floatX)*
     - scope: *required*
     - description: Error in horizontal wavefront curvature radius.
@@ -67,7 +75,7 @@ On the `series` object, set the following attributes:
                               `unitDimension = (1., 0., 0., 0., 0., 0., 0.)`
                               (m)
 
-  - `Delta_R/y`
+- `Delta_R/y`
     - type: *(floatX)*
     - scope: *required*
     - description: Error in vertical wavefront curvature radius.

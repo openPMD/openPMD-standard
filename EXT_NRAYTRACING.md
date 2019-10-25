@@ -98,17 +98,17 @@ Particle Records
 - `time/`
     - type: Required *(real)*
     - description: Time relative to `timeOffset`. That is, absolute time = `time + timeOffset`.
-    - unitDimension: [unitless] (0., 0., 0., 1., 0., 0., 0., 0.)
+    - unitDimension: [s] (0., 0., 1., 0., 0., 0., 0.)
     - unitSI: 1.0        
     
 - `timeOffset/`
     - type: Optional *(real)*
     - description: Base time from which `time` is measured. That is, absolute time = `time + timeOffset`. Assumed zero if not present. Some programs will use the `timeOffset` to store the **reference time** in which case `time` will then be the deviation from the reference.
-    - unitDimension: [unitless] (0., 0., 0., 1., 0., 0., 0., 0.)
+    - unitDimension: [s] (0., 0., 1., 0., 0., 0., 0.)
     - unitSI: 1.0            
 
 - `weight/`
     - type: Required *(real)*
     - description: Weight of the neutron ray with the physical unit of intensity, neutrons per second. When simulating a source with a given intensity, this intensity is split up into weights of the neutron rays that will be simulated.
-    - unitDimension: [unitless] (0., 0., 0., 1., 0., 0., 0., 0.)
+    - unitDimension: [unitless] (0., 0., 0., 0., 0., 0., 0.)
     - unitSI: 1.0

@@ -78,20 +78,20 @@ Particle Records
     
 - `spin/`
     - type: Optional 
-    - description: Particle spin direction, no unit
+    - description: Particle polarisation direction, no unit
     - `x` 
         - type: Optional *(real)*
-        - description: x component of spin
+        - description: x component of polarisation
         - unitDimension: [unitless] (0., 0., 0., 0., 0., 0., 0.)
         - unitSI: 1.0
     - `y` 
         - type: Optional *(real)*
-        - description: y component of spin
+        - description: y component of polarisation
         - unitDimension: [unitless] (0., 0., 0., 0., 0., 0., 0.)
         - unitSI: 1.0
     - `z` 
         - type: Optional *(real)*
-        - description: z component of spin
+        - description: z component of polarisation
         - unitDimension: [unitless] (0., 0., 0., 0., 0., 0., 0.)
         - unitSI: 1.0        
     
@@ -110,5 +110,5 @@ Particle Records
 - `weight/`
     - type: Required *(real)*
     - description: Weight of the neutron ray with the physical unit of intensity, neutrons per second. When simulating a source with a given intensity, this intensity is split up into weights of the neutron rays that will be simulated.
-    - unitDimension: [unitless] (0., 0., 0., 0., 0., 0., 0.)
+    - unitDimension: [neutrons/s] (0., 0., 0., 0., 0., 0., 0.)
     - unitSI: 1.0

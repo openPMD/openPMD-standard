@@ -104,7 +104,7 @@ electric field `mesh records`.
                               if attribute `Fourier domain` is 'time', or
                               `unitDimension = (0., -1,0, 0., 0., 0., 0., 0.)`
                               ((J / eV)^{1/2} / m  = m^{-1})
-                              if attribute `Fourier domain` is 'frequency`.
+                              if attribute `temporal domain` is 'frequency`.
  
  - `E_imag/x` and `E_imag/y`
     - type: *(floatX)* or *(intX)* or *(uintX)*

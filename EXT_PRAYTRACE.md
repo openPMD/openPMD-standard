@@ -8,9 +8,7 @@ Introduction
 ------------
 
 This extension to the openPMD addresses the domain-specific requirements
-met in raytracing codes (e.g. OASYS). Each ray has the information stored
-in its own record, e.g. data/1/particles/rays/1...nRays/ and therefore
-has to have the same length.
+met in photon raytracing codes (e.g. Shadow3). 
 
 Particle Based Records (Fields)
 ---------------------------
@@ -99,19 +97,19 @@ Optional
 		- description: *x-* direction
 		- scope: *required*
 		- unitSI: 1.0
-		- unitDimension: [m] (1., 0., 0., 0., 0., 0., 0.)
+		- unitDimension: [unitless] (0., 0., 0., 0., 0., 0., 0.)
 	- `y`
 		- type: *(floatX)*
 		- description: *x-* direction
 		- scope: *required*
 		- unitSI: 1.0
-		- unitDimension: [m] (1., 0., 0., 0., 0., 0., 0.)
+		- unitDimension: [unitless] (0., 0., 0., 0., 0., 0., 0.)
 	- `z`
 		- type: *(floatX)*
 		- description: *x-* direction
 		- scope: *required*
 		- unitSI: 1.0
-		- unitDimension: [m] (1., 0., 0., 0., 0., 0., 0.)
+		- unitDimension: [unitless] (0., 0., 0., 0., 0., 0., 0.)
 
 - `eFieldSPolarisation/`
 	- `x`
@@ -133,7 +131,7 @@ Optional
 		- unitSI: 1.0
 		- unitDimension: [sqrt(V / m) = sqrt(kg m s^-3 A^-1)] (1/2, 1/2, -3/2, -1/2, 0., 0., 0.)
 
-- `eFieldPPolarisations/`
+- `eFieldPPolarisation/`
 	- `x`
 		- type: *(floatX)*
 		- description: P polarised E field, *x* component
@@ -153,7 +151,7 @@ Optional
 		- unitSI: 1.0
 		- unitDimension: [sqrt(V / m) = sqrt(kg m s^-3 A^-1)] (1/2, 1/2, -3/2, -1/2, 0., 0., 0.)
 
-- `photonEnergy`
+- `photon_energy`
 	- type: *(floatX)*
 	- description: energy, self-explanatory
 	- scope: *required*
@@ -182,8 +180,6 @@ The following additional attributes are optional.
 	- type: *bool*
 	- description: logical array whether ray is dead or alive
 	- scope: *optional*
-	- unitSI: 1.0
-	- unitDimension: [unitless] (0., 0., 0., 0., 0., 0., 0.)
 
 - `opticalPath`
 	- type: array *(string)*

@@ -26,7 +26,7 @@ On the `series` object, set the following attributes:
     - allowed values:
       - `time`: The field is given for the time domain.
       - `frequency`: The field is given for the frequency (energy) domain.
-
+      
   - `spatial domain`
     - type: *(string)*
     - scope: *required*
@@ -35,53 +35,42 @@ On the `series` object, set the following attributes:
     - allowed values:
       - `r`: The field is given in cartesian space.
       - `k`: The field is given in reciprocmal space.
-
-Additional records
-------------------
-- `z coordinate`
+      
+  - `z coordinate`
     -type: *(floatX)*
     -description: The z coordinate with respect to the beamline origin.
     - `unitDimension = (1., 0., 0., 0., 0., 0., 0.)` (m)
     - scope: *required*
 
-- `photon energy`
+  - `photon energy`
     - type: *(floatX)* or *(intX)* or *(uintX)*
     - description: The central photon energy of the wavefield.
-    - `unitDimension = (1., 2., -2., 0., 0., 0., 0.)` (J = kg m^2/s^2)
-    - `unitSI = 1.602176634e−19`
     - scope: *required*
+    - Unit: If not otherwise specified, units of eV are assumed.
 
-- `R/x`
+  - `radius of curvature in x`
     - type: *(floatX)*
     - scope: *required*
-    - description: Horizontal wavefront curvature radius.
-    - advice to implementors: must have
-                              `unitDimension = (1., 0., 0., 0., 0., 0., 0.)`
-                              (m)
+    - description: Horizontal wavefront curvature radius in.
+    - Unit: If not otherwise specified, units of meter are assumed.
 
-- `R/y`
+  - `radius of curvature in y`
     - type: *(floatX)*
     - scope: *required*
     - description: Vertical wavefront curvature radius.
-    - advice to implementors: must have
-                              `unitDimension = (1., 0., 0., 0., 0., 0., 0.)`
-                              (m)
+    - Unit: If not otherwise specified, units of meter are assumed.
 
-- `Delta_R/x`
+  - `Delta radius of curvature in x`
     - type: *(floatX)*
     - scope: *required*
     - description: Error in horizontal wavefront curvature radius.
-    - advice to implementors: must have
-                              `unitDimension = (1., 0., 0., 0., 0., 0., 0.)`
-                              (m)
+    - Unit: If not otherwise specified, units of meter are assumed.
 
-- `Delta_R/y`
+  - `Delta radius of curvature in y`
     - type: *(floatX)*
     - scope: *required*
     - description: Error in vertical wavefront curvature radius.
-    - advice to implementors: must have
-                              `unitDimension = (1., 0., 0., 0., 0., 0., 0.)`
-                              (m)
+    - Unit: If not otherwise specified, units of meter are assumed.
 
 
 Mesh records
@@ -101,7 +90,7 @@ electric field `mesh records`.
     - advice to implementors: must have
                               `unitDimension = (0., 0.5, -1.5, 0., 0., 0., 0.)`
                               (W^{1/2} / m = (kg / s^3)^{1/2})
-                              if attribute `Fourier domain` is 'time', or
+                              if attribute `temporal domain` is 'time', or
                               `unitDimension = (0., -1,0, 0., 0., 0., 0., 0.)`
                               ((J / eV)^{1/2} / m  = m^{-1})
                               if attribute `temporal domain` is 'frequency`.
@@ -114,7 +103,7 @@ electric field `mesh records`.
     - advice to implementors: must have
                               `unitDimension = (0., 0.5, -1.5, 0., 0., 0., 0.)`
                               (W^{1/2} / m = (kg / s^3)^{1/2})
-                              if attribute `Fourier domain` is 'time', or
+                              if attribute `temporal domain` is 'time', or
                               `unitDimension = (0., -1,0, 0., 0., 0., 0., 0.)`
                               ((J / eV)^{1/2} / m  = m^{-1})
                               if attribute `temporal domain` is 'frequency`.

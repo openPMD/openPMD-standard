@@ -349,7 +349,7 @@ meshes):
                      three-dimensional record where the last axis corresponds
                      to the `z` direction, the second axis correspond to the
                      `r` direction and where the first axis corresponds to
-                     the azimuthal mode. (This last axis has length `2m+1`,
+                     the azimuthal mode. (This last axis has length `2m-1`,
                      where `m` is the number of modes used. By convention,
                      this first stores the real part of the mode `0`, then
                      the real part of the mode `1`, then the imaginary part

@@ -1,5 +1,6 @@
 BeamPhysics Extension to the openPMD Standard for Describing Particle Beams, Photons, and External Fields
 =========================================================================================================
+openPMD extension name: `BeamPhysics`
 
 Overview
 --------

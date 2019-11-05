@@ -14,8 +14,8 @@
 
 ## Affected Components
 
-- `base`
-- `EXT: ...`
+- [ ] `base`
+- [ ] `EXT: ...`
 
 ## Logic Changes
 
@@ -27,7 +27,7 @@
 *What would a writer need to change?*
 *Does this pull request change the interpretation of existing data writers?*
 
-- `openPMD-api` (upcoming): https://github.com/openPMD/openPMD-api/...
+- [ ] `openPMD-api`: https://github.com/openPMD/openPMD-api
 
 ## Reader Changes
 
@@ -35,12 +35,12 @@
 
 *What would a reader need to change? Link implementation examples!*
 
-- `openPMD-validator`: https://github.com/openPMD/openPMD-validator/...
-- `openPMD-viewer`: https://github.com/openPMD/openPMD-viewer/...
-- `yt`: https://github.com/yt-project/yt/...
-- `VisIt`: https://github.com/openPMD/openPMD-visit-plugin
-- `openPMD-api` (upcoming): https://github.com/openPMD/openPMD-api/...
-- `XDMF` (upcoming): https://github.com/openPMD/openPMD-converter/...
+- [ ] `openPMD-validator`: https://github.com/openPMD/openPMD-validator
+- [ ] `openPMD-viewer`: https://github.com/openPMD/openPMD-viewer
+- [ ] `yt`: https://github.com/yt-project/yt
+- [ ] `VisIt`: https://github.com/openPMD/openPMD-visit-plugin
+- [ ] `converter`: https://github.com/openPMD/openPMD-converter
+- [ ] `openPMD-api`: https://github.com/openPMD/openPMD-api
 
 ## Data Updater
 
@@ -48,4 +48,4 @@
 *Is this change possible to be expressed in a way, that an automated tool can update the file?*
 *Link code/pull requests that implement the upgrade logic!*
 
-- https://github.com/openPMD/openPMD-updater/...
+- [ ] https://github.com/openPMD/openPMD-updater

@@ -375,15 +375,13 @@ meshes):
     - description: this attribute assigns human-readible labels for the
                    indices `i`, `j`, `k`, etc. denoting the axes of a mesh
                    `A_{i,j,k}`
-    - advice to implementors: dimensions shall be ordered from slowest to
-                              fastest varying index when accessing the mesh
-                              contiguously (as 1D flattened logical memory)
-    - advice to implementors: if you access a ND array in C-like languages,
-                              a matrix `A[i,j,k]` will have its first index
-                              as the slowest varying index (e.g. `i`);
-    -                         if you access a ND array Fortran-like,
-                              a matrix `A(i,j,k)` will have its last index
-                              as the slowest varying index (e.g. `k`);
+    - advice to implementors:
+      - dimensions shall be ordered from slowest to fastest varying index when
+        accessing the mesh contiguously (as 1D flattened logical memory)
+      - if you access a ND array in C-like languages, a matrix `A[i,j,k]` will
+        have its first index as the slowest varying index (e.g. `i`)
+      - if you access a ND array Fortran-like, a matrix `A(i,j,k)` will have
+        its last index as the slowest varying index (e.g. `k`)
     - examples:
       - 3D `cartesian` mesh accessed in C-like as `A[z,y,x]` will have `z` as
         its slowest varying index name and `axisLabels`: `("z", "y", "x")`

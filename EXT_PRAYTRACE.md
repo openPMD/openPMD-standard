@@ -45,7 +45,7 @@ Required
 	- `x`, `y`, `z`
 - `photonEnergy`
 - `phase`
-	- `sPol`, `pPol`
+	- `sPol_r`, `sPol_i`, `pPol_r`, `pPol_i`
 	
 Optional
 
@@ -161,15 +161,27 @@ Optional
 	- unitDimension: [J = kg m^2 s^-2] (2., 1., -2., 0., 0., 0., 0.)
 
 - `phase/`
-	- `sPol`
-		- type: *(complexX)*
-		- description: phase for S polarisation
+	- `sPol_r`
+		- type: *(floatX)*
+		- description: real part of phase for S polarisation
 		- scope: *required*
 		- unitSI: 1.0
 		- unitDimension: [unitless] (0., 0., 0., 0., 0., 0., 0.)
-	- `pPol`
-		- type: *(complexX)*
-		- description: phase for P polarisation
+	- `sPol_i`
+		- type: *(floatX)*
+		- description: imaginary part of phase for S polarisation
+		- scope: *required*
+		- unitSI: 1.0
+		- unitDimension: [unitless] (0., 0., 0., 0., 0., 0., 0.)
+	- `pPol_r`
+		- type: *(floatX)*
+		- description: real part of phase for P polarisation
+		- scope: *required*
+		- unitSI: 1.0
+		- unitDimension: [unitless] (0., 0., 0., 0., 0., 0., 0.)
+	- `pPol_i`
+		- type: *(floatX)*
+		- description: imaginary part of phase for P polarisation
 		- scope: *required*
 		- unitSI: 1.0
 		- unitDimension: [unitless] (0., 0., 0., 0., 0., 0., 0.)
@@ -240,7 +252,7 @@ The following additional attributes are optional.
 	
 - `wavevector/`
 	- `k`
-		- type: *(complexX)*
+		- type: *(floatX)*
 		- description: |k|, magnitude of the wavevector
 		- scope: *optional*
 		- unitSI: 1.0

@@ -1,11 +1,11 @@
 BeamPhysics Extension to the openPMD Standard for Describing Particle Beams, Photons, and External Fields
 =========================================================================================================
-openPMD extension name: `BeamPhysics`
 
 Overview
 --------
 
-The `BeamPhysics` extension to the openPMD standard is meant for describing particles and fields commonly encountered in accelerator physics simulations.
+The `BeamPhysics` extension to the openPMD standard is meant for describing particles and fields commonly encountered
+in accelerator physics simulations.
 
 How to Use this Extension
 -------------------------
@@ -257,11 +257,10 @@ Notes
 
 - AC fields can be described using complex numbers. The actual field is the real part of
 
-    Z &ast; Exp[-2 pi i f &ast; (t - t0)]
+    Z &ast; Exp[-2 &ast; pi &ast; I &ast; (f &ast; t + phi)]
 
-where `Z` is the complex field, `f` is the Oscillation frequency, `t` is the time, and `t0` is a reference time.
+where `Z` is the field complex number, `f` is the Oscillation frequency, `t` is the time, and `phi0` is a reference time.
 
-Software that writes complex data must use native complex storage for formats that support complex numbers. For formats that do not have native complex support (for example, HDF5), complex numbers are to be stored using subgroups labeled `r` and `i` for real and imaginary respectively. 
 
 `External Fields Group` Attributes
 ----------------------------------

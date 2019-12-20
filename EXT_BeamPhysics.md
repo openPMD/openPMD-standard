@@ -261,7 +261,7 @@ Notes
 
 where `Z` is the complex field, `f` is the Oscillation frequency, `t` is the time, and `t0` is a reference time.
 
-Software that writes complex data must use native complex storage for formats that support complex numbers. For formats that do not have native complex support (for example, HDF5), complex numbers are to be stored using subgroups labeled `r` and `i` for real and imaginary respectively. 
+Note: To ensure portability, complex data types are to be stored in a group with datasets (or constant record components if the values are constant) labeled "re" for the real part and "im" for the imaginary part. Using "re" and "im" datasets is mandated even if the storage format supports native complex numbers.
 
 `External Fields Group` Attributes
 ----------------------------------

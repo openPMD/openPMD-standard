@@ -28,13 +28,15 @@ Definitions
 
 - **Lattice coordinate system**: The curvilinear coordinate system whose "longitudinal" coordinate (**s**) typically runs through the nominal centers of the elements in the machine. The **lattice** coordinate system is often used to describe particle positions.
 
-- **Macro-particle**: Macro-particles are simulation particles that represent multiple real particles. The number of real particles that a macro-particle represents affects the calculation of the field due to a macro-particle but does not affect tracking.
+- **Macro-particle**: Macro-particles are simulation particles that represent multiple real particles. The number of real particles that a macro-particle represents affects the calculation of the field due to a macro-particle.
 
 - **Particle coordinate system**: The coordinate system with respect to which particles positions and momenta are given. Some programs use the **global coordinate system** as the **particle coordinate system** while other programs use a coordinate system that is derived from the curvilinear **lattice coordinate system**.
 
 - **Polar coordinates**: **Polar** coordinates are **(r, theta, phi)** where **r** is the radius, **theta** is the angle from the **z** or **s** axis, and **phi** is the projected azimuthal angle in the **(x, y)** plane.
 
 - **Particle Group**: The **Particle Group** is a group for specifying a set of particles such as the particles in a bunch. The Beam Physics extension defines a standard for the  **Particle Group** as discussed below.
+
+- **Reference Time**, **Reference Energy**, etc. Some programs have a reference from which various quantities are measured. For example, the **Reference Position** may be defined as the position of the center of the bunch under consideration.
 
 Notes:
 ------
@@ -205,7 +207,7 @@ The following records store data on a particle-by-particle basis.
 
 - `timeOffset/`
     - type: Optional *(real)*
-    - description: Base time from which `time` is measured. That is, absolute time = `time + timeOffset`. Assumed zero if not present. Some programs will use the `timeOffset` to store the **reference time** in which case `time` will then be the deviation from the reference.
+    - description: Base time from which `time` is measured. That is, absolute time = `time + timeOffset`. Assumed zero if not present. Some programs will use the `timeOffset` to store the **reference time** in which case `time` will then be the deviation from the reference. [Note: The **reference time** may depend upon the longitudinal position of a particle and so may be different for different particles.]
 
 - `velocity/`
   - type: Optional 3-vector *(real)*
@@ -213,7 +215,7 @@ The following records store data on a particle-by-particle basis.
 
 - `weight/`
     - type: Optional *(real)*
-    - description: If macro-particles are being simulated, the `weight` is the total charge of a macro-particle. This is proportional to the number of particles that a macro-particle represents. Also see `charge`.
+    - description: Typically used when macro-particles are being simulated. The `weight` is a weighting factor to be used in calculations and will generally (but not necessarily) be proportional to the number of particles a macro-particle represents. For example, the `weight` may be the total charge of a macro-particle. Or the `weight` could be the intensity (in, say, particles per second) represented by a macro-particle. Also see `charge`.
 
 
 Non Per-Particle Records of the `Particle Group`

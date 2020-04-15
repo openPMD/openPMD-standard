@@ -142,6 +142,10 @@ The following records store data on a particle-by-particle basis.
   - description: Base momentum from which `momentum` is measured. That is, True momentum = `momentum + momentumOffset`. Assumed zero if not present.
   - components: (`x`, `y`, `z`).
 
+-`particleID`
+  - type: Optional *(int)*
+  - description: Some programs give each particle an ID number. This field can be used to record that number.
+
 - `photonPolarizationAmplitude/`
   - type: Optional 2-vector *(real)*
   - description: Polarization amplitude of the photon.

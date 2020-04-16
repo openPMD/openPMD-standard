@@ -142,9 +142,9 @@ The following records store data on a particle-by-particle basis.
   - description: Base momentum from which `momentum` is measured. That is, True momentum = `momentum + momentumOffset`. Assumed zero if not present.
   - components: (`x`, `y`, `z`).
 
--`particleID`
+-`id`
   - type: Optional *(int)*
-  - description: Some programs give each particle an ID number. This field can be used to record that number.
+  - description: Some programs give each particle an ID number. This field can be used to record that number. The `id` parameter is defined in the openPMD base standard and is just mentioned here for completeness sake. See the openPMD base standard for more details.
 
 - `photonPolarizationAmplitude/`
   - type: Optional 2-vector *(real)*

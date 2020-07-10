@@ -54,16 +54,23 @@ The following records are defined for the file root group.
 
 - `latticeName`
   - type: Optional *(string)*
-  - description: The name of the lattice.
+  - description: The name of the beamline.
 
 - `latticeFile`
   - type: Optional *(string)*
   - description: The location of the root lattice file.
+  
+- `particlesPath`
+  - type: Optional *(string)*
+  - value: `rays/`
+  - description: name of the particles path
 
 Particle Group Standard
 =======================
 
-The **Particle Group** is a group for specifying a set of particles such as the particles in a bunch. Multiple **Particle Groups** can be defined in a file. The path for a **Particle Group** is given by the **basePath** and **particlesPath** attributes in the file root group as discussed in the base OpenPMD standard. For example, if **basePath** is  `/data/%T/`, and **ParticlesPath** is `particles/`, then **Particle Groups** paths would be of the form `/data/%T/particles/` where `%T` is an integer. EG: `/data/37/particles/`.
+The **Particle Group** is a group for specifying a set of rays. Multiple **Particle Groups** can be defined in a file. The path for a **Particle Group** is given by the **basePath** and **particlesPath** attributes in the file root group as discussed in the base OpenPMD standard. For example, if **basePath** is  `/data/%T/`, and **ParticlesPath** is `particles/`, then **Particle Groups** paths would be of the form `/data/%T/particles/` where `%T` is an integer. EG: `/data/37/particles/`.
+
+In case of photon raytracing extension, the default **particlesPath** is `rays/`. EG: `data/%T/rays/`.
 
 
 `Particle Group` Attributes
@@ -71,76 +78,25 @@ The **Particle Group** is a group for specifying a set of particles such as the 
 
 For each **particle group** the following attributes are defined:
 
-- `chargeLive`
-  - type: Optional *(real)*
-  - description: The total charge of all the live particles.
-
-- `chargeUnitSI`
-  - type: *(real)*. Only required if `chargeLive` or `totalCharge` is present.
-  - description: Unit conversion factor to multiply `chargeLive` or `totalCharge` by in order to convert to SI units.
-
-- `latticeElementName`
-  - type: Optional *(string)*
-  - description: The name of the lattice element the particle are in. This only makes sense if all particles are in the same element. [Keep in mind that if particles are lost and the lost particles are also included in the file, not all particles may be in the same element.] Also see: `locationInElement`.
-
 - `numParticles`
   - type: Required *(int)*
   - description: The number of particles in the group.
 
 - `speciesType`
   - type: Required *(string)*
+  - value: `photon`
   - description: The name of the particle species. Species names must conform to the `SpeciesType` extension.
-  - Example: `electron`, `H2O`.
-
-- `totalCharge`
-  - type: Optional *(real)*
-  - description: The total charge of all the particles alive and dead.
 
 Per-Particle Records of the `Particle Group`
 --------------------------------------------
 
 The following records store data on a particle-by-particle basis.
 
-- `branchIndex/`
-  - type Optional *(int)*
-  - description: The unique index number assigned to the lattice branch the particle is in.
-
-- `chargeState/`
-  - type: Optional *(int)*
-  - description: The charge state of the particles. Used for atoms and molecules. Not needed if the charge can be computed from knowledge of the `SpeciesType` (That is, is a fundamental particle). Also see `weight`.
-
-- `electricField/`
-    - type: Optional 3-vector *(real)*
-    - description: External electric field at the particle.
-    - components: (`x`, `y`, `z`).
-
- - `elementIndex/`
-   - type Optional *(int)*
-   - description: The unique index number assigned to the lattice element the particle is in.
-
-- `magneticField/`
-    - type: Optional 3-vector *(real)*
-    - description: External magnetic field at the particle.
-    - components: (`x`, `y`, `z`).
-
-- `locationInElement`
-   - type Optional *(integer)*
-   - description: The program generating the data file may model a lattice element using a "hard edge" model where the fringe fields at the ends of the element are modeled as having zero longitudinal length. In such a case, if a particle is at the end of the lattice element, it is important to know if the particle is outside of the fringe or if the particle is inside the fringe within the body of the element. Note that with a hard edge fringe, the longitudinal **s**-position does not necessarily provide enough information to determine where a particle is with respect to an edge field. Another situation where `locationInElement` is useful is with zero length elements that affect the particle transport (such as zero length multipole elements). If the program generating the data file does **not** use any hard edge models or zero length non-marker elements, `locationInElement` should not be present since this parameter is meaningless in this case.
-   - Possible values:    
-     - `-1`: Upstream end of element outside of the upstream fringe edge.
-     - `0`: Inside the element.
-     - `1`: Downstream end of the element outside the downstream fringe edge.
-
 - `momentum/`
   - type: Optional 3-vector *(real)*
   - description: The momentum vector of the particles relative to `momentumOffset`
   - components: (`x`, `y`, `z`).
   - true momentum = `momentum + momentumOffset`
-
-- `momentumOffset/`
-  - type: Optional 3-vector *(real)*
-  - description: Base momentum from which `momentum` is measured. That is, True momentum = `momentum + momentumOffset`. Assumed zero if not present.
-  - components: (`x`, `y`, `z`).
 
 -`id`
   - type: Optional *(int)*
@@ -156,10 +112,6 @@ The following records store data on a particle-by-particle basis.
   - description: Polarization phase of the photon.
   - components: (`x`, `y`).
 
-- `sPosition`
-  - type: Optional *(real)*
-  - description: The value of the longitudinal position in the curvilinear lattice coordinate system.
-
 - `totalMomentum/`
   - type: Optional *(real)*
   - description: Total momentum relative to the totalMomentumOffset. That is, True total momentum = `totalMomentum + totalMomentumOffset`. Assumed zero if not present.
@@ -168,26 +120,9 @@ The following records store data on a particle-by-particle basis.
   - type: Optional *(real)*
   - description: Base total momentum from which `totalMomentum` is measured. That is, True total momentum = `totalMomentum + totalMomentumOffset`. Some programs will use `totalMomentumOffset/` to store the **reference momentum** in which case `totalMomentum` will then be the deviation from the referece.
 
-- `particleCoordinatesToGlobalTransformation/`
-  - type: Optional group.
-  - description: Defines the transformation from the coordinates used to describe a particle to the **global** coordinate system.
-  - `R_frame`:
-    - Required 3-vector *(real)* Attribute
-    - description: Specifying the (`x`, `y`, `z`) position of the coordinate origin that the particles are measured with respect to in the **global** coordinate frame.
-  - `W_matrix`:
-    - Required 3 x 3 matrix *(real)*
-    - description: Dataset holding the 3x3 transformation matrix from  coordinates to **global**
-  coordinates.
-  - Position Transformation: Position_global = W_matrix * (position + positionOffset) + R_frame
-  - Momentum transformation: Momentum_global = W_matrix * (momentum + momentumOffset)
-
 - `particleStatus/`
     - type: Optional *(int)*
     - description: Integer indicating whether a particle is "alive" or "dead" (for example, has hit the vacuum chamber wall). A value of one indicates the particle is alive and any other value indicates that the particle is dead. Programs are free to distinguish how a particle died by assigning different non-unit values to `particleStatus`. For example, a program might want to differentiate between particles that are dead due to hitting the side walls versus reversing the direction longitudinally in an RF cavity.
-
-- `pathLength/`
-    - type: Optional *(real)*
-    - description: Length that a particle has traveled.
 
 - `position/`
     - type: Required 3-vector *(real)*
@@ -200,26 +135,9 @@ The following records store data on a particle-by-particle basis.
     - description: Offset for each particle position component relative to the coordinate origin. Assumed zero if not present.
     - components: (`x`, `y`, `z`)
 
-- `spin/`
-    - type: Optional 3-vector *(real)*
-    - description: Particle spin.
-    - components: (`x`, `y`, `z`) or (`r`, `theta`, `phi`).
-
-- `time/`
-    - type: Optional *(real)*
-    - description: Time relative to `timeOffset`. That is, absolute time = `time + timeOffset`.
-
-- `timeOffset/`
-    - type: Optional *(real)*
-    - description: Base time from which `time` is measured. That is, absolute time = `time + timeOffset`. Assumed zero if not present. Some programs will use the `timeOffset` to store the **reference time** in which case `time` will then be the deviation from the reference. [Note: The **reference time** may depend upon the longitudinal position of a particle and so may be different for different particles.]
-
 - `velocity/`
   - type: Optional 3-vector *(real)*
   - description: (`x`, `y`, `z`) velocity vector. Meant to be used for photons where using `momentum` is not appropriate.
-
-- `weight/`
-    - type: Optional *(real)*
-    - description: Typically used when macro-particles are being simulated. The `weight` is a weighting factor to be used in calculations and will generally (but not necessarily) be proportional to the number of particles a macro-particle represents. For example, the `weight` may be the total charge of a macro-particle. Or the `weight` could be the intensity (in, say, particles per second) represented by a macro-particle. Also see `charge`.
 
 
 Non Per-Particle Records of the `Particle Group`

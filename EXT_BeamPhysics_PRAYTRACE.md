@@ -1,4 +1,6 @@
 BeamPhysics Extension to the openPMD Standard for Describing Particle Beams, Photons, and External Fields
+
+Additional definitions for photon raytracing
 =========================================================================================================
 openPMD extension name: `BeamPhysics`
 

@@ -139,6 +139,9 @@ The following records store data on a particle-by-particle basis.
   - type: Optional 3-vector *(real)*
   - description: (`x`, `y`, `z`) velocity vector. Meant to be used for photons where using `momentum` is not appropriate.
 
+- `wavelength/`
+  - type: Optional *(real)*
+  - description: Wavelength of the ray.
 
 Non Per-Particle Records of the `Particle Group`
 ------------------------------------------------

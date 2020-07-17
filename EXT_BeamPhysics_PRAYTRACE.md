@@ -103,14 +103,14 @@ The following records store data on a particle-by-particle basis.
   - description: Some programs give each particle an ID number. This field can be used to record that number. The `id` parameter is defined in the openPMD base standard and is just mentioned here for completeness sake. See the openPMD base standard for more details.
 
 - `photonPolarizationAmplitude/`
-  - type: Optional 2-vector *(real)*
-  - description: Polarization amplitude of the photon.
-  - components: (`x`, `y`).
+  - type: Required 3-vector *(real)*
+  - description: Electric field amplitude.
+  - components: (`x`, `y`, `z`).
 
 - `photonPolarizationPhase/`
-  - type: Optional 2-vector *(real)*
-  - description: Polarization phase of the photon.
-  - components: (`x`, `y`).
+  - type: Required 3-vector *(real)*
+  - description: Electric field phase.
+  - components: (`x`, `y`, `z`).
 
 - `totalMomentum/`
   - type: Optional *(real)*
@@ -140,7 +140,7 @@ The following records store data on a particle-by-particle basis.
   - description: (`x`, `y`, `z`) velocity vector. Meant to be used for photons where using `momentum` is not appropriate.
 
 - `wavelength/`
-  - type: Optional *(real)*
+  - type: Required *(real)*
   - description: Wavelength of the ray.
 
 Non Per-Particle Records of the `Particle Group`
@@ -168,82 +168,3 @@ The following attributes can be used with any dataset:
 - `maxValue`:
   - type: Optional *(real)*
   - description: Maximum of the data.
-
-External Mesh Fields Groups
-===========================
-
-The **external mesh field group** is a group for specifying electric and/or magnetic fields, due to a lattice element, at regularly spaced grid points. For example, the fields due to an RF cavity or the fields due to a DC magnet. Multiple **external mesh field groups** can be defined in a file. The path for a **external mesh field group** is given by the **externalFieldPath** in the file root group:
-- `externalFieldPath`
-  - type: Required if there are external mesh field group(s) *(string)*
-  - description: Base path to the external mesh field groups. Use the **%T** construct if there are multiple meshes present.
-  - example: `/ExternalFieldMesh/%T/`. Base paths to the external fields group, in this case, would be `/ExternalFieldMesh/01/`, etc.
-  - example: `/ExternalFieldMesh/`. In this case since there is no `%T` in the name, there is only one external fields group.
-
-Notes
------
-
-- AC fields can be described using complex numbers. The actual field is the real part of
-
-    Z &ast; Exp[-2 pi i f &ast; (t - t0)]
-
-where `Z` is the complex field, `f` is the Oscillation frequency, `t` is the time, and `t0` is a reference time.
-
-Note: To ensure portability, complex data types are to be stored in a group with datasets (or constant record components if the values are constant) labeled "r" for the real part and "i" for the imaginary part. Exception: If the storage format supports native complex numbers, use the native storage. Note: HDF5 in particular does not have native support for complex numbers.
-
-`External Fields Group` Attributes
-----------------------------------
-
-- `gridCurvatureRadius`
-  - type: Optional *(real)*
-  - description: Only used if using **(x, y, z)** field components. A zero value (the default) indicates that the grid is rectilinear. A non-zero value indicates that the grid is curved. The curvature is in the **(x, z)** plane with positive **x** pointing away from the center of curvature if `gridCurvatureRadius` is positive and vice versa for negative values. `gridCurvatureRadius` is the radius for the lines **x = 0** at constant **y**.
-
-- `eleAnchorPt`
-  - type: Required *(string)*
-  - description: Point on the lattice element that the grid origin is referenced to. Possible values are: `beginning`, `center`, or `end`. The `beginning` point is at the entrance end of the element, the `center` point is at the center of the element and the `end` point is at the exit end of the element. All three points are on the reference orbit.
-
-- `fieldScale`
-  - type: Optional *(real)*
-  - description: A scale factor that is used to scale the fields. Default is 1.
-
-- `fundamentalFrequency`
-  - type: Optional *(real)*
-  - description: The fundamental RF frequency. Used for AC fields.
-
-- `gridSpacing`
-  - type: Required 3-vector *(real)*
-  - description: Spacing between grid points.
-
-- `gridLowerBound`
-  - type: Required 3-vector *(int)*
-  - description: Lower bound of the grid index. Note: The grid upper bound will be `gridLowerBound` + `gridSize` - 1.
-
-- `gridSize`
-  - type: Required 3-vector *(int)*
-  - description: Size of the grid.
-
-- `gridOriginOffset`
-  - type: Required 3-vector *(real)*
-  - description: distance from `eleAnchorPt` to the grid origin point.
-
-- `harmonic`
-  - type: Required *(int)*
-  - description: Harmonic number of the fundamental frequency. A value of zero implies a DC field.
-
-- `name`
-  - type: Optional *(string)*
-  - description: Name to be used to identify the grid.
-
-- `RFphase`
-  - type Required if `harmonic` is not zero *(real)*
-  - description: Phase offset for oscillating fields. See the note above. Default is zero.
-
-Per-grid `External Fields Group` Records
-----------------------------------------
-
-- `magneticField`
-  - type: Optional 3-vector *(complex)*
-  - description: Magnetic field. If the field is DC, only the real part should be nonzero. The components of `magneticField` may be either **(x, y, z)** representing `Bx`, `By`, and `Bz` or **(r, theta, z)** representing `Br`, `Btheta`, and `Bz`. Each component contains a 3-dimensional table giving the field on a grid. When using **(x, y, z)** components, each component contains a  **(x, y, z)** spatial grid. When using **(r, theta, z)** components, each component contains a **(r, theta, z)** spatial grid. In this case, if the grid size in the `theta` direction is 1, the field is taken to be axially symmetric.
-
-- `electricField`
-  - type: Optional 3-vector *(complex)*
-  - description: Electric field. If the field is DC, only the real part should be nonzero. The components of `magneticField` may be either **(x, y, z)** representing `Ex`, `Ey`, and `Ez` or **(r, theta, z)** representing `Er`, `Etheta`, and `Ez`. Each component contains a 3-dimensional table giving the field on a grid. When using **(x, y, z)** components, each component contains a  **(x, y, z)** spatial grid. When using **(r, theta, z)** components, each component contains a **(r, theta, z)** spatial grid. In this case, if the grid size in the `theta` direction is 1, the field is taken to be axially symmetric.

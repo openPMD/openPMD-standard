@@ -115,7 +115,7 @@ Required
 - `momentum/`
   - type: Optional 3 x N-vector *(real)*
   - description: The momentum vector of the particles relative to `momentumOffset`
-  - components: numParticles rows and columns of (`x`, `y`, `z`).
+  - components: numParticles columns and rows of (`x`, `y`, `z`).
   - true momentum = `momentum + momentumOffset`
 
 -`id`
@@ -125,22 +125,22 @@ Required
 - `photonSPolarizationAmplitude/`
   - type: Required 3 x N-vector *(real)*
   - description: Electric field amplitude of s- polarized photons.
-  - components: numParticles rows and columns of (`x`, `y`, `z`).
+  - components: numParticles columns and rows of (`x`, `y`, `z`).
 
 - `photonSPolarizationPhase/`
   - type: Required 3 x N-vector *(real)*
   - description: Electric field phase of s- polarized photons.
-  - components: numParticles rows and columns of (`x`, `y`, `z`).
+  - components: numParticles columns and rows of (`x`, `y`, `z`).
 
 - `photonPPolarizationAmplitude/`
   - type: Required 3 x N-vector *(real)*
   - description: Electric field amplitude of p- polarized photons.
-  - components: numParticles rows and columns of (`x`, `y`, `z`).
+  - components: numParticles columns and rows of (`x`, `y`, `z`).
 
 - `photonPPolarizationPhase/`
   - type: Required 3 x N-vector *(real)*
   - description: Electric field phase of p- polarized photons.
-  - components: numParticles rows and columns of (`x`, `y`, `z`).
+  - components: numParticles columns and rows of (`x`, `y`, `z`).
 
 - `particleStatus/`
     - type: Optional 1 x N-vector *(int)*
@@ -148,14 +148,14 @@ Required
 
 - `position/`
     - type: Required 3 x N-vector *(real)*
-    - components: numParticles rows and columns of (`x`, `y`, `z`)
+    - components: numParticles columns and rows of (`x`, `y`, `z`)
     - description: particle Position relative to the `positionOffset`.
     That is, true position relative to the coordinate origin = `position + positionOffset`.
 
 - `direction`
   - type: Required 3 x N-vector *(real)*
-  - components: numParticles rows and columns of (`x`, `y`, `z`)
-  - description: `velocity` in beamphysics extension. 3 x N vector with columns being the direction in (`x`, `y`, `z`) respectively.
+  - components: numParticles columns and rows of (`x`, `y`, `z`)
+  - description: `velocity` in beamphysics extension. 3 x N vector with rows being the direction in (`x`, `y`, `z`) respectively.
 
 - `wavelength/`
   - type: Required 1 x N-vector *(real)*

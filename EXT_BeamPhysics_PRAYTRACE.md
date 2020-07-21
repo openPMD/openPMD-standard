@@ -113,52 +113,52 @@ Required
 ### Attributes
 
 - `momentum/`
-  - type: Optional N x 3-vector *(real)*
+  - type: Optional 3 x N-vector *(real)*
   - description: The momentum vector of the particles relative to `momentumOffset`
   - components: numParticles rows and columns of (`x`, `y`, `z`).
   - true momentum = `momentum + momentumOffset`
 
 -`id`
-  - type: Optional N x 1-vector *(int)*
+  - type: Optional 1 x N-vector *(int)*
   - description: Some programs give each particle an ID number. This field can be used to record that number. The `id` parameter is defined in the openPMD base standard and is just mentioned here for completeness sake. See the openPMD base standard for more details.
 
 - `photonSPolarizationAmplitude/`
-  - type: Required N x 3-vector *(real)*
+  - type: Required 3 x N-vector *(real)*
   - description: Electric field amplitude of s- polarized photons.
   - components: numParticles rows and columns of (`x`, `y`, `z`).
 
 - `photonSPolarizationPhase/`
-  - type: Required N x 3-vector *(real)*
+  - type: Required 3 x N-vector *(real)*
   - description: Electric field phase of s- polarized photons.
   - components: numParticles rows and columns of (`x`, `y`, `z`).
 
 - `photonPPolarizationAmplitude/`
-  - type: Required N x 3-vector *(real)*
+  - type: Required 3 x N-vector *(real)*
   - description: Electric field amplitude of p- polarized photons.
   - components: numParticles rows and columns of (`x`, `y`, `z`).
 
 - `photonPPolarizationPhase/`
-  - type: Required N x 3-vector *(real)*
+  - type: Required 3 x N-vector *(real)*
   - description: Electric field phase of p- polarized photons.
   - components: numParticles rows and columns of (`x`, `y`, `z`).
 
 - `particleStatus/`
-    - type: Optional N x 1-vector *(int)*
+    - type: Optional 1 x N-vector *(int)*
     - description: Integer indicating whether N-th particle is "alive" or "dead" (for example, has hit the vacuum chamber wall). A value of one indicates the particle is alive and any other value indicates that the particle is dead. Programs are free to distinguish how a particle died by assigning different non-unit values to `particleStatus`. For example, a program might want to differentiate between particles that are dead due to hitting the side walls versus reversing the direction longitudinally in an RF cavity.
 
 - `position/`
-    - type: Required N x 3-vector *(real)*
+    - type: Required 3 x N-vector *(real)*
     - components: numParticles rows and columns of (`x`, `y`, `z`)
     - description: particle Position relative to the `positionOffset`.
     That is, true position relative to the coordinate origin = `position + positionOffset`.
 
 - `direction`
-  - type: Required N x 3-vector *(real)*
+  - type: Required 3 x N-vector *(real)*
   - components: numParticles rows and columns of (`x`, `y`, `z`)
-  - description: `velocity` in beamphysics extension. N x 3 vector with columns being the direction in (`x`, `y`, `z`) respectively.
+  - description: `velocity` in beamphysics extension. 3 x N vector with columns being the direction in (`x`, `y`, `z`) respectively.
 
 - `wavelength/`
-  - type: Required N x 1-vector *(real)*
+  - type: Required 1 x N-vector *(real)*
   - description: Wavelength of the N-th ray.
 
 Particle Record Dataset Attributes

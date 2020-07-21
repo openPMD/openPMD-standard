@@ -92,69 +92,74 @@ Per-Particle Records of the `Particle Group`
 
 The following records store data on a particle-by-particle basis.
 
+### Scope
+
+Required
+
+- `position/`
+	- `x`, `y`, `z`
+- `direction/`
+	- `x`, `y`, `z`
+- `photonSPolarizationAmplitude/`
+	- `x`, `y`, `z`
+- `photonSPolarizationPhase/`
+	- `x`, `y`, `z`
+- `photonPPolarizationAmplitude/`
+	- `x`, `y`, `z`
+- `photonPPolarizationPhase/`
+	- `x`, `y`, `z`
+- `wavelength`
+	
+### Attributes
+
 - `momentum/`
-  - type: Optional 3-vector *(real)*
+  - type: Optional N x 3-vector *(real)*
   - description: The momentum vector of the particles relative to `momentumOffset`
-  - components: (`x`, `y`, `z`).
+  - components: numParticles rows and columns of (`x`, `y`, `z`).
   - true momentum = `momentum + momentumOffset`
 
 -`id`
-  - type: Optional *(int)*
+  - type: Optional N x 1-vector *(int)*
   - description: Some programs give each particle an ID number. This field can be used to record that number. The `id` parameter is defined in the openPMD base standard and is just mentioned here for completeness sake. See the openPMD base standard for more details.
 
-- `photonPolarizationAmplitude/`
-  - type: Required 3-vector *(real)*
-  - description: Electric field amplitude.
-  - components: (`x`, `y`, `z`).
+- `photonSPolarizationAmplitude/`
+  - type: Required N x 3-vector *(real)*
+  - description: Electric field amplitude of s- polarized photons.
+  - components: numParticles rows and columns of (`x`, `y`, `z`).
 
-- `photonPolarizationPhase/`
-  - type: Required 3-vector *(real)*
-  - description: Electric field phase.
-  - components: (`x`, `y`, `z`).
+- `photonSPolarizationPhase/`
+  - type: Required N x 3-vector *(real)*
+  - description: Electric field phase of s- polarized photons.
+  - components: numParticles rows and columns of (`x`, `y`, `z`).
 
-- `totalMomentum/`
-  - type: Optional *(real)*
-  - description: Total momentum relative to the totalMomentumOffset. That is, True total momentum = `totalMomentum + totalMomentumOffset`. Assumed zero if not present.
+- `photonPPolarizationAmplitude/`
+  - type: Required N x 3-vector *(real)*
+  - description: Electric field amplitude of p- polarized photons.
+  - components: numParticles rows and columns of (`x`, `y`, `z`).
 
-- `totalMomentumOffset/`
-  - type: Optional *(real)*
-  - description: Base total momentum from which `totalMomentum` is measured. That is, True total momentum = `totalMomentum + totalMomentumOffset`. Some programs will use `totalMomentumOffset/` to store the **reference momentum** in which case `totalMomentum` will then be the deviation from the referece.
+- `photonPPolarizationPhase/`
+  - type: Required N x 3-vector *(real)*
+  - description: Electric field phase of p- polarized photons.
+  - components: numParticles rows and columns of (`x`, `y`, `z`).
 
 - `particleStatus/`
-    - type: Optional *(int)*
-    - description: Integer indicating whether a particle is "alive" or "dead" (for example, has hit the vacuum chamber wall). A value of one indicates the particle is alive and any other value indicates that the particle is dead. Programs are free to distinguish how a particle died by assigning different non-unit values to `particleStatus`. For example, a program might want to differentiate between particles that are dead due to hitting the side walls versus reversing the direction longitudinally in an RF cavity.
+    - type: Optional N x 1-vector *(int)*
+    - description: Integer indicating whether N-th particle is "alive" or "dead" (for example, has hit the vacuum chamber wall). A value of one indicates the particle is alive and any other value indicates that the particle is dead. Programs are free to distinguish how a particle died by assigning different non-unit values to `particleStatus`. For example, a program might want to differentiate between particles that are dead due to hitting the side walls versus reversing the direction longitudinally in an RF cavity.
 
 - `position/`
-    - type: Required 3-vector *(real)*
-    - components: (`x`, `y`, `z`)
+    - type: Required N x 3-vector *(real)*
+    - components: numParticles rows and columns of (`x`, `y`, `z`)
     - description: particle Position relative to the `positionOffset`.
     That is, true position relative to the coordinate origin = `position + positionOffset`.
 
-- `positionOffset/`
-    - type: Optional 3-vector *(real)*
-    - description: Offset for each particle position component relative to the coordinate origin. Assumed zero if not present.
-    - components: (`x`, `y`, `z`)
-
-- `velocity/`
-  - type: Optional 3-vector *(real)*
-  - description: (`x`, `y`, `z`) velocity vector. Meant to be used for photons where using `momentum` is not appropriate.
+- `direction`
+  - type: Required N x 3-vector *(real)*
+  - components: numParticles rows and columns of (`x`, `y`, `z`)
+  - description: `velocity` in beamphysics extension. N x 3 vector with columns being the direction in (`x`, `y`, `z`) respectively.
 
 - `wavelength/`
-  - type: Required *(real)*
-  - description: Wavelength of the ray.
-
-Non Per-Particle Records of the `Particle Group`
-------------------------------------------------
-
-The following possible records of the `Particle Group` are for specifying properties of the entire group of particles.
-
-- `phaseSpaceFirstOrderMoment/`
-  - type: Optional 6-vector *(real)*
-  - description: First order beam moments of `(x, px, y, py, z, pz)`.
-
-- `phaseSpaceSecondOrderMoment/`
-  - type: Optional 6x6-matrix *(real)*
-  - description: Second order beam moments of `(x, px, y, py, z, pz)`.
+  - type: Required N x 1-vector *(real)*
+  - description: Wavelength of the N-th ray.
 
 Particle Record Dataset Attributes
 ----------------------------------

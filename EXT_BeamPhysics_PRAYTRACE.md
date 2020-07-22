@@ -118,7 +118,7 @@ Required
   - components: numParticles columns and rows of (`x`, `y`, `z`).
   - true momentum = `momentum + momentumOffset`
 
--`id`
+-`id/`
   - type: Optional 1 x N-vector *(int)*
   - description: Some programs give each particle an ID number. This field can be used to record that number. The `id` parameter is defined in the openPMD base standard and is just mentioned here for completeness sake. See the openPMD base standard for more details.
 

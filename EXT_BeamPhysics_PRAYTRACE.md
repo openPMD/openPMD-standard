@@ -62,15 +62,15 @@ The following records are defined for the file root group.
   
 - `particlesPath`
   - type: Optional *(string)*
-  - value: `rays/`
+  - value: `particles/rays/`
   - description: name of the particles path
 
 Particle Group Standard
 =======================
 
-The **Particle Group** is a group for specifying a set of rays. Multiple **Particle Groups** can be defined in a file. The path for a **Particle Group** is given by the **basePath** and **particlesPath** attributes in the file root group as discussed in the base OpenPMD standard. For example, if **basePath** is  `/data/%T/`, and **ParticlesPath** is `particles/`, then **Particle Groups** paths would be of the form `/data/%T/particles/` where `%T` is an integer. EG: `/data/37/particles/`.
+The **Particle Group** is a group for specifying a set of rays. Multiple **Particle Groups** can be defined in a file. The path for a **Particle Group** is given by the **basePath** and **particlesPath** attributes in the file root group as discussed in the base OpenPMD standard. For example, if **basePath** is  `/data/%T/`, and **ParticlesPath** is `particles/rays/`, then **Particle Groups** paths would be of the form `/data/%T/particles/rays` where `%T` is an integer. EG: `/data/37/particles/rays`.
 
-In case of photon raytracing extension, the default **particlesPath** is `rays/`. EG: `data/%T/rays/`.
+In case of photon raytracing extension, the default **particlesPath** is `particles/rays/`. EG: `data/%T/particles/rays/`.
 
 
 `Particle Group` Attributes
@@ -118,7 +118,7 @@ Required
   - components: numParticles columns and rows of (`x`, `y`, `z`).
   - true momentum = `momentum + momentumOffset`
 
-- `id`
+- `id/`
   - type: Optional 1 x N-vector *(int)*
   - description: Some programs give each particle an ID number. This field can be used to record that number. The `id` parameter is defined in the openPMD base standard and is just mentioned here for completeness sake. See the openPMD base standard for more details.
 

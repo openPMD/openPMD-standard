@@ -128,9 +128,9 @@ Required
   - components: numParticles columns and rows of (`x`, `y`, `z`).
 
 - `photonSPolarizationPhase/`
-  - type: Required 3 x N-vector *(real)*
+  - type: Required 2 x N-vector *(real)*
   - description: Electric field phase of s- polarized photons.
-  - components: numParticles columns and rows of (`x`, `y`, `z`).
+  - components: numParticles columns and rows of (`Real`, `Imaginary`).
 
 - `photonPPolarizationAmplitude/`
   - type: Required 3 x N-vector *(real)*
@@ -138,9 +138,9 @@ Required
   - components: numParticles columns and rows of (`x`, `y`, `z`).
 
 - `photonPPolarizationPhase/`
-  - type: Required 3 x N-vector *(real)*
+  - type: Required 2 x N-vector *(real)*
   - description: Electric field phase of p- polarized photons.
-  - components: numParticles columns and rows of (`x`, `y`, `z`).
+  - components: numParticles columns and rows of (`Real`, `Imaginary`).
 
 - `particleStatus/`
     - type: Optional 1 x N-vector *(int)*
@@ -154,7 +154,7 @@ Required
 
 - `direction`
   - type: Required 3 x N-vector *(real)*
-  - components: numParticles columns and rows of (`x`, `y`, `z`)
+  - components: numParticles columns and rows of (`x'`, `y'`, `z'`)
   - description: `velocity` in beamphysics extension. 3 x N vector with rows being the direction in (`x`, `y`, `z`) respectively.
 
 - `wavelength/`

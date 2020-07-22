@@ -99,15 +99,15 @@ Required
 - `position/`
 	- `x`, `y`, `z`
 - `direction/`
-	- `x`, `y`, `z`
+	- `x'`, `y'`, `z'`
 - `photonSPolarizationAmplitude/`
 	- `x`, `y`, `z`
 - `photonSPolarizationPhase/`
-	- `x`, `y`, `z`
+	- `Real`, `Imaginary`
 - `photonPPolarizationAmplitude/`
 	- `x`, `y`, `z`
 - `photonPPolarizationPhase/`
-	- `x`, `y`, `z`
+	- `Real`, `Imaginary`
 - `wavelength`
 	
 ### Attributes

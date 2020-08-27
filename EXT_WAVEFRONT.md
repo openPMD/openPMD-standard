@@ -27,8 +27,7 @@ electric field `mesh records`.
     - `x/` 
     - `y/` 
     - `z/`     
-  - decription: electric field representing the wavefront. The field oscillate as $\exp(-i \omega t)$, where $\omega = 2\pi$*`frequency`. The real field at a time $t$ is then $\Re($`electricField` * <img src="https://render.githubusercontent.com/render/math?math=\exp(-i \omega t)">
-  
+  - decription: electric field representing the wavefront. The field oscillate as $\exp(-i \omega t)$, where $\omega = 2\pi$*`frequency`. The real field at a time $t$ is then $\Re($ `electricField` * $\exp(-i \omega t)$
   
   - advice to implementors: if attribute `temporal domain` is `'time'`, this is an electric field with SI unit in `V/m`, and therefore must have:
     - `unitDimension = (1, 1, -3, -1, 0, 0, 0)`  (electric field)

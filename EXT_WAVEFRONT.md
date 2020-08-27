@@ -26,12 +26,13 @@ electric field `mesh records`.
   - components:
     - `x/` 
     - `y/` 
+    - `z/`     
   - decription: electric field representing the wavefront. The field oscillate as $\exp(-i \omega t)$, where $\omega = 2\pi$*`frequency`. The real field at a time $t$ is then $\Re($`electricField` * $\exp(-i \omega t)$
   
   - advice to implementors: if attribute `temporal domain` is `'time'`, this is an electric field with SI unit in `V/m`, and therefore must have:
     - `unitDimension = (1, 1, -3, -1, 0, 0, 0)`  (electric field)
   - advice to implementors: if attribute `temporal domain` is `'frequency'`, this must have:
-    - `unitDimension = (0. -1, 0, 0, 0, 0, 0)` (per meter, as $\sqrt{\textrm{J} / \textrm{eV} }/ \textrm{m}  = \textrm{m}^{-1}$)
+    - `unitDimension = (0. -1, 0, 0, 0, 0, 0)` (inverse length, as $\sqrt{\textrm{J} / \textrm{eV} }/ \textrm{m}  = \textrm{m}^{-1}$)
 
 
 ### Additional attributes on `mesh record`s (field records)

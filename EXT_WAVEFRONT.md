@@ -27,7 +27,7 @@ electric field `mesh records`.
     - `x/` 
     - `y/` 
     - `z/`     
-  - decription: electric field representing the wavefront. The field oscillate as $\exp(-i \omega t)$, where $\omega = 2\pi$*`frequency`. The real field at a time $t$ is then $\Re($ `electricField` * $\exp(-i \omega t)$
+  - decription: electric field representing the wavefront. The field oscillate as $\exp(-i \omega t)$, where the angular frequency $\omega$ is related to `photonEnergy` defined below. The real field at a time $t$ is then $\Re($ `electricField` * $\exp(-i \omega t)$)
   
   - advice to implementors: if attribute `temporal domain` is `'time'`, this is an electric field with SI unit in `V/m`, and therefore must have:
     - `unitDimension = (1, 1, -3, -1, 0, 0, 0)`  (electric field)
@@ -39,17 +39,10 @@ electric field `mesh records`.
 
 On the `series` object, set the following attributes:
 
-  - `frequency`
-    - type: *(floatX)* or *(intX)* or *(uintX)*
-    - description: central frequency $f$, related to the angular frequency $\omega=2\pi f$.
-    - scope: *required*
-    - `unitDimension = (0., 0., -1., 0., 0., 0., 0.)` (cycle per second)
-
-
   - `photonEnergy`
-    - type: *(floatX)* or *(intX)* or *(uintX)*
-    - description: The central photon energy of the wavefield $E_\textrm{photon} = h$*`frequency`, where $h$ is Planck's constant.
-    - scope: *optional*
+    - type: *(floatX)* 
+    - description: The central photon energy of the wavefield $E_\textrm{photon} = \hbar \omega $, where $\hbar$ is Planck's constant divided by $2\pi$.
+    - scope: *required*
     - `unitDimension = (2., 1., -2., 0., 0., 0., 0.)` (energy)
 
 

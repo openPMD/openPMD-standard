@@ -35,7 +35,7 @@ electric field `mesh records`.
     - `unitDimension = (0. -1, 0, 0, 0, 0, 0)` (inverse length, as $\sqrt{\textrm{J} / \textrm{eV} }/ \textrm{m}  = \textrm{m}^{-1}$)
 
 
-### Additional attributes on `mesh record`s (field records)
+### Additional attributes on the `mesh record` named `electricField`
 
 On the `series` object, set the following attributes:
 
@@ -105,7 +105,6 @@ On the `series` object, set the following attributes:
     - scope: *optional*
     - description: Error in vertical wavefront curvature radius.
     - `unitDimension = (1., 0., 0., 0., 0., 0., 0.)` (length)
-
 
 
 

@@ -9,16 +9,44 @@ Introduction
 
 This extension is specifically designed for the domain of coherent wavefront propagation codes.
 
-Additional attributes on `series`
----------------------------------
+
+
+Mesh Based Records (Fields)
+---------------------------
+
+### Naming Conventions for `mesh record`s (field records)
+
+When added to an output, the following naming conventions shall be used for complex
+electric field `mesh records`. 
+
+
+- `electricField/` 
+  - type: *(complexX)*
+  - scope: *(required)*  
+  - components:
+    - `x/` 
+    - `y/` 
+    - `z/`     
+  - decription: electric field representing the wavefront. The field oscillate as $\exp(-i \omega t)$, where the angular frequency $\omega$ is related to `photonEnergy` defined below. The real field at a time $t$ is then $\Re($ `electricField` * $\exp(-i \omega t)$)
+  
+  - advice to implementors: if attribute `temporal domain` is `'time'`, this is an electric field with SI unit in `V/m`, and therefore must have:
+    - `unitDimension = (1, 1, -3, -1, 0, 0, 0)`  (electric field)
+  - advice to implementors: if attribute `temporal domain` is `'frequency'`, this must have:
+    - `unitDimension = (0. -1, 0, 0, 0, 0, 0)` (inverse length, as $\sqrt{\textrm{J} / \textrm{eV} }/ \textrm{m}  = \textrm{m}^{-1}$)
+
+
+### Additional attributes on the `mesh record` named `electricField`
+
 On the `series` object, set the following attributes:
 
-  - `beamline`
-    - type: *(string)*
-    - scope: *optional*
-    - description: The string representation of the optical beamline.
+  - `photonEnergy`
+    - type: *(floatX)* 
+    - description: The central photon energy of the wavefield $E_\textrm{photon} = \hbar \omega $, where $\hbar$ is Planck's constant divided by $2\pi$.
+    - scope: *required*
+    - `unitDimension = (2., 1., -2., 0., 0., 0., 0.)` (energy)
 
-  - `temporal domain`
+
+  - `temporalDomain`
     - type: *(string)*
     - scope: *required*
     - description: Indicates whether the data represents a field in time or
@@ -27,7 +55,8 @@ On the `series` object, set the following attributes:
       - `time`: The field is given for the time domain.
       - `frequency`: The field is given for the frequency (energy) domain.
       
-  - `spatial domain`
+      
+  - `spatialDomain`
     - type: *(string)*
     - scope: *required*
     - description: Indicates whether the data represents a field in cartesian
@@ -36,76 +65,46 @@ On the `series` object, set the following attributes:
       - `r`: The field is given in cartesian space.
       - `k`: The field is given in reciprocmal space.
       
-  - `z coordinate`
-    -type: *(floatX)*
-    -description: The z coordinate with respect to the beamline origin.
-    - `unitDimension = (1., 0., 0., 0., 0., 0., 0.)` (m)
-    - scope: *required*
-
-  - `photon energy`
-    - type: *(floatX)* or *(intX)* or *(uintX)*
-    - description: The central photon energy of the wavefield.
-    - scope: *required*
-    - Unit: If not otherwise specified, units of eV are assumed.
-
-  - `radius of curvature in x`
-    - type: *(floatX)*
-    - scope: *required*
-    - description: Horizontal wavefront curvature radius in.
-    - Unit: If not otherwise specified, units of meter are assumed.
-
-  - `radius of curvature in y`
-    - type: *(floatX)*
-    - scope: *required*
-    - description: Vertical wavefront curvature radius.
-    - Unit: If not otherwise specified, units of meter are assumed.
-
-  - `Delta radius of curvature in x`
-    - type: *(floatX)*
-    - scope: *required*
-    - description: Error in horizontal wavefront curvature radius.
-    - Unit: If not otherwise specified, units of meter are assumed.
-
-  - `Delta radius of curvature in y`
-    - type: *(floatX)*
-    - scope: *required*
-    - description: Error in vertical wavefront curvature radius.
-    - Unit: If not otherwise specified, units of meter are assumed.
-
-
-Mesh records
-------------
-
-### Naming Conventions for `mesh record`s (field records)
-
-When added to an output, the following naming conventions shall be used for
-electric field `mesh records`.
-
-- fundamental fields:
-  - `E_real/x` and `E_real/y`
-    - type: *(floatX)* or *(intX)* or *(uintX)*
-    - description: the real part of the complex electric field.
-    - advice to implementors: a *(floatX)* type is likely the most frequent case
-                              for this record
-    - advice to implementors: must have
-                              `unitDimension = (0., 0.5, -1.5, 0., 0., 0., 0.)`
-                              (W^{1/2} / m = (kg / s^3)^{1/2})
-                              if attribute `temporal domain` is 'time', or
-                              `unitDimension = (0., -1,0, 0., 0., 0., 0., 0.)`
-                              ((J / eV)^{1/2} / m  = m^{-1})
-                              if attribute `temporal domain` is 'frequency`.
  
- - `E_imag/x` and `E_imag/y`
-    - type: *(floatX)* or *(intX)* or *(uintX)*
-    - description: the imaginary part of the complex electric field.
-    - advice to implementors: a *(floatX)* type is likely the most frequent case
-                              for this record
-    - advice to implementors: must have
-                              `unitDimension = (0., 0.5, -1.5, 0., 0., 0., 0.)`
-                              (W^{1/2} / m = (kg / s^3)^{1/2})
-                              if attribute `temporal domain` is 'time', or
-                              `unitDimension = (0., -1,0, 0., 0., 0., 0., 0.)`
-                              ((J / eV)^{1/2} / m  = m^{-1})
-                              if attribute `temporal domain` is 'frequency`.
+  - `zCoordinate`
+    - type: *(floatX)*
+    - description: The z coordinate with respect to the beamline origin.
+    - `unitDimension = (1., 0., 0., 0., 0., 0., 0.)` (length)
+    - scope: *required*      
+
+
+  - `beamline`
+    - type: *(string)*
+    - scope: *optional*
+    - description: The string representation of the optical beamline.
+
+
+  - `radiusOfCurvatureX`
+    - type: *(floatX)*
+    - scope: *optional*
+    - description: Horizontal wavefront curvature radius.
+    - `unitDimension = (1., 0., 0., 0., 0., 0., 0.)` (length)
+
+
+  - `radiusOfCurvatureY`
+    - type: *(floatX)*
+    - scope: *optional*
+    - description: Vertical wavefront curvature radius.
+    - `unitDimension = (1., 0., 0., 0., 0., 0., 0.)` (length)
+
+
+  - `deltaRadiusOfCurvatureX`
+    - type: *(floatX)*
+    - scope:*optional*
+    - description: Error in horizontal wavefront curvature radius.
+    - `unitDimension = (1., 0., 0., 0., 0., 0., 0.)` (length)
+
+
+  - `deltaRadiusOfCurvatureY`
+    - type: *(floatX)*
+    - scope: *optional*
+    - description: Error in vertical wavefront curvature radius.
+    - `unitDimension = (1., 0., 0., 0., 0., 0., 0.)` (length)
+
 
 

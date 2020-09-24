@@ -108,9 +108,9 @@ The following records store data on a particle-by-particle basis.
   - components: numParticles columns and rows of (`x`, `y`, `z`).
 
 - `photonSPolarizationPhase/`
-  - type: Required 2 x N-vector *(real)*
+  - type: Required 1 x N-vector *(real)*
   - description: Electric field phase of s- polarized photons.
-  - components: numParticles columns and rows of (`Real`, `Imaginary`).
+  - components: numParticles of phase in [rad].
 
 - `photonPPolarizationAmplitude/`
   - type: Required 3 x N-vector *(real)*
@@ -118,9 +118,9 @@ The following records store data on a particle-by-particle basis.
   - components: numParticles columns and rows of (`x`, `y`, `z`).
 
 - `photonPPolarizationPhase/`
-  - type: Required 2 x N-vector *(real)*
+  - type: Required 1 x N-vector *(real)*
   - description: Electric field phase of p- polarized photons.
-  - components: numParticles columns and rows of (`Real`, `Imaginary`).
+  - components: numParticles of phase in [rad].
 
 - `particleStatus/`
     - type: Optional 1 x N-vector *(int)*

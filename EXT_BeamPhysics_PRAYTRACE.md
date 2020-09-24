@@ -92,26 +92,6 @@ Per-Particle Records of the `Particle Group`
 
 The following records store data on a particle-by-particle basis.
 
-### Scope
-
-Required
-
-- `position/`
-	- `x`, `y`, `z`
-- `direction/`
-	- `x'`, `y'`, `z'`
-- `photonSPolarizationAmplitude/`
-	- `x`, `y`, `z`
-- `photonSPolarizationPhase/`
-	- `Real`, `Imaginary`
-- `photonPPolarizationAmplitude/`
-	- `x`, `y`, `z`
-- `photonPPolarizationPhase/`
-	- `Real`, `Imaginary`
-- `wavelength`
-	
-### Attributes
-
 - `momentum/`
   - type: Optional 3 x N-vector *(real)*
   - description: The momentum vector of the particles relative to `momentumOffset`

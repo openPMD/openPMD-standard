@@ -68,9 +68,9 @@ The following records are defined for the file root group.
 Particle Group Standard
 =======================
 
-The **Particle Group** is a group for specifying a set of rays. Multiple **Particle Groups** can be defined in a file. The path for a **Particle Group** is given by the **basePath** and **particlesPath** attributes in the file root group as discussed in the base OpenPMD standard. For example, if **basePath** is  `/data/%T/`, and **ParticlesPath** is `particles/rays/`, then **Particle Groups** paths would be of the form `/data/%T/particles/rays` where `%T` is an integer. EG: `/data/37/particles/rays`.
+The **Particle Group** is a group for specifying a set of rays. Multiple **Particle Groups** can be defined in a file. The path for a **Particle Group** is given by the **basePath** and **particlesPath** attributes in the file root group as discussed in the base OpenPMD standard. For example, if **basePath** is  `/data/`, and **ParticlesPath** is `particles/rays/`, then **Particle Groups** paths would be of the form `/data/particles/rays`.
 
-In case of photon raytracing extension, the default **particlesPath** is `particles/rays/`. EG: `data/%T/particles/rays/`.
+In case of photon raytracing extension, the default **particlesPath** is `particles/rays/`. EG: `data/particles/rays/`.
 
 
 `Particle Group` Attributes
@@ -97,6 +97,28 @@ The following records store data on a particle-by-particle basis.
   - description: The momentum vector of the particles relative to `momentumOffset`
   - components: numParticles columns and rows of (`x`, `y`, `z`).
   - true momentum = `momentum + momentumOffset`
+
+- `direction`
+  - type: Required 3 x N-vector *(real)*
+  - components: numParticles columns and rows of (`x'`, `y'`, `z'`)
+  - description: `velocity` in beamphysics extension. 3 x N vector with rows being the direction in (`x`, `y`, `z`) respectively.
+
+- `nonPhotonPolarization/`
+  - type: Optional 3 x N-vector *(real)*
+  - description: Polarization for neutrons.
+  - components: numParticles columns and rows of (`x`, `y`, `z`).
+
+- `wavelength/`
+  - type: Required 1 x N-vector *(real)*
+  - description: Wavelength of the N-th ray.
+
+- `rayTime/`
+  - type: Optional 1 x N-vector *(real)*
+  - description: For neutrons, the time w. r. t. emission of the neutron..
+
+- `weight/`
+  - type: Optional 1 x N-vector *(real)*
+  - description: Weight of the N-th particle.
 
 - `id/`
   - type: Optional 1 x N-vector *(int)*
@@ -126,21 +148,6 @@ The following records store data on a particle-by-particle basis.
     - type: Optional 1 x N-vector *(int)*
     - description: Integer indicating whether N-th particle is "alive" or "dead" (for example, has hit the vacuum chamber wall). A value of one indicates the particle is alive and any other value indicates that the particle is dead. Programs are free to distinguish how a particle died by assigning different non-unit values to `particleStatus`. For example, a program might want to differentiate between particles that are dead due to hitting the side walls versus reversing the direction longitudinally in an RF cavity.
 
-- `position/`
-    - type: Required 3 x N-vector *(real)*
-    - components: numParticles columns and rows of (`x`, `y`, `z`)
-    - description: particle Position relative to the `positionOffset`.
-    That is, true position relative to the coordinate origin = `position + positionOffset`.
-
-- `direction`
-  - type: Required 3 x N-vector *(real)*
-  - components: numParticles columns and rows of (`x'`, `y'`, `z'`)
-  - description: `velocity` in beamphysics extension. 3 x N vector with rows being the direction in (`x`, `y`, `z`) respectively.
-
-- `wavelength/`
-  - type: Required 1 x N-vector *(real)*
-  - description: Wavelength of the N-th ray.
-
 Particle Record Dataset Attributes
 ----------------------------------
 
@@ -153,3 +160,14 @@ The following attributes can be used with any dataset:
 - `maxValue`:
   - type: Optional *(real)*
   - description: Maximum of the data.
+
+Additional variables related to the coordinate system
+----------------------------------
+
+- `directionOfGravity`:
+  - type: Optional 3 x 1-vector *(real)*
+  - description: (`x`, `y`, `z`) unit vector pointing into the direction of gravity.
+
+- `horizontalCoordinate`:
+  - type: Optional 3 x 1-vector *(real)*
+  - description: (`x`, `y`, `z`) unit vector pointing into the horizontal direction. 

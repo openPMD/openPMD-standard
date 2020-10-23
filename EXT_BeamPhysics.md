@@ -54,11 +54,11 @@ The following records are defined for the file root group.
 
 - `latticeName`
   - type: Optional *(string)*
-  - description: The name of the lattice.
+  - description: The name of the lattice. This name is a descriptive string. Some programs allow a descriptive string to be associated with the lattice.
 
 - `latticeFile`
   - type: Optional *(string)*
-  - description: The location of the root lattice file.
+  - description: The  name of the root lattice file. This name may contain a path component.
 
 Particle Group Standard
 =======================
@@ -142,7 +142,7 @@ The following records store data on a particle-by-particle basis.
   - description: Base momentum from which `momentum` is measured. That is, True momentum = `momentum + momentumOffset`. Assumed zero if not present.
   - components: (`x`, `y`, `z`).
 
--`id`
+- `id`
   - type: Optional *(int)*
   - description: Some programs give each particle an ID number. This field can be used to record that number. The `id` parameter is defined in the openPMD base standard and is just mentioned here for completeness sake. See the openPMD base standard for more details.
 

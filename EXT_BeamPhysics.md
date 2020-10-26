@@ -34,7 +34,7 @@ Definitions
 
 - **Polar coordinates**: **Polar** coordinates are **(r, theta, phi)** where **r** is the radius, **theta** is the angle from the **z** or **s** axis, and **phi** is the projected azimuthal angle in the **(x, y)** plane.
 
-- **Particle Group**: The **Particle Group** is a group for specifying a set of particles such as the particles in a bunch. The Beam Physics extension defines a standard for the  **Particle Group** as discussed below.
+- **Particle Group**: The **Particle Group** is a group for specifying a set of particles such as the particles in a bunch. The Beam Physics extension defines a standard for the **Particle Group** as discussed below.
 
 - **Reference Time**, **Reference Energy**, etc. Some programs have a reference from which various quantities are measured. For example, the **Reference Position** may be defined as the position of the center of the bunch under consideration.
 
@@ -54,16 +54,16 @@ The following records are defined for the file root group.
 
 - `latticeName`
   - type: Optional *(string)*
-  - description: The name of the lattice.
+  - description: The name of the lattice. This name is a descriptive string. Some programs allow a descriptive string to be associated with the lattice.
 
 - `latticeFile`
   - type: Optional *(string)*
-  - description: The location of the root lattice file.
+  - description: The name of the root lattice file. This name may contain a path component.
 
 Particle Group Standard
 =======================
 
-The **Particle Group** is a group for specifying a set of particles such as the particles in a bunch. Multiple **Particle Groups** can be defined in a file. The path for a **Particle Group** is given by the **basePath** and **particlesPath** attributes in the file root group as discussed in the base OpenPMD standard. For example, if **basePath** is  `/data/%T/`, and **ParticlesPath** is `particles/`, then **Particle Groups** paths would be of the form `/data/%T/particles/` where `%T` is an integer. EG: `/data/37/particles/`.
+The **Particle Group** is a group for specifying a set of particles such as the particles in a bunch. Multiple **Particle Groups** can be defined in a file. The path for a **Particle Group** is given by the **basePath** and **particlesPath** attributes in the file root group as discussed in the base OpenPMD standard. For example, if **basePath** is `/data/%T/`, and **ParticlesPath** is `particles/`, then **Particle Groups** paths would be of the form `/data/%T/particles/` where `%T` is an integer. EG: `/data/37/particles/`.
 
 
 `Particle Group` Attributes
@@ -126,7 +126,7 @@ The following records store data on a particle-by-particle basis.
 - `locationInElement`
    - type Optional *(integer)*
    - description: The program generating the data file may model a lattice element using a "hard edge" model where the fringe fields at the ends of the element are modeled as having zero longitudinal length. In such a case, if a particle is at the end of the lattice element, it is important to know if the particle is outside of the fringe or if the particle is inside the fringe within the body of the element. Note that with a hard edge fringe, the longitudinal **s**-position does not necessarily provide enough information to determine where a particle is with respect to an edge field. Another situation where `locationInElement` is useful is with zero length elements that affect the particle transport (such as zero length multipole elements). If the program generating the data file does **not** use any hard edge models or zero length non-marker elements, `locationInElement` should not be present since this parameter is meaningless in this case.
-   - Possible values:    
+   - Possible values:  
      - `-1`: Upstream end of element outside of the upstream fringe edge.
      - `0`: Inside the element.
      - `1`: Downstream end of the element outside the downstream fringe edge.
@@ -142,7 +142,7 @@ The following records store data on a particle-by-particle basis.
   - description: Base momentum from which `momentum` is measured. That is, True momentum = `momentum + momentumOffset`. Assumed zero if not present.
   - components: (`x`, `y`, `z`).
 
--`id`
+- `id`
   - type: Optional *(int)*
   - description: Some programs give each particle an ID number. This field can be used to record that number. The `id` parameter is defined in the openPMD base standard and is just mentioned here for completeness sake. See the openPMD base standard for more details.
 
@@ -176,7 +176,7 @@ The following records store data on a particle-by-particle basis.
     - description: Specifying the (`x`, `y`, `z`) position of the coordinate origin that the particles are measured with respect to in the **global** coordinate frame.
   - `W_matrix`:
     - Required 3 x 3 matrix *(real)*
-    - description: Dataset holding the 3x3 transformation matrix from  coordinates to **global**
+    - description: Dataset holding the 3x3 transformation matrix from coordinates to **global**
   coordinates.
   - Position Transformation: Position_global = W_matrix * (position + positionOffset) + R_frame
   - Momentum transformation: Momentum_global = W_matrix * (momentum + momentumOffset)
@@ -319,8 +319,8 @@ Per-grid `External Fields Group` Records
 
 - `magneticField`
   - type: Optional 3-vector *(complex)*
-  - description: Magnetic field. If the field is DC, only the real part should be nonzero. The components of `magneticField` may be either **(x, y, z)** representing `Bx`, `By`, and `Bz` or **(r, theta, z)** representing `Br`, `Btheta`, and `Bz`. Each component contains a 3-dimensional table giving the field on a grid. When using **(x, y, z)** components, each component contains a  **(x, y, z)** spatial grid. When using **(r, theta, z)** components, each component contains a **(r, theta, z)** spatial grid. In this case, if the grid size in the `theta` direction is 1, the field is taken to be axially symmetric.
+  - description: Magnetic field. If the field is DC, only the real part should be nonzero. The components of `magneticField` may be either **(x, y, z)** representing `Bx`, `By`, and `Bz` or **(r, theta, z)** representing `Br`, `Btheta`, and `Bz`. Each component contains a 3-dimensional table giving the field on a grid. When using **(x, y, z)** components, each component contains a **(x, y, z)** spatial grid. When using **(r, theta, z)** components, each component contains a **(r, theta, z)** spatial grid. In this case, if the grid size in the `theta` direction is 1, the field is taken to be axially symmetric.
 
 - `electricField`
   - type: Optional 3-vector *(complex)*
-  - description: Electric field. If the field is DC, only the real part should be nonzero. The components of `magneticField` may be either **(x, y, z)** representing `Ex`, `Ey`, and `Ez` or **(r, theta, z)** representing `Er`, `Etheta`, and `Ez`. Each component contains a 3-dimensional table giving the field on a grid. When using **(x, y, z)** components, each component contains a  **(x, y, z)** spatial grid. When using **(r, theta, z)** components, each component contains a **(r, theta, z)** spatial grid. In this case, if the grid size in the `theta` direction is 1, the field is taken to be axially symmetric.
+  - description: Electric field. If the field is DC, only the real part should be nonzero. The components of `magneticField` may be either **(x, y, z)** representing `Ex`, `Ey`, and `Ez` or **(r, theta, z)** representing `Er`, `Etheta`, and `Ez`. Each component contains a 3-dimensional table giving the field on a grid. When using **(x, y, z)** components, each component contains a **(x, y, z)** spatial grid. When using **(r, theta, z)** components, each component contains a **(r, theta, z)** spatial grid. In this case, if the grid size in the `theta` direction is 1, the field is taken to be axially symmetric.

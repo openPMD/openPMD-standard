@@ -300,7 +300,7 @@ where `Z` is the complex field, `f` is the Oscillation frequency, `t` is the tim
 
 - `gridOriginOffset`
   - type: Required 3-vector *(real)*
-  - description: distance from `eleAnchorPt` to the grid origin point.
+  - description: Cartesian (`x`, `y`, `z`) distance from `eleAnchorPt` to the grid origin point. Notice that Cartesian coordinates are used here independent of the coordinates used for the field grid itself.
 
 - `harmonic`
   - type: Required *(int)*

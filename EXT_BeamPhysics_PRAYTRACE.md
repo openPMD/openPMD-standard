@@ -92,12 +92,6 @@ Per-Particle Records of the `Particle Group`
 
 The following records store data on a particle-by-particle basis.
 
-- `momentum/`
-  - type: Optional 3 x N-vector *(real)*
-  - description: The momentum vector of the particles relative to `momentumOffset`
-  - components: numParticles columns and rows of (`x`, `y`, `z`).
-  - true momentum = `momentum + momentumOffset`
-
 - `direction`
   - type: Required 3 x N-vector *(real)*
   - components: numParticles columns and rows of (`x'`, `y'`, `z'`)

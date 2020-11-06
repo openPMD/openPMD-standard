@@ -270,10 +270,6 @@ where `Z` is the complex field, `f` is the Oscillation frequency, `t` is the tim
 `External Fields Group` Attributes
 ----------------------------------
 
-- `gridCurvatureRadius`
-  - type: Optional *(real)*
-  - description: Only used if using **(x, y, z)** field components. A zero value (the default) indicates that the grid is rectilinear. A non-zero value indicates that the grid is curved. The curvature is in the **(x, z)** plane with positive **x** pointing away from the center of curvature if `gridCurvatureRadius` is positive and vice versa for negative values. `gridCurvatureRadius` is the radius for the lines **x = 0** at constant **y**.
-
 - `eleAnchorPt`
   - type: Required *(string)*
   - description: Point on the lattice element that the grid origin is referenced to. Possible values are: `beginning`, `center`, or `end`. The `beginning` point is at the entrance end of the element, the `center` point is at the center of the element and the `end` point is at the exit end of the element. All three points are on the reference orbit.
@@ -285,6 +281,14 @@ where `Z` is the complex field, `f` is the Oscillation frequency, `t` is the tim
 - `fundamentalFrequency`
   - type: Optional *(real)*
   - description: The fundamental RF frequency. Used for AC fields.
+
+- `gridCurvatureRadius`
+  - type: Optional *(real)*
+  - description: Only used if using **(x, y, z)** field components. A zero value (the default) indicates that the grid is rectilinear. A non-zero value indicates that the grid is curved. The curvature is in the **(x, z)** plane with positive **x** pointing away from the center of curvature if `gridCurvatureRadius` is positive and vice versa for negative values. `gridCurvatureRadius` is the radius for the lines **x = 0** at constant **y**.
+
+- `gridGeometry`
+  - type: Required *(string)*
+  - description: The type of coordinate system being used. Must be set to either `rectangular`, or `cylindrical`.
 
 - `gridSpacing`
   - type: Required 3-vector *(real)*

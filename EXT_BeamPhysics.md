@@ -320,11 +320,14 @@ where `Z` is the complex field, `f` is the Oscillation frequency, `t` is the tim
 
 Per-grid `External Fields Group` Records
 ----------------------------------------
+**Note:** Each field component contains a 3-dimensional table giving the field on a grid. When using **(x, y, z)** field components, each component contains an **(x, y, z)** spatial grid. When using **(r, theta, z)** field components, each component contains an **(r, theta, z)** spatial grid. In this case, if the grid size in the `theta` direction is 1, the field is taken to be axially symmetric.
+
+**Note:** If any field component is not present in the data file, the value of that component will be taken as zero everywhere.
 
 - `magneticField`
   - type: Optional 3-vector *(complex)*
-  - description: Magnetic field. If the field is DC, only the real part should be nonzero. The components of `magneticField` may be either **(x, y, z)** representing `Bx`, `By`, and `Bz` or **(r, theta, z)** representing `Br`, `Btheta`, and `Bz`. Each component contains a 3-dimensional table giving the field on a grid. When using **(x, y, z)** components, each component contains a **(x, y, z)** spatial grid. When using **(r, theta, z)** components, each component contains a **(r, theta, z)** spatial grid. In this case, if the grid size in the `theta` direction is 1, the field is taken to be axially symmetric.
+  - description: Magnetic field. If the field is DC, only the real part should be nonzero. The components of `magneticField` may be either **(x, y, z)** representing `Bx`, `By`, and `Bz` or **(r, theta, z)** representing `Br`, `Btheta`, and `Bz`.
 
 - `electricField`
   - type: Optional 3-vector *(complex)*
-  - description: Electric field. If the field is DC, only the real part should be nonzero. The components of `magneticField` may be either **(x, y, z)** representing `Ex`, `Ey`, and `Ez` or **(r, theta, z)** representing `Er`, `Etheta`, and `Ez`. Each component contains a 3-dimensional table giving the field on a grid. When using **(x, y, z)** components, each component contains a **(x, y, z)** spatial grid. When using **(r, theta, z)** components, each component contains a **(r, theta, z)** spatial grid. In this case, if the grid size in the `theta` direction is 1, the field is taken to be axially symmetric.
+  - description: Electric field. If the field is DC, only the real part should be nonzero. The components of `electricField` may be either **(x, y, z)** representing `Ex`, `Ey`, and `Ez` or **(r, theta, z)** representing `Er`, `Etheta`, and `Ez`.

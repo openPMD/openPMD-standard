@@ -1,6 +1,6 @@
 # List of Authors of the Standard
 
-### Original Design (2014-2015) and Lead Author (2014-2018)
+### Original Design (2014-2015) and Lead Author (2014-2020)
 
 - Axel Huebl (HZDR, TU Dresden, a.huebl@hzdr.de)
 
@@ -22,7 +22,7 @@
 - Michael Bussmann (HZDR)
 
 
-### Reviewers and Substantive Contributions in openPMD 2.0 (2017-2018)
+### Reviewers and Substantive Contributions in openPMD 2.0 (2017-2020)
 
 Above authors and:
 

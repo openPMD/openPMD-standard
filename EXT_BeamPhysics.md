@@ -331,3 +331,4 @@ Per-grid `External Fields Group` Records
 - `electricField`
   - type: Optional 3-vector *(complex)*
   - description: Electric field. If the field is DC, only the real part should be nonzero. The components of `electricField` may be either **(x, y, z)** representing `Ex`, `Ey`, and `Ez` or **(r, theta, z)** representing `Er`, `Etheta`, and `Ez`.
+

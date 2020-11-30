@@ -316,7 +316,7 @@ where `Z` is the complex field, `f` is the Oscillation frequency, `t` is the tim
 
 - `RFphase`
   - type Optional *(real)*
-  - description: Phase offset for oscillating fields. See the note above. Default is zero.
+  - description: Phase offset for oscillating fields. See the equation above. Default is zero. Note that the units are `2 pi` and not `radians`.
 
 Per-grid `External Fields Group` Records
 ----------------------------------------

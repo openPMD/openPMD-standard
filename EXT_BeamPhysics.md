@@ -263,9 +263,9 @@ Notes
 
 - AC fields can be described using complex numbers. The actual field is the real part of
 
-    Z &ast; Exp[-2 pi i f &ast; (t - t0)]
+    Z &ast; Exp[-2 pi i (f &ast; t + RFphase)]
 
-where `Z` is the complex field, `f` is the Oscillation frequency, `t` is the time, and `t0` is a reference time.
+where `Z` is the complex field, `f` is the Oscillation frequency, `t` is the time, and `RFphase` is a reference phase.
 
 `External Fields Group` Attributes
 ----------------------------------
@@ -331,4 +331,3 @@ Per-grid `External Fields Group` Records
 - `electricField`
   - type: Optional 3-vector *(complex)*
   - description: Electric field. If the field is DC, only the real part should be nonzero. The components of `electricField` may be either **(x, y, z)** representing `Ex`, `Ey`, and `Ez` or **(r, theta, z)** representing `Er`, `Etheta`, and `Ez`.
-

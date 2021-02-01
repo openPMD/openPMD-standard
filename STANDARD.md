@@ -133,7 +133,7 @@ The following attributes are *optional* in each each file's *root* group
   - `particlesPath`
     - type: *(string)*
     - description: path *relative* from the `basePath` to the groups for each
-                   particle species and the records they include
+                   particle group and the records they include
     - example: `particles/`
     - note: if this attribute is missing, the file is interpreted as if it
       contains *no particle records*! If the attribute is set, the group behind
@@ -461,7 +461,7 @@ The following attributes must be stored with each `scalar record` and each
 Particle Records
 ----------------
 
-Each `particle species` shall be represented as a group `particleName/` that
+Each `particle group` shall be represented as a group `particleName/` that
 contains all its records. Particles records are generally represented in
 one-dimensional contiguous records, where the n-th entry in
 `particleName/recordNameA` and the n-th entry in `particleName/recordNameB`
@@ -473,22 +473,25 @@ As with general `vector` records, compound particle vector records
 are again split in scalar components that are stored in a common
 sub-group `particleName/recordName/`
 (see: *Scalar, Vector and Tensor Records*). Also, record components that are
-constant for all particles of a species (and iteration) can be replaced with a
+constant for all particles of a group (and iteration) can be replaced with a
 short-hand notation (see: *Constant Record Components*).
 
-### Records for each `Particle Species`
+### Records for each `Particle Group`
 
   - `id`
-    - type: *(uint64 / UNSIGNED8)*
+    - type: *(intX)*
     - scope: *optional*
     - description: a globally-unique identifying integer for each particle,
                    that can be used to, e.g., track particles. This
-                   identifying integer should be truly unique within the
+                   identifying integer should be unique within the
                    simulation; in particular, even among different particle
-                   species, two particles should not have the same id.
+                   groups, two particles should not have the same id unless
+                   they are truly the same particle.
                    Also, when a particle exits the simulation box, its
                    identifying integer should not be reassigned to a new
                    particle.
+    - advice to implementors: it is recommended to use the type
+                              *(uint64 / UNSIGNED8)*
 
   - `position/` + components such as `x`, `y`, `z`
     - type: each component in *(floatX)* or *(intX)* or *(uintX)*
@@ -534,9 +537,9 @@ x = position_x_relative * unitXRel + \
 ```
 
 
-### Sub-Group for each `Particle Species`
+### Sub-Group for each `Particle Group`
 
-Within each particle species' group the sub-group `particlePatches` alongside
+Within each particle groups' group the sub-group `particlePatches` alongside
 its records, as mentioned above, is *recommended* for parallel
 post-processing. The idea is to logically order the 1D arrays of attributes into
 local patches of particles that can be read and processed in parallel.

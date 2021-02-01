@@ -263,16 +263,12 @@ Notes
 
 - AC fields can be described using complex numbers. The actual field is the real part of
 
-    Z &ast; Exp[-2 pi i f &ast; (t - t0)]
+    Z &ast; Exp[-2 pi i (f &ast; t + RFphase)]
 
-where `Z` is the complex field, `f` is the Oscillation frequency, `t` is the time, and `t0` is a reference time.
+where `Z` is the complex field, `f` is the Oscillation frequency, `t` is the time, and `RFphase` is a reference phase.
 
 `External Fields Group` Attributes
 ----------------------------------
-
-- `gridCurvatureRadius`
-  - type: Optional *(real)*
-  - description: Only used if using **(x, y, z)** field components. A zero value (the default) indicates that the grid is rectilinear. A non-zero value indicates that the grid is curved. The curvature is in the **(x, z)** plane with positive **x** pointing away from the center of curvature if `gridCurvatureRadius` is positive and vice versa for negative values. `gridCurvatureRadius` is the radius for the lines **x = 0** at constant **y**.
 
 - `eleAnchorPt`
   - type: Required *(string)*
@@ -285,6 +281,14 @@ where `Z` is the complex field, `f` is the Oscillation frequency, `t` is the tim
 - `fundamentalFrequency`
   - type: Optional *(real)*
   - description: The fundamental RF frequency. Used for AC fields.
+
+- `gridCurvatureRadius`
+  - type: Optional *(real)*
+  - description: Only used if using **(x, y, z)** field components. A zero value (the default) indicates that the grid is rectilinear. A non-zero value indicates that the grid is curved. The curvature is in the **(x, z)** plane with positive **x** pointing away from the center of curvature if `gridCurvatureRadius` is positive and vice versa for negative values. `gridCurvatureRadius` is the radius for the lines **x = 0** at constant **y**.
+
+- `gridGeometry`
+  - type: Required *(string)*
+  - description: The type of coordinate system being used. Must be set to either `rectangular`, or `cylindrical`.
 
 - `gridSpacing`
   - type: Required 3-vector *(real)*
@@ -300,7 +304,7 @@ where `Z` is the complex field, `f` is the Oscillation frequency, `t` is the tim
 
 - `gridOriginOffset`
   - type: Required 3-vector *(real)*
-  - description: distance from `eleAnchorPt` to the grid origin point.
+  - description: Cartesian (`x`, `y`, `z`) distance from `eleAnchorPt` to the grid origin point. Notice that Cartesian coordinates are used here independent of the coordinates used for the field grid itself.
 
 - `harmonic`
   - type: Required *(int)*
@@ -311,16 +315,19 @@ where `Z` is the complex field, `f` is the Oscillation frequency, `t` is the tim
   - description: Name to be used to identify the grid.
 
 - `RFphase`
-  - type Required if `harmonic` is not zero *(real)*
-  - description: Phase offset for oscillating fields. See the note above. Default is zero.
+  - type Optional *(real)*
+  - description: Phase offset for oscillating fields. See the equation above. Default is zero. Note that the units are `2 pi` and not `radians`.
 
 Per-grid `External Fields Group` Records
 ----------------------------------------
+**Note:** Each field component contains a 3-dimensional table giving the field on a grid. When using **(x, y, z)** field components, each component contains an **(x, y, z)** spatial grid. When using **(r, theta, z)** field components, each component contains an **(r, theta, z)** spatial grid. In this case, if the grid size in the `theta` direction is 1, the field is taken to be axially symmetric.
+
+**Note:** If any field component is not present in the data file, the value of that component will be taken as zero everywhere.
 
 - `magneticField`
   - type: Optional 3-vector *(complex)*
-  - description: Magnetic field. If the field is DC, only the real part should be nonzero. The components of `magneticField` may be either **(x, y, z)** representing `Bx`, `By`, and `Bz` or **(r, theta, z)** representing `Br`, `Btheta`, and `Bz`. Each component contains a 3-dimensional table giving the field on a grid. When using **(x, y, z)** components, each component contains a **(x, y, z)** spatial grid. When using **(r, theta, z)** components, each component contains a **(r, theta, z)** spatial grid. In this case, if the grid size in the `theta` direction is 1, the field is taken to be axially symmetric.
+  - description: Magnetic field. If the field is DC, only the real part should be nonzero. The components of `magneticField` may be either **(x, y, z)** representing `Bx`, `By`, and `Bz` or **(r, theta, z)** representing `Br`, `Btheta`, and `Bz`.
 
 - `electricField`
   - type: Optional 3-vector *(complex)*
-  - description: Electric field. If the field is DC, only the real part should be nonzero. The components of `magneticField` may be either **(x, y, z)** representing `Ex`, `Ey`, and `Ez` or **(r, theta, z)** representing `Er`, `Etheta`, and `Ez`. Each component contains a 3-dimensional table giving the field on a grid. When using **(x, y, z)** components, each component contains a **(x, y, z)** spatial grid. When using **(r, theta, z)** components, each component contains a **(r, theta, z)** spatial grid. In this case, if the grid size in the `theta` direction is 1, the field is taken to be axially symmetric.
+  - description: Electric field. If the field is DC, only the real part should be nonzero. The components of `electricField` may be either **(x, y, z)** representing `Ex`, `Ey`, and `Ez` or **(r, theta, z)** representing `Er`, `Etheta`, and `Ez`.

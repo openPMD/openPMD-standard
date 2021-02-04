@@ -31,11 +31,11 @@ that allows to share and exchange data to achieve
 openPMD suits for **any kind of hierarchical, self-describing** data format,
 such as, but not limited to
 
-  - [ADIOS BP](https://www.olcf.ornl.gov/center-projects/adios/)
+  - [ADIOS1 (BP3)](https://www.olcf.ornl.gov/center-projects/adios/)
+  - [ADIOS2 (BP4)](https://github.com/ornladios/ADIOS2)
   - [HDF5](http://hdfgroup.org/HDF5/)
-  - [SDF](http://ccpforge.cse.rl.ac.uk/gf/project/epoch/)
-  - [VTK-XML](http://www.vtk.org/VTK/img/file-formats.pdf)
-  - [netCDF](http://www.unidata.ucar.edu/software/netcdf/).
+  - [JSON](https://en.wikipedia.org/wiki/JSON)
+  - [XML](https://en.wikipedia.org/wiki/XML).
 
 
 Motivation

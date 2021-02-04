@@ -753,6 +753,8 @@ defined:
 
 - **ED-PIC**: electro-dynamic/static particle-in-cell codes,
   see [EXT_ED-PIC.md](EXT_ED-PIC.md).
+- **ParticleWeighting**: conventions for macroparticles,
+  see [EXT_ParticleWeighting.md](EXT_ParticleWeighting.md).
 - **SpeciesType**: naming lists for particle species,
   see [EXT_SpeciesType.md](EXT_SpeciesType.md).
 

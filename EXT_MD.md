@@ -1,5 +1,5 @@
 Domain-Specific Naming Conventions for Molecular Dynamics Simulation Codes
-=======================================================================
+==========================================================================
 
 openPMD extension name: `MD`
 
@@ -8,7 +8,7 @@ VERSION: 0.0.3 (January 26th, 2020)
 Introduction
 ------------
 
-This extension is specifically designed for the molecular dynamics simulation codes.
+This extension is specifically designed for molecular dynamics simulation codes.
 
 The current version of this extension is suitable to allow the output of
 arbitrary simulation codes to be post-processed and compared with common
@@ -18,9 +18,9 @@ records and further attributes.
 The example data structure can be found [HERE](https://github.com/ejcjason/MDDomainExtension).
 
 Root Group
----------------------------
+----------
 
-### Additional Attributes for the `Root` group
+### Additional Attributes for the *Root* (`/`) Group
 
 The following additional attributes are defined in this extension.
 The individual requirement is given in `scope`.
@@ -43,13 +43,13 @@ The individual requirement is given in `scope`.
       - ...
 
 Observable Records
----------------------------
+------------------
 
 `observables` is an *optional* group that contains physical observables that are derived from the system state, i.e., thermodynamic information (e.g. temperature, energy, pressure).
 
 ### Naming conventions
 
-The naming conventions conforming the naming conventions for [Scalar, Vector and Tensor Records](https://github.com/openPMD/openPMD-standard/blob/latest/STANDARD.md#naming-conventions) in [openPMD base standard](https://github.com/openPMD/openPMD-standard/blob/latest/STANDARD.md).
+The naming conventions conforming the naming conventions for [Scalar, Vector and Tensor Records](STANDARD.md#naming-conventions) in [openPMD base standard](STANDARD.md).
 
 - `scalar` record
   - type: *(any type)*
@@ -60,11 +60,11 @@ The naming conventions conforming the naming conventions for [Scalar, Vector and
 
 ### Attributes for each `observable` record
 
-The attributes of unit system for records should be included as defined in [openPMD base standard](https://github.com/openPMD/openPMD-standard/blob/latest/STANDARD.md#unit-systems-and-dimensionality).
+The attributes of unit system for records should be included as defined in [openPMD base standard](STANDARD.md#unit-systems-and-dimensionality).
 
 
 Particle Records
----------------------------
+----------------
 
 ### Additional attributes for each `position` record
 

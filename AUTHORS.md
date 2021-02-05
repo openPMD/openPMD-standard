@@ -1,8 +1,8 @@
 # List of Authors of the Standard
 
-### Original Design (2014-2015) and Lead Author (2014-2020)
+### Original Design (2014-2015) and Lead Author (2014-2021)
 
-- Axel Huebl (HZDR, TU Dresden, a.huebl@hzdr.de)
+- Axel Huebl (LBNL, previously HZDR, axelhuebl@lbl.gov)
 
 *Acknowledgements:* the original design of this standard is based on the
                     experiences we gained in the last years implementing
@@ -18,11 +18,11 @@
 - Jean-Luc Vay (LBNL)
 - David P. Grote (LLNL)
 - Ivo F. Sbalzarini (TU Dresden, MPI-CBG)
-- Stephan Kuschel (IOQ Jena, now SLAC)
-- Michael Bussmann (HZDR)
+- Stephan Kuschel (IOQ Jena, now Uni Hamburg)
+- Michael Bussmann (CASUS, HZDR)
 
 
-### Reviewers and Substantive Contributions in openPMD 2.0 (2017-2020)
+### Reviewers and Substantive Contributions in openPMD 2.0 (2017-2021)
 
 Above authors and:
 
@@ -30,6 +30,10 @@ Above authors and:
 - Christopher Mayes (SLAC)
 - Frédéric Pérez (LULI)
 - Fabian Koller (HZDR)
+- Franz Poeschel (CASUS)
+- Carsten Fortmann-Grote (EU XFEL, MPI-EvolBio)
+- Ángel Ferran Pousa (DESY)
+- Juncheng E (EU XFEL)
 
 
 ### Affiliations
@@ -40,6 +44,10 @@ Above authors and:
 - LLNL: Lawrence Livermore National Laboratory, Livermore (CA), United States of America
 - MPI-CBG: Max Planck Institute of Molecular Cell Biology and Genetics, Dresden, Germany
 - IOQ Jena: Institut für Optik und Quantenelektronik, Jena, Germany
-- SLAC: SLAC National Accelerator Laboratory, Menlo Park (CA), United States of America
+- Uni Hamburg: University Hamburg, Hamburg, Germany
 - Cornell: Cornell University, Ithaca (NY), United States of America
 - LULI: Laboratoire pour l'Utilisation des Lasers Intenses, Paris, France
+- CASUS: Center for Advanced Systems Understanding, Goerlitz, Germany
+- MPI-EvolBio: Max-Planck-Institute for Evolutionary Biology, Ploen, Germany
+- DESY: German Electron Synchrotron DESY, Hamburg, Germany
+- EU XFEL: European XFEL GmbH, Schenefeld, Germany

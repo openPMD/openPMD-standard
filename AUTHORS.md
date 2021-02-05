@@ -31,7 +31,7 @@ Above authors and:
 - Frédéric Pérez (LULI)
 - Fabian Koller (HZDR)
 - Franz Poeschel (CASUS)
-- Carsten Fortmann-Grote (MPI-EvolBio)
+- Carsten Fortmann-Grote (EU XFEL, MPI-EvolBio)
 - Ángel Ferran Pousa (DESY)
 - Juncheng E (EU XFEL)
 

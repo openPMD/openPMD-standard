@@ -51,7 +51,7 @@ Hierarchy of the Data File
 The used hierarchical data file format must provide the capability to
 
   - create groups and sub-groups (in-file directories)
-  - create multi-dimensional, homogenous array-based data structures
+  - create multi-dimensional, homogeneous array-based data structures
 
 while allowing for each of those to assign
 
@@ -268,7 +268,7 @@ on Unit Systems and Dimensionality, further below):
 Scalar, Vector and Tensor Records
 ---------------------------------
 
-In general, all data sets shall be stored as homogenous arrays or matrices
+In general, all data sets shall be stored as homogeneous arrays or matrices
 respectively, depending on the (spatial) dimensionality of the record they
 represent.
 
@@ -327,8 +327,7 @@ the `record` is the `component` (and vice versa).
 Mesh Based Records
 ------------------
 
-Mesh based records such as discretized fields shall be represented as
-homogenous records, usually in a N-dimensional matrix.
+Mesh based records such as discretized fields shall be represented as homogeneous records, usually in a N-dimensional matrix.
 
 ### Required Attributes for each `mesh record`
 

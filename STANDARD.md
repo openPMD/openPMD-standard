@@ -762,6 +762,17 @@ molecular-dynamics simulations, CCD images or other particle and/or mesh-based
 records can proposed for [future versions](CONTRIBUTING.md) of this document.
 
 
+Data-Format Specific Conventions
+--------------------------------
+
+Some low-level data formats and libraries need slight additional conventions to make best use of openPMD.
+Individual implementation notes are described in:
+
+- **ADIOS**: see [FORMAT_ADIOS.md](FORMAT_ADIOS.md)
+- **HDF5**: see [FORMAT_HDF5.md](FORMAT_HDF5.md)
+- **JSON**: see [FORMAT_JSON.md](FORMAT_JSON.md)
+
+
 Implementations
 ---------------
 

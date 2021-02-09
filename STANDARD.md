@@ -750,12 +750,16 @@ the standard, using multiple extensions at the same time is discouraged.
 Up to now, the following domain-specific naming conventions for have been
 defined:
 
+- **BeamPhysics**: particle beams, photons, and external fields for accelerator physics,
+  see [EXT_BeamPhysics.md](EXT_BeamPhysics.md).
 - **ED-PIC**: electro-dynamic/static particle-in-cell codes,
   see [EXT_ED-PIC.md](EXT_ED-PIC.md).
 - **ParticleWeighting**: conventions for macroparticles,
   see [EXT_ParticleWeighting.md](EXT_ParticleWeighting.md).
 - **SpeciesType**: naming lists for particle species,
   see [EXT_SpeciesType.md](EXT_SpeciesType.md).
+- **WAVEFRONT**: fields for coherent wavefront propagation codes,
+  see [EXT_WAVEFRONT.md](EXT_WAVEFRONT.md).
 
 Extensions to similar domains such as fluid, finite-element or
 molecular-dynamics simulations, CCD images or other particle and/or mesh-based

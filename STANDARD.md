@@ -48,7 +48,9 @@ for changes in keywords).
 Hierarchy of the Data File
 --------------------------
 
-The used hierarchical data file format must provide the capability to
+For simplicity, we call the storage concept of a specific data format that implements the openPMD hierarchy "files", even if they are implemented in-memory or by other means.
+
+The used hierarchical data format must provide the capability to
 
   - create groups and sub-groups (in-file directories)
   - create multi-dimensional, homogeneous array-based data structures
@@ -85,7 +87,10 @@ Each file's *root* group (path `/`) must at least contain the attributes:
                    to create a real path from it replace all occurrences
                    of `%T` with the integer value of the iteration, e.g.,
                    `/data/%T` becomes `/data/100`
-    - allowed value: fixed to `/data/%T/` for this version of the standard
+    - allowed values:
+      - see *Iterations and Time Series* below
+      - for `fileBased` and `groupBased`, this is fixed to `/data/%T/`
+      - for `stepBased` this is fixed to `/data/`
     - note: all the data that is formatted according to the present
       standard (i.e. both the meshes and the particles) is to be
       stored within a path of the form given by `basePath` (e.g. in
@@ -195,9 +200,8 @@ standard:
 Iterations and Time Series
 --------------------------
 
-Iterations can be encoded in either the file name of each master-file of a
-time step or in groups of the same file. (Here, an *iteration* refers
-to a single simulation cycle.)
+Iterations can be encoded in either the file name of each individual files, in groups of the same file, or in data sets & attributes (with supported data formats).
+(Here, an *iteration* might refer to a single measurement or simulation cycle.)
 
 The chosen style shall not vary within a related set of iterations.
 
@@ -212,6 +216,7 @@ Each file's *root* group (path `/`) must further define the attributes:
     - allowed values:
       - `fileBased` (multiple files)
       - `groupBased` (one file)
+      - `stepBased` (one file with internally encoding, if supported by the data format)
 
   - `iterationFormat`
     - type: *(string)*
@@ -225,17 +230,16 @@ Each file's *root* group (path `/`) must further define the attributes:
     - examples:
       - for `fileBased`:
         - `filename_%T.h5` (without file system directories)
-      - for `groupBased`:
+      - for `groupBased`: (fixed value)
         - `/data/%T/` (must be equal to and encoded in the `basePath`)
+      - for `stepBased`: (fixed value)
+        - `slowest varying index`
 
 
 Required Attributes for the `basePath`
 --------------------------------------
 
-In addition to holding information about the iteration, each series of
-files  (`fileBased`) or series of groups (`groupBased`) should have
-attributes that describe the current time and the last
-time step.
+In addition to holding information about the iteration, each series of files  (`fileBased`), series of groups (`groupBased`) or internally encoded iterations (`stepBased`) should have attributes that describe the current time and the last time step.
 
  - `time`
    - type: *(floatX)*

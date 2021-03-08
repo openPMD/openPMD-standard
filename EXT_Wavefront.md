@@ -1,7 +1,7 @@
 Domain-Specific Naming Conventions for Coherent Wavefront Propagation Codes
 ===========================================================================
 
-openPMD extension name: `WAVEFRONT`
+openPMD extension name: `Wavefront`
 
 
 Introduction

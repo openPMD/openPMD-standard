@@ -758,8 +758,8 @@ defined:
   see [EXT_ParticleWeighting.md](EXT_ParticleWeighting.md).
 - **SpeciesType**: naming lists for particle species,
   see [EXT_SpeciesType.md](EXT_SpeciesType.md).
-- **WAVEFRONT**: fields for coherent wavefront propagation codes,
-  see [EXT_WAVEFRONT.md](EXT_WAVEFRONT.md).
+- **Wavefront**: fields for coherent wavefront propagation codes,
+  see [EXT_Wavefront.md](EXT_Wavefront.md).
 
 Extensions to similar domains such as fluid, finite-element or
 molecular-dynamics simulations, CCD images or other particle and/or mesh-based

@@ -370,7 +370,7 @@ meshes):
 
   - `axisLabels`
     - type: 1-dimensional array containing N *(string)*
-            elements, where N is the number of dimensions in the simulation
+            elements, where N is the number of dimensions in the mesh
     - description: this attribute assigns human-readible labels for the
                    indices `i`, `j`, `k`, etc. denoting the axes of a mesh
                    `A_{i,j,k}`
@@ -392,7 +392,7 @@ meshes):
 
   - `gridSpacing`
     - type: 1-dimensional array containing N *(floatX)*
-            elements, where N is the number of dimensions in the simulation
+            elements, where N is the number of dimensions in the mesh
     - description: spacing of the grid points along each dimension (in the
                    units of the simulation); this refers to the spacing of the
                    actual record that is written to the file, not that of the
@@ -403,7 +403,7 @@ meshes):
 
   - `gridGlobalOffset`
     - type: 1-dimensional array containing N *(float64 / REAL8)*
-            elements, where N is the number of dimensions in the simulation
+            elements, where N is the number of dimensions in the mesh
     - description: start of the current domain of the simulation (position of
                    the beginning of the first cell) in simulation units
     - advice to implementors: the order of the N values must be identical to
@@ -416,7 +416,7 @@ on Unit Systems and Dimensionality, further below):
 
   - `gridUnitSI`
     - type: 1-dimensional array containing N *(float64 / REAL8)*
-            elements, where N is the number of dimensions in the simulation.
+            elements, where N is the number of dimensions in the mesh.
             The order of the N values must be identical to the axes in `axisLabels`.
     - description: unit-conversion factor to multiply each value in
                    `gridSpacing` and `gridGlobalOffset`, in order to convert
@@ -425,7 +425,7 @@ on Unit Systems and Dimensionality, further below):
 
   - `gridUnitDimension`
     - type: 1-dimensional array of 7 N *(float64 / REAL8)*
-            elements, where N is the number of dimensions in the simulation.
+            elements, where N is the number of dimensions in the mesh.
             The order of the N 7-value arrays must be identical to the axes in `axisLabels`.
     - description: powers of the 7 base measures characterizing the
             grid axes's dimensions (length L, mass M, time T,
@@ -447,7 +447,7 @@ The following attributes must be stored with each `scalar record` and each
 
   - `position`
     - type: 1-dimensional array of N *(floatX)* where N is the number of
-            dimensions in the simulation.
+            dimensions in the mesh.
     - range of each value: `[ 0.0 : 1.0 )`
     - description: relative position of the component on the current element of
                    the mesh/grid/node/cell/voxel;
@@ -754,6 +754,8 @@ defined:
   see [EXT_BeamPhysics.md](EXT_BeamPhysics.md).
 - **ED-PIC**: electro-dynamic/static particle-in-cell codes,
   see [EXT_ED-PIC.md](EXT_ED-PIC.md).
+- **MeshRefinement**: mesh records refined over multiple levels of resolution,
+  see [EXT_MeshRefinement.md](EXT_MeshRefinement.md)
 - **ParticleWeighting**: conventions for macroparticles,
   see [EXT_ParticleWeighting.md](EXT_ParticleWeighting.md).
 - **SpeciesType**: naming lists for particle species,

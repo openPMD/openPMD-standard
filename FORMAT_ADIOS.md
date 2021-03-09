@@ -32,3 +32,35 @@ Output from `bpls -A` for a boolean attribute `pybool` stored in the location of
 
 There is no convention yet for a unique representation of ADIOS2 variables with boolean type.
 Thus, implementations should cast the data to and from `unsigned char` instead.
+
+## `stepBased` Encoding of Iterations
+
+In order to correlate openPMD iterations with ADIOS steps, the *root* group (path `/`) in ADIOS must contain a variable:
+
+  - `__step__`
+    - type: 1-dimensional array containing N *(int)* elements, where N is the number of ADIOS steps
+    - description: for each ADIOS step, this variable needs to be updated with the corresponding openPMD iteration.
+    - note: ADIOS steps are absolute and not every ADIOS step or openPMD iteration contains an update for each declared openPMD record.
+    - advice to implementers: [decide on this] an openPMD iteration for different openPMD records might be spread over multiple ADIOS steps.
+                              An iteration of an openPMD record must correspond to exactly one ADIOS step.
+
+## Datasets
+
+An openPMD **data set** is represented by an group prefix that contains an ADIOS variable `__data__`.
+
+**attributes** are defined further below and can also appear at the dataset's **group** prefix level.
+
+## Attributes
+
+openPMD **attributes** stored as ADIOS `Variables` at the location where they would usually be stored.
+
+Example for a mesh record `E` with record component `x` and attributes `unitDimension` and `unitSI`:
+```
+  double    /data/meshes/E/unitDimension     10*{7}
+  double    /data/meshes/E/x/__data__        10*{1000}
+  double    /data/meshes/E/x/position        10*{1}
+  double    /data/meshes/E/x/unitSI          10*scalar
+```
+
+This example uses `stepBased` iteration encoding, but other iteration encodings would work similarly with their respective `basePath` prefix.
+

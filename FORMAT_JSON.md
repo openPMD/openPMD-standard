@@ -20,7 +20,7 @@ An openPMD **data set** is represented by a JSON object with keys `attributes`, 
 {"attributes": <attributes>, "data": <data>, "datatype": <datatype>}
 ```
 
-**attributes** are defined further below and can also appear ath the openPMD **group** level.
+**attributes** are defined further below and can also appear at the openPMD **group** level.
 
 The `data` dictionary stores values as a multi-dimensional array in [row-major order](https://en.wikipedia.org/wiki/Row-_and_column-major_order#Programming_languages_and_libraries).
 The `datatype` key-value pair is defined for identification of the string-serialized type.

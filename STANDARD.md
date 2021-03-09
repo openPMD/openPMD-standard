@@ -456,6 +456,22 @@ The following attributes must be stored with each `scalar record` and each
                    the same dimensionality N as in `gridSpacing` and
                    `gridGlobalOffset`
 
+### Optional Attributes for each `mesh record`
+
+  - `particleList`
+    - type: *(string)*
+    - description:
+        this adds a hint to analysis tools that this mesh record is related to one or more particle groups;
+        multiple particle groups can be indicated at the same time and must appear as semicolon-separated list
+    - note:
+        this is often used in graphical user-interfaces to group projected meshes of particle distributions in a user-friendly manner;
+        examples are particle densities and phase space projections
+    - note:
+        when reading this back, the particle groups listed here might not be present in some steps or are even skipped in the whole openPMD series by the writer
+    - examples:
+      - `electrons`: indicates this field is related to the `particle group` named `electrons`
+      - `electrons;hydrogen;carbon`: indicates this field is related to the `particle group`s named `electrons`, `hydrogen` and `carbon`
+
 
 Particle Records
 ----------------
@@ -595,6 +611,22 @@ patch order:
                    the patch as the exact upper bound of position `offset` +
                    `extent` is excluded from the patch;
                    the same requirements as for regular record components apply
+
+### Optional Attributes for each `Particle Group`
+
+  - `meshList`
+    - type: *(string)*
+    - description:
+        this adds a hint to analysis tools that this particle group is related to one or more mesh records;
+        multiple mesh records can be indicated at the same time and must appear as semicolon-separated list
+    - note:
+        this is often used in graphical user-interfaces to group meshes that are sampled with particles in a user-friendly manner;
+        examples are particle probes as well as non-uniform and curved samples from large meshes
+    - note:
+        when reading this back, the mesh records listed here might not be present in some steps or are even skipped in the whole openPMD series by the writer
+    - examples:
+      - `E`: indicates this particle group is related to the `E` mesh record
+      - `E;B;j`: indicates this particle group is related to the `E`, `B` and `j` mesh records
 
 
 Unit Systems and Dimensionality

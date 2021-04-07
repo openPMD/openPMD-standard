@@ -216,7 +216,7 @@ Each file's *root* group (path `/`) must further define the attributes:
     - allowed values:
       - `fileBased` (multiple files)
       - `groupBased` (one file)
-      - `stepBased` (one file with internally encoding, if supported by the data format)
+      - `stepBased` (one file with internal encoding for iterations, if supported by the data format)
 
   - `iterationFormat`
     - type: *(string)*
@@ -227,13 +227,26 @@ Each file's *root* group (path `/`) must further define the attributes:
                    for `fileBased` formats the iteration must be included
                    in the file name;
                    the format depends on the selected `iterationEncoding` method
+    - note: it is not required that every openPMD iteration contains an update for each declared openPMD record (see below)
     - examples:
       - for `fileBased`:
         - `filename_%T.h5` (without file system directories)
       - for `groupBased`: (fixed value)
         - `/data/%T/` (must be equal to and encoded in the `basePath`)
       - for `stepBased`: (fixed value)
-        - `slowest varying index`
+        - data-format internal convention
+        - *slowest varying index* of data
+
+### `stepBased` Encoding of Iterations
+
+In order to correlate openPMD iterations with an index of data-format internal updates/steps or an index in the slowest varying dimension of an array, the *root* group (path `/`) must contain an additional variable once `stepBased` is chosen for `iterationEncoding`:
+
+  - `snapshot`
+    - type: 1-dimensional array containing N *(int)* elements, where N is the number of updates/steps in the data format
+    - description: for each update/step in a data format, this variable needs to be updated with the corresponding openPMD iteration.
+    - note: in some data formats, updates/steps are absolute and not every update/step contains an update for each declared openPMD record
+    - advice to implementers: an openPMD iteration might be spread over multiple updates/steps, but not vice versa.
+                              In such a scenario, an individual openPMD record's update/step must appear exactly once per iteration.
 
 
 Required Attributes for the `basePath`

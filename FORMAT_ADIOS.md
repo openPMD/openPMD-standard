@@ -35,14 +35,7 @@ Thus, implementations should cast the data to and from `unsigned char` instead.
 
 ## `stepBased` Encoding of Iterations
 
-In order to correlate openPMD iterations with ADIOS steps, the *root* group (path `/`) in ADIOS must contain a variable:
-
-  - `__step__`
-    - type: 1-dimensional array containing N *(int)* elements, where N is the number of ADIOS steps
-    - description: for each ADIOS step, this variable needs to be updated with the corresponding openPMD iteration.
-    - note: ADIOS steps are absolute and not every ADIOS step or openPMD iteration contains an update for each declared openPMD record.
-    - advice to implementers: [decide on this] an openPMD iteration for different openPMD records might be spread over multiple ADIOS steps.
-                              An iteration of an openPMD record must correspond to exactly one ADIOS step.
+The `iterationEncoding` mode `stepBased` must be implemented via ADIOS steps.
 
 ## Datasets
 

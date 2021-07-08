@@ -205,6 +205,10 @@ Particle Records (Macroparticles)
 The following additional attributes are defined in this extension.
 The individual requirement is given in `scope`.
 
+Note that the attributes below to not include information about the species
+type (e.g. electrons, Helium 4, etc.). Please use the [SpeciesType
+extension](EXT_SpeciesType.md) in order to include this type of information.
+
   - `particleShape`
     - type: *(floatX)*
     - scope: *required*
@@ -435,21 +439,6 @@ should be used to push the particle.
   - `boundElectrons`
     - type: *(floatX)* or *(intX)* or *(uintX)*
     - description: number of bound electrons of an ion/atom;
-                   to provide information to atomic physics algorithms
-    - advice to implementors: must have `weightingPower = 1` and
-                              `unitDimension = (0., ..., 0.)` (dimensionless)
-
-  - `protonNumber`
-    - type: *(floatX)* or *(intX)* or *(uintX)*
-    - description: the atomic number Z of an ion/atom;
-                   to provide information to atomic physics algorithms
-    - advice to implementors: must have `weightingPower = 1` and
-                              `unitDimension = (0., ..., 0.)` (dimensionless)
-
-  - `neutronNumber`
-    - type: *(floatX)* or *(intX)* or *(uintX)*
-    - description: the neutron number N = the mass number - A and
-                   the atomic number Z of an ion/atom;
                    to provide information to atomic physics algorithms
     - advice to implementors: must have `weightingPower = 1` and
                               `unitDimension = (0., ..., 0.)` (dimensionless)

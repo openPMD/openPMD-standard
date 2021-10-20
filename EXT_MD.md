@@ -70,10 +70,10 @@ Particle Records
 
 The following attributes are defined in this extension. The individual requirement is given in `scope`. 
 
-- `coordinate`
+- `positionFormat`
     - type: *(string)*
     - scope: *required*
-    - description: the representation of the stored position coordinates
+    - description: the format of the stored position coordinates
     - available values:
       - `absolute` the unscaled coordinates
       - `fractional` the coordinates that are scaled in the range of [0,1] relative to the length of each box edge; in this coordinate system, the `unitSI` of each position component should be `1.0`
@@ -118,11 +118,11 @@ The individual requirement is given in `scope`.
   - `edge`
     - type: DxD array of *(floatX)*, where **D** is the value of `dimension`.
     - scope: *required*, if `box` sub-group exists
-    - description: the edge vector of the simulation box in each dimension.
+    - description: the edge direction vector of the simulation box in each dimension.
     - example values:
-      - `[[1.,0.,0.],[0.,1.,0.],[0.,0.,1.]]` 3D cubic simulation box, Ax = (1.,0.,0.), Ay = (0.,1.,0.), Az = (0.,0.,1.)
+      - `[[1.,0.,0.],[0.,1.,0.],[0.,0.,1.]]` 3D orthorhombic simulation box, Ax = (1.,0.,0.), Ay = (0.,1.,0.), Az = (0.,0.,1.)
       - `[[3.46,0.,0.],[1.73,2.997,0.],[0.,0.,10.]]` 3D triclinic simulation box, Ax = (3.46,0.,0.), Ay = (1.73,2.997,0.), Az = (0.,0.,10.)
-      - `[[1.,0.],[1.,1.]]` 2D rectangle simulation box, Ax = (1.,0.), Ay = (0.,1.)
+      - `[[1.,0.],[0.,1.]]` 2D rectangle simulation box, Ax = (1.,0.), Ay = (0.,1.)
   - `limit`
     - type: Dx2 array of *(floatX)*, where **D** is the value of `dimension`.
     - scope: *required*, if `box` sub-group exists

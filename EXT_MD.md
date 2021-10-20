@@ -100,10 +100,15 @@ The individual requirement is given in `scope`.
   - `boundary`
     - type: array of *(string)* containing **D** elements, where **D** is the value of `dimension`.
     - scope: *required*, if `box` sub-group exists
-    - description: the boundary condition of the box along each dimension. The allowed values in `boundary` are either **periodic** or **none**.
+    - description: the boundary condition of the box along each dimension.
+    - Allowed values
+        - `none`
+        - `periodic`
+        - `dirichlet`
+        - `neumann`
     - example values:
       - `["periodic","periodic","periodic"]`  periodic in all the three dimensions
-      - `["none","periodic","periodic"]` periodic in only *y* and *z* dimensions
+      - `["none","periodic","periodic"]` periodic in only the second and third dimensions
 
 ### Records for Sub-Group `box`
 

@@ -235,7 +235,7 @@ The following possible records of the `Particle Group` are for specifying proper
   - type: Optional 6x6-matrix *(real)*
   - description: Second order beam moments of `(x, px, y, py, z, pz)`.
 
-Particle Record Dataset Attributes
+Record Dataset Attributes
 ----------------------------------
 
 The following attributes can be used with any dataset:
@@ -247,6 +247,10 @@ The following attributes can be used with any dataset:
 - `maxValue`:
   - type: Optional *(real)*
   - description: Maximum of the data.
+
+- `gridDataOrder`:
+  - type: Optional *(string)*
+  - description: Used with HDF5 and any other storage medium where the storage order of multidimensional arrays can vary depending upon the language of the code interfaced to the API of the storage medium. Possible values are "C" indicating row major storage or "F" indicating column major order. Default if not present or blank is "F".
 
 External Mesh Fields Groups
 ===========================

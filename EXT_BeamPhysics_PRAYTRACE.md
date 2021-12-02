@@ -1,21 +1,21 @@
 Additional definitions for photon raytracing for BeamPhysics Extension of the openPMD Standard
 =========================================================================================================
-openPMD extension name: `BeamPhysics`
+openPMD extension name: `Raytracing`
 
 Overview
 --------
 
-The `BeamPhysics` extension to the openPMD standard is meant for describing particles and fields commonly encountered in accelerator physics simulations.
+The `Raytracing` extension to the openPMD standard is meant for describing particles and fields commonly encountered in photon and neutron raytracing simulations.
 
 How to Use this Extension
 -------------------------
 
-The `BeamPhysics` extension to the openPMD standard is indicated in a data file by the setting of the `openPMDextension` attribute:
+The `Raytracing` extension to the openPMD standard is indicated in a data file by the setting of the `openPMDextension` attribute:
 ```
-  openPMDextension = BeamPhysics;SpeciesType
+  openPMDextension = Raytracing;SpeciesType
 ```
 
-Note: The `SpeciesType` extension must be used when using the `BeamPhysics` extension.
+Note: The `SpeciesType` extension must be used when using the `Raytracing` extension, setting it to either `photon` or `neutron`.
 
 Definitions
 -----------

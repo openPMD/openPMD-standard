@@ -103,7 +103,7 @@ The following records store data on a particle-by-particle basis.
   - components: numParticles columns and rows of (`x'`, `y'`, `z'`)
   - description: `velocity` in beamphysics extension. 3 x N vector with rows being the direction in (`x`, `y`, `z`) respectively.
 
-- `nonPhotonPolarization/`
+- `neutronPolarization/`
   - type: Optional 3 x N-vector *(real)*
   - description: Polarization for neutrons.
   - components: numParticles columns and rows of (`x`, `y`, `z`).
@@ -112,9 +112,13 @@ The following records store data on a particle-by-particle basis.
   - type: Required 1 x N-vector *(real)*
   - description: Wavelength of the N-th ray.
 
+- `opticalPath/`
+  - type: Optional 1 x N-vector *(real)*
+  - description: For photons, the accumulated flying distance for the ray from the source to the current beam position.
+  
 - `rayTime/`
   - type: Optional 1 x N-vector *(real)*
-  - description: For neutrons, the time w. r. t. emission of the neutron..
+  - description: For neutrons, the time w. r. t. emission of the neutron.
 
 - `weight/`
   - type: Optional 1 x N-vector *(real)*
@@ -125,22 +129,22 @@ The following records store data on a particle-by-particle basis.
   - description: Some programs give each particle an ID number. This field can be used to record that number. The `id` parameter is defined in the openPMD base standard and is just mentioned here for completeness sake. See the openPMD base standard for more details.
 
 - `photonSPolarizationAmplitude/`
-  - type: Required 3 x N-vector *(real)*
+  - type: Optional 3 x N-vector *(real)*
   - description: Electric field amplitude of s- polarized photons.
   - components: numParticles columns and rows of (`x`, `y`, `z`).
 
 - `photonSPolarizationPhase/`
-  - type: Required 1 x N-vector *(real)*
+  - type: Optional 1 x N-vector *(real)*
   - description: Electric field phase of s- polarized photons.
   - components: numParticles of phase in [rad].
 
 - `photonPPolarizationAmplitude/`
-  - type: Required 3 x N-vector *(real)*
+  - type: Optional 3 x N-vector *(real)*
   - description: Electric field amplitude of p- polarized photons.
   - components: numParticles columns and rows of (`x`, `y`, `z`).
 
 - `photonPPolarizationPhase/`
-  - type: Required 1 x N-vector *(real)*
+  - type: Optional 1 x N-vector *(real)*
   - description: Electric field phase of p- polarized photons.
   - components: numParticles of phase in [rad].
 

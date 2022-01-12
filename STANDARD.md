@@ -6,9 +6,9 @@ VERSION: **1.1.0** (Feburary 6th, 2018)
 Conventions Throughout these Documents
 --------------------------------------
 
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
-"SHOULD NOT", "RECOMMENDED",  "MAY", and "OPTIONAL" in this document are to be
-interpreted as described in [RFC 2119](http://tools.ietf.org/html/rfc2119).
+The keywords "must", "must not", "required", "shall", "shall not", "should",
+"should not", "recommended",  "may", and "optional" in this document are to be
+interpreted as described in [IETF RFC 2119](https://datatracker.ietf.org/doc/html/rfc2119).
 
 All `keywords` in this standard are case-sensitive.
 

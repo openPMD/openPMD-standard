@@ -74,7 +74,7 @@ In case of photon raytracing extension, the default **particlesPath** is `partic
 
 
 `Particle Group` Attributes
---------------------------------
+---------------------------
 
 For each **particle group** the following attributes are defined:
 

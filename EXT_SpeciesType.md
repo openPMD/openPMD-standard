@@ -49,17 +49,17 @@ The following additional attribute for openPMD `mesh records` and
 
 This attribute can be used with any `record` (including `mesh records`).
 
-A particle species list containing only a single item MUST be treated as a
-single species.
+A particle species list containing only a single item **must** be
+treated as a single species.
 
 > Note that `other:` can *only* be used for single species, it is
 > forbidden in lists.
 >
 > The list separator is a sole `;`. Neither spaces around it nor empty
 > list items (two semicolons following each other `;;`) are allowed.
-> However, a single trailing semicolon `;` MUST be ignored.
+> However, a single trailing semicolon `;` **must** be ignored.
 
-The following values SHOULD NOT be used by an implementation, even if
+The following values **should not** be used by an implementation, even if
 they are allowed above:
 
 - `other:`, as it does not specify any content.
@@ -161,15 +161,15 @@ element = "H" / "He" / "Li" / "Be" / "B" / "C" / "N" / "O" / "F" / "Ne" / "Na" /
 The charge state is not encoded by the `speciesType` attribute.
 
 The charge state ("ionization") is an attribute of an individual
-particle, and therefore an implementation SHOULD NOT encode a charge
-state as part of the `speciesType` in any way.
+particle, and therefore an implementation **should not** encode a
+charge state as part of the `speciesType` in any way.
 In the case that the implementation does treat the charge state
 ("ionization") as a global, unmodifiable property of the `speciesType`
-it MAY encode a charge state in an implementation-defined way.
+it **may** encode a charge state in an implementation-defined way.
 
 ### Molecules
 Molecules are not supported by the `speciesType` attribute.
 
-However, an implementation MAY encode molecules using an
+However, an implementation **may** encode molecules using an
 implementation-defined syntax. In this case typical chemical notation
-SHOULD be accepted, e.g. `H2O` for water.
+**should** be accepted, e.g. `H2O` for water.

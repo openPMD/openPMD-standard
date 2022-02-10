@@ -16,9 +16,9 @@ The **openPMD** standard, short for
 is **not a file format** per se.
 It is a standard for **meta data and naming schemes**.
 
-openPMD provides naming and attribute conventions that allow to exchange
-**particle and mesh based data** from scientific simulations and experiments.
-The primary goals are to define
+openPMD provides naming and attribute conventions that allow for the exchange
+of **particle and mesh-based data** from scientific simulations and experiments.
+The primary goal is to define
 
   - a minimal set/kernel of meta information
 
@@ -26,7 +26,7 @@ that allows to share and exchange data to achieve
 
   - portability between various applications and differing algorithms
   - a unified open-access description for scientific data (publishing and archiving)
-  - a unified description for post-processing, visualization and analysis.
+  - a unified description for post-processing, visualization, and analysis.
 
 openPMD suits for **any kind of hierarchical, self-describing** data format,
 such as, but not limited to

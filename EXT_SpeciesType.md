@@ -117,7 +117,7 @@ We currently do not define spellings of hadrons besides the commonly used ones
 below.
 
 For particle species not mentioned here we suggest to use `other:`
-with namings from the [particle data group (PDG)](http://pdg.lbl.gov/).
+with namings from the [particle data group (PDG)](http://pdg.lbl.gov).
 
 Examples:
 

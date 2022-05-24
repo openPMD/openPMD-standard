@@ -183,7 +183,7 @@ The following records store data on a particle-by-particle basis.
 
 - `particleStatus/`
     - type: Optional *(int)*
-    - description: Integer indicating whether a particle is "alive" or "dead" (for example, has hit the vacuum chamber wall). A value of one indicates the particle is alive and any other value indicates that the particle is dead. Programs are free to distinguish how a particle died by assigning different non-unit values to `particleStatus`. For example, a program might want to differentiate between particles that are dead due to hitting the side walls versus reversing the direction longitudinally in an RF cavity.
+    - description: Integer indicating whether a particle is "alive" or "dead" (for example, has hit the vacuum chamber wall). A value of one indicates the particle is alive. A value of zero indicates the particle is within the body of a material (EG: cathode emitter) waiting to be emitted. Any other value indicates that the particle is dead. Programs are free to distinguish how a particle died by assigning different non-unit values to `particleStatus`. For example, a program might want to differentiate between particles that are dead due to hitting the side walls versus reversing the direction longitudinally in an RF cavity.
 
 - `pathLength/`
     - type: Optional *(real)*

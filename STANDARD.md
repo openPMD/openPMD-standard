@@ -239,7 +239,7 @@ Each file's *root* group (path `/`) must further define the attributes:
 
 ### `variableBased` Encoding of Iterations
 
-In order to correlate openPMD iterations with an index of data-format internal updates/steps or an index in the slowest varying dimension of an array, the *root* group (path `/`) must contain an additional variable once `variableBased` is chosen for `iterationEncoding`:
+In order to correlate openPMD iterations with an index of data-format internal updates/steps or an index in the slowest varying dimension of an array, the iteration base path (default: path `/default`) must contain an additional variable once `variableBased` is chosen for `iterationEncoding`:
 
   - `snapshot`
     - type: 1-dimensional array containing N *(int)* elements, where N is the number of updates/steps in the data format
@@ -247,6 +247,14 @@ In order to correlate openPMD iterations with an index of data-format internal u
     - note: in some data formats, updates/steps are absolute and not every update/step contains an update for each declared openPMD record
     - advice to implementers: an openPMD iteration might be spread over multiple updates/steps, but not vice versa.
                               In such a scenario, an individual openPMD record's update/step must appear exactly once per iteration.
+
+Notes:
+
+* In implementations without support for IO steps, the variable-based encoding of iterations may still be used for storage of a single iteration.
+  In that case, the `snapshot` attribute is optional and defaults to zero (0).
+* In implementations with support for IO steps, the `snapshot` attribute may optionally be used in group-based encoding to associate openPMD iterations with IO steps.
+  In group-based encoding, there is still only one instance of this attribute globally (`/data/snapshot`).
+  In consequence, the attribute shall only be written if modifiable attributes are supported by the implementation.
 
 
 Required Attributes for the `basePath`

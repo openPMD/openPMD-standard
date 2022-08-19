@@ -90,7 +90,7 @@ Each file's *root* group (path `/`) must at least contain the attributes:
     - allowed values:
       - see *Iterations and Time Series* below
       - for `fileBased` and `groupBased`, this is fixed to `/data/%T/`
-      - for `stepBased` this is fixed to `/data/`
+      - for `variableBased` this is fixed to `/data/`
     - note: all the data that is formatted according to the present
       standard (i.e. both the meshes and the particles) is to be
       stored within a path of the form given by `basePath` (e.g. in
@@ -216,7 +216,7 @@ Each file's *root* group (path `/`) must further define the attributes:
     - allowed values:
       - `fileBased` (multiple files)
       - `groupBased` (one file)
-      - `stepBased` (one file with internal encoding for iterations, if supported by the data format)
+      - `variableBased` (one file with internal encoding for iterations, if supported by the data format)
 
   - `iterationFormat`
     - type: *(string)*
@@ -233,13 +233,13 @@ Each file's *root* group (path `/`) must further define the attributes:
         - `filename_%T.h5` (without file system directories)
       - for `groupBased`: (fixed value)
         - `/data/%T/` (must be equal to and encoded in the `basePath`)
-      - for `stepBased`: (fixed value)
+      - for `variableBased`: (fixed value)
         - data-format internal convention
         - *slowest varying index* of data
 
-### `stepBased` Encoding of Iterations
+### `variableBased` Encoding of Iterations
 
-In order to correlate openPMD iterations with an index of data-format internal updates/steps or an index in the slowest varying dimension of an array, the *root* group (path `/`) must contain an additional variable once `stepBased` is chosen for `iterationEncoding`:
+In order to correlate openPMD iterations with an index of data-format internal updates/steps or an index in the slowest varying dimension of an array, the *root* group (path `/`) must contain an additional variable once `variableBased` is chosen for `iterationEncoding`:
 
   - `snapshot`
     - type: 1-dimensional array containing N *(int)* elements, where N is the number of updates/steps in the data format
@@ -252,7 +252,7 @@ In order to correlate openPMD iterations with an index of data-format internal u
 Required Attributes for the `basePath`
 --------------------------------------
 
-In addition to holding information about the iteration, each series of files  (`fileBased`), series of groups (`groupBased`) or internally encoded iterations (`stepBased`) should have attributes that describe the current time and the last time step.
+In addition to holding information about the iteration, each series of files  (`fileBased`), series of groups (`groupBased`) or internally encoded iterations (`variableBased`) should have attributes that describe the current time and the last time step.
 
  - `time`
    - type: *(floatX)*

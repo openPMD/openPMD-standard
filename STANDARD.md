@@ -214,9 +214,9 @@ Each file's *root* group (path `/`) must further define the attributes:
                    is an other `open/close` call necessary to access other
                    iterations
     - allowed values:
-      - `fileBased` (multiple files)
-      - `groupBased` (one file)
-      - `variableBased` (one file with internal encoding for iterations, if supported by the data format)
+      - `fileBased` (multiple files; one iteration per file)
+      - `groupBased` (one file; iteration use groups in that file)
+      - `variableBased` (one file; if the data format supports to store multiple iterations in the same variables and attributes)
 
   - `iterationFormat`
     - type: *(string)*

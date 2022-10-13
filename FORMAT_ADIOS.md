@@ -49,10 +49,10 @@ openPMD **attributes** stored as ADIOS `Attributes` at the location where they w
 
 Example for a mesh record `E` with record component `x` and attributes `unitDimension` and `unitSI`:
 ```
-  double    /data/meshes/E/unitDimension          attr   = {0, 0, 0, 0, 0, 0, 0}
-  double    /data/meshes/E/x                      {1000}
-  double    /data/meshes/E/x/position             attr   = 0
-  double    /data/meshes/E/x/unitSI               attr   = 1
+  double    /data/meshes/E/unitDimension          attr   = {1, 1, -3, -1, 0, 0, 0}
+  double    /data/meshes/E/x                      {128, 2048, 128}
+  double    /data/meshes/E/x/position             attr   = {0.5, 0.5, 0.5}
+  double    /data/meshes/E/x/unitSI               attr   = 1.22627e+13
 ```
 
 This example uses `variableBased` iteration encoding, but other iteration encodings would work similarly with their respective `basePath` prefix.

@@ -215,7 +215,7 @@ Each file's *root* group (path `/`) must further define the attributes:
                    iterations
     - allowed values:
       - `fileBased` (multiple files; one iteration per file)
-      - `groupBased` (one file; iteration use groups in that file)
+      - `groupBased` (one file; iterations use groups in that file)
       - `variableBased` (one file; if the data format supports to store multiple iterations in the same variables and attributes)
 
   - `iterationFormat`
@@ -239,7 +239,7 @@ Each file's *root* group (path `/`) must further define the attributes:
 
 ### `variableBased` Encoding of Iterations
 
-In order to correlate openPMD iterations with an index of data-format internal updates/steps or an index in the slowest varying dimension of an array, the iteration base path (default: path `/default`) must contain an additional variable once `variableBased` is chosen for `iterationEncoding`:
+In order to correlate openPMD iterations with an index of data-format internal updates/steps or an index in the slowest varying dimension of an array, the iteration base path (default: path `/data`) must contain an additional variable once `variableBased` is chosen for `iterationEncoding`:
 
   - `snapshot`
     - type: 1-dimensional array containing N *(int)* elements, where N is the number of updates/steps in the data format
@@ -250,9 +250,9 @@ In order to correlate openPMD iterations with an index of data-format internal u
 
 Notes:
 
-* In implementations without support for IO steps, the variable-based encoding of iterations may still be used for storage of a single iteration.
+* In implementations without support for storing multiple versions of datasets/attributes, the variable-based encoding of iterations may still be used for storage of a single iteration.
   In that case, the `snapshot` attribute is optional and defaults to zero (0).
-* In implementations with support for IO steps, the `snapshot` attribute may optionally be used in group-based encoding to associate openPMD iterations with IO steps.
+* In implementations with support for storing multiple versions of datasets/attributes, the `snapshot` attribute may optionally be used in group-based encoding to associate openPMD iterations with IO steps.
   In group-based encoding, there is still only one instance of this attribute globally (`/data/snapshot`).
   In consequence, the attribute shall only be written if modifiable attributes are supported by the implementation.
 

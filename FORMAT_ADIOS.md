@@ -50,7 +50,7 @@ openPMD **attributes** stored as ADIOS `Attributes` at the location where they w
 Example for a mesh record `E` with record component `x` and attributes `unitDimension` and `unitSI`:
 ```
   double    /data/meshes/E/unitDimension          attr   = {0, 0, 0, 0, 0, 0, 0}
-  int32_t   /data/meshes/E/x                      {1000}
+  double    /data/meshes/E/x                      {1000}
   double    /data/meshes/E/x/position             attr   = 0
   double    /data/meshes/E/x/unitSI               attr   = 1
 ```

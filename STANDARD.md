@@ -260,7 +260,7 @@ Notes:
 Required Attributes for the `basePath`
 --------------------------------------
 
-In addition to holding information about the iteration, each series of files  (`fileBased`), series of groups (`groupBased`) or internally encoded iterations (`variableBased`) should have attributes that describe the current time and the last time step.
+In addition to holding information about the iteration, each series of files  (`fileBased`), series of groups (`groupBased`) or internally encoded iterations (`variableBased`) should have attributes that describe the current time and the last step.
 
  - `time`
    - type: *(floatX)*

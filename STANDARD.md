@@ -207,8 +207,8 @@ Each file's *root* group (path `/`) must further define the attributes:
     - type: *(string)*
     - description: Whether other iterations of this series, from the
                    file-format's API point of view, are encoded in the same file
-                   or in separate files. In the latter case, another `open/close`
-                   call is necessary to access other iterations
+                   or whether another `open/close` call is necessary to access
+                   other iterations
     - allowed values:
       - `fileBased` (multiple files)
       - `groupBased` (one file)

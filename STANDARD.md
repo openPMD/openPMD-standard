@@ -144,7 +144,7 @@ contains the attributes:
 
   - `author`
     - type: *(string)*
-    - description: Author and contact for the information in the file
+    - description: author and contact for the information in the file
     - example: `Axel Huebl <a.huebl@hzdr.de>`
 
   - `software`
@@ -205,20 +205,20 @@ Each file's *root* group (path `/`) must further define the attributes:
 
   - `iterationEncoding`
     - type: *(string)*
-    - description: tells if other iterations of this series, from the
-                   file-format's API point of view, encoded in the same file or
-                   is an other `open/close` call necessary to access other
-                   iterations
+    - description: whether other iterations of this series, from the
+                   file-format's API point of view, are encoded in the same file
+                   or whether another `open/close` call is necessary to access
+                   other iterations
     - allowed values:
       - `fileBased` (multiple files)
       - `groupBased` (one file)
 
   - `iterationFormat`
     - type: *(string)*
-    - description: a well defined string with the iteration `%T` placeholder
+    - description: a well-defined string with the iteration `%T` placeholder
                    defining either the series of files (`fileBased`) or the
                    series of groups within a single file (`groupBased`)
-                   that allows to extract the iteration from it;
+                   from which the iteration can be extracted;
                    for `fileBased` formats the iteration must be included
                    in the file name;
                    the format depends on the selected `iterationEncoding` method
@@ -252,7 +252,7 @@ time step.
 
  - `dt`
    - type: *(floatX)*
-   - description: The latest time step (that was used to reach this iteration).
+   - description: the latest time step (that was used to reach this iteration).
                   This is needed at the iteration level, since the time step
                   may vary from iteration to iteration in certain codes.
 

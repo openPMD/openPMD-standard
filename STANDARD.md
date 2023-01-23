@@ -792,6 +792,8 @@ defined:
   see [EXT_SpeciesType.md](EXT_SpeciesType.md).
 - **Wavefront**: fields for coherent wavefront propagation codes,
   see [EXT_Wavefront.md](EXT_Wavefront.md).
+- **LaserEnvelope**: envelope of a laser pulse,
+  see [EXT_LaserEnvelope.md](EXT_LaserEnvelope.md).
 
 Extensions to similar domains such as fluid, finite-element or
 molecular-dynamics simulations, CCD images or other particle and/or mesh-based

@@ -27,11 +27,11 @@ where $\operatorname{Re}$ stands for real part,  $E_x$ (resp. $E_y$) is the lase
 
 When added to an output, the following naming conventions shall be used for complex electric field `mesh records`.
 
-- `laserEnvelope/`
-  - type: *(complexX)*
-  - scope: *(required)*
-  - decription: Scalar field for the envelope (in V/m). See above for description.
-  - unitDimension = `(1., 1., -3., -1., 0., 0., 0.)` $(V/m = kg . m / (A . s^3))$
+  - `laserEnvelope/`
+    - type: *(complexX)*
+    - scope: *(required)*
+    - decription: Scalar field for the envelope (in V/m). See above for description.
+    - unitDimension = `(1., 1., -3., -1., 0., 0., 0.)` $(V/m = kg . m / (A . s^3))$
 
 ### Additional attributes on the `mesh record` named `laserEnvelope`
 
@@ -42,16 +42,9 @@ On the `series` object, set the following attributes:
     - description: Angular frequency $\omega_0$ at which the laser envelope is defined (rad/s).
     - scope: *required*
 
-
   - `polarization`
-    - type: *(floatX)*
-    - description: Polarization vector. This vector is normalized (so its modulus is 1) and contains all information to account for polarization states and carrier-envelope phase (CEP).
-    - scope: *required*
-    - components:
-      - `x/`
-      - `y/`
-    - `unitDimension = (0., 0., 0., 0., 0., 0., 0.)` (unitless)
-
+    - type: 1-dimensional array containing 2 *(complexX)*
+    - description: polarization vector, 2 values for the 2 transverse components x and y. This vector is normalized (so its modulus is 1) and contains all information to account for polarization states and carrier-envelope phase (CEP).
 
   - `propagationDirection`
     - type: *(floatX)*

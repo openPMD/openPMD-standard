@@ -9,7 +9,7 @@ Introduction
 This convention is for standardizing the names of particle species, e.g. in
 particle physics.
 
-This document uses ABNF as speciefied by [RFC 5234][rfc5234].
+This document uses ABNF as specified by [RFC 5234][rfc5234].
 
 [rfc5234]: https://datatracker.ietf.org/doc/html/rfc5234
 

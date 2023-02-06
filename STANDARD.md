@@ -366,7 +366,9 @@ meshes):
       - for `thetaMode` geometry:
         - `m=3;imag=+` (3 *modes* and using a `+` sign for the definition of
                         the *imaginary* part)
-                       ![definition of imaginary part](img/cylindrical.png)
+```math
+    E_z = \tilde{E}_{z,0} + \sum_{l=1}^{m} \mathcal{R}(\tilde{E}_{z,l}) \cdot \cos(l \Theta) {\color{red}+} \mathcal{I}(\tilde{E}_{z,l}) \cdot \sin(l \Theta)$
+```
 
   - `axisLabels`
     - type: 1-dimensional array containing N *(string)*

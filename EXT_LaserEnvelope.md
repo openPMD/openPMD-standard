@@ -27,15 +27,20 @@ where $\operatorname{Re}$ stands for real part,  $E_x$ (resp. $E_y$) is the lase
 
 When added to an output, the following naming conventions shall be used for complex electric field `mesh records`.
 
-  - `laserEnvelope/`
+  - `<laser envelope name>/`
     - type: *(complexX)*
-    - scope: *(required)*
-    - description: Scalar field for the envelope (as a field strength). See above for description.
+    - scope: *required*
+    - description: Scalar field for the envelope (as a field strength). See above for description. The name is arbitrary, allowing a single series to store multiple laser pulses.
     - unitDimension = `(1., 1., -3., -1., 0., 0., 0.)` $(V/m = kg . m / (A . s^3))$
 
-### Additional attributes on the `mesh record` named `laserEnvelope`
+### Additional attributes on the `mesh record` named `<laser envelope name>`
 
 On the `series` object, set the following attributes:
+
+  - `isLaserEnvelope`
+    - type: *(boolean)*
+    - description: Whether the mesh record is of type laserEnvelope.
+    - scope: *optional*
 
   - `angularFrequency`
     - type: *(floatX)*

@@ -350,10 +350,10 @@ meshes):
                      `r` direction and where the first axis corresponds to
                      the azimuthal mode. (This last axis has length `2m-1`,
                      where `m` is the number of modes used. By convention,
-                     this first stores the real part of the mode `0`, then
+                     this first stores only the real part of the mode `0`, then
                      the real part of the mode `1`, then the imaginary part
                      of the mode `1`, then the real part of the mode `2`,
-                     etc.)
+                     then the imaginary part of the mode `2`, etc.)
       - reserved: `cylindrical`, `spherical`
       - `other`
 

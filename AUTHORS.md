@@ -34,6 +34,7 @@ Above authors and:
 - Carsten Fortmann-Grote (EU XFEL, MPI-EvolBio)
 - Ángel Ferran Pousa (DESY)
 - Juncheng E (EU XFEL)
+- Maxence Thévenet (DESY)
 
 
 ### Affiliations

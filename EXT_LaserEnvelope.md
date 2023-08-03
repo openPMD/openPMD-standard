@@ -62,7 +62,7 @@ On the `series` object, set the following attributes:
     - scope: *required*
 
   - `isSpatial`
-    - type: *(bool)*
+    - type: *(boolean)*
     - description: If True, the longitudinal dimension represents space (z). If False, it represents time.
     - scope: *required*
 

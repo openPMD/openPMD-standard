@@ -14,7 +14,7 @@ Mesh Based Records (Fields)
 
 ### Naming Conventions for `mesh record`s (field records)
 
-The laser pulse is represented as a single complex field $\mathcal{E}$, describing the envelope of the laser electric field:
+The laser pulse is represented as a single complex field $\mathcal{E}$, describing the envelope of the laser electric field, either in temporal representation:
 
 ```math
    \begin{aligned}
@@ -23,7 +23,16 @@ The laser pulse is represented as a single complex field $\mathcal{E}$, describi
 \end{aligned}
 ```
 
-where $\mathrm{Re}$ stands for real part,  $E_x$ (resp. $E_y$) is the laser electric field in the x (resp. y) direction, $\mathcal{E}$ is the complex laser envelope described in the standard, $\omega_0 = 2\pi c/\lambda_0$ is the angular frequency defined from the laser wavelength $\lambda_0$ and $(p_x,p_y)$ is the (complex and normalized) polarization vector. The polarization state (linear, circular, elliptical) is controlled by the phase of the polarization vector. For instance, if $arg(p_x) = arg(p_y)$, the polarization is linear. If $arg(p_x) = arg(p_y) + \pi/2$, the polarization is circular.
+or in spatial representation
+
+```math
+   \begin{aligned}
+   E_x &= \mathrm{Re}\left( \mathcal{E} e^{ik_0z}p_x\right)\\
+   E_y &= \mathrm{Re}\left( \mathcal{E} e^{ik_0z}p_y\right)\\
+\end{aligned}
+```
+
+where $\mathrm{Re}$ stands for real part, $E_x$ (resp. $E_y$) is the laser electric field in the x (resp. y) direction, $\mathcal{E}$ is the complex laser envelope described in the standard, $\omega_0 = 2\pi c/\lambda_0$ is the angular frequency defined from the laser wavelength $\lambda_0$, $k_0$ is the corresponding wavenumber $k_0=2\pi/\lambda_0$ and $(p_x,p_y)$ is the (complex and normalized) polarization vector. The polarization state (linear, circular, elliptical) is controlled by the phase of the polarization vector. For instance, if $arg(p_x) = arg(p_y)$, the polarization is linear. If $arg(p_x) = arg(p_y) + \pi/2$, the polarization is circular. Alternatively, the stored array can represent the normalized vector potential $a_{x/y} = eA_{x/y}/m_ec$ where $A_{x/y}$ is the vector potential of the laser, related to the electric field by $E_{x/y} = \partial_tA_{x/y}$.
 
 When added to an output, the following naming conventions shall be used for complex electric field `mesh records`.
 
@@ -40,11 +49,21 @@ On the `series` object, set the following attributes:
   - `isLaserEnvelope`
     - type: *(boolean)*
     - description: Whether the mesh record is of type laserEnvelope.
-    - scope: *optional*
+    - scope: *required*
+
+  - `isNormalized`
+    - type: *(boolean)*
+    - description: If True, the mesh record represents the normalized vector potential. Otherwise, it represents the electric field.
+    - scope: *required*
 
   - `angularFrequency`
     - type: *(floatX)*
     - description: Angular frequency $\omega_0$ at which the laser envelope is defined (rad/s).
+    - scope: *required*
+
+  - `isSpatial`
+    - type: *(bool)*
+    - description: If True, the longitudinal dimension represents space (z). If False, it represents time.
     - scope: *required*
 
   - `polarization`

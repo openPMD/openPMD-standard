@@ -367,7 +367,7 @@ meshes):
         - `m=3;imag=+` (3 *modes* and using a `+` sign for the definition of
                         the *imaginary* part)
 ```math
-    E_z = \tilde{E}_{z,0} + \sum_{l=1}^{m} \mathcal{R}(\tilde{E}_{z,l}) \cdot \cos(l \Theta) {\color{red}+} \mathcal{I}(\tilde{E}_{z,l}) \cdot \sin(l \Theta)$
+    E_z = \mathcal{R}(\tilde{E}_{z,0}) + \sum_{l=1}^{m} \mathcal{R}(\tilde{E}_{z,l}) \cdot \cos(l \Theta) {\color{red}+} \mathcal{I}(\tilde{E}_{z,l}) \cdot \sin(l \Theta)$
 ```
 
   - `axisLabels`

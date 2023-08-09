@@ -350,10 +350,10 @@ meshes):
                      `r` direction and where the first axis corresponds to
                      the azimuthal mode. (This last axis has length `2m-1`,
                      where `m` is the number of modes used. By convention,
-                     this first stores the real part of the mode `0`, then
+                     this first stores only the real part of the mode `0`, then
                      the real part of the mode `1`, then the imaginary part
                      of the mode `1`, then the real part of the mode `2`,
-                     etc.)
+                     then the imaginary part of the mode `2`, etc.)
       - reserved: `cylindrical`, `spherical`
       - `other`
 
@@ -366,7 +366,9 @@ meshes):
       - for `thetaMode` geometry:
         - `m=3;imag=+` (3 *modes* and using a `+` sign for the definition of
                         the *imaginary* part)
-                       ![definition of imaginary part](img/cylindrical.png)
+```math
+    E_z = \mathcal{R}(\tilde{E}_{z,0}) + \sum_{l=1}^{m} \mathcal{R}(\tilde{E}_{z,l}) \cdot \cos(l \Theta) {\color{red}+} \mathcal{I}(\tilde{E}_{z,l}) \cdot \sin(l \Theta)$
+```
 
   - `axisLabels`
     - type: 1-dimensional array containing N *(string)*

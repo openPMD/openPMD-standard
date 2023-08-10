@@ -40,7 +40,7 @@ When added to an output, the following naming conventions shall be used for comp
     - type: *(complexX)*
     - scope: *required*
     - description: Scalar field for the envelope (as a field strength). See above for description. The name is arbitrary, allowing a single series to store multiple laser pulses.
-    - unitDimension = `(1., 1., -3., -1., 0., 0., 0.)` $(V/m = kg . m / (A . s^3))$
+    - unitDimension = `(1., 1., -3., -1., 0., 0., 0.)` $(V/m = kg . m / (A . s^3))$ if `envelopeField` is `electric_field`, dimensionless (0., 0., 0., 0., 0., 0., 0.) otherwise.
 
 ### Additional attributes on the `mesh record` named `<laser envelope name>`
 

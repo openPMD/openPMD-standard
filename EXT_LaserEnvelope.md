@@ -62,3 +62,4 @@ On the `series` object, set the following attributes:
   - `polarization`
     - type: 1-dimensional array containing 2 *(complexX)*
     - description: polarization vector, 2 values for the 2 transverse components x and y. This vector is normalized (so its modulus is 1) and contains all information to account for polarization states and carrier-envelope phase (CEP).
+    - scope: *required*

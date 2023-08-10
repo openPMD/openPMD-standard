@@ -52,7 +52,7 @@ On the `series` object, set the following attributes:
     - description: Physical quantity used to represent the laser envelope field.
     - allowed values:
       - `electric_field` The mesh represents the envelope of the transverse electric field $E_{x/y}$ of the laser pulse.
-      - `normalized_vector_potential` The mesh represents the envelope of the transverse vector potential of the laser pulse. Furthermore, this quantity is normalized (to be dimensionless), as commonly used in laser-plasma interaction literature: $eA_{x/y}/(m_ec)$.
+      - `normalized_vector_potential` The mesh represents the envelope of the transverse vector potential of the laser pulse. This quantity is normalized (to be dimensionless), as commonly used in laser-plasma interaction literature: $eA_{x/y}/(m_ec)$.
 
   - `angularFrequency`
     - type: *(floatX)*

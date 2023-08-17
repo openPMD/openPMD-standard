@@ -7,7 +7,7 @@ openPMD extension name: `LaserEnvelope`
 Introduction
 ------------
 
-This extension is specifically designed for modeling the laser beam propagation.
+This extension is specifically designed for modeling the propagation of laser beams and pulses.
 
 Mesh Based Records (Fields)
 ---------------------------

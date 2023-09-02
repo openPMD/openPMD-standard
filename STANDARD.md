@@ -48,7 +48,9 @@ for changes in keywords).
 Hierarchy of the Data File
 --------------------------
 
-The used hierarchical data file format must provide the capability to
+For simplicity, we call the storage concept of a specific data format that implements the openPMD hierarchy "files", even if they are implemented in-memory or by other means.
+
+The used hierarchical data format must provide the capability to
 
   - create groups and sub-groups (in-file directories)
   - create multi-dimensional, homogeneous array-based data structures
@@ -85,7 +87,10 @@ Each file's *root* group (path `/`) must at least contain the attributes:
                    to create a real path from it replace all occurrences
                    of `%T` with the integer value of the iteration, e.g.,
                    `/data/%T` becomes `/data/100`
-    - allowed value: fixed to `/data/%T/` for this version of the standard
+    - allowed values:
+      - see *Iterations and Time Series* below
+      - for `fileBased` and `groupBased`, this is fixed to `/data/%T/`
+      - for `variableBased` this is fixed to `/data/`
     - note: all the data that is formatted according to the present
       standard (i.e. both the meshes and the particles) is to be
       stored within a path of the form given by `basePath` (e.g. in
@@ -195,9 +200,8 @@ standard:
 Iterations and Time Series
 --------------------------
 
-Iterations can be encoded in either the file name of each master-file of a
-time step or in groups of the same file. (Here, an *iteration* refers
-to a single simulation cycle.)
+Iterations can be encoded in either the file name of each individual files, in groups of the same file, or in data sets & attributes (with supported data formats).
+(Here, an *iteration* might refer to a single measurement or simulation cycle.)
 
 The chosen style shall not vary within a related set of iterations.
 
@@ -210,8 +214,9 @@ Each file's *root* group (path `/`) must further define the attributes:
                    or whether another `open/close` call is necessary to access
                    other iterations
     - allowed values:
-      - `fileBased` (multiple files)
-      - `groupBased` (one file)
+      - `fileBased` (multiple files; one iteration per file)
+      - `groupBased` (one file; iterations use groups in that file)
+      - `variableBased` (one file; if the data format supports to store multiple iterations in the same variables and attributes)
 
   - `iterationFormat`
     - type: *(string)*
@@ -222,20 +227,40 @@ Each file's *root* group (path `/`) must further define the attributes:
                    for `fileBased` formats the iteration must be included
                    in the file name;
                    the format depends on the selected `iterationEncoding` method
+    - note: it is not required that every openPMD iteration contains an update for each declared openPMD record (see below)
     - examples:
       - for `fileBased`:
         - `filename_%T.h5` (without file system directories)
-      - for `groupBased`:
+      - for `groupBased`: (fixed value)
         - `/data/%T/` (must be equal to and encoded in the `basePath`)
+      - for `variableBased`: (fixed value)
+        - data-format internal convention
+        - *slowest varying index* of data
+
+### `variableBased` Encoding of Iterations
+
+In order to correlate openPMD iterations with an index of data-format internal updates/steps or an index in the slowest varying dimension of an array, the iteration base path (default: path `/data`) must contain an additional variable once `variableBased` is chosen for `iterationEncoding`:
+
+  - `snapshot`
+    - type: 1-dimensional array containing N *(int)* elements, where N is the number of updates/steps in the data format
+    - description: for each update/step in a data format, this variable needs to be updated with the corresponding openPMD iteration.
+    - note: in some data formats, updates/steps are absolute and not every update/step contains an update for each declared openPMD record
+    - advice to implementers: an openPMD iteration might be spread over multiple updates/steps, but not vice versa.
+                              In such a scenario, an individual openPMD record's update/step must appear exactly once per iteration.
+
+Notes:
+
+* In implementations without support for storing multiple versions of datasets/attributes, the variable-based encoding of iterations may still be used for storage of a single iteration.
+  In that case, the `snapshot` attribute is optional and defaults to zero (0).
+* In implementations with support for storing multiple versions of datasets/attributes, the `snapshot` attribute may optionally be used in group-based encoding to associate openPMD iterations with IO steps.
+  In group-based encoding, there is still only one instance of this attribute globally (`/data/snapshot`).
+  In consequence, the attribute shall only be written if modifiable attributes are supported by the implementation.
 
 
 Required Attributes for the `basePath`
 --------------------------------------
 
-In addition to holding information about the iteration, each series of
-files  (`fileBased`) or series of groups (`groupBased`) should have
-attributes that describe the current time and the last
-time step.
+In addition to holding information about the iteration, each series of files  (`fileBased`), series of groups (`groupBased`) or internally encoded iterations (`variableBased`) should have attributes that describe the current time and the last step.
 
  - `time`
    - type: *(floatX)*

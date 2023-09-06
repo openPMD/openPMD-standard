@@ -233,9 +233,10 @@ Required Attributes for the `basePath`
 --------------------------------------
 
 In addition to holding information about the iteration, each series of
-files  (`fileBased`) or series of groups (`groupBased`) should have
-attributes that describe the current time and the last
-time step.
+files  (`fileBased`) or series of groups (`groupBased`) can have
+attributes that describe the current time and the last time step. (In the
+case where each iteration corresponds to a different time.) Thus, the 
+following attributes are *optional*:
 
  - `time`
    - type: *(floatX)*
@@ -704,6 +705,7 @@ Reminder: for scalar records the `record` itself is also the `component`.
 
   - `timeOffset`
     - type: *(floatX)*
+    - scope: *optional* (only used if `time` and `dt` are used)
     - description: the offset between the time at which this record is
                    defined and the `time` attribute of the `basePath` level.
                    This should be written in the same unit system as `time`

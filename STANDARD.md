@@ -192,13 +192,74 @@ The following attributes are *optional* in each each file's *root* group
         as an attribute?
 
   - `particlesPath`
-    - type: *(string)*
-    - description: path *relative* from the `basePath` to the groups for each
-                   particle group and the records they include
-    - example: `particles/`
-    - note: if this attribute is missing, the file is interpreted as if it
-      contains *no particle records*! If the attribute is set, the group behind
-      it *must* exist!
+    - type: 1-dimensional array containing N *(string)*
+    - description: List of regular expressions (regex) that specify the location
+                   of particle species *relative* from the `basePath`.
+                   Let the path to a particle species be denoted by
+                   `<pathToContainingGroup>/<containingGroupName>/<particleSpeciesName>`,
+                   relative to the `basePath` and starting
+                   with a leading slash `/`.
+                   The particle can be specified in three different ways:
+
+      1. **Full path to the group containing particles**:
+        The `particlesPath` contains
+        `<pathToContainingGroup>/<containingGroupName>/`
+        This mode is recognized by both the leading and trailing
+        slash `/`.
+        Any group found in this group will be interpreted as a particle species.
+      2. **Full path to the particle species itself**:
+        The `particlesPath` contains
+        `<pathToContainingGroup>/<containingGroupName>/<particleSpeciesName>`
+        This mode is recognized by a leading, but no trailing slash `/`.
+        This specific path will be interpreted as a particle record.
+      3. **Shorthand notation: Name of groups that contain particles**:
+        The `particlesPath` contains `<containingGroupName>/`.
+        This mode is recognized by no leading, but a trailing slash.
+        No further slashes than the trailing slash must be used.
+        Any group with the specified name will be treated as containing only
+        particles.
+
+    - Examples for the 3 different notations:
+
+      1. `.*/particles/` is equivalent to `particles/` (see format 3).
+        Specifying `/particles/` refers only to the `particles` group found
+        directly in the base path, e.g. in a group-based file:
+
+          - `/data/0/particles/e` will be recognized as a particle species,
+          - but `/data/100/generations/2/particles/e` will not.
+
+        In this example, `/generations/[[:num:]]+/particles/` can be used
+        to refer to the particles found at different particle generations.
+      2. `/particles/e` refers only to this particular particle species relative
+        from the `basePath`. E.g., in a group-based file:
+
+          - `/data/100/particles/e` will be recognized as a particle species,
+          - but neither will `/data/50/particles/i`,
+          - nor will `/data/0/generations/2/particles/e`.
+
+      3. `particles/`: Any group with name `particles` contains only
+        particle species.
+        In a group-based file, this will recognize the following paths
+        as particle species:
+
+          - `/data/0/particles/e`
+          - `/data/100/generations/2/particles/e`
+
+    - Notes:
+
+        A single regex is technically sufficient since regexes can express
+        multiple options. However, using a list improves legibility and can
+        help tooling interpret user intent better (e.g. if the first list
+        entry is `fields/`, then an implementation can choose to use that
+        name by default instead of `particles/`).
+
+        The shorthand notation (format 3) corresponds with the openPMD 1.0
+        notation of particles paths.
+
+        No specific dialect of regular expressions is specified, but the
+        `egrep` style is recommended.
+        @TODO: Should we use a recommendation? Should we encode the style
+        as an attribute?
 
 It is *recommended* that each file's *root* group (path `/`) further
 contains the attributes:

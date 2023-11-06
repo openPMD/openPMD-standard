@@ -34,7 +34,7 @@ Definitions
 
 - **Polar coordinates**: **Polar** coordinates are **(r, theta, phi)** where **r** is the radius, **theta** is the angle from the **z** or **s** axis, and **phi** is the projected azimuthal angle in the **(x, y)** plane.
 
-- **Particle Group**: The **Particle Group** is a group for specifying a set of particles such as the particles in a bunch. The Beam Physics extension defines a standard for the  **Particle Group** as discussed below.
+- **Particle Group**: The **Particle Group** is a group for specifying a set of particles such as the particles in a bunch. The Beam Physics extension defines a standard for the **Particle Group** as discussed below.
 
 - **Reference Time**, **Reference Energy**, etc. Some programs have a reference from which various quantities are measured. For example, the **Reference Position** may be defined as the position of the center of the bunch under consideration.
 
@@ -58,12 +58,12 @@ The following records are defined for the file root group.
 
 - `latticeFile`
   - type: Optional *(string)*
-  - description: The  name of the root lattice file. This name may contain a path component.
+  - description: The name of the root lattice file. This name may contain a path component.
 
 Particle Group Standard
 =======================
 
-The **Particle Group** is a group for specifying a set of particles such as the particles in a bunch. Multiple **Particle Groups** can be defined in a file. The path for a **Particle Group** is given by the **basePath** and **particlesPath** attributes in the file root group as discussed in the base OpenPMD standard. For example, if **basePath** is  `/data/%T/`, and **ParticlesPath** is `particles/`, then **Particle Groups** paths would be of the form `/data/%T/particles/` where `%T` is an integer. EG: `/data/37/particles/`.
+The **Particle Group** is a group for specifying a set of particles such as the particles in a bunch. Multiple **Particle Groups** can be defined in a file. The path for a **Particle Group** is given by the **basePath** and **particlesPath** attributes in the file root group as discussed in the base OpenPMD standard. For example, if **basePath** is `/data/%T/`, and **ParticlesPath** is `particles/`, then **Particle Groups** paths would be of the form `/data/%T/particles/` where `%T` is an integer. EG: `/data/37/particles/`.
 
 
 `Particle Group` Attributes
@@ -126,7 +126,7 @@ The following records store data on a particle-by-particle basis.
 - `locationInElement`
    - type Optional *(integer)*
    - description: The program generating the data file may model a lattice element using a "hard edge" model where the fringe fields at the ends of the element are modeled as having zero longitudinal length. In such a case, if a particle is at the end of the lattice element, it is important to know if the particle is outside of the fringe or if the particle is inside the fringe within the body of the element. Note that with a hard edge fringe, the longitudinal **s**-position does not necessarily provide enough information to determine where a particle is with respect to an edge field. Another situation where `locationInElement` is useful is with zero length elements that affect the particle transport (such as zero length multipole elements). If the program generating the data file does **not** use any hard edge models or zero length non-marker elements, `locationInElement` should not be present since this parameter is meaningless in this case.
-   - Possible values:    
+   - Possible values:
      - `-1`: Upstream end of element outside of the upstream fringe edge.
      - `0`: Inside the element.
      - `1`: Downstream end of the element outside the downstream fringe edge.
@@ -176,7 +176,7 @@ The following records store data on a particle-by-particle basis.
     - description: Specifying the (`x`, `y`, `z`) position of the coordinate origin that the particles are measured with respect to in the **global** coordinate frame.
   - `W_matrix`:
     - Required 3 x 3 matrix *(real)*
-    - description: Dataset holding the 3x3 transformation matrix from  coordinates to **global**
+    - description: Dataset holding the 3x3 transformation matrix from coordinates to **global**
   coordinates.
   - Position Transformation: Position_global = W_matrix * (position + positionOffset) + R_frame
   - Momentum transformation: Momentum_global = W_matrix * (momentum + momentumOffset)
@@ -235,7 +235,7 @@ The following possible records of the `Particle Group` are for specifying proper
   - type: Optional 6x6-matrix *(real)*
   - description: Second order beam moments of `(x, px, y, py, z, pz)`.
 
-Record Dataset Attributes
+Particle Record Dataset Attributes
 ----------------------------------
 
 The following attributes can be used with any dataset:
@@ -267,9 +267,9 @@ Notes
 
 - AC fields can be described using complex numbers. The actual field is the real part of
 
-    Z &ast; Exp[-2 pi i f &ast; (t - t0)]
+    Z &ast; Exp[-2 pi i (f &ast; t + RFphase)]
 
-where `Z` is the complex field, `f` is the Oscillation frequency, `t` is the time, and `t0` is a reference time.
+where `Z` is the complex field, `f` is the Oscillation frequency, `t` is the time, and `RFphase` is a reference phase.
 
 `External Fields Group` Attributes
 ----------------------------------
@@ -290,9 +290,9 @@ where `Z` is the complex field, `f` is the Oscillation frequency, `t` is the tim
   - type: Optional *(real)*
   - description: The fundamental RF frequency. Used for AC fields.
 
-- `gridSpacing`
-  - type: Required 3-vector *(real)*
-  - description: Spacing between grid points.
+- `gridGeometry`
+  - type: Required *(string)*
+  - description: The type of coordinate system being used. Must be set to either `rectangular` which specifies fields using **(x, y, z)**, or `cylindrical` which uses coordinates **(r, theta, z)**.
 
 - `gridLowerBound`
   - type: Required 3-vector *(int)*
@@ -302,9 +302,13 @@ where `Z` is the complex field, `f` is the Oscillation frequency, `t` is the tim
   - type: Required 3-vector *(int)*
   - description: Size of the grid.
 
+- `gridSpacing`
+  - type: Required 3-vector *(real)*
+  - description: Spacing between grid points.
+
 - `gridOriginOffset`
   - type: Required 3-vector *(real)*
-  - description: distance from `eleAnchorPt` to the grid origin point.
+  - Description: Cartesian (`x`, `y`, `z`) distance from `eleAnchorPt` to the grid origin point. Notice that Cartesian coordinates are used here independent of the coordinates used for the field grid itself.
 
 - `harmonic`
   - type: Required *(int)*
@@ -315,16 +319,30 @@ where `Z` is the complex field, `f` is the Oscillation frequency, `t` is the tim
   - description: Name to be used to identify the grid.
 
 - `RFphase`
-  - type Required if `harmonic` is not zero *(real)*
-  - description: Phase offset for oscillating fields. See the note above. Default is zero.
+  - type Optional *(real)*
+  - description: Phase offset for oscillating fields. See the equation above. Default is zero. Note that the units are `2 pi` and not `radians`.
 
 Per-grid `External Fields Group` Records
 ----------------------------------------
 
+**Note:** Each field component contains a 3-dimensional table giving the field on a grid. When using **(x, y, z)** field components, each component contains an **(x, y, z)** spatial grid. When using **(r, theta, z)** field components, each component contains an **(r, theta, z)** spatial grid. In this case, if the grid size in the `theta` direction is 1, the field is taken to be axially symmetric.
+
+**Note:** If any field component is not present in the data file, the value of that component will be taken as zero everywhere.
+
 - `magneticField`
   - type: Optional 3-vector *(complex)*
-  - description: Magnetic field. If the field is DC, only the real part should be nonzero. The components of `magneticField` may be either **(x, y, z)** representing `Bx`, `By`, and `Bz` or **(r, theta, z)** representing `Br`, `Btheta`, and `Bz`. Each component contains a 3-dimensional table giving the field on a grid. When using **(x, y, z)** components, each component contains a  **(x, y, z)** spatial grid. When using **(r, theta, z)** components, each component contains a **(r, theta, z)** spatial grid. In this case, if the grid size in the `theta` direction is 1, the field is taken to be axially symmetric.
+  - description: Magnetic field. 
+If the field is DC, only the real part should be nonzero. 
+The components of `magneticField` will be either **(x, y, z)** representing `Bx`, `By`, and `Bz` or **(r, theta, z)** representing `Br`, `Btheta`, and `Bz` depending upon the setting of `gridGeomety`. 
+Each component contains a 3-dimensional table giving the field on a grid. 
+When using **(x, y, z)** components, each component contains a  **(x, y, z)** spatial grid. 
+When using **(r, theta, z)** components, each component contains a **(r, theta, z)** spatial grid. In this case, if the grid size in the `theta` direction is 1, the field is taken to be axially symmetric.
 
 - `electricField`
   - type: Optional 3-vector *(complex)*
-  - description: Electric field. If the field is DC, only the real part should be nonzero. The components of `magneticField` may be either **(x, y, z)** representing `Ex`, `Ey`, and `Ez` or **(r, theta, z)** representing `Er`, `Etheta`, and `Ez`. Each component contains a 3-dimensional table giving the field on a grid. When using **(x, y, z)** components, each component contains a  **(x, y, z)** spatial grid. When using **(r, theta, z)** components, each component contains a **(r, theta, z)** spatial grid. In this case, if the grid size in the `theta` direction is 1, the field is taken to be axially symmetric.
+  - description: Electric field. 
+If the field is DC, only the real part should be nonzero. 
+The components of `magneticField` may be either **(x, y, z)** representing `Ex`, `Ey`, and `Ez` or **(r, theta, z)** representing `Er`, `Etheta`, and `Ez` depending upon the setting of `gridGeomety`. 
+Each component contains a 3-dimensional table giving the field on a grid. 
+When using **(x, y, z)** components, each component contains a  **(x, y, z)** spatial grid. 
+When using **(r, theta, z)** components, each component contains a **(r, theta, z)** spatial grid. In this case, if the grid size in the `theta` direction is 1, the field is taken to be axially symmetric.

@@ -342,7 +342,7 @@ When using **(r, theta, z)** components, each component contains a **(r, theta, 
   - type: Optional 3-vector *(complex)*
   - description: Electric field. 
 If the field is DC, only the real part should be nonzero. 
-The components of `magneticField` may be either **(x, y, z)** representing `Ex`, `Ey`, and `Ez` or **(r, theta, z)** representing `Er`, `Etheta`, and `Ez` depending upon the setting of `gridGeomety`. 
+The components of `magneticField` will be either **(x, y, z)** representing `Ex`, `Ey`, and `Ez` or **(r, theta, z)** representing `Er`, `Etheta`, and `Ez` depending upon the setting of `gridGeomety`. 
 Each component contains a 3-dimensional table giving the field on a grid. 
 When using **(x, y, z)** components, each component contains a  **(x, y, z)** spatial grid. 
 When using **(r, theta, z)** components, each component contains a **(r, theta, z)** spatial grid. In this case, if the grid size in the `theta` direction is 1, the field is taken to be axially symmetric.

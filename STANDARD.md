@@ -172,51 +172,41 @@ The following attributes are *optional* in each each file's *root* group
 
   - `particlesPath`
     - type: 1-dimensional array containing N *(string)*
-    - description: List of regular expressions (regex) that specify the location
-                   of particle species *relative* from the `basePath`.
-                   Let the path to a particle species be denoted by
-                   `<pathToContainingGroup>/<containingGroupName>/<particleSpeciesName>`,
-                   relative to the `basePath` and starting
-                   with a leading slash `/`.
-                   The particle can be specified in three different ways:
+    - description: List of globbing expressions that specify the location
+                   of particle containers *relative* from the `basePath`.
+                   Particle containers are openPMD groups that contain (one or more) particle species.
+                   Each group in a particle container is treated as a particle species.
+                   The entries in the `particlesPath` can be specified in two different ways:
 
-      1. **Full path to the group containing particles**:
-        The `particlesPath` contains
-        `<pathToContainingGroup>/<containingGroupName>/`
-        This mode is recognized by both the leading and trailing
-        slash `/`.
-        Any group found in this group will be interpreted as a particle species.
-      2. **Full path to the particle species itself**:
-        The `particlesPath` contains
-        `<pathToContainingGroup>/<containingGroupName>/<particleSpeciesName>`
-        This mode is recognized by a leading, but no trailing slash `/`.
-        This specific path will be interpreted as a particle record.
-      3. **Shorthand notation: Name of groups that contain particles**:
-        The `particlesPath` contains `<containingGroupName>/`.
-        This mode is recognized by no leading, but a trailing slash.
-        No further slashes than the trailing slash must be used.
-        Any group with the specified name will be treated as containing only
-        particles.
+      1. **Full path to particle container**:
+        An entry in the `particlesPath` that starts and ends with a slash `/`.
+        This can also be a globbing expression:
 
-    - Examples for the 3 different notations:
+        a. A single `%` expands to any legal group name.
+        b. A double `%%` expands to any legal path. Unlike a single `%`, its expansion may contain slashes. The full path may start with a double `%%` instead of the leading slash `/`.
 
-      1. `.*/particles/` is equivalent to `particles/` (see format 3).
+        As a regular expression: `(/|%%)[[:alnum:]_%/]+/`.
+
+      2. **Shorthand notation: Name of mesh containers**:
+        An entry in the `particlesPath` that ends with a slash `/` and contains no other slashes.
+        Any group with the specified name will be treated as a particles container.
+        There is no globbing support.
+
+        As a regular expression: `[[:alnum:]_]+/`.
+
+    - Examples for the 2 different notations:
+
+      1. `%%/particles/` is equivalent to `particles/` (see format 2).
         Specifying `/particles/` refers only to the `particles` group found
         directly in the base path, e.g. in a group-based file:
 
           - `/data/0/particles/e` will be recognized as a particle species,
           - but `/data/100/generations/2/particles/e` will not.
 
-        In this example, `/generations/[[:num:]]+/particles/` can be used
+        In this example, `/generations/%/particles/` can be used
         to refer to the particles found at different particle generations.
-      2. `/particles/e` refers only to this particular particle species relative
-        from the `basePath`. E.g., in a group-based file:
 
-          - `/data/100/particles/e` will be recognized as a particle species,
-          - but neither will `/data/50/particles/i`,
-          - nor will `/data/0/generations/2/particles/e`.
-
-      3. `particles/`: Any group with name `particles` contains only
+      2. `particles/`: Any group with name `particles` contains only
         particle species.
         In a group-based file, this will recognize the following paths
         as particle species:
@@ -226,19 +216,8 @@ The following attributes are *optional* in each each file's *root* group
 
     - Notes:
 
-        A single regex is technically sufficient since regexes can express
-        multiple options. However, using a list improves legibility and can
-        help tooling interpret user intent better (e.g. if the first list
-        entry is `fields/`, then an implementation can choose to use that
-        name by default instead of `particles/`).
-
-        The shorthand notation (format 3) corresponds with the openPMD 1.0
+        The shorthand notation (format 2) corresponds with the openPMD 1.0
         notation of particles paths.
-
-        No specific dialect of regular expressions is specified, but the
-        `egrep` style is recommended.
-        @TODO: Should we use a recommendation? Should we encode the style
-        as an attribute?
 
 It is *recommended* that each file's *root* group (path `/`) further
 contains the attributes:

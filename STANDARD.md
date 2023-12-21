@@ -124,72 +124,51 @@ The following attributes are *optional* in each each file's *root* group
 
   - `meshesPath`
     - type: 1-dimensional array containing N *(string)*
-    - description: List of regular expressions (regex) that specify the location
-                   of mesh records *relative* from the `basePath`.
-                   Let the path to a mesh record be denoted by
-                   `<pathToContainingGroup>/<containingGroupName>/<meshRecordName>`,
-                   relative to the `basePath` and starting
-                   with a leading slash `/`.
-                   The mesh can be specified in three different ways:
+    - description: List of globbing expressions that specify the location
+                   of mesh containers *relative* from the `basePath`.
+                   Mesh containers are openPMD groups that contain meshes.
+                   Each group in a mesh container is treated as a mesh; each dataset in a mesh container is treated as a (scalar) mesh.
+                   The entries in the `meshesPath` can be specified in two different ways:
 
-      1. **Full path to the group containing meshes**:
-        The `meshesPath` contains
-        `<pathToContainingGroup>/<containingGroupName>/`
-        This mode is recognized by both the leading and trailing
-        slash `/`.
-        Any group found in this group will be interpreted as a mesh record.
-      2. **Full path to the mesh itself**:
-        The `meshesPath` contains
-        `<pathToContainingGroup>/<containingGroupName>/<meshRecordName>`
-        This mode is recognized by a leading, but no trailing slash `/`.
-        This specific path will be interpreted as a mesh record.
-      3. **Shorthand notation: Name of groups that contain meshes**:
-        The `meshesPath` contains `<containingGroupName>/`.
-        This mode is recognized by no leading, but a trailing slash.
-        No further slashes than the trailing slash must be used.
-        Any group with the specified name will be treated as containing only
-        meshes.
+      1. **Full path to mesh container**:
+        An entry in the `meshesPath` that starts and ends with a slash `/`.
+        This can also be a globbing expression:
 
-    - Examples for the 3 different notations:
+        a. A single `%` expands to any legal group name.
+        b. A double `%%` expands to any legal path. Unlike a single `%`, its expansion may contain slashes. The full path may start with a double `%%` instead of the leading slash `/`.
 
-      1. `.*/meshes/` is equivalent to `meshes/` (see format 3).
+        As a regular expression: `(/|%%)[[:alnum:]_%/]+/`.
+
+      2. **Shorthand notation: Name of mesh containers**:
+        An entry in the `meshesPath` that ends with a slash `/` and contains no other slashes.
+        Any group with the specified name will be treated as a mesh container.
+        There is no globbing support.
+
+        As a regular expression: `[[:alnum:]_]+/`.
+
+    - Examples for the 2 different notations:
+
+      1. `%%/meshes/` is equivalent to `meshes/` (see format 3).
         Specifying `/meshes/` refers only to the `meshes` group found
         directly in the base path, e.g. in a group-based file:
 
           - `/data/0/meshes/E` will be recognized as a mesh,
           - but `/data/100/refinement_levels/2/meshes/E` will not.
 
-        In this example, `/refinement_levels/[[:num:]]+/meshes/` can be used
+        In this example, `/refinement_levels/%/meshes/` can be used
         to refer to the meshes found at different mesh refinement levels.
-      2. `/meshes/E` refers only to this particular mesh relative from the
-        `basePath`. E.g., in a group-based file:
 
-          - `/data/100/meshes/E` will be recognized as a mesh,
-          - but neither will `/data/50/meshes/B`,
-          - nor will `/data/0/refinement_levels/2/meshes/E`.
-
-      3. `meshes/`: Any group with name `meshes` contains only mesh records.
+      2. `meshes/`: Any group with name `meshes` contains only mesh records.
         In a group-based file, this will recognize the following paths
         as meshes:
 
           - `/data/0/meshes/E`
           - `/data/100/refinement_levels/2/meshes/E`
 
-    - Notes:
+    - Note:
 
-        A single regex is technically sufficient since regexes can express
-        multiple options. However, using a list improves legibility and can
-        help tooling interpret user intent better (e.g. if the first list
-        entry is `fields/`, then an implementation can choose to use that
-        name by default instead of `meshes/`).
-
-        The shorthand notation (format 3) corresponds with the openPMD 1.0
+        The shorthand notation (format 2) corresponds with the openPMD 1.0
         notation of meshes paths.
-
-        No specific dialect of regular expressions is specified, but the
-        `egrep` style is recommended.
-        @TODO: Should we use a recommendation? Should we encode the style
-        as an attribute?
 
   - `particlesPath`
     - type: 1-dimensional array containing N *(string)*

@@ -80,6 +80,8 @@ shall be used.
     - description: the number of underlying individual particles that
                    the macroparticles represent
     - advice to implementors: must have `weightingPower = 1`,
-                              `macroWeighted = 1`, `unitSI = 1` and
-                              `unitDimension == (0., ..., 0.)`
+                              `macroWeighted = 1`, `unitSI = 1`.
+                              `unitDimension` is a unitless count in 3D geometries `(0., ..., 0.)`
+                              but can be a count per length `(-1., ..., 0.)` or
+                              per surface area `(-2., ..., 0.)` in lower dimensions.
 

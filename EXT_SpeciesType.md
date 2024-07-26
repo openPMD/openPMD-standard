@@ -94,7 +94,8 @@ Gauge & Higgs Bosons:
 
 - `photon`
 - `gluon`
-- `w-boson`
+- `w-plus-boson`
+- `w-minus-boson`
 - `z-boson`
 - `higgs`
   

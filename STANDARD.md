@@ -123,21 +123,101 @@ The following attributes are *optional* in each each file's *root* group
 *required* to set them if one wants to store mesh and/or particle records.
 
   - `meshesPath`
-    - type: *(string)*
-    - description: path *relative* from the `basePath` to the mesh records
-    - example: `meshes/`
-    - note: if this attribute is missing, the file is interpreted as if it
-      contains *no mesh records*! If the attribute is set, the group behind
-      it *must* exist!
+    - type: 1-dimensional array containing N *(string)*
+    - description: List of globbing expressions that specify the location
+                   of mesh containers *relative* from the `basePath`.
+                   Mesh containers are openPMD groups that contain meshes.
+                   Each group in a mesh container is treated as a mesh; each dataset in a mesh container is treated as a (scalar) mesh.
+                   The entries in the `meshesPath` can be specified in two different ways:
+
+      1. **Full path to mesh container**:
+        An entry in the `meshesPath` that starts and ends with a slash `/`.
+        This can also be a globbing expression:
+
+        a. A single `%` expands to any legal group name.
+        b. A double `%%` expands to any legal path. Unlike a single `%`, its expansion may contain slashes. The full path may start with a double `%%` instead of the leading slash `/`.
+
+        As a regular expression: `(/|%%)[[:alnum:]_%/]+/`.
+
+      2. **Shorthand notation: Name of mesh containers**:
+        An entry in the `meshesPath` that ends with a slash `/` and contains no other slashes.
+        Any group with the specified name will be treated as a mesh container.
+        There is no globbing support.
+
+        As a regular expression: `[[:alnum:]_]+/`.
+
+    - Examples for the 2 different notations:
+
+      1. `%%/meshes/` is equivalent to `meshes/` (see format 3).
+        Specifying `/meshes/` refers only to the `meshes` group found
+        directly in the base path, e.g. in a group-based file:
+
+          - `/data/0/meshes/E` will be recognized as a mesh,
+          - but `/data/100/refinement_levels/2/meshes/E` will not.
+
+        In this example, `/refinement_levels/%/meshes/` can be used
+        to refer to the meshes found at different mesh refinement levels.
+
+      2. `meshes/`: Any group with name `meshes` contains only mesh records.
+        In a group-based file, this will recognize the following paths
+        as meshes:
+
+          - `/data/0/meshes/E`
+          - `/data/100/refinement_levels/2/meshes/E`
+
+    - Note:
+
+        The shorthand notation (format 2) corresponds with the openPMD 1.0
+        notation of meshes paths.
 
   - `particlesPath`
-    - type: *(string)*
-    - description: path *relative* from the `basePath` to the groups for each
-                   particle group and the records they include
-    - example: `particles/`
-    - note: if this attribute is missing, the file is interpreted as if it
-      contains *no particle records*! If the attribute is set, the group behind
-      it *must* exist!
+    - type: 1-dimensional array containing N *(string)*
+    - description: List of globbing expressions that specify the location
+                   of particle containers *relative* from the `basePath`.
+                   Particle containers are openPMD groups that contain (one or more) particle species.
+                   Each group in a particle container is treated as a particle species.
+                   The entries in the `particlesPath` can be specified in two different ways:
+
+      1. **Full path to particle container**:
+        An entry in the `particlesPath` that starts and ends with a slash `/`.
+        This can also be a globbing expression:
+
+        a. A single `%` expands to any legal group name.
+        b. A double `%%` expands to any legal path. Unlike a single `%`, its expansion may contain slashes. The full path may start with a double `%%` instead of the leading slash `/`.
+
+        As a regular expression: `(/|%%)[[:alnum:]_%/]+/`.
+
+      2. **Shorthand notation: Name of mesh containers**:
+        An entry in the `particlesPath` that ends with a slash `/` and contains no other slashes.
+        Any group with the specified name will be treated as a particles container.
+        There is no globbing support.
+
+        As a regular expression: `[[:alnum:]_]+/`.
+
+    - Examples for the 2 different notations:
+
+      1. `%%/particles/` is equivalent to `particles/` (see format 2).
+        Specifying `/particles/` refers only to the `particles` group found
+        directly in the base path, e.g. in a group-based file:
+
+          - `/data/0/particles/e` will be recognized as a particle species,
+          - but `/data/100/generations/2/particles/e` will not.
+
+        In this example, `/generations/%/particles/` can be used
+        to refer to the particles found at different particle generations.
+
+      2. `particles/`: Any group with name `particles` contains only
+        particle species.
+        In a group-based file, this will recognize the following paths
+        as particle species:
+
+          - `/data/0/particles/e`
+          - `/data/100/generations/2/particles/e`
+
+    - Notes:
+
+        The shorthand notation (format 2) corresponds with the openPMD 1.0
+        notation of particles paths.
 
 It is *recommended* that each file's *root* group (path `/`) further
 contains the attributes:

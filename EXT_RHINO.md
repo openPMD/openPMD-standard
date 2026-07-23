@@ -18,6 +18,9 @@ places the full time history in particle-style records below the iteration's
 `particlesPath`. This layout is intended for table-like, non-spatial inventory
 data.
 
+This extension uses RHINO in the sense of the Reduced Hydrogen INventory
+Optimization model described by Malone et al. [1].
+
 
 How to Use this Extension
 -------------------------
@@ -324,3 +327,12 @@ The following example shows the RHINO shim layout.
               injectors = ...
               label = ...
 ```
+
+
+References
+----------
+
+[1] C. R. Malone, H. B. Flynn, A. D. Somers, P. A. Rowell, and
+G. K. Larsen, "Approach to startup inventory for viable commercial fusion
+power plant," *Fusion Engineering and Design*, vol. 206, 114563, 2024.
+doi: [10.1016/j.fusengdes.2024.114563](https://doi.org/10.1016/j.fusengdes.2024.114563)

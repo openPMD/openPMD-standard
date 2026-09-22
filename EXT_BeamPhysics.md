@@ -126,7 +126,7 @@ The following records store data on a particle-by-particle basis.
 - `locationInElement`
    - type Optional *(integer)*
    - description: The program generating the data file may model a lattice element using a "hard edge" model where the fringe fields at the ends of the element are modeled as having zero longitudinal length. In such a case, if a particle is at the end of the lattice element, it is important to know if the particle is outside of the fringe or if the particle is inside the fringe within the body of the element. Note that with a hard edge fringe, the longitudinal **s**-position does not necessarily provide enough information to determine where a particle is with respect to an edge field. Another situation where `locationInElement` is useful is with zero length elements that affect the particle transport (such as zero length multipole elements). If the program generating the data file does **not** use any hard edge models or zero length non-marker elements, `locationInElement` should not be present since this parameter is meaningless in this case.
-   - Possible values:  
+   - Possible values:
      - `-1`: Upstream end of element outside of the upstream fringe edge.
      - `0`: Inside the element.
      - `1`: Downstream end of the element outside the downstream fringe edge.
@@ -183,7 +183,7 @@ The following records store data on a particle-by-particle basis.
 
 - `particleStatus/`
     - type: Optional *(int)*
-    - description: Integer indicating whether a particle is "alive" or "dead" (for example, has hit the vacuum chamber wall). A value of one indicates the particle is alive and any other value indicates that the particle is dead. Programs are free to distinguish how a particle died by assigning different non-unit values to `particleStatus`. For example, a program might want to differentiate between particles that are dead due to hitting the side walls versus reversing the direction longitudinally in an RF cavity.
+    - description: Integer indicating whether a particle is "alive" or "dead" (for example, has hit the vacuum chamber wall). A value of one indicates the particle is alive. A value of zero indicates the particle is within the body of a material (EG: cathode emitter) waiting to be emitted. Any other value indicates that the particle is dead. Programs are free to distinguish how a particle died by assigning different non-unit values to `particleStatus`. For example, a program might want to differentiate between particles that are dead due to hitting the side walls versus reversing the direction longitudinally in an RF cavity.
 
 - `pathLength/`
     - type: Optional *(real)*
@@ -288,11 +288,7 @@ where `Z` is the complex field, `f` is the Oscillation frequency, `t` is the tim
 
 - `gridGeometry`
   - type: Required *(string)*
-  - description: The type of coordinate system being used. Must be set to either `rectangular`, or `cylindrical`.
-
-- `gridSpacing`
-  - type: Required 3-vector *(real)*
-  - description: Spacing between grid points.
+  - description: The type of coordinate system being used. Must be set to either `rectangular` which specifies fields using **(x, y, z)**, or `cylindrical` which uses coordinates **(r, theta, z)**.
 
 - `gridLowerBound`
   - type: Required 3-vector *(int)*
@@ -301,6 +297,10 @@ where `Z` is the complex field, `f` is the Oscillation frequency, `t` is the tim
 - `gridSize`
   - type: Required 3-vector *(int)*
   - description: Size of the grid.
+
+- `gridSpacing`
+  - type: Required 3-vector *(real)*
+  - description: Spacing between grid points.
 
 - `gridOriginOffset`
   - type: Required 3-vector *(real)*
@@ -318,16 +318,23 @@ where `Z` is the complex field, `f` is the Oscillation frequency, `t` is the tim
   - type Optional *(real)*
   - description: Phase offset for oscillating fields. See the equation above. Default is zero. Note that the units are `2 pi` and not `radians`.
 
-Per-grid `External Fields Group` Records
-----------------------------------------
+- `axisLabels`
+  - type: Required *(string array)*
+  - description: Array of axis labels. See the OpenPMD standard for more details.
+For the fields here, and with Fortran-like ordering of the grid, the labels will be `["z", "y", "x"]` or `["z", "theta", "r"]`.
+For C-like ordering of the grid, the labels will be in opposite order.
+
+`External Fields Group` Records
+-------------------------------
+
 **Note:** Each field component contains a 3-dimensional table giving the field on a grid. When using **(x, y, z)** field components, each component contains an **(x, y, z)** spatial grid. When using **(r, theta, z)** field components, each component contains an **(r, theta, z)** spatial grid. In this case, if the grid size in the `theta` direction is 1, the field is taken to be axially symmetric.
 
 **Note:** If any field component is not present in the data file, the value of that component will be taken as zero everywhere.
 
 - `magneticField`
   - type: Optional 3-vector *(complex)*
-  - description: Magnetic field. If the field is DC, only the real part should be nonzero. The components of `magneticField` may be either **(x, y, z)** representing `Bx`, `By`, and `Bz` or **(r, theta, z)** representing `Br`, `Btheta`, and `Bz`.
+  - description: Magnetic field. If the field is DC, only the real part should be nonzero. The components of `magneticField` will be either **(x, y, z)** representing `Bx`, `By`, and `Bz` or **(r, theta, z)** representing `Br`, `Btheta`, and `Bz` depending upon the setting of `gridGeometry`.
 
 - `electricField`
   - type: Optional 3-vector *(complex)*
-  - description: Electric field. If the field is DC, only the real part should be nonzero. The components of `electricField` may be either **(x, y, z)** representing `Ex`, `Ey`, and `Ez` or **(r, theta, z)** representing `Er`, `Etheta`, and `Ez`.
+  - description: Electric field. If the field is DC, only the real part should be nonzero. The components of `electricField` will be either **(x, y, z)** representing `Ex`, `Ey`, and `Ez` or **(r, theta, z)** representing `Er`, `Etheta`, and `Ez` depending upon the setting of `gridGeometry`.

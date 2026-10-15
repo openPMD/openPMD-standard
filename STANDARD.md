@@ -341,7 +341,8 @@ meshes):
                    coordinate systems are imposed
     - allowed values:
       - `cartesian`: standard Cartesian mesh
-      - `thetaMode`: regularly-spaced mesh in the r-z plane, with
+      - `thetaMode`: mesh in the r-z plane (regularly spaced, or rectilinear
+                     with explicit coordinates, see `gridCoordinates`), with
                      Fourier decomposition in the azimuthal direction (See
                      [doi:10.1016/j.jcp.2008.11.017](http://dx.doi.org/10.1016/j.jcp.2008.11.017))
                      In this case, the mesh arrays are stored as a
@@ -400,6 +401,9 @@ meshes):
                    actual record that is written to the file, not that of the
                    simulation grid. (The record written may be down-sampled, as
                    compared to the simulation grid).
+                   For an axis with explicit coordinates (see `gridCoordinates`)
+                   the value is informative only; writers should store the
+                   smallest spacing along that axis.
     - advice to implementors: the order of the N values must be identical to
                               the axes in `axisLabels`
 
@@ -456,9 +460,57 @@ The following attributes must be stored with each `scalar record` and each
                    `0.0` means at the beginning of the mesh element and `1.0` is
                    the beginning of the next mesh element;
                    the same dimensionality N as in `gridSpacing` and
-                   `gridGlobalOffset`
+                   `gridGlobalOffset`;
+                   must be `0.0` along axes with explicit coordinates (see
+                   `gridCoordinates`), whose coordinates already give the
+                   positions of the data points of this component
 
 ### Optional Attributes for each `mesh record`
+
+  - `gridCoordinates`
+    - type: 1-dimensional array containing N *(string)*
+            elements, where N is the number of dimensions in the simulation
+    - description: explicit coordinates of the data points along axes that are
+                   not equally spaced (a *rectilinear* mesh: a tensor product
+                   of 1D axes with arbitrary, strictly increasing node
+                   positions).
+                   Each element belongs to the axis at the same position in
+                   `axisLabels`. An empty string means that the axis is
+                   regularly spaced (`gridSpacing`, `gridGlobalOffset` and
+                   `position` as usual). Otherwise the element is the absolute
+                   path of a 1-dimensional data set of *(floatX)* in the same
+                   file, see "Coordinate data sets" below.
+    - the attribute may also be set on a component of a `vector` record, where
+      it takes precedence over the attribute of the record; components of
+      staggered fields (e.g. on cell faces and on cell centers of a
+      non-uniform grid) can so carry different coordinates and extents
+    - examples:
+      - stretched radial grid of a `thetaMode` mesh with `axisLabels`
+        `("r", "z")`: `("/data/100/gridCoordinates/r_centers", "")`
+      - all axes explicit: `("/data/gridCoordinates/x", "/data/gridCoordinates/y")`
+
+#### Coordinate data sets
+
+  - the data set referenced for axis `a` holds the positions of the data points
+    of the record (component) along `a`, one value per data point:
+    its length equals the extent of the record (component) along `a`
+  - the values are in the units of the grid (multiplied by the element of
+    `gridUnitSI` belonging to `a`, they are in SI) and relative to the element
+    of `gridGlobalOffset` belonging to `a`:
+    the position of data point `i` along `a` is `gridGlobalOffset[a] + coordinates[i]`
+  - the values must be strictly increasing
+  - location (recommended):
+    - per iteration: `<basePath>gridCoordinates/<free name>`,
+      e.g. `/data/100/gridCoordinates/r_centers`
+    - shared by all iterations (grids that do not change in time):
+      `/data/gridCoordinates/<free name>`; with `fileBased` iteration encoding
+      the data set is repeated in every file
+  - one data set may be referenced by any number of records and components
+    (e.g. all fields on the same nodes); the reference is the only link, the
+    name is free
+  - rationale: coordinates are stored as data sets, not attributes, because
+    attributes are limited in size in some backends (64 kB in HDF5 without
+    dense attribute storage) and because they are shared between records
 
   - `particleList`
     - type: *(string)*

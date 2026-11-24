@@ -172,7 +172,8 @@ it **may** encode a charge state in an implementation-defined way.
 A molecule is written as its chemical formula: a sequence of atoms (elements
 or isotopes, as above), each followed by the number of that atom in the
 molecule. A count of one is left out. A group of atoms can be put in
-parentheses, followed by a count for the whole group. Groups can be nested.
+parentheses `( )` or square brackets `[ ]`, followed by a count for the whole
+group. The two mean the same, and groups can be nested.
 
 Examples:
 
@@ -181,6 +182,7 @@ Examples:
 - `#2H2O` for heavy water (two deuterium atoms and one oxygen atom)
 - `CH3COOH` for acetic acid
 - `Ca(OH)2` for calcium hydroxide
+- `K4[Fe(CN)6]` for potassium ferrocyanide
 
 As for atoms, the names are case sensitive: `CO` is carbon monoxide and `Co`
 is cobalt. A single atom with no count, such as `He` or `#3He`, is an atom and
@@ -195,6 +197,6 @@ As for atoms, the charge state is not part of the formula (see above).
 ABNF:
 
 ```
-molecule = 1*( ( atom / "(" molecule ")" ) [ count ] )
+molecule = 1*( ( atom / "(" molecule ")" / "[" molecule "]" ) [ count ] )
 count = ( %x32-39 *DIGIT ) / ( "1" 1*DIGIT )  ; an integer of 2 or more
 ```

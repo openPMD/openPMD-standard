@@ -112,7 +112,7 @@ lepton = lepton-anti / lepton-normal
 lepton-anti = "positron" / "anti-electron-neutrino" / "anti-muon" / "anti-muon-neutrino" / "anti-tau" / "anti-tau-neutrino"
 lepton-normal = "electron" / "electron-neutrino" / "muon" / "muon-neutrino" / "tau" / "tau-neutrino"
 
-boson = "photon" / "gluon" / "w-boson" / "z-boson" / "higgs"
+boson = "photon" / "gluon" / "w-plus-boson" / "w-minus-boson" / "z-boson" / "higgs"
 ```
 
 ### Hadrons and Jets

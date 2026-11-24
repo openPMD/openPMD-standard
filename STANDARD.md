@@ -490,6 +490,9 @@ The following attributes must be stored with each `scalar record` and each
     - note:
         a file that uses this attribute must list `SpeciesType` in `openPMDextension`
     - note:
+        a species name in this attribute **must not** include a charge state;
+        the charge state is given per particle
+    - note:
         a particle species list containing only a single item **must** be treated as a single species
     - note:
         `other:` can *only* be used for single species, it is forbidden in lists

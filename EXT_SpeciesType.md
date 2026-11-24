@@ -74,15 +74,6 @@ Specifications of isotopes are denoted by a pound symbol `#` followed
 by the isotopic number followed by an element, e.g.: `#3He` for
 Helium-3.
 
-The charge state is not encoded by the `speciesType` attribute.
-
-The charge state ("ionization") is an attribute of an individual
-particle, and therefore an implementation **should not** encode a
-charge state as part of the `speciesType` in any way.
-In the case that the implementation does treat the charge state
-("ionization") as a global, unmodifiable property of the `speciesType`
-it **may** encode a charge state in an implementation-defined way.
-
 ### Molecules
 
 A molecule is written as its chemical formula: a sequence of atoms (elements
@@ -108,7 +99,21 @@ Only the number of each kind of atom matters. An atom that appears more than
 once is counted each time, so `CH3COOH` and `C2H4O2` name the same species.
 Isomers, which have the same atoms arranged differently, are not distinguished.
 
-As for atoms, the charge state is not part of the formula (see above).
+### Charge State
+
+The charge of an atom or molecule is written after it as `+` or `-` followed
+by the size of the charge in units of the elementary charge. For a charge of
+one, the number can be left out, so `Cl-` and `Cl-1` are the same. Examples:
+
+- `H+` for a hydrogen ion
+- `#3He+2` for a fully ionized helium-3 atom
+- `Au+79` for a fully ionized gold atom
+- `Cl-` for a chloride ion
+- `SO4-2` for a sulfate ion
+
+An atom or molecule written without a charge is neutral, except in openPMD
+files. There the charge state is given per particle, not by the species, so
+the `speciesType` attribute **must not** include a charge.
 
 ### PDG Numbers
 

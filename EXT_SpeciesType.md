@@ -62,6 +62,26 @@ A `deuteron`, `triton` or `helion` is the nucleus of `#2H`, `#3H` or `#3He`.
 
 Other hadrons are given by their PDG number (see *PDG Numbers* below).
 
+### PDG Numbers
+
+A particle species not named in this document is written as `pdg:` followed by
+its number in the [Monte Carlo particle numbering scheme][pdg-numbering] of the
+Particle Data Group (PDG). An antiparticle has the negative of its particle's
+number. Examples:
+
+- `pdg:321` for a positive kaon, and `pdg:-321` for a negative kaon
+- `pdg:3122` for a lambda baryon
+- `pdg:3222` for a positive sigma baryon
+
+Geant4, PYTHIA, HepMC and other Monte Carlo codes use the same numbers.
+
+A species that this document names **should** be written by that name, not by
+its PDG number: `proton`, not `pdg:2212`.
+
+Unlike `other:`, a `pdg:` species can be used in a species list.
+
+[pdg-numbering]: https://pdg.lbl.gov/2026/reviews/rpp2026-rev-monte-carlo-numbering.pdf
+
 ### Atoms & Isotopes
 
 Valid element names are the symbols of the periodic table, defined
@@ -73,6 +93,9 @@ The names are case sensitive.
 Specifications of isotopes are denoted by a pound symbol `#` followed
 by the isotopic number followed by an element, e.g.: `#3He` for
 Helium-3.
+
+An anti-atom is written with `anti-` in front of the atom, e.g. `anti-H` for
+antihydrogen and `anti-#4He` for anti-helium-4.
 
 ### Molecules
 
@@ -103,34 +126,17 @@ Isomers, which have the same atoms arranged differently, are not distinguished.
 
 The charge of an atom or molecule is written after it as `+` or `-` followed
 by the size of the charge in units of the elementary charge. For a charge of
-one, the number can be left out, so `Cl-` and `Cl-1` are the same. Examples:
+one, the number can be left out, so `Cl-` and `Cl-1` are the same. For a
+charge of up to three, the sign can be repeated instead, so `He++` and `He+2`
+are the same. Examples:
 
 - `H+` for a hydrogen ion
-- `#3He+2` for a fully ionized helium-3 atom
+- `#3He+2` or `#3He++` for a fully ionized helium-3 atom
 - `Au+79` for a fully ionized gold atom
 - `Cl-` for a chloride ion
 - `SO4-2` for a sulfate ion
+- `anti-#4He-2` for a fully ionized anti-helium-4 atom
 
 An atom or molecule written without a charge is neutral, except in openPMD
 files. There the charge state is given per particle, not by the species, so
 the `speciesType` attribute **must not** include a charge.
-
-### PDG Numbers
-
-A particle species not named in this document is written as `pdg:` followed by
-its number in the [Monte Carlo particle numbering scheme][pdg-numbering] of the
-Particle Data Group (PDG). An antiparticle has the negative of its particle's
-number. Examples:
-
-- `pdg:321` for a positive kaon, and `pdg:-321` for a negative kaon
-- `pdg:3122` for a lambda baryon
-- `pdg:3222` for a positive sigma baryon
-
-Geant4, PYTHIA, HepMC and other Monte Carlo codes use the same numbers.
-
-A species that this document names **should** be written by that name, not by
-its PDG number: `proton`, not `pdg:2212`.
-
-Unlike `other:`, a `pdg:` species can be used in a species list.
-
-[pdg-numbering]: https://pdg.lbl.gov/2026/reviews/rpp2026-rev-monte-carlo-numbering.pdf

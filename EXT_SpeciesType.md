@@ -9,50 +9,11 @@ Introduction
 This convention is for standardizing the names of particle species, e.g. in
 particle physics.
 
-Additional Record Attribute
----------------------------
+These names are the values of the `speciesType` attribute of `mesh records`
+and `particle groups`, which is defined in the [base standard](STANDARD.md).
 
-The following additional attribute for openPMD `mesh records` and
-`particle groups` is defined in this extension:
-
-- `speciesType`
-  - type: *(string)*
-  - scope: *optional*
-  - description: particle species in this record. If there are multiple
-                 species to be specified, they can be specified using a
-                 semicolon separated list.
-  - allowed values:
-    - a single *particle species*, which is either:
-      - one of the list entries below, or
-      - `other:` followed by any number of spaces (ascii 0x20) or
-        visible ("printing") ascii characters, i.e. ascii 0x21 to 0x7e
-    - a *particle species list*, which is multiple entries of the
-      list below separated by a single semicolon character `;`.
-      A trailing semicolon `;` is allowed, but not required.
-  - examples:
-    - `electron` (e.g. on an electron `particle record` or an electron
-                  density `mesh record`)
-    - `electron;proton;#12C` (e.g. on a `mesh record` for a plasma's
-                              local charge density)
-    - `other:apple` (e.g. for an apple `particle record`)
-
-This attribute can be used with any `record` (including `mesh records`).
-
-A particle species list containing only a single item **must** be
-treated as a single species.
-
-> Note that `other:` can *only* be used for single species, it is
-> forbidden in lists.
->
-> The list separator is a sole `;`. Neither spaces around it nor empty
-> list items (two semicolons following each other `;;`) are allowed.
-> However, a single trailing semicolon `;` **must** be ignored.
-
-The following values **should not** be used by an implementation, even if
-they are allowed above:
-
-- `other:`, as it does not specify any content.
-- Trailing spaces, as they can lead to ambiguous display.
+Species Names
+-------------
 
 ### Elementary Particles
 
@@ -91,6 +52,7 @@ We currently do not define spellings of hadrons besides the commonly used ones
 below.
 
 For particle species not mentioned here we suggest to use `other:`
+(see `speciesType` in the [base standard](STANDARD.md))
 with namings from the [particle data group (PDG)](http://pdg.lbl.gov).
 
 Examples:

@@ -474,6 +474,37 @@ The following attributes must be stored with each `scalar record` and each
       - `electrons`: indicates this field is related to the `particle group` named `electrons`
       - `electrons;hydrogen;carbon`: indicates this field is related to the `particle group`s named `electrons`, `hydrogen` and `carbon`
 
+  - `speciesType`
+    - type: *(string)*
+    - description:
+        the particle species in this record;
+        multiple species can be indicated at the same time as a semicolon-separated list
+    - allowed values:
+      - a single *particle species*, which is either:
+        - a species name defined by the [SpeciesType](EXT_SpeciesType.md) extension, or
+        - `other:` followed by any number of spaces (ascii 0x20) or
+          visible ("printing") ascii characters, i.e. ascii 0x21 to 0x7e
+      - a *particle species list*, which is multiple species names
+        separated by a single semicolon character `;`.
+        A trailing semicolon `;` is allowed, but not required.
+    - note:
+        a file that uses this attribute must list `SpeciesType` in `openPMDextension`
+    - note:
+        a particle species list containing only a single item **must** be treated as a single species
+    - note:
+        `other:` can *only* be used for single species, it is forbidden in lists
+    - note:
+        the list separator is a sole `;`. Neither spaces around it nor empty list items
+        (two semicolons following each other `;;`) are allowed.
+        However, a single trailing semicolon `;` **must** be ignored.
+    - note:
+        the following values **should not** be used, even if they are allowed above:
+        `other:`, as it does not specify any content,
+        and trailing spaces, as they can lead to ambiguous display
+    - examples:
+      - `electron`: an electron density
+      - `electron;proton;#12C`: a plasma's local charge density
+
 
 Particle Records
 ----------------
@@ -629,6 +660,15 @@ patch order:
     - examples:
       - `E`: indicates this particle group is related to the `E` mesh record
       - `E;B;j`: indicates this particle group is related to the `E`, `B` and `j` mesh records
+
+  - `speciesType`
+    - type: *(string)*
+    - description:
+        the particle species in this particle group;
+        the allowed values and rules are those of `speciesType` for a `mesh record`
+    - examples:
+      - `electron`: an electron `particle group`
+      - `other:apple`: an apple `particle group`
 
 
 Unit Systems and Dimensionality

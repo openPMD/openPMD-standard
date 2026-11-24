@@ -22,10 +22,7 @@ The following additional attribute for openPMD `mesh records` and
                  species to be specified, they can be specified using a
                  semicolon separated list.
   - allowed values:
-    - a single *particle species*, which is either:
-      - one of the list entries below, or
-      - `other:` followed by any number of spaces (ascii 0x20) or
-        visible ("printing") ascii characters, i.e. ascii 0x21 to 0x7e
+    - a single *particle species*, which is one of the list entries below
     - a *particle species list*, which is multiple entries of the
       list below separated by a single semicolon character `;`.
       A trailing semicolon `;` is allowed, but not required.

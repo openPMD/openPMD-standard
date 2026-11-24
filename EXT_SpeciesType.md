@@ -38,7 +38,7 @@ The following additional attribute for openPMD `mesh records` and
     species-type = species-single / species-list / species-other
     species-other = "other:" *( VCHAR / SP )
     species-list = species-single *( ";" species-single ) [ ";" ]
-    species-single = elementary / hadron-or-jet / atom
+    species-single = elementary / hadron-or-jet / atom / molecule
     ```
   - examples:
     - `electron` (e.g. on an electron `particle record` or an electron
@@ -168,8 +168,33 @@ In the case that the implementation does treat the charge state
 it **may** encode a charge state in an implementation-defined way.
 
 ### Molecules
-Molecules are not supported by the `speciesType` attribute.
 
-However, an implementation **may** encode molecules using an
-implementation-defined syntax. In this case typical chemical notation
-**should** be accepted, e.g. `H2O` for water.
+A molecule is written as its chemical formula: a sequence of atoms (elements
+or isotopes, as above), each followed by the number of that atom in the
+molecule. A count of one is left out. A group of atoms can be put in
+parentheses, followed by a count for the whole group. Groups can be nested.
+
+Examples:
+
+- `H2` for molecular hydrogen
+- `H2O` for water
+- `#2H2O` for heavy water (two deuterium atoms and one oxygen atom)
+- `CH3COOH` for acetic acid
+- `Ca(OH)2` for calcium hydroxide
+
+As for atoms, the names are case sensitive: `CO` is carbon monoxide and `Co`
+is cobalt. A single atom with no count, such as `He` or `#3He`, is an atom and
+not a molecule.
+
+Only the number of each kind of atom matters. An atom that appears more than
+once is counted each time, so `CH3COOH` and `C2H4O2` name the same species.
+Isomers, which have the same atoms arranged differently, are not distinguished.
+
+As for atoms, the charge state is not part of the formula (see above).
+
+ABNF:
+
+```
+molecule = 1*( ( atom / "(" molecule ")" ) [ count ] )
+count = ( %x32-39 *DIGIT ) / ( "1" 1*DIGIT )  ; an integer of 2 or more
+```

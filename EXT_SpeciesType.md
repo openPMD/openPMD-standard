@@ -51,19 +51,16 @@ Gauge & Higgs Bosons:
 We currently do not define spellings of hadrons besides the commonly used ones
 below.
 
-For particle species not mentioned here we suggest to use `other:`
-(see `speciesType` in the [base standard](STANDARD.md))
-with namings from the [particle data group (PDG)](http://pdg.lbl.gov).
-
-Examples:
-
 - `proton`, `anti-proton`
 - `neutron`, `anti-neutron`
-- `other:sigma`, `other:anti-sigma`
-- `other:kaon`, ...
-  
-> Keep in mind that particle species with `other:` can't be used in
-> particle species lists.
+- `pion+`, `pion-`, `pion0`
+- `deuteron`, `anti-deuteron`
+- `triton`, `anti-triton`
+- `helion`, `anti-helion`
+
+A `deuteron`, `triton` or `helion` is the nucleus of `#2H`, `#3H` or `#3He`.
+
+Other hadrons are given by their PDG number (see *PDG Numbers* below).
 
 ### Atoms & Isotopes
 
@@ -112,3 +109,23 @@ once is counted each time, so `CH3COOH` and `C2H4O2` name the same species.
 Isomers, which have the same atoms arranged differently, are not distinguished.
 
 As for atoms, the charge state is not part of the formula (see above).
+
+### PDG Numbers
+
+A particle species not named in this document is written as `pdg:` followed by
+its number in the [Monte Carlo particle numbering scheme][pdg-numbering] of the
+Particle Data Group (PDG). An antiparticle has the negative of its particle's
+number. Examples:
+
+- `pdg:321` for a positive kaon, and `pdg:-321` for a negative kaon
+- `pdg:3122` for a lambda baryon
+- `pdg:3222` for a positive sigma baryon
+
+Geant4, PYTHIA, HepMC and other Monte Carlo codes use the same numbers.
+
+A species that this document names **should** be written by that name, not by
+its PDG number: `proton`, not `pdg:2212`.
+
+Unlike `other:`, a `pdg:` species can be used in a species list.
+
+[pdg-numbering]: https://pdg.lbl.gov/2026/reviews/rpp2026-rev-monte-carlo-numbering.pdf
